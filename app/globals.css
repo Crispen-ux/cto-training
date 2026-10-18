@@ -91,6 +91,10 @@ nav .dropdown > summary::-webkit-details-marker { display: none; }
 nav .dropdown-menu { position: absolute; top: calc(100% + 8px); left: 0; min-width: 200px; background: var(--panel2); border: 1px solid var(--line); border-radius: 8px; padding: 6px; display: flex; flex-direction: column; z-index: 20; box-shadow: 0 8px 20px rgba(0,0,0,.35); }
 nav .dropdown-menu a { display: block; padding: 10px 12px; border-radius: 6px; color: var(--text); line-height: 1.4; }
 nav .dropdown-menu a:hover { background: var(--panel); text-decoration: none; }
+/* Keep the open menu usable when the nav itself scrolls on small screens. */
+@media (max-width: 640px) {
+  nav .dropdown-menu { position: fixed; right: 12px; left: 12px; top: 56px; min-width: 0; }
+}
 
 /* ---- Architecture report builder ---- */
 .wizard-steps { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 18px; }

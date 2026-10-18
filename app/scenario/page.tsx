@@ -90,7 +90,7 @@ export default async function ScenarioBank({
               </p>
               {module && (
                 <p className="muted" style={{ fontSize: 13 }}>
-                  Curriculum: {module.title}
+                  Curriculum: <Link href={`/roadmap#${module.id}`}>{module.title}</Link>
                 </p>
               )}
               <p className="muted" style={{ fontSize: 13 }}>
