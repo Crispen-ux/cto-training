@@ -211,6 +211,25 @@
       "ai-governance",
       "ai-responsible",
       "ai-injection"
+    ],
+    "aws-solutions-architect-material": [
+      "sa-aws",
+      "sa-options",
+      "sa-scalability",
+      "sa-dr",
+      "sa-cost",
+      "sa-integration",
+      "sa-presentation"
+    ],
+    "azure-az305-solutions-architect": [
+      "sa-azure",
+      "sa-identity",
+      "sa-governance",
+      "data-arch",
+      "sa-dr",
+      "sa-cost",
+      "sa-options",
+      "sa-presentation"
     ]
   },
   "studioSources": {

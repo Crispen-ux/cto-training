@@ -11,10 +11,13 @@ import {
   today,
   addEvidence,
   addSubmission,
+  getSubmission,
   readState,
   reviewSubmission,
   saveSettings,
+  scenarioRefToAttemptId,
 } from "@/lib/store";
+import { recordScenarioReview } from "@/lib/scenario/store";
 
 function refresh() {
   revalidatePath("/", "layout");
@@ -102,6 +105,24 @@ export async function submitReview(formData: FormData) {
       notes,
       assessedBy: "human",
     });
+
+    // A scenario deliverable is reviewed twice over: once as evidence against
+    // the lesson, and once on the attempt itself, so the reasoning behind the
+    // deliverable carries the reviewer's judgement rather than only its text.
+    const sub = getSubmission(submissionId);
+    const attemptId = scenarioRefToAttemptId(sub?.artifactRef);
+    if (attemptId) {
+      try {
+        recordScenarioReview(attemptId, {
+          score: pct / 100,
+          notes,
+          assessedBy: "human",
+        });
+      } catch {
+        // The evidence review above already succeeded. A missing attempt must
+        // not roll that back, so the scenario record is best-effort here.
+      }
+    }
   } catch (e) {
     redirect(`/review?error=${encodeURIComponent((e as Error).message)}`);
   }

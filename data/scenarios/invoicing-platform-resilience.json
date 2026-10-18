@@ -1,0 +1,701 @@
+{
+  "id": "invoicing-platform-resilience",
+  "bankVersion": "scenario-bank-v1",
+  "title": "Meridian Invoicing: payments, resilience and a residency constraint",
+  "theme": "application-architecture",
+  "cloudScope": "aws",
+  "difficulty": "professional",
+  "moduleId": "cloud-solutions-architecture",
+  "evidenceLessonId": "aws-solutions-architect-material",
+  "competencies": [
+    "sa-nfr",
+    "sa-options",
+    "sa-aws",
+    "sa-azure",
+    "sa-identity",
+    "sa-integration",
+    "sa-scalability",
+    "sa-dr",
+    "sa-cost",
+    "data-arch",
+    "cloud-security",
+    "arch-tradeoffs"
+  ],
+  "timeEstimateMinutes": 150,
+  "context": {
+    "businessContext": "Meridian Invoicing is a fictional B2B SaaS invoicing product used here as a training scenario. It is shaped like a real growing invoicing platform, so you may compare it against your own invoicing or billing work - but do not assume any figure here describes your production system, and do not invent measurements for either. Meridian sells to UK and EU businesses. Customers create quotations, convert them to invoices, take card payments, store documents and query their books through a customer portal and a public API. The company is growing about 30 percent per quarter and has signed no enterprise customer yet. One enterprise prospect is now in late-stage negotiation and has introduced requirements the platform was never designed for.",
+    "objectives": [
+      "Keep the platform reliable enough that finance trusts the ledger without reconciliation spreadsheets",
+      "Pass the enterprise prospect's security and residency review inside 14 weeks",
+      "Hold infrastructure spend under the monthly cap while invoice volume roughly triples",
+      "Reduce the on-call load on a four-person engineering team"
+    ],
+    "stakeholders": [
+      {
+        "name": "Priya Raman",
+        "role": "Chief Executive",
+        "concern": "Will not accept a design that puts the enterprise deal at risk or needs headcount that is not approved."
+      },
+      {
+        "name": "Tom Whitfield",
+        "role": "Head of Finance",
+        "concern": "Needs an audit trail that satisfies an external auditor, and a per-invoice cost number he can defend."
+      },
+      {
+        "name": "Aisha Bello",
+        "role": "Lead Engineer",
+        "concern": "Owns the pager. Will reject anything that adds a new class of failure she cannot debug at 3am."
+      },
+      {
+        "name": "Daniel Okafor",
+        "role": "Security consultant (SOC 2 readiness)",
+        "concern": "Wants tenant isolation enforced where it cannot be forgotten, and evidence rather than assurance."
+      },
+      {
+        "name": "Marc Lefevre",
+        "role": "IT Director, enterprise prospect",
+        "concern": "Needs single sign-on, data residency and 99.9 percent availability, and will read the architecture diagram himself."
+      }
+    ],
+    "existingInfrastructure": "A Rails monolith running on an auto-scaling group of EC2 instances behind an application load balancer, in one AWS region and one availability zone. A single PostgreSQL instance on RDS, db.m6g.xlarge, single-AZ, holding all customer, quotation, invoice, payment-status and audit data. Invoice PDFs are rendered by a process on the same instances and written to S3 on the Standard tier. Email goes through a managed sending service. Card payments are taken through a hosted payment element on the customer's own page, so card numbers are posted directly to the payment provider and never enter Meridian's systems. Payment outcomes arrive back by webhook. There is no infrastructure as code, no staging environment that matches production, and no load testing has ever been run.",
+    "dataCharacteristics": [
+      "Approximately 4,200 business customers, 180,000 monthly active portal users, growing about 30 percent per quarter",
+      "Invoice creation peaks at about 40 per minute today, forecast to reach 400 per minute within twelve months",
+      "Invoice PDFs average 180 KB; the document store holds roughly 1.4 TB and grows with invoice volume",
+      "Reads dominate writes on the portal, but invoice creation is a multi-table transaction across customers, line items and tax records",
+      "Finance runs month-end reporting that joins invoices, payments and adjustments - ad-hoc queries, not a fixed access pattern",
+      "Every financial event must be attributable and tamper-evident for an external auditor"
+    ],
+    "compliance": [
+      "UK GDPR and EU GDPR: personal data of customer contacts and their end customers",
+      "Card payment data is handled by a third-party provider; Meridian believes it holds no cardholder data, and this belief has never been formally assessed",
+      "SOC 2 Type II readiness work is in progress; ISO 27001 is targeted for next year",
+      "The enterprise prospect requires data residency in the UK or EU, including backups"
+    ]
+  },
+  "requirements": {
+    "functional": [
+      "F1: Customers create quotations and convert them to invoices, with line items, tax and currency",
+      "F2: Card payments are taken through the provider's hosted element, and payment outcomes update invoice status by webhook",
+      "F3: Business customers authenticate to a self-service portal and view, download and search their own invoices",
+      "F4: A public API, authenticated by OAuth, lets accounting packages read invoices and push payments",
+      "F5: Invoice PDFs are generated, stored and retrievable for the retention period",
+      "F6: Every financial event is recorded in an append-only audit trail with actor, timestamp and before/after state"
+    ],
+    "nonFunctional": [
+      "NFR1: Portal and API availability of 99.9 percent measured monthly",
+      "NFR2: p95 API response latency under 300 ms for the ten most common endpoints",
+      "NFR3: RPO of 15 minutes and RTO of 4 hours for the ledger database",
+      "NFR4: All data, including backups, remains in UK or EU regions",
+      "NFR5: One tenant must not be able to read, modify or enumerate another tenant's data, and this must be provable",
+      "NFR6: Fully loaded cost per invoice must be measurable to the finance team, not estimated"
+    ],
+    "performanceAvailability": [
+      "99.9 percent monthly availability for the portal and API",
+      "p95 latency under 300 ms on the ten most common endpoints",
+      "Invoice creation peak 40 per minute today, 400 per minute within twelve months",
+      "PDF generation currently reports a p95 of 2.1 seconds and is the slowest user-visible path",
+      "RPO 15 minutes, RTO 4 hours for the ledger database"
+    ],
+    "budget": "Infrastructure spend is currently GBP 14,200 per month against a cap of GBP 18,000. Volume is forecast to roughly triple within the year. No headcount increase is approved this year.",
+    "teamSkills": "Four engineers. Strong in Ruby, Rails and PostgreSQL. One engineer is the only person comfortable making database changes. No Kubernetes experience and no one who has operated a streaming platform. The team has used infrastructure as code in a previous job but has none in production here.",
+    "deadline": "The enterprise prospect requires a signed security and architecture response within 14 weeks, and production go-live eight weeks after signature."
+  },
+  "constraints": {
+    "security": [
+      "SOC 2 readiness: access to production must be logged, time-bounded and least-privilege",
+      "Secrets must not live in source control or instance environment files",
+      "All data encrypted in transit and at rest, with keys the company controls rather than provider defaults where the auditor requires it",
+      "Card numbers must never enter Meridian's systems; this must be demonstrable, not assumed"
+    ],
+    "identityNetworking": [
+      "The enterprise prospect requires single sign-on from its own identity provider, with group-to-role mapping",
+      "Public API access must be OAuth-based and revocable per integration",
+      "The ledger database must not be reachable from the public internet",
+      "Any new managed identity or federation must map to an auditable principal, not a shared service account"
+    ],
+    "operational": [
+      "One database engineer; any design that requires routine manual database surgery will fail in practice",
+      "No staging environment that matches production, so change risk is currently unmeasured",
+      "The team can absorb one significant architectural change this quarter, not three",
+      "On-call is a shared rota of four; anything added must be observable with the tooling already in use"
+    ]
+  },
+  "ambiguity": {
+    "explicitFacts": [
+      "Invoice creation peaks at about 40 per minute today and is forecast at 400 per minute within twelve months",
+      "PDF generation has a measured p95 of 2.1 seconds",
+      "Infrastructure spend is GBP 14,200 of an GBP 18,000 cap",
+      "The database is single-AZ PostgreSQL on RDS",
+      "Card numbers are posted to the payment provider directly and do not enter Meridian's systems",
+      "RPO is 15 minutes and RTO is 4 hours for the ledger",
+      "The team has no Kubernetes or streaming experience"
+    ],
+    "assumptions": [
+      "That the PDF generation path, and not the database or the network, is the cause of the 2.1 second p95 - this has been reported but never profiled",
+      "That the current single database can serve the month-end reporting joins without a separate analytical store",
+      "That the payment provider's webhook delivery is at-least-once and may be delayed or reordered - this is typical but has not been verified against the provider's current contract",
+      "That the 30 percent growth rate continues, though it is based on a single quarter"
+    ],
+    "missingInformation": [
+      "Per-endpoint latency has never been measured, so NFR2 compliance is unknown rather than met",
+      "The actual distribution of invoice volume across tenants - a single large customer could dominate the peak",
+      "Which single sign-on protocol the enterprise prospect's identity provider supports, and whether it can do group-to-role mapping",
+      "Whether the prospect means data residency for storage only, or also for compute, backups and logs",
+      "What the auditor will accept as evidence of tamper-evidence for the audit trail"
+    ],
+    "ambiguities": [
+      "99.9 percent availability is stated for 'the portal', but it is not stated whether the public API is included. The two have different traffic shapes and different failure modes.",
+      "Data residency is stated for 'data', which could mean the primary database only, or storage, backups, analytics exports and application logs as well.",
+      "Multi-tenant isolation is stated as a requirement but the mechanism is not specified: application-level filtering, row-level enforcement in the database, or separate databases per tenant are all defensible at different scales.",
+      "Cost per invoice is requested as 'fully loaded', which is not defined. Marginal infrastructure cost, fully loaded including engineering time, and cost including support overhead give three different numbers and three different decisions."
+    ]
+  },
+  "diagram": {
+    "title": "Meridian Invoicing - current container architecture",
+    "caption": "What is running today. The synchronous render call from the API to the PDF worker is the path under question.",
+    "elements": [
+      {
+        "id": "meridian",
+        "kind": "software-system",
+        "name": "Meridian Invoicing",
+        "description": "B2B SaaS invoicing: quotations, invoices, card payments, documents and a public API.",
+        "responsibility": "The system under design."
+      },
+      {
+        "id": "customer",
+        "kind": "person",
+        "name": "Business customer",
+        "description": "Creates quotations and invoices, chases payment, downloads PDFs.",
+        "responsibility": "The primary portal user."
+      },
+      {
+        "id": "acct-dev",
+        "kind": "person",
+        "name": "Integration developer",
+        "description": "Builds the customer's accounting software against the public API.",
+        "responsibility": "Consumes the OAuth-protected API."
+      },
+      {
+        "id": "portal",
+        "kind": "container",
+        "name": "Customer portal",
+        "description": "Self-service SPA. Shows invoices, quotations and payment status.",
+        "technology": "React, served from a CDN",
+        "responsibility": "Presentation only; holds no authoritative state."
+      },
+      {
+        "id": "api",
+        "kind": "container",
+        "name": "Invoicing API",
+        "description": "Owns customers, quotations, invoices, payments and audit records.",
+        "technology": "Ruby on Rails on EC2 behind an application load balancer",
+        "responsibility": "The system of record and the only writer to the ledger database."
+      },
+      {
+        "id": "pdf-worker",
+        "kind": "container",
+        "name": "PDF worker",
+        "description": "Renders invoice PDFs. Currently invoked synchronously by the API.",
+        "technology": "Ruby process on the same EC2 instances",
+        "responsibility": "Document generation. Not a system of record."
+      },
+      {
+        "id": "email",
+        "kind": "container",
+        "name": "Notification service",
+        "description": "Sends invoice, reminder and receipt emails.",
+        "technology": "Managed email sending service",
+        "responsibility": "Outbound notification. Fire and forget."
+      },
+      {
+        "id": "postgres",
+        "kind": "data-store",
+        "name": "Ledger database",
+        "description": "Customers, quotations, invoices, line items, payment status, audit events.",
+        "technology": "PostgreSQL 14 on RDS, db.m6g.xlarge, single-AZ",
+        "responsibility": "The single system of record for all financial data."
+      },
+      {
+        "id": "documents",
+        "kind": "data-store",
+        "name": "Document store",
+        "description": "Generated invoice PDFs and customer-uploaded attachments.",
+        "technology": "S3, Standard tier, single region",
+        "responsibility": "Durable object storage for documents."
+      },
+      {
+        "id": "stripe",
+        "kind": "external-system",
+        "name": "Payment provider",
+        "description": "Hosted card element, charge creation and payment webhooks.",
+        "technology": "Stripe",
+        "responsibility": "Holds cardholder data. Meridian receives only status."
+      },
+      {
+        "id": "idp",
+        "kind": "external-system",
+        "name": "Customer identity provider",
+        "description": "SSO for enterprise tenants. Not yet integrated.",
+        "technology": "Entra ID or Okta, to be confirmed",
+        "unverified": true,
+        "responsibility": "Would own authentication for federated tenants."
+      }
+    ],
+    "relationships": [
+      { "id": "r1", "sourceId": "customer", "targetId": "portal", "label": "uses", "technology": "HTTPS" },
+      { "id": "r2", "sourceId": "portal", "targetId": "api", "label": "reads and writes invoices", "technology": "HTTPS/JSON" },
+      { "id": "r3", "sourceId": "acct-dev", "targetId": "api", "label": "reads invoices, pushes payments", "technology": "OAuth 2.0/JSON" },
+      { "id": "r4", "sourceId": "api", "targetId": "postgres", "label": "reads and writes", "technology": "PostgreSQL wire" },
+      { "id": "r5", "sourceId": "api", "targetId": "pdf-worker", "label": "requests a render and waits for it", "technology": "In-process call" },
+      { "id": "r6", "sourceId": "pdf-worker", "targetId": "postgres", "label": "reads invoice", "technology": "PostgreSQL wire" },
+      { "id": "r7", "sourceId": "pdf-worker", "targetId": "documents", "label": "writes PDF", "technology": "S3 API" },
+      { "id": "r8", "sourceId": "api", "targetId": "documents", "label": "reads attachment", "technology": "S3 API" },
+      { "id": "r9", "sourceId": "portal", "targetId": "documents", "label": "downloads PDF by short-lived signed URL", "technology": "HTTPS" },
+      { "id": "r10", "sourceId": "api", "targetId": "stripe", "label": "creates charges", "technology": "HTTPS" },
+      { "id": "r11", "sourceId": "stripe", "targetId": "api", "label": "webhook: payment outcome", "technology": "HTTPS" },
+      { "id": "r12", "sourceId": "api", "targetId": "email", "label": "sends notification", "technology": "HTTPS" },
+      { "id": "r13", "sourceId": "idp", "targetId": "portal", "label": "SSO assertion (planned)", "technology": "SAML or OIDC, unverified" }
+    ],
+    "omissions": [
+      "No queue is drawn, because there is none: the render call is synchronous",
+      "No separate analytical store is drawn, because month-end reporting queries the ledger directly",
+      "No backup or replica is drawn, because the deployment is single-AZ with automated backups only"
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1-pci-scope",
+      "kind": "diagram-interpretation",
+      "prompt": "The enterprise prospect's security reviewer asks where card data flows through your system, and whether your platform is in PCI DSS scope. Based on the diagram and the stated facts, which statement is accurate?",
+      "tests": ["sa-identity", "cloud-security", "sa-nfr"],
+      "options": [
+        { "id": "A", "text": "Card numbers are entered on the portal and stored alongside the invoice in the ledger database, so the whole platform is in scope." },
+        { "id": "B", "text": "Card numbers are posted directly to the payment provider from a hosted field on the customer's page, so they never enter Meridian's systems; Meridian receives only a payment status, and scope is limited to the systems that handle that status." },
+        { "id": "C", "text": "Card numbers pass through the invoicing API on their way to the payment provider, so the API and the database are both in scope." },
+        { "id": "D", "text": "Card data is stored in the document store inside the generated invoice PDFs, so the document store is the only system in scope." }
+      ],
+      "answers": ["B"],
+      "rationale": "The stated facts say the card element is hosted by the provider and card numbers post directly to it, never entering Meridian's systems. That is the whole reason for using a hosted element. The diagram supports this: there is no relationship carrying card data into the API or the database, and the payment provider connects to the API only by a webhook carrying an outcome. Option A describes the failure the hosted element exists to prevent. Option C describes an integration pattern that would put the API in scope, but it is not the one in use. Option D confuses a receipt, which may show a last four digits, with cardholder data storage.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "Card numbers never enter Meridian's systems, so they are not stored in the ledger database. This option would put the entire platform in scope for no reason.", "mistake": "Assuming that because payments are involved, the platform must hold card data." },
+        { "optionId": "C", "whyWrong": "The API creates charges with a token, not a card number. No relationship in the diagram carries card data into the API.", "mistake": "Conflating a payment token with the cardholder data it represents." },
+        { "optionId": "D", "whyWrong": "The document store holds invoice PDFs. A PDF may print a masked card reference, but that is not storage of cardholder data, and it is not the only thing in scope either.", "mistake": "Treating the most visible store as the whole scope." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, but only after confirming with the payment provider that the hosted element is current and that no client-side script captures the number.", "conditions": "If Meridian has written any JavaScript that reads the card number, even transiently, option C becomes correct and the API is in scope." }
+      ]
+    },
+    {
+      "id": "q2-scope-boundary",
+      "kind": "single-best",
+      "prompt": "Given that finding, where should the PCI DSS cardholder data environment boundary be drawn for this platform?",
+      "tests": ["cloud-security", "sa-identity"],
+      "dependsOn": "q1-pci-scope",
+      "options": [
+        { "id": "A", "text": "Around the entire platform, because card payments are involved and an auditor will expect that." },
+        { "id": "B", "text": "At the integration boundary: the systems that send payment requests and receive and store payment status. Card numbers do not cross it, so the ledger, portal and document store sit outside it, subject to confirming that no component captures card data." },
+        { "id": "C", "text": "Nowhere, because the payment provider is PCI compliant and that responsibility transfers with the payment." },
+        { "id": "D", "text": "Around the document store only, because invoices are the artefact that references a payment." }
+      ],
+      "answers": ["B"],
+      "rationale": "Scope follows the data, not the involvement of payments. Because card numbers never enter Meridian's systems, the cardholder data environment stops at the boundary of the integration that handles payment requests and status. Option C is the most common and most damaging error: a compliant service provider does not transfer the merchant's own responsibilities. Using a provider-managed field reduces Meridian's scope substantially, it does not eliminate it. Option A is over-scoping, which is expensive and usually abandoned halfway. Option D mistakes a document that references a payment for cardholder data storage.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "Over-scoping drives real cost and, more often than not, gets quietly abandoned. Scope is determined by where cardholder data actually flows.", "mistake": "Equating involvement in payments with holding card data." },
+        { "optionId": "C", "whyWrong": "A compliant provider reduces the merchant's scope but does not remove the merchant's responsibilities for the systems that remain in play. This is the classic transfer-of-responsibility error.", "mistake": "Assuming a vendor's certification covers your own systems." },
+        { "optionId": "D", "whyWrong": "An invoice PDF is a business document. It is not where cardholder data is stored, and scoping only the document store would leave the actual integration unassessed.", "mistake": "Scoping by artefact visibility rather than by data flow." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "A, if the assessment shows any component captures card data even transiently.", "conditions": "Only correct if discovery contradicts the stated facts. Worth doing as an exercise precisely because the belief has never been formally verified." }
+      ]
+    },
+    {
+      "id": "q3-gate-requirements",
+      "kind": "multiple-select",
+      "prompt": "The enterprise prospect will sign only if the following are demonstrably in place and evidenced before go-live. Select every item that must be implemented and evidenced. Selecting an item that is not required, or omitting one that is, is a wrong answer.",
+      "tests": ["sa-nfr", "sa-identity", "cloud-security", "sa-dr"],
+      "dependsOn": "q2-scope-boundary",
+      "options": [
+        { "id": "A", "text": "Single sign-on federation from the prospect's identity provider, with group-to-role mapping into Meridian's tenant model." },
+        { "id": "B", "text": "Encryption in transit everywhere, and encryption at rest with keys the company controls rather than provider defaults, where the auditor requires it." },
+        { "id": "C", "text": "A signed, append-only audit trail of financial events, retained for the agreed period, that an external auditor can verify." },
+        { "id": "D", "text": "An active-active deployment across two regions so that a regional failure causes no interruption." },
+        { "id": "E", "text": "Tenant isolation enforced in the data layer, not only in application code, with a test that fails if it regresses." },
+        { "id": "F", "text": "A public status page and a marketing site reachable from the internet." }
+      ],
+      "answers": ["A", "B", "C", "E"],
+      "rationale": "A, B, C and E map directly to stated requirements: single sign-on from the identity networking constraints, encryption from the security constraints, an audit trail from functional requirement F6, and tenant isolation from NFR5. D is not required by anything stated: the recovery target is RTO 4 hours and RPO 15 minutes, both of which a single-region design with a standby in a second availability zone can meet. Proposing active-active multi-region here is over-engineering that adds cost, operational load the team cannot absorb, and a class of failure the team has never operated. F is irrelevant to the requirement set.",
+      "distractors": [
+        { "optionId": "D", "whyWrong": "Nothing stated requires sub-hour cross-region recovery. Active-active multi-region buys an RTO measured in minutes or seconds that nobody asked for, at a cost and complexity the four-person team cannot operate.", "mistake": "Proposing the most impressive resilience pattern rather than the one the requirement justifies." },
+        { "optionId": "F", "whyWrong": "A status page is good operational practice and worth doing, but it is not a signing gate and is not in the requirement set.", "mistake": "Including desirable work in a requirement checklist, which dilutes the checklist." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "Include D if the prospect privately signals a sub-hour recovery objective in a later conversation.", "conditions": "Only if NFR3 is actually revised. Taking it now on a hunch is spending the budget that buys the rest of the gate." }
+      ]
+    },
+    {
+      "id": "q4-db-resilience",
+      "kind": "choose-architecture",
+      "prompt": "RPO is 15 minutes and RTO is 4 hours for the ledger. The database is currently single-AZ. Which resilience design is justified by those targets, given the budget and the one-database-engineer constraint?",
+      "tests": ["sa-dr", "sa-scalability", "sa-cost"],
+      "dependsOn": "q3-gate-requirements",
+      "options": [
+        { "id": "A", "text": "Keep single-AZ and rely on automated backups plus a documented restore runbook." },
+        { "id": "B", "text": "Enable Multi-AZ deployment with a synchronous standby in a second availability zone, keeping automated backups for point-in-time recovery." },
+        { "id": "C", "text": "Adopt a globally distributed relational service with a secondary region for cross-region failover." },
+        { "id": "D", "text": "Take nightly snapshots to object storage and restore from them when needed." }
+      ],
+      "answers": ["B"],
+      "rationale": "Multi-AZ gives an automatic failover measured in seconds to low minutes when an availability zone is lost, comfortably inside a 4-hour RTO, and automated backups give point-in-time recovery inside a 15-minute RPO. It is operated by the provider, so the single database engineer is not asked to perform manual failover. Option C is over-specified: cross-region failover is what a sub-hour, cross-region RTO needs, and nothing here asks for that. It also adds write latency and real cost. Option A leaves a zone failure as a restore-from-backup event, which routinely exceeds 4 hours in practice. Option D fails both targets: nightly snapshots give an RPO measured in hours.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "A restore from backups is a manual, hours-long event under pressure. It does not meet a 4-hour RTO with margin, and it puts the whole recovery on the one person who understands the database.", "mistake": "Treating a backup as if it were a failover." },
+        { "optionId": "C", "whyWrong": "It meets the target, but so does a far cheaper option. Buying cross-region capability that no requirement asks for consumes the budget that funds the security gate.", "mistake": "Optimising past the requirement." },
+        { "optionId": "D", "whyWrong": "Nightly snapshots give an RPO of up to 24 hours against a stated 15 minutes. This fails by more than an order of magnitude.", "mistake": "Choosing a backup schedule by convention rather than by the stated RPO." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "C, if NFR3 is later tightened to a cross-region recovery objective.", "conditions": "Correct only when the requirement actually changes. Also correct if the compliance review concludes that a whole-region loss must be survivable, which is a question the scenario leaves open." }
+      ]
+    },
+    {
+      "id": "q5-cost-lever",
+      "kind": "trade-off",
+      "prompt": "Infrastructure spend is GBP 14,200 of an GBP 18,000 cap and rising with volume. Which single change produces the largest defensible cost reduction without harming a stated non-functional requirement?",
+      "tests": ["sa-cost", "sa-options"],
+      "dependsOn": "q4-db-resilience",
+      "options": [
+        { "id": "A", "text": "Commit to reserved capacity or a savings plan for the steady-state EC2 fleet, since the API and worker run continuously and their baseline is predictable." },
+        { "id": "B", "text": "Migrate the ledger database to a key-value store, which is cheaper per unit of throughput at high volume." },
+        { "id": "C", "text": "Move invoice PDFs off object storage onto the application instances' local disks to remove the storage bill." },
+        { "id": "D", "text": "Halve the database instance size immediately to cut the largest single line item." }
+      ],
+      "answers": ["A"],
+      "rationale": "The EC2 fleet is steady-state and its baseline is measurable from existing billing data, so a commitment is a discount on spend that is already happening, not a bet on future behaviour. It carries no availability, latency or durability risk. Option B is a large migration with no guaranteed saving, breaks the reporting joins that finance depends on, and contradicts the one-database-engineer constraint. Option C removes durability and breaks RPO, since a local disk dies with the instance. Option D is unmeasured: the scenario explicitly says per-endpoint latency has never been recorded, so halving the instance is a guess that could breach NFR2, and the only database engineer would be firefighting it.",
+      "distractors": [
+        { "optionId": "B", "whyWrong": "A migration of the system of record by a team with one database engineer, under a 14-week deadline, is a high-probability failure. It also does not follow from any stated access pattern.", "mistake": "Reaching for a cheaper unit price without checking whether the workload fits the model." },
+        { "optionId": "C", "whyWrong": "Local disks are ephemeral. Moving the only copy of a financial document to one destroys the durability the retention requirement depends on.", "mistake": "Optimising a single cost line while silently breaking a non-functional requirement." },
+        { "optionId": "D", "whyWrong": "It cuts the largest line item, which makes it tempting, but there is no measurement to support it and a real risk of breaching the latency requirement.", "mistake": "Treating the biggest bill as the biggest opportunity." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "D, after first measuring per-endpoint latency and running a load test at the forecast peak.", "conditions": "Becomes correct once evidence exists. The lesson is the order: measure, then cut, not cut and hope." }
+      ]
+    },
+    {
+      "id": "q6-webhook-ordering",
+      "kind": "troubleshooting",
+      "prompt": "Finance reports invoices stuck in 'pending'. The payment provider had an incident and has been retrying webhook deliveries. Your logs show the same invoice updated three times, and in some cases the final stored status is older than a status that arrived earlier. What is the root cause, and the correct fix?",
+      "tests": ["sa-integration", "sa-scalability"],
+      "dependsOn": "q5-cost-lever",
+      "options": [
+        { "id": "A", "text": "Delivery is at-least-once and unordered. Deduplicate by the provider's event identifier, and apply status transitions in the provider's event timestamp order rather than by arrival, with a guard that refuses to move a status backwards." },
+        { "id": "B", "text": "The database is dropping writes under load. Increase the instance size and enable the connection pooler." },
+        { "id": "C", "text": "The portal is caching stale status responses. Add a cache-busting header and reduce the cache time-to-live." },
+        { "id": "D", "text": "The PDF worker is starving the webhook handler. Scale the worker pool out and separate it onto its own instances." }
+      ],
+      "answers": ["A"],
+      "rationale": "Three symptoms together identify the cause: the same invoice updated repeatedly means at-least-once delivery, and a final status older than an earlier one means reordering. Both are normal for webhook delivery and neither is a fault at the provider. The fix has two parts that are often conflated: idempotency handles the duplicate, and ordering handles the regression. A deduplicator alone still stores an out-of-order status as final. Option B would mask the symptom under load without addressing ordering. Option C is unrelated: the portal reads what the API returns. Option D confuses a downstream consumer with the inbound path.",
+      "distractors": [
+        { "optionId": "B", "whyWrong": "The symptoms are logical, not capacity-related: duplicates and reordering do not come from dropped writes. Adding capacity is a common reflex that leaves the bug intact.", "mistake": "Reaching for capacity when the failure is in the integration contract." },
+        { "optionId": "C", "whyWrong": "The stored status is wrong in the database, so no amount of portal caching change fixes what is persisted.", "mistake": "Fixing the presentation layer for a data-layer defect." },
+        { "optionId": "D", "whyWrong": "The worker is on the outbound render path, not the inbound webhook path. Scaling it changes nothing here.", "mistake": "Not tracing the actual path of the failing request." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "A, plus a dead-letter queue with an alert so that events for unknown invoices surface rather than retry forever.", "conditions": "Always a good addition. The scenario's acceptance criteria for the lab exercise make it mandatory." }
+      ]
+    },
+    {
+      "id": "q7-tenant-isolation",
+      "kind": "open-design",
+      "prompt": "Design the multi-tenant isolation model for this platform. State where isolation is enforced, what happens to a query that crosses tenants, how a new tenant's data is provisioned, and how you would prove the isolation holds under test. Be concrete about the mechanism, and name what you are giving up by choosing it.",
+      "tests": ["data-arch", "cloud-security", "sa-nfr"],
+      "dependsOn": "q6-webhook-ordering",
+      "minWords": 120,
+      "rubric": [
+        {
+          "criterion": "Isolation is enforced in the data layer, not only in application filters",
+          "weight": 0.3,
+          "lookFor": ["row-level security", "rls", "tenant_id", "constraint", "separate schema", "separate database", "database role", "policy"]
+        },
+        {
+          "criterion": "A specific, stated failure mode for a query that crosses tenants",
+          "weight": 0.2,
+          "lookFor": ["throws", "rejects", "returns nothing", "denies", "error", "403", "logged", "refuses"]
+        },
+        {
+          "criterion": "Provisioning of a new tenant is described end to end",
+          "weight": 0.15,
+          "lookFor": ["provision", "onboard", "tenant record", "migration", "identifier", "scaffold"]
+        },
+        {
+          "criterion": "A test exists that would catch a regression, and is said to run in the pipeline",
+          "weight": 0.2,
+          "lookFor": ["test", "automated", "suite", "assert", "pipeline", "ci", "proof", "cross-tenant"]
+        },
+        {
+          "criterion": "Key handling per tenant is addressed where the auditor requires customer-controlled keys",
+          "weight": 0.15,
+          "lookFor": ["kms", "key vault", "envelope", "cmk", "per-tenant", "key", "grant"]
+        }
+      ],
+      "rationale": "The strongest answers put enforcement where it cannot be forgotten: a database-enforced tenant identifier with row-level security, or a separate schema or database per tenant at larger scale. Answers that rely only on a where-clause in application code are weaker not because they are wrong today, but because the failure mode is silent and appears exactly when a new endpoint is written in a hurry. Naming what you give up matters: row-level security costs query-plan complexity and requires the one database engineer to understand it; a database per tenant costs migrations and connection count. An answer that names no cost has not really chosen."
+    },
+    {
+      "id": "q8-defend-relational",
+      "kind": "defence",
+      "prompt": "You recommended PostgreSQL on the managed relational service rather than a key-value or document store. A reviewer objects that a document database would scale better for this workload. Defend your choice against that specific claim, and state the conditions under which the reviewer would be right.",
+      "tests": ["arch-tradeoffs", "sa-options", "data-arch"],
+      "dependsOn": "q7-tenant-isolation",
+      "minWords": 100,
+      "rubric": [
+        {
+          "criterion": "Names the access patterns that actually justify relational here",
+          "weight": 0.3,
+          "lookFor": ["join", "ad-hoc", "report", "query", "transaction", "referential", "integrity", "acid", "month-end"]
+        },
+        {
+          "criterion": "Addresses the scaling claim with a mechanism, not an assertion",
+          "weight": 0.25,
+          "lookFor": ["read replica", "partition", "shard", "throughput", "bottleneck", "limit", "connection", "pool"]
+        },
+        {
+          "criterion": "States the condition under which the alternative would win",
+          "weight": 0.25,
+          "lookFor": ["if ", "when ", "would be", "would win", "unless", "provided", "at which point"]
+        },
+        {
+          "criterion": "Names a real cost of the chosen option",
+          "weight": 0.2,
+          "lookFor": ["trade-off", "downside", "cost of", "gives up", "loses", "sacrifice", "accept", "limits"]
+        }
+      ],
+      "rationale": "The decisive facts are the month-end joins and ad-hoc finance reporting, plus multi-row transactions across invoices, line items and tax records. Those are relational workloads, and the scenario states the team owns SQL. On scaling, the honest answer is that 400 invoices per minute is not a volume that stresses a well-tuned relational database, and that read replicas and partitioning come long before any re-platform. The reviewer is right when the access pattern becomes a single hot key read at very high volume with no joins, or when write throughput rather than query flexibility becomes the binding constraint. Naming a cost, such as connection count under load or the operational knowledge concentrated in one engineer, is what separates a defended choice from a preferred one.",
+      "defensibleAlternatives": [
+        { "answer": "A document store for a separate, append-only events or analytics collection, while keeping the transactional ledger relational.", "conditions": "Correct and often the right end state: it separates the reporting load from the transactional load without re-platforming the system of record." }
+      ]
+    },
+    {
+      "id": "q9-idempotent-webhook",
+      "kind": "lab",
+      "prompt": "Implement an idempotent webhook handler for payment events, together with a test that demonstrates the behaviour. Deliver the code and a short note on what you verified and how. This is a conceptual exercise unless you have actually run it: say plainly which it is.",
+      "tests": ["sa-integration", "cicd"],
+      "dependsOn": "q8-defend-relational",
+      "minWords": 80,
+      "rubric": [
+        {
+          "criterion": "Duplicates are suppressed by the provider's event identifier",
+          "weight": 0.3,
+          "lookFor": ["event id", "event_id", "idempotenc", "dedup", "processed_events", "unique", "seen"]
+        },
+        {
+          "criterion": "An out-of-order event cannot regress a later status",
+          "weight": 0.3,
+          "lookFor": ["timestamp", "created", "sequence", "order", "newer", "state machine", "monotonic", "refuse"]
+        },
+        {
+          "criterion": "An event for an unknown invoice is acknowledged and logged rather than retried indefinitely",
+          "weight": 0.2,
+          "lookFor": ["unknown", "acknowledge", "ack", "log", "dead letter", "dlq", "no retry", "4xx"]
+        },
+        {
+          "criterion": "The learner states whether the code was actually run",
+          "weight": 0.2,
+          "lookFor": ["ran", "executed", "verified", "test output", "conceptual", "not run", "did not run", "assertion"]
+        }
+      ],
+      "rationale": "This exercise exists because the ordering bug in the troubleshooting question is one of the most common real integration defects, and the fix is easy to state and easy to get half-right. Deduplication without an ordering guard still stores stale status. An ordering guard without deduplication still processes the same event twice. The fourth criterion is deliberately about honesty: the Academy distinguishes work implemented and tested from work designed, and the scenario brief requires that distinction to be stated rather than implied."
+    }
+  ],
+  "twist": {
+    "id": "twist-azure-residency",
+    "change": "The enterprise prospect has now confirmed during final negotiation that it will only sign if the platform is deployed inside the prospect's own Microsoft Azure tenancy, where it holds committed annual spend it must use. The prospect also requires Microsoft Entra ID B2B for single sign-on, and its security team will review the architecture against Azure guidance rather than AWS guidance. The timeline is unchanged: 14 weeks.",
+    "revisePrompt": "Your recommendation so far has assumed AWS services throughout. State which parts of your design survive the change unchanged, which components must be re-selected, and what you would now insist on in the design so that a future platform change of this kind is not a rewrite. Do not simply list replacement services: justify what survives on requirements and what does not.",
+    "modelAnswer": "Most of the design survives, and that is the point of the exercise. The pattern survives: a system of record with a queue-backed asynchronous document path, an idempotent webhook consumer, Multi-AZ-equivalent resilience sized to a 4-hour RTO and 15-minute RPO, and tenant isolation enforced in the data layer. None of those are AWS properties; they are consequences of the requirements. What must be re-selected is everything named: the relational service, object storage, the queue and event routing, identity and federation, key management, the API front door, monitoring and the email sender. Each re-selection must be verified against current Azure documentation rather than assumed, because a capability that exists on one platform and has no equivalent on the other is the thing that actually turns a port into a rewrite. The design principle worth extracting is that the survivable parts are the ones derived from requirements and the discarded parts are the ones derived from habit. Insist on infrastructure as code as the source of truth from the start, keep the queue between the API and document generation rather than coupling them, keep the payment integration behind the provider's hosted element so PCI scope does not change with the platform, and avoid depending on a proprietary managed feature for which no equivalent is documented. A design that names services but cannot say which requirements each one satisfies cannot be moved; this one can, and that is what the change tests."
+  },
+  "deliverable": {
+    "kind": "written-recommendation",
+    "prompt": "Write a recommendation of no more than 800 words for Priya Raman and Marc Lefevre. It must lead with the recommendation, state the two or three requirements that decided it, include a short decision matrix comparing the options you rejected, and be explicit about what you are assuming and what you would need to confirm. The audience includes a non-technical executive, so lead with the conclusion and keep the mechanism concrete.",
+    "acceptance": [
+      "The recommendation appears in the first three sentences, not after a preamble",
+      "At least two rejected alternatives are named, each with the condition under which it would win",
+      "Assumptions are labelled as assumptions and separated from stated facts",
+      "At least one decision is justified by a measurable target rather than an adjective",
+      "The answer stays under 800 words",
+      "Nothing is claimed as implemented or tested unless it actually was"
+    ]
+  },
+  "modelAnswer": {
+    "businessProblem": "A growing invoicing platform must pass an enterprise security and residency review inside 14 weeks on an unchanged budget and with no new headcount, while its current design couples a user-visible latency path to document generation, holds financial data in a single availability zone, and has never enforced or tested tenant isolation. The business problem is not a technology gap; it is that three requirements the enterprise deal depends on were never designed for, and the team has one quarter to close them without destabilising the system of record.",
+    "decisiveRequirements": [
+      "NFR5, tenant isolation provable in the data layer, because the auditor and the prospect's security team both require evidence rather than assurance",
+      "NFR3, RPO 15 minutes and RTO 4 hours, because the current single-AZ deployment cannot meet it and it is a signing gate",
+      "NFR2, p95 under 300 ms, because the synchronous render path currently violates it and it is measurable by the customer",
+      "The 14-week deadline with one significant change per quarter, because it rules out re-platforming the system of record"
+    ],
+    "importantConstraints": [
+      "One database engineer, so any solution requiring routine manual database operation will fail in practice",
+      "No Kubernetes or streaming experience on the team, so those are not credible options this quarter",
+      "GBP 18,000 monthly cap with GBP 3,800 of headroom and volume roughly tripling",
+      "Card numbers must demonstrably never enter Meridian's systems, which keeps PCI scope narrow and must stay that way through any platform change"
+    ],
+    "pattern": "A layered application with an asynchronous, queue-backed document generation path, an idempotent webhook consumer, and tenant isolation enforced in the data layer. This is deliberately not a microservices decomposition: the team is four people, the deadline is 14 weeks, and the requirement is correctness and auditability rather than independent scaling of many services.",
+    "recommendedServices": [
+      { "name": "Managed relational database with Multi-AZ", "why": "Meets a 4-hour RTO with failover in seconds to low minutes and a 15-minute RPO with point-in-time recovery, without asking the single database engineer to perform manual failover.", "cloud": "cross-cloud" },
+      { "name": "Queue service between API and document generation", "why": "Removes document generation from the user-visible latency path, absorbs provider retry bursts, and makes the render path retryable without blocking a response.", "cloud": "cross-cloud" },
+      { "name": "Hosted payment element and webhook integration", "why": "Keeps card numbers out of Meridian's systems, which is what keeps PCI scope narrow. This is the single most valuable property in the design and it is platform-independent.", "cloud": "cross-cloud" },
+      { "name": "Object storage with lifecycle tiering", "why": "Durable document storage at a cost that scales with volume rather than with instances, and a lifecycle policy that moves aged invoices to a cheaper tier without application changes.", "cloud": "cross-cloud" },
+      { "name": "Row-level security or equivalent data-layer isolation", "why": "Enforces tenant isolation where it cannot be forgotten by a future endpoint written in a hurry, and produces something an auditor can test.", "cloud": "cross-cloud" },
+      { "name": "Infrastructure as code from the start", "why": "The twist in this scenario is only survivable because the environment is described in code. Without it, a platform change is a manual rebuild under a fixed deadline.", "cloud": "cross-cloud" }
+    ],
+    "rejectedAlternatives": [
+      { "name": "Active-active multi-region database", "whyNot": "Buys a cross-region recovery objective measured in minutes that nothing here asks for, at real cost and an operational load the team has never carried.", "whenRight": "Correct if NFR3 is tightened to a sub-hour cross-region RTO, or if the compliance review concludes a whole-region loss must be survivable." },
+      { "name": "Key-value or document database as the system of record", "whyNot": "The month-end joins, ad-hoc finance reporting and multi-row transactions across invoices, line items and tax records are relational workloads, and the team owns SQL.", "whenRight": "Correct for a single hot access pattern at very high volume with no joins, or for a separate append-only analytics collection kept alongside the relational ledger." },
+      { "name": "Decompose into microservices now", "whyNot": "Four engineers, one quarter, one significant change permitted. Decomposition adds network failure modes and distributed transaction problems without satisfying any stated requirement.", "whenRight": "Correct when independent scaling or independent deployment of a component becomes a measured need, not before." },
+      { "name": "Keep the synchronous render path and scale the instances", "whyNot": "Scaling does not remove the render time from the response; it makes the violation of NFR2 more expensive.", "whenRight": "Never correct for this requirement. The path has to become asynchronous regardless of fleet size." },
+      { "name": "Halve the database instance size to cut cost", "whyNot": "Per-endpoint latency has never been measured, so this is a guess that risks NFR2 with the only database engineer left to clean it up.", "whenRight": "Correct after per-endpoint latency is measured and a load test at forecast peak shows genuine headroom." }
+    ],
+    "tradeOffs": [
+      "An asynchronous render path makes invoice creation return before the PDF exists, so the portal must handle a not-yet-ready state. That is a real product change, not a free win.",
+      "Data-layer tenant isolation adds query-plan complexity and requires the one database engineer to understand and own it. The alternative, application-level filtering, is easier to start with and fails silently later.",
+      "Multi-AZ costs more than single-AZ and does not protect against a whole-region loss. It is sized to the stated RTO and no further, and saying so plainly is part of the recommendation.",
+      "Committing to reserved capacity locks in a baseline for the commitment term. It is safe only because the baseline is measurable from existing billing data.",
+      "Moving to a second cloud platform mid-project re-opens every service selection under the same deadline, and the honest cost of that is schedule risk, not technical risk."
+    ],
+    "securityControls": [
+      "Card numbers never enter Meridian's systems, kept true by using the provider's hosted element and never capturing the number in client-side code",
+      "Encryption in transit everywhere, and encryption at rest with customer-controlled keys where the auditor requires them",
+      "Least-privilege, time-bounded, logged production access, which is a SOC 2 requirement and also the thing that makes an incident investigable",
+      "Secrets in a managed secret store, never in source control or instance environment files",
+      "Tenant isolation enforced in the data layer with a cross-tenant test that fails the build if it regresses",
+      "A signed, append-only audit trail of financial events, retained for the agreed period"
+    ],
+    "scalingRecoveryMonitoring": [
+      "Scale on the measured bottleneck: the queue depth on the document path, not CPU on the API, once rendering is asynchronous",
+      "Read replicas for portal and reporting reads before any consideration of re-platforming the write path",
+      "Multi-AZ failover for zone loss, automated backups for point-in-time recovery, and a restore that has actually been rehearsed rather than documented",
+      "Alert on webhook consumer lag, dead-letter depth, queue age and database connection saturation, which are the four signals that would have caught the stuck-invoices incident",
+      "A load test at the forecast peak of 400 invoices per minute before the enterprise go-live, because nothing has ever been load tested and NFR2 is currently unknown rather than met"
+    ],
+    "assumptionsToConfirm": [
+      "That the PDF path is actually the cause of the 2.1 second p95 - it has been reported but never profiled",
+      "Whether the prospect means residency for storage only or also for compute, backups, analytics exports and logs",
+      "Which single sign-on protocol the prospect's identity provider supports, and whether it can do group-to-role mapping",
+      "Whether the payment provider's webhook delivery is at-least-once and may be reordered - assumed, not verified against the current contract",
+      "That the 30 percent growth rate continues, since it rests on a single quarter",
+      "What the auditor will accept as evidence of tamper-evidence for the audit trail"
+    ],
+    "evidenceThatWouldChangeRecommendation": [
+      "A profile showing the latency is not in the render path, which would redirect the work at the database or the network instead",
+      "A compliance finding that any component captures card data even transiently, which would pull the API into PCI scope and change the isolation design",
+      "A revised NFR3 requiring sub-hour cross-region recovery, which would justify the globally distributed database option",
+      "A load test showing the current database instance has genuine headroom, which would make the cost reduction safe rather than a guess",
+      "A security review concluding that a whole-region loss must be survivable, which would re-open the resilience design",
+      "Confirmation that the prospect's platform constraint is permanent rather than a commercial negotiating position, which would change whether the port is done now or the deal is re-priced"
+    ]
+  },
+  "sources": [
+    {
+      "title": "Study guide for Exam AZ-305: Designing Microsoft Azure Infrastructure Solutions",
+      "url": "https://learn.microsoft.com/credentials/certifications/resources/study-guides/az-305",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The Azure domains the twist re-opens: identity, data storage, business continuity, disaster recovery and compute. Used to frame what must be re-verified, not as a service list to copy."
+    },
+    {
+      "title": "Azure Architecture Center",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The reference point the prospect's security team will review the revised architecture against, and the source for verifying any Azure service named in a revision."
+    },
+    {
+      "title": "Architecture styles - Azure Architecture Center",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "That a queue-based or layered style is a recognised pattern independent of cloud vendor, which is the basis for the pattern surviving the platform change."
+    },
+    {
+      "title": "Azure operational security overview",
+      "url": "https://learn.microsoft.com/en-us/azure/security/fundamentals/operational-overview",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The operational security control categories the revised design must still satisfy: identity, logging, encryption and key management."
+    },
+    {
+      "title": "AWS Certified Solutions Architect - Associate (SAA-C03) exam guide",
+      "url": "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-associate-03/solutions-architect-associate-03.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The AWS domain areas this scenario exercises: resilient architectures, secure design, cost-optimised architectures and high-performing architectures."
+    },
+    {
+      "title": "In-scope AWS services for SAA-C03",
+      "url": "https://docs.aws.amazon.com/aws-certification/latest/solutions-architect-associate-03/saa-03-in-scope-services.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "That the AWS services named in the model answer are within the current documented scope, rather than recalled from an older service list."
+    },
+    {
+      "title": "What is AWS Lambda?",
+      "url": "https://docs.aws.amazon.com/lambda/latest/dg/welcome.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The compute decision frame: duration limits, concurrency, scaling-to-zero and per-request pricing, which is what makes the asynchronous render path comparison concrete rather than a preference."
+    },
+    {
+      "title": "What is Amazon S3?",
+      "url": "https://docs.aws.amazon.com/AmazonS3/latest/userguide/Welcome.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Object storage characteristics for the document store decision and the lifecycle tiering that keeps cost aligned with volume."
+    },
+    {
+      "title": "Configuring and managing a Multi-AZ deployment for Amazon RDS",
+      "url": "https://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/Concepts.MultiAZ.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The resilience answer: that Multi-AZ provides a synchronous standby and automatic failover, which is what meets the 4-hour RTO without a cross-region design."
+    },
+    {
+      "title": "Amazon SQS API reference",
+      "url": "https://docs.aws.amazon.com/AWSSimpleQueueService/latest/APIReference/Welcome.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Queue semantics for the asynchronous document path and for the idempotent webhook consumer exercise."
+    },
+    {
+      "title": "Creating an event bus in Amazon EventBridge",
+      "url": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-create-event-bus.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Event routing as an alternative to a direct queue for payment outcome fan-out, considered and rejected here on the grounds of team familiarity."
+    },
+    {
+      "title": "What is Amazon API Gateway?",
+      "url": "https://docs.aws.amazon.com/apigateway/latest/developerguide/welcome.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The API front door option considered for the public OAuth API, and its cost and operational characteristics."
+    },
+    {
+      "title": "Policies and permissions in AWS Identity and Access Management",
+      "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Least-privilege production access, which is both a SOC 2 requirement and the condition under which an incident remains investigable."
+    },
+    {
+      "title": "AWS Well-Architected Framework",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The pillar structure used to argue that operational excellence and security are not traded against cost, which is the basis for rejecting the unmeasured instance downsize."
+    },
+    {
+      "title": "The C4 model for visualising software architecture",
+      "url": "https://c4model.com/",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The diagram notation used for the scenario diagram: containers, data stores, people and external systems with a description on every element."
+    }
+  ]
+}

@@ -29,6 +29,20 @@ export function isStudioRef(ref: string | undefined): boolean {
   return !!ref && ref.startsWith(STUDIO_REF_PREFIX);
 }
 
+/**
+ * A scenario deliverable submitted for review. It references the attempt, so a
+ * reviewer can read the full reasoning rather than only the final text.
+ */
+export const SCENARIO_REF_PREFIX = "scenario:";
+
+export function isScenarioRef(ref: string | undefined): boolean {
+  return !!ref && ref.startsWith(SCENARIO_REF_PREFIX);
+}
+
+export function scenarioRefToAttemptId(ref: string | undefined): string | undefined {
+  return isScenarioRef(ref) ? ref!.slice(SCENARIO_REF_PREFIX.length) : undefined;
+}
+
 export interface Submission {
   id: string;
   lessonId: string;
@@ -286,6 +300,11 @@ export function saveSettings(settings: Settings) {
   const state = readState();
   state.settings = settings;
   writeState(state);
+}
+
+/** Reads one submission, so a reviewer can be shown the work it points at. */
+export function getSubmission(id: string): Submission | undefined {
+  return readState().submissions.find((s) => s.id === id);
 }
 
 // ---- AI support: sessions, audit log, usage cap -------------------------------------------------
