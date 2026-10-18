@@ -1,0 +1,675 @@
+{
+  "id": "claims-assistant-grounding",
+  "bankVersion": "scenario-bank-v1",
+  "title": "Harrowgate: an AI assistant grounded in claims documents",
+  "theme": "ai-data",
+  "cloudScope": "cross-cloud",
+  "difficulty": "expert",
+  "moduleId": "tech-ai",
+  "evidenceLessonId": "ai-model-selection",
+  "competencies": [
+    "ai-rag",
+    "ai-permissions",
+    "ai-evaluation",
+    "ai-governance",
+    "ai-injection",
+    "sa-identity",
+    "cloud-security",
+    "data-arch",
+    "sa-integration",
+    "cto-security",
+    "sa-cost",
+    "arch-tradeoffs"
+  ],
+  "timeEstimateMinutes": 180,
+  "context": {
+    "businessContext": "Harrowgate Insurance is a fictional mid-sized commercial insurance broker, used here as a training scenario. It is shaped like a real firm with a real document problem, so you may compare it against your own AI or knowledge work, but do not assume any figure here describes your organisation, and do not invent measurements for either. Handlers answer coverage questions by searching three systems and reading PDFs by hand. A pilot chat assistant, answering from a general model with no grounding in the firm's documents, invented a policy exclusion. A handler repeated it to a client and the firm paid a claim it should not have paid. The pilot was withdrawn. The proposal on the table is a grounded assistant: answers drawn from the firm's own policy wordings, endorsements and correspondence, with the sources cited.",
+    "objectives": [
+      "Cut the median time to answer a coverage question from 18 minutes to under 3",
+      "Make every answer traceable to the exact passage it came from, or say plainly that no supporting passage was found",
+      "Make it structurally impossible for the assistant to surface a document the handler is not already entitled to see",
+      "Keep claim decisions out of the model entirely, so an assistant answer can never become a determination",
+      "Be able to reconstruct any answer for a regulator seven years after it was given"
+    ],
+    "stakeholders": [
+      {
+        "name": "Nadia Farouk",
+        "role": "Head of Claims",
+        "concern": "Wants the speed badly and is frightened of a second invented exclusion. Will kill the project over one more incident."
+      },
+      {
+        "name": "Marcus Bell",
+        "role": "Compliance officer",
+        "concern": "Accountable to the regulator. Needs an answer log he can read, not a dashboard that shows confidence scores."
+      },
+      {
+        "name": "Priya Raghunathan",
+        "role": "Chief Technology Officer",
+        "concern": "Will not sign off anything she cannot explain to a lawyer, and will not buy a system the team cannot operate."
+      },
+      {
+        "name": "Sam Oyelaran",
+        "role": "Lead engineer",
+        "concern": "The only person who understands the claims schema. Anything that needs her for every change will stall."
+      },
+      {
+        "name": "Jo Kettle",
+        "role": "Claims handler, power user",
+        "concern": "Will use it daily and abandon it in a week if it answers without citing, or cites something she cannot open."
+      }
+    ],
+    "existingInfrastructure": "A twelve-year-old commercial claims platform, vendor-supported and not modifiable this year. PostgreSQL holds claims records. A separate object store holds policy wordings, endorsements, correspondence, loss adjuster reports and broker notes, most as PDF and many as scans with no text layer. There is no unified search: handlers use the claims system's own search plus a shared drive. Single sign-on comes from the firm's identity provider with team and authority-level groups. Authorisation in the claims system runs on two independent axes at once - a handler's authority level, and which book of business their team holds - and the two can disagree. A monthly batch job applies retention deletions. There are no machine learning engineers on staff.",
+    "dataCharacteristics": [
+      "About 2.1 million documents spanning fourteen years, averaging growth of roughly 9 percent a year",
+      "A large minority are scanned images with no text layer, and optical character recognition quality varies by age and scanning batch",
+      "Some correspondence is legally privileged and must never be retrieved through this interface by anyone",
+      "Documents carry a retention class; those past retention must be deleted, and a deletion must reach any index built from them",
+      "An endorsement issued later can supersede an earlier clause, so a document's meaning depends on its version and date",
+      "Loss reports contain special category data under UK GDPR, including health and injury detail",
+      "Peak query volume is about 200 questions per minute at month end, across 60 handlers"
+    ],
+    "compliance": [
+      "FCA conduct rules: the firm is accountable for statements of coverage made to clients, and an inaccurate one is a conduct issue, not a support ticket",
+      "UK GDPR: special category data appears in loss reports and requires a lawful basis and a processing agreement that covers it",
+      "Legal privilege: a subset of correspondence is privileged and must be excluded by a rule compliance can verify",
+      "Retention schedule: documents past retention must be deleted, and the firm must be able to show that a deletion reached downstream systems",
+      "A regulator thematic review is scheduled in sixteen weeks and the firm must be able to demonstrate its controls by then"
+    ]
+  },
+  "requirements": {
+    "functional": [
+      "F1: A handler asks a question in natural language and receives an answer citing the exact supporting passages, openable in place",
+      "F2: When no supporting passage is found, the answer says so rather than producing a plausible one",
+      "F3: Retrieval respects the handler's existing entitlements on both axes - authority level and team book - and the two are applied together",
+      "F4: Privileged documents are never retrieved for anyone through this interface",
+      "F5: Every answer is logged with the question, the passages used, the model and configuration, and the caller",
+      "F6: The assistant may quote a passage but can never take, propose or simulate a claim decision",
+      "F7: A deletion from the source system propagates to the index within the agreed retention window"
+    ],
+    "nonFunctional": [
+      "NFR1: Median time to a cited answer under 3 seconds where a supporting passage exists, p95 under 5 seconds including retrieval",
+      "NFR2: Zero retrieval of a document the handler is not entitled to. This is a hard boundary, not a quality metric to be traded against latency",
+      "NFR3: Any answer reconstructable from the log alone, seven years later, without the live index",
+      "NFR4: A measured hallucination rate below an agreed threshold on a golden set, with retrieval faithfulness scored separately from generation quality",
+      "NFR5: The assistant must not degrade the claims platform's own performance"
+    ],
+    "performanceAvailability": [
+      "60 handlers, about 200 questions per minute at month end",
+      "99.5 percent availability - an internal tool, not client-facing",
+      "p95 answer latency under 5 seconds including retrieval",
+      "Median under 3 seconds where a supporting passage exists"
+    ],
+    "budget": "Infrastructure and model spend capped at GBP 22,000 per month. The withdrawn pilot spent GBP 4,100 per month for 40 users, but it answered from an ungrounded model and is not a usable extrapolation for a grounded system.",
+    "teamSkills": "Five engineers. Strong PostgreSQL. No machine learning engineers and no one who has operated a vector index in production. One engineer, Sam, understands the claims schema and is the only person who can interpret its entitlement model.",
+    "deadline": "A regulator thematic review lands in sixteen weeks, and the firm must be able to demonstrate its controls by then. That is a demonstration of controls, not a launch date."
+  },
+  "constraints": {
+    "security": [
+      "Privileged documents must be excluded by a rule the compliance officer can inspect and change, not by an application filter a future engineer can quietly remove",
+      "Special category data must not be sent to a model endpoint unless the processing agreement explicitly covers it",
+      "Prompts and retrieved passages are client data. They must not be retained by the model provider for training",
+      "An answer that cites a passage must be reproducible: same question, same passages, same configuration, same log entry"
+    ],
+    "identityNetworking": [
+      "Entitlement must be evaluated before retrieval, so an unauthorised document is never a candidate rather than being removed afterwards",
+      "The index must carry the same entitlement metadata as the claims system, and a change to entitlements must propagate to it",
+      "Service-to-service calls must use managed identity rather than shared keys or embedded credentials",
+      "The model endpoint must be reachable only from the application's own network boundary"
+    ],
+    "operational": [
+      "No machine learning engineers: anything requiring specialist model operations will not be maintained",
+      "Sam is the only person who understands the claims schema, so a design needing her for every change will stall",
+      "The claims platform is vendor-supported and cannot be modified",
+      "Retention deletions currently run as a monthly batch, which may not satisfy the propagation requirement"
+    ]
+  },
+  "ambiguity": {
+    "explicitFacts": [
+      "2.1 million documents, fourteen years of history, about 9 percent annual growth",
+      "The pilot invented a policy exclusion and the firm paid a claim it should not have",
+      "A large minority of documents are scans with no text layer and variable recognition quality",
+      "Authorisation runs on two axes that can disagree: authority level and team book",
+      "Some correspondence is legally privileged",
+      "There are no machine learning engineers on staff",
+      "The claims platform cannot be modified this year",
+      "The retention batch runs monthly"
+    ],
+    "assumptions": [
+      "That the claims system's authorisation is correct and complete - it has never been audited, and the two axes have never been reconciled",
+      "That optical character recognition quality is uniformly poor, when it may be bimodal: modern documents fine, old scans unusable",
+      "That handlers ask coverage questions, when a meaningful share will ask the assistant to argue a position or draft a letter",
+      "That the withdrawn pilot's cost profile tells you nothing about a grounded system, because the workload is different in kind"
+    ],
+    "missingInformation": [
+      "What proportion of the corpus is privileged - compliance has never counted, and the answer changes the exclusion design",
+      "Whether entitlement metadata is present on every document or only on some, and what happens to the rest",
+      "The actual distribution of recognition quality, since a small unusable tail may be acceptable and a large one may not be",
+      "Whether the monthly retention batch can be made more frequent without support from the vendor",
+      "What the agreed hallucination threshold actually is - it is written into a requirement that nobody has agreed a number for"
+    ],
+    "ambiguities": [
+      "'Entitled to see' is three separate things that can disagree: the handler's authority level, their team's book of business, and the document's own classification. A design that treats them as one predicate will be wrong in a way that is hard to detect.",
+      "'Cited answer' has not been defined. Cited to a document, to a page, or to a specific passage? The regulator has not said, and the three cost very different amounts to build and to store.",
+      "'Reconstructable in seven years' is ambiguous between the log alone and the log plus the index. If the index is rebuilt, chunk boundaries change, and a passage reference that resolved last year may not resolve now.",
+      "'Hallucination rate' has two populations with different meanings: questions where a supporting passage exists, and questions where none does. A single number across both conceals which failure you actually have."
+    ]
+  },
+  "diagram": {
+    "title": "Harrowgate claims assistant - proposed architecture",
+    "caption": "Ingestion builds the index; the answer service retrieves and generates. Where entitlement is evaluated is the decision under examination.",
+    "elements": [
+      {
+        "id": "harrowgate",
+        "kind": "software-system",
+        "name": "Harrowgate claims assistant",
+        "description": "Answers coverage questions from the firm's own documents, with sources cited.",
+        "responsibility": "Informs a handler. Never determines a claim."
+      },
+      {
+        "id": "handler",
+        "kind": "person",
+        "name": "Claims handler",
+        "description": "Asks coverage questions and reads cited passages before relying on an answer.",
+        "responsibility": "Remains accountable for anything said to a client."
+      },
+      {
+        "id": "compliance",
+        "kind": "person",
+        "name": "Compliance officer",
+        "description": "Sets the privilege rule and reads the answer log during review.",
+        "responsibility": "Owns what must be excluded and what must be retained."
+      },
+      {
+        "id": "ui",
+        "kind": "container",
+        "name": "Assistant web app",
+        "description": "Handler interface. Shows the answer, the cited passages, and an explicit not-found state.",
+        "technology": "Internal web application behind single sign-on",
+        "responsibility": "Presentation only. Holds no entitlement logic of its own."
+      },
+      {
+        "id": "answer-service",
+        "kind": "container",
+        "name": "Answer service",
+        "description": "Takes the question and the caller's entitlements, retrieves passages, and generates a cited answer.",
+        "technology": "Application service, managed identity to its dependencies",
+        "responsibility": "The only component that talks to the index and the model."
+      },
+      {
+        "id": "ingestion",
+        "kind": "container",
+        "name": "Ingestion pipeline",
+        "description": "Extracts text, chunks it, and writes chunks with entitlement metadata to the index.",
+        "technology": "Batch and event-driven pipeline",
+        "responsibility": "Builds and maintains the index. Applies the privilege rule."
+      },
+      {
+        "id": "claims-platform",
+        "kind": "external-system",
+        "name": "Claims platform",
+        "description": "Vendor-supported system of record for claims. Cannot be modified.",
+        "technology": "Commercial claims platform",
+        "responsibility": "Authoritative for claims records and for entitlement."
+      },
+      {
+        "id": "claims-db",
+        "kind": "data-store",
+        "name": "Claims database",
+        "description": "Claims records and the entitlement model: authority level and team book.",
+        "technology": "PostgreSQL",
+        "responsibility": "System of record for claims and entitlement."
+      },
+      {
+        "id": "documents",
+        "kind": "data-store",
+        "name": "Document store",
+        "description": "Policy wordings, endorsements, correspondence, loss reports and broker notes.",
+        "technology": "Object storage, mixed PDF and scanned images",
+        "responsibility": "System of record for documents. Retention deletions originate here."
+      },
+      {
+        "id": "index",
+        "kind": "data-store",
+        "name": "Search index",
+        "description": "Chunked text with entitlement metadata and privilege flags.",
+        "technology": "Managed vector and keyword index",
+        "responsibility": "Retrieval only. Not a system of record."
+      },
+      {
+        "id": "answer-log",
+        "kind": "data-store",
+        "name": "Answer log",
+        "description": "Question, passages used, model and configuration, caller and entitlements at the time.",
+        "technology": "Append-only log store",
+        "responsibility": "The only artefact that must survive seven years."
+      },
+      {
+        "id": "model",
+        "kind": "external-system",
+        "name": "Model endpoint",
+        "description": "Hosted language model. Currently routes through a region outside the UK and EU.",
+        "technology": "Managed model endpoint",
+        "responsibility": "Generates text. Holds no authority of its own."
+      }
+    ],
+    "relationships": [
+      { "id": "r1", "sourceId": "handler", "targetId": "ui", "label": "asks a coverage question", "technology": "HTTPS" },
+      { "id": "r2", "sourceId": "ui", "targetId": "answer-service", "label": "submits question with the caller's identity", "technology": "HTTPS" },
+      { "id": "r3", "sourceId": "answer-service", "targetId": "index", "label": "retrieves passages", "technology": "Query API" },
+      { "id": "r4", "sourceId": "answer-service", "targetId": "model", "label": "sends question and retrieved passages", "technology": "HTTPS" },
+      { "id": "r5", "sourceId": "answer-service", "targetId": "answer-log", "label": "writes question, passages and configuration", "technology": "Append-only write" },
+      { "id": "r6", "sourceId": "ingestion", "targetId": "documents", "label": "reads and extracts text", "technology": "Object API" },
+      { "id": "r7", "sourceId": "ingestion", "targetId": "claims-db", "label": "reads entitlement metadata", "technology": "PostgreSQL wire" },
+      { "id": "r8", "sourceId": "ingestion", "targetId": "index", "label": "writes chunks with entitlement metadata", "technology": "Index API" },
+      { "id": "r9", "sourceId": "claims-platform", "targetId": "claims-db", "label": "owns", "technology": "Internal" },
+      { "id": "r10", "sourceId": "claims-platform", "targetId": "documents", "label": "references", "technology": "Internal" },
+      { "id": "r11", "sourceId": "compliance", "targetId": "ingestion", "label": "sets the privilege exclusion rule", "technology": "Configuration" },
+      { "id": "r12", "sourceId": "compliance", "targetId": "answer-log", "label": "reads during review", "technology": "Query" }
+    ],
+    "omissions": [
+      "No entitlement evaluation step is drawn on the retrieval path, because where it belongs is the question",
+      "No optical character recognition service is drawn; extraction is inside ingestion",
+      "No caching layer is drawn, though one will be needed to meet the latency target"
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1-boundary",
+      "kind": "diagram-interpretation",
+      "prompt": "The compliance officer reads the diagram and asks where entitlement is enforced. Looking at the retrieval path, which statement is accurate about the risk in this design?",
+      "tests": ["ai-permissions", "sa-identity", "cloud-security"],
+      "options": [
+        { "id": "A", "text": "Entitlement is enforced in the answer service after retrieval, which is adequate because the handler never sees the raw index." },
+        { "id": "B", "text": "If the index holds documents the handler is not entitled to and filtering happens after retrieval, the unauthorised content has already entered the model's context. Any later filter failure discloses it, so the boundary has to be at retrieval." },
+        { "id": "C", "text": "Entitlement is enforced at ingestion, so the index only ever contains what the broadest group of handlers may see." },
+        { "id": "D", "text": "Entitlement does not need separate enforcement here, because the claims platform already enforces it for every other interface." }
+      ],
+      "answers": ["B"],
+      "rationale": "Retrieval is the boundary. Once an unauthorised passage is in the model's context it has crossed the boundary, and it can surface through a follow-up question, a summary, or a failure of a post-filter nobody has tested. Option C is a common and expensive mistake: the broadest group is every handler, so the index would contain everything and enforce nothing. Option D is the transfer-of-responsibility error - another interface's enforcement says nothing about this one, and this interface introduces a new path to the same data.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "Post-retrieval filtering only removes content from the prompt. It does not stop the content being retrieved, logged, embedded in a cached response, or recovered by a differently worded follow-up.", "mistake": "Treating the user interface as the security boundary." },
+        { "optionId": "C", "whyWrong": "Indexing to the broadest entitlement means the index holds the entire corpus for everyone, so the control does not exist. It also makes a privilege exclusion the only thing standing between a handler and everything.", "mistake": "Coarsening a two-axis authorisation model to one predicate." },
+        { "optionId": "D", "whyWrong": "The claims platform enforces entitlement on its own interfaces. This one reads the same data by a different path, so its enforcement is the assistant's responsibility, not inherited.", "mistake": "Assuming a control transfers with the data." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "A, if the index is also entitlement-scoped so retrieval cannot return an unauthorised passage in the first place - in which case the post-filter is defence in depth rather than the boundary.", "conditions": "Correct only if the index is demonstrably scoped. That is option B's design, not A's." }
+      ]
+    },
+    {
+      "id": "q2-authorisation-point",
+      "kind": "single-best",
+      "prompt": "Where must authorisation be evaluated so that a handler cannot cause a document they are not entitled to to be retrieved at all?",
+      "tests": ["ai-permissions", "sa-identity"],
+      "dependsOn": "q1-boundary",
+      "options": [
+        { "id": "A", "text": "In the answer service, after retrieval, by removing disallowed passages before they reach the prompt." },
+        { "id": "B", "text": "Before retrieval, by carrying the caller's entitlements into the query itself, so an unauthorised document is never a candidate for retrieval." },
+        { "id": "C", "text": "In the model endpoint, which should be configured to refuse to return content the caller may not see." },
+        { "id": "D", "text": "In the user interface, by hiding passages the handler may not open once they are returned." }
+      ],
+      "answers": ["B"],
+      "rationale": "Enforcement before retrieval is what makes the unauthorised document not a candidate, which is a materially different property from retrieving it and then discarding it. It is also testable: assert that a cross-team document returns nothing, and the test fails if the filter is removed. Option A is defence in depth, not the boundary. Option C asks a text generator to hold an authorisation decision, which it has no reliable way to do. Option D is presentation.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "Useful as a second layer, but the content has already been retrieved, and retrieval is usually logged and cached. It does not satisfy a hard boundary.", "mistake": "Confusing defence in depth with the primary control." },
+        { "optionId": "C", "whyWrong": "A model is a probabilistic text generator. Asking it to enforce an authorisation rule makes a security boundary depend on behaviour that is not deterministic.", "mistake": "Delegating a control to the component least able to hold it." },
+        { "optionId": "D", "whyWrong": "The content has already been returned to the client and has been through the network and any logging. Hiding it afterwards is not enforcement.", "mistake": "Treating the interface as the boundary." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, plus a post-retrieval filter as defence in depth, and an assertion in the test suite that removing the pre-retrieval filter causes a failure.", "conditions": "Always correct. The question asks where authorisation must be evaluated; the answer is before retrieval, and the extra layers are additive." }
+      ]
+    },
+    {
+      "id": "q3-gate",
+      "kind": "multiple-select",
+      "prompt": "The regulator's review is in sixteen weeks and the firm must demonstrate its controls. Select every item that must be demonstrably in place before this is used on live claims. Partial credit is not given: selecting an item that is not required, or omitting one that is, is a wrong answer.",
+      "tests": ["ai-governance", "ai-permissions", "ai-evaluation", "cto-security"],
+      "dependsOn": "q2-authorisation-point",
+      "options": [
+        { "id": "A", "text": "Privileged documents excluded by a rule the compliance officer can inspect and change, rather than an application filter a future engineer can remove." },
+        { "id": "B", "text": "Entitlement carried into the retrieval query, with an automated test that fails when a document from another team is returned." },
+        { "id": "C", "text": "An answer log sufficient to reconstruct an answer seven years later without the live index." },
+        { "id": "D", "text": "A second model provider configured as an availability fallback." },
+        { "id": "E", "text": "Special category data excluded from anything sent to the model, unless the processing agreement explicitly covers it." },
+        { "id": "F", "text": "A measured hallucination rate on a golden set, with retrieval faithfulness scored separately from generation quality." }
+      ],
+      "answers": ["A", "B", "C", "E", "F"],
+      "rationale": "A, B, C, E and F each map to a stated constraint or requirement: the privilege rule, the hard retrieval boundary, the seven-year reconstruction target, the processing agreement, and the evaluation requirement. D is not required by anything stated. Availability is 99.5 percent for an internal tool, and a second provider buys availability at the cost of a second prompt and safety configuration that must be kept in step - a real operational burden for a team with no machine learning engineers. It is a common over-build, and proposing it here spends effort the sixteen weeks do not have.",
+      "distractors": [
+        { "optionId": "D", "whyWrong": "Nothing stated justifies it. It adds a second prompt and safety configuration to maintain, on a team with no model operations experience, against a 99.5 percent internal availability target.", "mistake": "Proposing redundancy for its own sake rather than against a stated objective." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "Include D if the review reveals an availability commitment the scenario has not stated.", "conditions": "Only if 99.5 percent is actually revised upward, or if handlers are given client-facing use. Taking it now is spending a budget the gate needs elsewhere." }
+      ]
+    },
+    {
+      "id": "q4-index-design",
+      "kind": "choose-architecture",
+      "prompt": "The claims platform is vendor-supported and cannot be modified. Documents live in an object store with inconsistent metadata, and entitlement lives in the claims database on two axes that can disagree. How should the index be built and kept in sync?",
+      "tests": ["data-arch", "sa-integration", "ai-permissions"],
+      "dependsOn": "q3-gate",
+      "options": [
+        { "id": "A", "text": "Point the model at the claims database directly and skip building an index." },
+        { "id": "B", "text": "Ingest documents into an index carrying entitlement metadata resolved from both axes at ingest time, re-sync entitlement changes on a schedule, and run a reconciliation job that detects drift between the index and the source." },
+        { "id": "C", "text": "Copy every document into the index with no entitlement metadata, and look up entitlement per answer in the application before assembling the prompt." },
+        { "id": "D", "text": "Replace the claims platform's document store with the index so there is a single source." }
+      ],
+      "answers": ["B"],
+      "rationale": "B is the only option that satisfies the platform constraint, the two-axis entitlement model, and the need to detect drift. Carrying both axes at ingest is what makes enforcement before retrieval possible, and reconciliation is what catches the case where a document had no metadata at all. Option A puts load on a system that cannot be modified and has no chunking or permission model. Option C is the post-retrieval failure from the first question, restated as a design. Option D contradicts the constraint and destroys the system of record.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "It violates the no-modification constraint, has no chunking for long wordings, and applies retrieval load to a vendor system with no support commitment for that use.", "mistake": "Skipping the index because it seems like less work." },
+        { "optionId": "C", "whyWrong": "It is the boundary failure from the first question expressed as an architecture: everything is indexed, and the control is a per-answer lookup in the application.", "mistake": "Recreating the post-retrieval design after rejecting it." },
+        { "optionId": "D", "whyWrong": "The platform cannot be modified, and the document store is the system of record for retention. Replacing it also means the index would become authoritative for something it is not good at.", "mistake": "Treating the index as a better system of record." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, with entitlement treated as a snapshot with a known staleness window, and the answer showing the handler their own entitlement as at a stated time.", "conditions": "Correct and arguably required, because a two-axis model that can disagree will produce cases where the index and the source differ, and the handler needs to know which was used." }
+      ]
+    },
+    {
+      "id": "q5-cost-driver",
+      "kind": "trade-off",
+      "prompt": "The withdrawn pilot cost GBP 4,100 per month for 40 users and answered from an ungrounded model. The cap is GBP 22,000 per month for 60 handlers at 200 questions per minute. Which cost driver should you model first, and why does the pilot figure not extrapolate?",
+      "tests": ["sa-cost", "ai-fundamentals", "ai-evaluation"],
+      "dependsOn": "q4-index-design",
+      "options": [
+        { "id": "A", "text": "Model output tokens, because longer answers cost more and the pilot's answers were short." },
+        { "id": "B", "text": "Retrieval index query and storage cost, plus the input tokens for the retrieved passages, because grounding puts those passages into every request and the pilot sent none. The pilot measured a different workload in kind, not just in scale." },
+        { "id": "C", "text": "The number of handlers, because more users means more requests, so scale the pilot figure by headcount." },
+        { "id": "D", "text": "Ingestion, because 2.1 million documents is the largest number on the page." }
+      ],
+      "answers": ["B"],
+      "rationale": "A grounded system's cost structure is different in kind from an ungrounded one: every request now carries retrieved passages as input, and there is an index to store and query. Extrapolating from the pilot multiplies a number from a workload that did not have those components at all, so the error is not one of degree. Option C is the most common mistake - linear scaling by headcount - and it compounds the same error. Option A is a real driver but not the first one, because output tokens did not change in character. Option D is a one-off or infrequent cost, not the recurring driver that determines whether GBP 22,000 holds.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "Output tokens are a genuine driver, but the pilot and the grounded system differ most in what goes into the request, not what comes out of it.", "mistake": "Optimising the visible line while the structural change is on the input side." },
+        { "optionId": "C", "whyWrong": "Linear scaling by headcount assumes the same cost per user, which is exactly what grounding breaks. It is the intuitive answer and the wrong one.", "mistake": "Extrapolating from a workload that does not share the cost structure." },
+        { "optionId": "D", "whyWrong": "Ingestion is significant but largely one-off and re-runnable. It does not determine whether a monthly cap holds under sustained use.", "mistake": "Treating the largest single number as the primary driver." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, then measure cost per successful task rather than cost per question, since a question answered wrongly is not a unit of work delivered.", "conditions": "Correct and better. Cost per successful task is the measure that keeps the team from buying cheap, wrong answers." }
+      ]
+    },
+    {
+      "id": "q6-invented-clause",
+      "kind": "troubleshooting",
+      "prompt": "Handlers report the assistant quoting a policy clause that is not in the wording. The wording document exists in the index, but the quoted text does not appear in it. What is the most likely root cause, and the correct fix?",
+      "tests": ["ai-rag", "ai-evaluation", "ai-injection"],
+      "dependsOn": "q5-cost-driver",
+      "options": [
+        { "id": "A", "text": "The model is hallucinating. Raise the temperature setting and make the system prompt longer and more explicit." },
+        { "id": "B", "text": "Retrieval returned the right document but the wrong chunk - an endorsement superseded an earlier clause and chunking split them - so the model synthesised a plausible clause from adjacent text. Fix by chunking on document structure and version, and requiring an answer to quote verbatim from a retrieved passage or refuse." },
+        { "id": "C", "text": "The index is stale. Rebuild it nightly so the current wording is always present." },
+        { "id": "D", "text": "The handler misread the answer. Add a confirmation dialog before an answer is shown." }
+      ],
+      "answers": ["B"],
+      "rationale": "The distinguishing fact is that the document is present but the text is not. That points at chunking and versioning rather than at the model in isolation: if an endorsement superseded a clause and the two were split across chunks, the model receives a fragment and completes it plausibly. Two fixes matter and they are often conflated - structure-aware chunking that respects endorsements and versions, and a generation rule that requires verbatim quotation from a retrieved passage or an explicit refusal. Option A is the reflex answer; temperature is not the cause of a grounded model completing a partial citation, and a longer prompt does not fix retrieval.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "It treats a retrieval and chunking defect as a generation defect. A longer prompt and lower temperature make the model more conservative but do not supply the clause it never received.", "mistake": "Reaching for a model setting when the fault is upstream." },
+        { "optionId": "C", "whyWrong": "Staleness would mean an old clause is quoted, not one that never existed. The symptom is a synthesised clause, not an outdated one.", "mistake": "Attributing a synthesis failure to freshness." },
+        { "optionId": "D", "whyWrong": "It moves the problem onto the user, who has no way to know the clause is invented - that is the entire reason the pilot failed.", "mistake": "Making the human the control for a machine defect." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, plus a retrieval faithfulness check that scores whether the answer's claims are supported by the retrieved passages, measured separately from answer quality.", "conditions": "Correct and necessary. Without it the same defect returns silently, because a fluent wrong answer looks like a fluent right one." }
+      ]
+    },
+    {
+      "id": "q7-answer-log",
+      "kind": "open-design",
+      "prompt": "Design the answer log so that an answer given today can be reconstructed in seven years, without the live index. State what is recorded, what is retained, what a deletion does to it, and how you would answer a regulator who asks why the system said this. Be explicit about what the log cannot prove.",
+      "tests": ["ai-governance", "cto-security", "data-arch"],
+      "dependsOn": "q6-invented-clause",
+      "minWords": 140,
+      "rubric": [
+        {
+          "criterion": "Records the retrieved passages themselves, or an immutable reference to them, rather than only identifiers",
+          "weight": 0.25,
+          "lookFor": ["passage", "chunk", "snippet", "verbatim", "snapshot", "immutable", "stored", "copied"]
+        },
+        {
+          "criterion": "Records the model, the prompt version and the generation configuration",
+          "weight": 0.2,
+          "lookFor": ["model", "version", "prompt", "temperature", "configuration", "parameters", "settings"]
+        },
+        {
+          "criterion": "Records the caller and the entitlements in force at the time of the answer",
+          "weight": 0.2,
+          "lookFor": ["entitlement", "authority", "caller", "user", "permission", "as at", "at the time", "snapshot"]
+        },
+        {
+          "criterion": "Handles a retention deletion without destroying the ability to explain the answer",
+          "weight": 0.2,
+          "lookFor": ["retention", "deletion", "purge", "tombstone", "redact", "retained", "withdrawn"]
+        },
+        {
+          "criterion": "States what the log cannot prove, rather than implying it settles every question",
+          "weight": 0.15,
+          "lookFor": ["cannot prove", "does not show", "limitation", "cannot reconstruct", "honest", "cannot evidence"]
+        }
+      ],
+      "rationale": "The hardest part is the deletion requirement sitting against the reconstruction requirement, because they pull opposite ways and a design that ignores either is not a design. Storing the passages themselves, not just references, is what makes reconstruction possible after the index is rebuilt and chunk boundaries move. Recording the caller's entitlements as at the time matters because entitlement changes, and a regulator asking why the system said this is partly asking why this handler saw that document. Naming what the log cannot prove - it cannot show the handler read it, nor that the model would answer identically tomorrow - is what separates a defensible answer from a compliance artefact."
+    },
+    {
+      "id": "q8-decision-boundary",
+      "kind": "defence",
+      "prompt": "You have recommended keeping claim decisions entirely outside the model. A reviewer objects: the model could decide low-value claims automatically, which would be faster and would free the handlers for the complex ones. Defend your position, and state the condition under which their proposal would be right.",
+      "tests": ["ai-governance", "arch-tradeoffs", "cto-exec"],
+      "dependsOn": "q7-answer-log",
+      "minWords": 110,
+      "rubric": [
+        {
+          "criterion": "Names what makes a claim determination different in kind from an information answer",
+          "weight": 0.3,
+          "lookFor": ["decision", "liability", "determinative", "accountable", "conduct", "advice", "remedy", "financial consequence", "entitlement"]
+        },
+        {
+          "criterion": "Names the failure mode that makes automated determination unacceptable here",
+          "weight": 0.25,
+          "lookFor": ["invent", "hallucinate", "wrong", "no recourse", "silent", "unauditable", "undetected", "appeal", "redress"]
+        },
+        {
+          "criterion": "States the condition under which automation becomes the right answer",
+          "weight": 0.25,
+          "lookFor": ["if ", "when ", "bounded", "would be", "provided", "deterministic", "rules", "threshold", "at which point"]
+        },
+        {
+          "criterion": "Does not overclaim that AI has no place in the workflow",
+          "weight": 0.2,
+          "lookFor": ["assist", "inform", "draft", "summar", "support", "in the loop", "prepare", "accelerate"]
+        }
+      ],
+      "rationale": "The distinction is not that a model is unreliable, though it is. It is that a claim determination is an accountable act with financial consequence and a right of redress, and the firm - not the model - is answerable for it. An information answer that a handler reads, checks against a cited passage and then acts on keeps a human in a position where they can be wrong in a way that is correctable. An automated determination removes that, and the failure mode is not a bad answer but a silent one that nobody learns about until a client complains. The reviewer is right that automation has a place: where the rule is genuinely deterministic, the value is bounded, and a redress path exists, a rules engine is the right tool - and notably it is a rules engine, not a model, that should do it."
+    },
+    {
+      "id": "q9-entitlement-test",
+      "kind": "lab",
+      "prompt": "Implement the entitlement-filtered retrieval call, together with a test that proves a document belonging to another team is never returned. Deliver the code and a short note on what you verified and how. This is a conceptual exercise unless you have actually run it: say plainly which it is.",
+      "tests": ["ai-permissions", "cicd", "cloud-security"],
+      "dependsOn": "q8-decision-boundary",
+      "minWords": 80,
+      "rubric": [
+        {
+          "criterion": "The caller's entitlements are part of the retrieval query, not a filter applied afterwards",
+          "weight": 0.3,
+          "lookFor": ["filter", "query", "entitlement", "scope", "restrict", "parameter", "predicate", "carried"]
+        },
+        {
+          "criterion": "The test asserts absence of the unauthorised document, not merely presence of the right ones",
+          "weight": 0.25,
+          "lookFor": ["not returned", "absent", "empty", "zero", "excluded", "never", "negative", "none"]
+        },
+        {
+          "criterion": "The test would fail if the entitlement filter were removed",
+          "weight": 0.25,
+          "lookFor": ["fails", "regression", "guard", "breaks", "without the filter", "mutation", "would catch"]
+        },
+        {
+          "criterion": "States plainly whether the code was actually run",
+          "weight": 0.2,
+          "lookFor": ["ran", "executed", "not run", "conceptual", "verified", "did not run", "assertion"]
+        }
+      ],
+      "rationale": "This exercise exists because the retrieval boundary is the single control the whole design rests on, and it is the one most often implemented as a post-filter out of habit. Two properties matter and they are easy to get half-right: the entitlement must narrow the candidate set rather than prune the result, and the test must assert that something is absent rather than that the expected things are present - a suite that only checks the happy path will pass while the boundary is broken. The fourth criterion is about honesty: the Academy distinguishes work designed from work implemented and tested, and the scenario brief requires that to be stated rather than implied."
+    }
+  ],
+  "twist": {
+    "id": "twist-residency",
+    "change": "The firm's insurer has now confirmed, mid-project, that client data must not be transmitted to any processor outside the UK or EU. The current hosted model endpoint routes requests through a region outside both. The processing agreement also does not yet cover special category data, which appears in a meaningful share of loss reports. The sixteen-week deadline is unchanged.",
+    "revisePrompt": "Your design assumed a hosted model throughout. State which parts of it survive the change, which must change, what the realistic options are for the delivery model, and what you would need to know in order to choose between them. Do not assume that self-hosting is automatically correct: state plainly what it would cost a team with no machine learning engineers.",
+    "modelAnswer": "Most of the design survives, and the reason is worth naming: the retrieval boundary, the entitlement model, the privilege rule, the answer log and the evaluation approach are consequences of the requirements, not of where the model runs. What changes is the delivery model, and there are three realistic options rather than two. A region-pinned endpoint satisfies the constraint if the processor will contractually pin the region and amend the agreement to cover special category data - which is a commercial conversation, not a technical one, and it is the cheapest option if it is available. Self-hosting an open-weight model inside the boundary satisfies residency outright, and it is the option that sounds obviously correct, but it trades a residency problem for an operational-capability problem: this team has no machine learning engineers, so it is buying a standing burden of model operations, hardware lifecycle and evaluation that nobody currently holds. The third option is to keep the hosted model and exclude special category data from retrieval entirely, which is cheap and honest about the narrowing - the assistant then answers questions about wordings and endorsements but not about loss circumstances, which is a real reduction in usefulness that should be put to the Head of Claims rather than decided by engineering. What you would need to know to choose: whether the processor will pin region and amend the agreement, what proportion of actual questions require special category data, and whether the firm can fund or contract model operations for the next three years. Note that the boundary between what the assistant may do and what it may not is unchanged by any of this, and it is the part worth being certain about."
+  },
+  "deliverable": {
+    "kind": "written-recommendation",
+    "prompt": "Write a recommendation of no more than 900 words for Nadia Farouk, Marcus Bell and Priya Raghunathan. It must state the boundary between what the assistant may do and what it may not, in terms a compliance officer can act on. Include the realistic delivery options after the insurer's constraint, and be explicit about what is unverified and what you would need to confirm. Lead with the recommendation.",
+    "acceptance": [
+      "The boundary between informing and determining appears in the first third of the document",
+      "At least two delivery options are named, each with the condition under which it would be chosen",
+      "Unverified items are labelled as assumptions or as genuinely unknown, and separated from stated facts",
+      "At least one recommendation is justified by a measured property rather than an adjective such as secure or scalable",
+      "The document stays under 900 words",
+      "Nothing is claimed as implemented or tested unless it actually was"
+    ]
+  },
+  "modelAnswer": {
+    "businessProblem": "A commercial insurance broker lost money and regulatory standing because an ungrounded assistant invented a policy exclusion that a handler repeated to a client. The business problem is not that the firm lacks an AI assistant; it is that the firm must give 60 handlers a way to answer coverage questions in under three minutes while being able to show a regulator, in sixteen weeks and seven years, exactly why any given answer was given - and it must do that without ever allowing a handler to surface a document they are not entitled to see, and without allowing an answer to become a determination. The difficulty is that the retrieval boundary, the retention deletion requirement and the seven-year reconstruction requirement pull against each other, and the delivery model has just become a commercial question rather than a technical one.",
+    "decisiveRequirements": [
+      "NFR2, zero retrieval of a document the handler is not entitled to, because it is a hard boundary and not a quality metric that can be traded against latency or cost",
+      "F6, the assistant may quote but never determine, because a claim determination is an accountable act with financial consequence and a right of redress",
+      "NFR3, reconstructable from the log alone in seven years, because the index will be rebuilt and chunk boundaries will move",
+      "F4 and the privilege constraint, because a privileged document surfacing is a different order of failure from an incorrect answer",
+      "The sixteen-week regulatory deadline, because it rules out a delivery model the team cannot operate in time"
+    ],
+    "importantConstraints": [
+      "No machine learning engineers, so a delivery model requiring standing model operations is a burden with no owner",
+      "The claims platform is vendor-supported and cannot be modified, so it cannot be made to emit entitlement or change its document store",
+      "Entitlement runs on two independent axes that can disagree and have never been reconciled, so any single-predicate design is wrong in a way that is hard to detect",
+      "Retention deletions run monthly against a requirement that may need faster propagation",
+      "Sam is the only person who understands the claims schema, so a design needing her for every change will stall"
+    ],
+    "pattern": "Retrieval-augmented generation with authorisation carried into the retrieval query, a privilege rule held as configuration compliance can inspect, and an append-only answer log that stores passages rather than references. Deliberately not a replacement of the claims platform, and deliberately not an automated determination engine. The generation step is treated as a component that must be constrained and measured, not as the system.",
+    "recommendedServices": [
+      { "name": "A vector and keyword index carrying entitlement metadata resolved from both axes at ingest", "why": "Makes enforcement before retrieval possible, which is the only design where an unauthorised document is not a candidate rather than being discarded after retrieval.", "cloud": "cross-cloud" },
+      { "name": "A retrieval call that takes the caller's entitlements as part of the query", "why": "The single control the design rests on. It is also the one most often implemented as a post-filter out of habit, so it needs an assertion that fails when it is removed.", "cloud": "cross-cloud" },
+      { "name": "An append-only answer log storing the passages, the model and configuration, and the caller's entitlements as at the time", "why": "The only artefact that must survive seven years, and the only one that can answer a regulator after the index has been rebuilt.", "cloud": "cross-cloud" },
+      { "name": "Structure-aware chunking that respects endorsements and document version", "why": "The invented-clause failure came from a superseding endorsement being split across chunks. Chunking by document structure is what stops a fluent wrong answer.", "cloud": "cross-cloud" },
+      { "name": "A golden set with retrieval faithfulness scored separately from generation quality", "why": "A single hallucination number across questions with and without a supporting passage conceals which failure you have. Separating them is what makes the measure actionable.", "cloud": "cross-cloud" },
+      { "name": "Managed identity between services, with the model endpoint reachable only from the application boundary", "why": "Removes shared credentials, and keeps client data on a path the firm can describe to a regulator.", "cloud": "cross-cloud" }
+    ],
+    "rejectedAlternatives": [
+      { "name": "Automatically determine low-value claims with the model", "whyNot": "A determination is an accountable act with financial consequence and a right of redress. A model that is wrong does so silently, and nobody learns of it until a client complains.", "whenRight": "Correct where the rule is genuinely deterministic, the value is bounded and a redress path exists - and then it should be a rules engine, not a model, that does it." },
+      { "name": "Filter entitlement in the application after retrieval", "whyNot": "The unauthorised content has already entered the model's context and been logged and cached. It is the boundary failure the first question identifies, restated as a design.", "whenRight": "Only as a second layer, on top of pre-retrieval enforcement, never instead of it." },
+      { "name": "Point the model at the claims database and skip the index", "whyNot": "It violates the no-modification constraint, has no chunking for long wordings, and applies retrieval load to a vendor system with no support commitment for that use.", "whenRight": "Correct only if the corpus were tiny and unstructured data were not the point, which it is." },
+      { "name": "Self-host the model inside the boundary as the first response to the residency constraint", "whyNot": "It satisfies residency but buys a standing model operations burden on a team with no machine learning engineers, which may be the higher-risk option.", "whenRight": "Correct if the processor will not pin region and amend the agreement, and the firm can fund or contract model operations for the long term." },
+      { "name": "A second model provider as an availability fallback", "whyNot": "Nothing stated justifies it against a 99.5 percent internal availability target, and it adds a second prompt and safety configuration to keep in step.", "whenRight": "Correct only if the availability commitment is actually revised upward, or the tool becomes client-facing." }
+    ],
+    "tradeOffs": [
+      "Entitlement as an ingest-time snapshot means the index is briefly stale when entitlements change. The honest answer is a stated staleness window and showing the handler their entitlement as at a time, rather than pretending it is always current.",
+      "Storing passages in the log rather than references costs storage, and it is the only way to reconstruct an answer after the index is rebuilt. That is a deliberate trade of money for defensibility.",
+      "Excluding privileged documents by a compliance-owned rule is safer than an application filter, and it is slower to change and harder to test automatically.",
+      "Requiring verbatim quotation from a retrieved passage reduces the assistant's usefulness on questions that need synthesis, and it is the price of not inventing clauses.",
+      "A golden set costs ongoing effort to maintain, and without it every change to chunking or prompt is an unmeasured risk."
+    ],
+    "securityControls": [
+      "Authorisation evaluated before retrieval, so an unauthorised document is never a candidate",
+      "Privileged exclusion held as configuration the compliance officer can inspect and change, not as code",
+      "Special category data withheld from the model unless the processing agreement covers it",
+      "Managed identity between services, with no shared keys",
+      "The model endpoint reachable only from the application's own network boundary",
+      "Prompts and passages not retained by the provider for training, verified in the processing agreement rather than assumed from a marketing page",
+      "An automated test that fails if the entitlement filter is removed"
+    ],
+    "scalingRecoveryMonitoring": [
+      "Scale on retrieved passages per request and index query volume, which are the actual cost and latency drivers, not on handler count",
+      "Cache at the passage level rather than the answer level, because answers are caller-specific and passages are not",
+      "Alert on retrieval faithfulness falling, on the not-found rate rising, and on any cross-team retrieval assertion failing in the pipeline",
+      "Monitor the index-to-source reconciliation job for drift, since that is where a missing entitlement metadata case will surface",
+      "Rehearse a retention deletion end to end, including its propagation to the index, before the regulator asks rather than after"
+    ],
+    "assumptionsToConfirm": [
+      "That the claims system's authorisation is correct and complete - it has never been audited and the two axes have never been reconciled",
+      "What proportion of the corpus is privileged, which changes the exclusion design",
+      "Whether entitlement metadata is present on every document or only some, and what happens to the rest",
+      "The actual distribution of optical character recognition quality, since a small unusable tail may be acceptable and a large one may not be",
+      "Whether the monthly retention batch can be made more frequent without vendor support",
+      "What the agreed hallucination threshold actually is, since it is written into a requirement nobody has agreed a number for",
+      "Whether the model processor will pin region and amend the processing agreement"
+    ],
+    "evidenceThatWouldChangeRecommendation": [
+      "An authorisation audit showing the two entitlement axes are inconsistent, which would make reconciling them the first task rather than a background job",
+      "A finding that a large share of the corpus is privileged, which would make the exclusion rule the highest-risk component rather than the retrieval filter",
+      "A processor willing to contractually pin region and cover special category data, which would make the hosted option clearly correct",
+      "A measured cost per successful task showing the GBP 22,000 cap cannot hold, which would put the scope question to the Head of Claims rather than the engineering team",
+      "A golden set showing retrieval faithfulness is high but generation quality is the binding constraint, which would shift effort from chunking to evaluation",
+      "Evidence that handlers routinely ask questions requiring special category data, which would rule out the cheapest residency workaround"
+    ]
+  },
+  "sources": [
+    {
+      "title": "Overview - Amazon Bedrock",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/what-is-bedrock.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Characteristics of a managed model delivery model: what the provider operates and what the customer remains responsible for. Used to argue that managed is not the same as responsibility-free."
+    },
+    {
+      "title": "Retrieve data and generate AI responses with Amazon Bedrock Knowledge Bases",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/knowledge-base.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Retrieval-augmented generation as a managed pattern, so the retrieval-then-generation structure in the diagram is recognised rather than invented."
+    },
+    {
+      "title": "RAG and Generative AI - Azure AI Search",
+      "url": "https://learn.microsoft.com/en-us/azure/search/retrieval-augmented-generation-overview",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The same pattern on a second cloud, which is the basis for the model answer treating the pattern as cross-cloud rather than vendor-specific."
+    },
+    {
+      "title": "OWASP Top 10 for Large Language Model Applications",
+      "url": "https://owasp.org/projects/top-10-for-large-language-model-applications",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The risk categories the scenario exercises, including insecure output handling and prompt injection, independent of any vendor's framing."
+    },
+    {
+      "title": "AI Risk Management Framework",
+      "url": "https://www.nist.gov/itl/ai-risk-management-framework",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The governance framing behind requiring measurement, documentation and a stated boundary between what the system may do and what it may not."
+    },
+    {
+      "title": "Detect and filter harmful content by using Amazon Bedrock Guardrails",
+      "url": "https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Content filtering as one control, and the model answer's position that a filter is not a substitute for enforcing entitlement before retrieval."
+    },
+    {
+      "title": "What is Amazon OpenSearch Service?",
+      "url": "https://docs.aws.amazon.com/opensearch-service/latest/developerguide/what-is.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Characteristics of a managed vector and keyword index, including that it is retrieval infrastructure and not a system of record."
+    },
+    {
+      "title": "SP 800-53 Rev. 5, Security and Privacy Controls for Information Systems and Organizations",
+      "url": "https://csrc.nist.gov/pubs/sp/800/53/r5/upd1/final",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The access control and audit families behind requiring least-privilege retrieval and a reconstructable audit record."
+    },
+    {
+      "title": "Policies and permissions in AWS Identity and Access Management",
+      "url": "https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Least-privilege enforcement and managed identity between services, which is a stated constraint."
+    },
+    {
+      "title": "Azure Architecture Center",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The cross-cloud reference point for the delivery model options after the residency constraint, since the recommendation must not assume one vendor."
+    }
+  ]
+}

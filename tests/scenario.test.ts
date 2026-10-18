@@ -6,9 +6,14 @@ import { validateScenarioDiagram, renderScenarioDiagram, interrogateComponent, d
 import { DECISION_FRAMES, DECISION_STEPS, SCENARIO_STAGES } from "@/lib/scenario/types";
 
 const scenario = getScenario("invoicing-platform-resilience")!;
+const claims = getScenario("claims-assistant-grounding")!;
 
 function q(id: string) {
   return scenario.questions.find((x) => x.id === id)!;
+}
+
+function qClaims(id: string) {
+  return claims.questions.find((x) => x.id === id)!;
 }
 
 describe("scenario bank integrity", () => {
@@ -84,6 +89,42 @@ describe("scenario bank integrity", () => {
     }
   });
 
+  it("loads a second scenario covering the ai-data theme at expert difficulty", () => {
+    expect(claims).toBeDefined();
+    expect(claims.theme).toBe("ai-data");
+    expect(claims.difficulty).toBe("expert");
+    expect(claims.cloudScope).toBe("cross-cloud");
+    expect(claims.moduleId).toBe("tech-ai");
+    expect(claims.evidenceLessonId).toBe("ai-model-selection");
+    expect(claims.questions).toHaveLength(9);
+    // Every closed question has a consistent answer key and explained distractors.
+    for (const question of claims.questions.filter(isClosed)) {
+      const optionIds = new Set(question.options!.map((o) => o.id));
+      for (const a of question.answers ?? []) {
+        expect(optionIds.has(a), `${question.id} answers ${a}`).toBe(true);
+      }
+      const explained = new Set((question.distractors ?? []).map((d) => d.optionId));
+      for (const o of question.options!) {
+        const isCorrect = question.answers?.includes(o.id);
+        if (!isCorrect) {
+          expect(explained.has(o.id), `${question.id} option ${o.id} lacks a distractor explanation`).toBe(true);
+        }
+      }
+    }
+    // Open questions must declare a rubric and a minimum length.
+    for (const question of claims.questions.filter((x) => !isClosed(x))) {
+      expect(question.rubric?.length, question.id).toBeGreaterThan(0);
+      expect(question.minWords, question.id).toBeGreaterThan(0);
+    }
+  });
+
+  it("keeps both scenarios evidence-linked to real lessons", () => {
+    for (const s of [scenario, claims]) {
+      const issues = validateScenario(s).filter((i) => i.issue.includes("is not a real lesson"));
+      expect(issues, s.id).toEqual([]);
+    }
+  });
+
   it("makes difficulty come from competing requirements, not obscurity", () => {
     // Every distractor must explain why it is wrong here, in this scenario.
     for (const question of scenario.questions) {
@@ -105,6 +146,20 @@ describe("closed question scoring", () => {
     const r = scoreClosed(q("q4-db-resilience"), ["B"], true);
     expect(r.correct).toBe(true);
     expect(r.score).toBe(1);
+  });
+
+  it("scores the claims scenario's entitlement boundary question correctly", () => {
+    const r = scoreClosed(qClaims("q2-authorisation-point"), ["B"], true);
+    expect(r.correct).toBe(true);
+    const wrong = scoreClosed(qClaims("q2-authorisation-point"), ["A"], true);
+    expect(wrong.correct).toBe(false);
+  });
+
+  it("treats claims multiple-select as all-or-nothing", () => {
+    const partial = scoreClosed(qClaims("q3-gate"), ["A", "B", "C"], true);
+    expect(partial.correct).toBe(false);
+    const full = scoreClosed(qClaims("q3-gate"), ["A", "B", "C", "E", "F"], true);
+    expect(full.correct).toBe(true);
   });
 
   it("scores a wrong single-best answer as zero", () => {
