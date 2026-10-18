@@ -1,0 +1,570 @@
+{
+  "id": "northwind-claims-portal-azure",
+  "bankVersion": "scenario-bank-v1",
+  "title": "Northwind: a claims portal redesigned for Azure",
+  "theme": "migration-modernisation",
+  "cloudScope": "azure",
+  "difficulty": "professional",
+  "moduleId": "cloud-solutions-architecture",
+  "evidenceLessonId": "azure-az305-solutions-architect",
+  "competencies": [
+    "sa-azure",
+    "sa-identity",
+    "sa-governance",
+    "sa-dr",
+    "sa-cost",
+    "sa-options",
+    "cloud-security",
+    "data-arch",
+    "sa-nfr",
+    "apis-networking"
+  ],
+  "timeEstimateMinutes": 150,
+  "context": {
+    "businessContext": "Northwind Mutual (fictional, used here as a training scenario shaped like a real mid-size insurer) runs a member claims portal on two on-premises virtual machines behind a hardware load balancer. The portal lets members submit claims, upload evidence, and check status. The VMs are three years into a five-year hardware cycle; the load balancer is out of support. Security has required multifactor authentication for staff for a year, but the portal still authenticates members with a shared password database. Leadership wants the portal redesigned for Azure within nine months, with a hard requirement that a single datacenter outage does not take member claim submission offline during storm season.",
+    "objectives": [
+      "Member claim submission stays available through a single datacenter outage",
+      "Members authenticate with a modern identity provider, not a shared password database",
+      "Staff can administer claims without VPN-only jump boxes",
+      "The operating cost after migration is no higher than the current hardware and colocation run rate"
+    ],
+    "stakeholders": [
+      {
+        "name": "Aisha Rahman",
+        "role": "Head of Claims Operations",
+        "concern": "Storm season is the revenue and reputation window. Will not accept a design that is only as available as today's pair of VMs."
+      },
+      {
+        "name": "Tomás Ferreira",
+        "role": "Chief Information Security Officer",
+        "concern": "The shared password database is the finding on the last audit. Needs identity and evidence of least privilege before go-live, not after."
+      },
+      {
+        "name": "Priya Shah",
+        "role": "Finance business partner",
+        "concern": "Will fund migration only if the steady-state run rate is modelled, not assumed."
+      },
+      {
+        "name": "Ben Okonkwo",
+        "role": "Platform engineer",
+        "concern": "Will own the Azure estate. Anything that cannot be expressed as code will drift."
+      }
+    ],
+    "existingInfrastructure": "Two on-premises virtual machines (web and application tiers on the same pair), a hardware load balancer out of support, SQL Server on a third VM with nightly backups to tape, file storage for claim evidence on a NAS, VPN for staff administration, and an Active Directory domain used for staff only. Members are not in Active Directory.",
+    "dataCharacteristics": [
+      "Claim records in SQL Server, approximately 40 GB, growing about 8 GB per year",
+      "Evidence uploads (PDF, JPEG) on a NAS, approximately 2 TB, growing about 400 GB per year",
+      "Claim evidence must be retained for seven years under the firm's retention schedule",
+      "Peak submission during named storm events: roughly 12x normal daily claim volume for 48 to 72 hours",
+      "No special category health data in this portal; medical claims are handled in a separate system out of scope"
+    ],
+    "compliance": [
+      "Financial services operational resilience expectations: claim submission is a critical member-facing service",
+      "Retention schedule: seven years for claim evidence and decision records",
+      "Access reviews: privileged access to claim data must be reviewable quarterly",
+      "The password database finding from the last audit must be closed before go-live"
+    ]
+  },
+  "requirements": {
+    "functional": [
+      "F1: A member submits a claim with evidence upload and receives a claim reference",
+      "F2: A member checks claim status without contacting the contact centre",
+      "F3: Staff administer claims (triage, request information, decide) from a separate authenticated interface",
+      "F4: Evidence files are stored, retrieved, and retained under the retention schedule"
+    ],
+    "nonFunctional": [
+      "NFR1: Claim submission remains available through loss of one datacenter or availability zone",
+      "NFR2: No shared password database for members; multifactor authentication is available for members and required for staff",
+      "NFR3: Privileged access to claim data is least-privileged, logged, and reviewable",
+      "NFR4: Infrastructure is expressible as code; manual portal-only changes are not the deployment path"
+    ],
+    "performanceAvailability": [
+      "Baseline availability target 99.9 percent for claim submission",
+      "Storm peak: sustain 12x normal claim submission volume for 72 hours without queueing members out",
+      "Evidence upload p95 under 10 seconds for a 10 MB file on a typical member connection"
+    ],
+    "budget": "Migration budget of GBP 180,000 for design, build and cutover. Steady-state Azure run rate must not exceed the current combined hardware, colocation and support contract of approximately GBP 9,500 per month.",
+    "teamSkills": "Three platform engineers with Windows Server and SQL Server experience; one has Azure administration training. No Kubernetes experience. Strong PowerShell and emerging Bicep skills. Claims developers are a separate vendor team on a maintenance contract.",
+    "deadline": "Go-live before the next storm season, nine months from kickoff. Hardware support ends in fourteen months, so a delayed project has a hard external floor."
+  },
+  "constraints": {
+    "security": [
+      "The shared member password database must not be migrated; it is decommissioned at cutover",
+      "Staff administrative access must not depend on a VPN-only jump box as the sole path",
+      "Evidence uploads must be scanned for malware before they are available to staff",
+      "Claim data must remain in UK or EU regions under the firm's data residency policy"
+    ],
+    "identityNetworking": [
+      "Members are not in Active Directory; member identity must come from a consumer-capable identity provider",
+      "Staff identity must federate with existing Active Directory",
+      "Private connectivity between the application and data tiers is preferred over public internet paths for data-plane traffic",
+      "The claims vendor's maintenance access must be time-bound and logged"
+    ],
+    "operational": [
+      "Three platform engineers; no Kubernetes and no desire to learn it for this workload",
+      "The claims vendor team deploys application code on their own schedule within change windows",
+      "Cutover must be reversible within one business day after go-live",
+      "Nightly tape backup is the current recovery mechanism and is not acceptable as the Azure design"
+    ]
+  },
+  "ambiguity": {
+    "explicitFacts": [
+      "Storm peak is roughly 12x normal volume for 48 to 72 hours",
+      "Hardware load balancer is out of support; hardware support ends in fourteen months",
+      "Member password database is an audit finding and must not migrate",
+      "Claim data residency is UK or EU",
+      "Team has no Kubernetes experience",
+      "Steady-state budget is approximately GBP 9,500 per month"
+    ],
+    "assumptions": [
+      "That the 12x storm peak is a traffic shape the application can absorb if the platform scales out, rather than a shape that breaks the application itself",
+      "That vendor application code can be containerised or otherwise redeployed without a rewrite",
+      "That 'available through a single datacenter outage' means application and data both survive, not only the front end",
+      "That the current GBP 9,500 includes enough of the real cost (power, third-line support, DR site) to be a fair comparison"
+    ],
+    "missingInformation": [
+      "Whether the vendor application supports horizontal scale-out, or is stateful in a way that caps it at one instance",
+      "Actual RPO and RPO for claim submission as a business service - leadership said 'storm season' but has not signed numbers",
+      "Whether evidence upload malware scanning is already licensed somewhere in the group, which changes both cost and design",
+      "The real current total cost of ownership: hardware, colocation, power, support contracts and staff time are not fully inventoried"
+    ],
+    "ambiguities": [
+      "'Available through a single datacenter outage' is ambiguous between zone redundancy inside one region and cross-region failover. The two cost very different amounts and have different cutover stories.",
+      "'No higher than the current run rate' does not say whether migration amortisation is in or out of the comparison, which changes whether a PaaS-heavy design looks expensive.",
+      "'Staff without VPN-only jump boxes' could mean public access with strong identity, or private access over a different private connectivity product. Security may intend only one of those."
+    ]
+  },
+  "diagram": {
+    "title": "Northwind claims portal - proposed Azure shape",
+    "caption": "Application Gateway with WAF fronts zone-redundant App Service; data plane stays on private endpoints. Where the vendor application can and cannot scale out is the open question.",
+    "elements": [
+      {
+        "id": "northwind",
+        "kind": "software-system",
+        "name": "Northwind claims portal",
+        "description": "Member claim submission, evidence upload, and staff administration.",
+        "responsibility": "Accepts and tracks claims. Does not decide medical outcomes; those are out of scope."
+      },
+      {
+        "id": "member",
+        "kind": "person",
+        "name": "Member",
+        "description": "Submits claims and checks status, authenticated as a consumer identity.",
+        "responsibility": "Provides accurate claim information and evidence."
+      },
+      {
+        "id": "staff",
+        "kind": "person",
+        "name": "Claims staff",
+        "description": "Triages and decides claims through an administrative interface.",
+        "responsibility": "Accountable for claim decisions."
+      },
+      {
+        "id": "admin",
+        "kind": "person",
+        "name": "Platform engineer",
+        "description": "Operates the Azure estate and reviews privileged access.",
+        "responsibility": "Owns infrastructure as code, monitoring, and recovery."
+      },
+      {
+        "id": "appgw",
+        "kind": "container",
+        "name": "Application Gateway with WAF",
+        "description": "Public entry point; terminates TLS and applies WAF rules.",
+        "technology": "Azure Application Gateway v2, zone-redundant",
+        "responsibility": "Edge protection and routing. Holds no claim logic."
+      },
+      {
+        "id": "appsvc",
+        "kind": "container",
+        "name": "Claims App Service",
+        "description": "Web and API tiers of the vendor application, zone-redundant instances.",
+        "technology": "Azure App Service, private VNet integration",
+        "responsibility": "Runs vendor application code. Scales out if the application allows it."
+      },
+      {
+        "id": "identity",
+        "kind": "external-system",
+        "name": "Microsoft Entra ID",
+        "description": "Member authentication (external identities) and staff federation with on-premises Active Directory.",
+        "technology": "Microsoft Entra ID",
+        "responsibility": "Authoritative for who may sign in. Not a store of claim data."
+      },
+      {
+        "id": "sql",
+        "kind": "data-store",
+        "name": "Azure SQL Database",
+        "description": "Claim records, with zone-redundant backups and point-in-time restore.",
+        "technology": "Azure SQL Database",
+        "responsibility": "System of record for claims. Not a file store."
+      },
+      {
+        "id": "evidence",
+        "kind": "data-store",
+        "name": "Evidence storage",
+        "description": "Claim evidence files with malware scan gate before staff visibility.",
+        "technology": "Azure Blob Storage, private endpoint",
+        "responsibility": "Stores evidence under retention. Not authoritative for claim status."
+      },
+      {
+        "id": "keyvault",
+        "kind": "data-store",
+        "name": "Key Vault",
+        "description": "Certificates and application secrets; accessed by managed identity.",
+        "technology": "Azure Key Vault",
+        "responsibility": "Holds secrets. Application never holds them in configuration files."
+      },
+      {
+        "id": "monitor",
+        "kind": "container",
+        "name": "Azure Monitor and Log Analytics",
+        "description": "Metrics, logs, and alerts for the portal and data services.",
+        "technology": "Azure Monitor",
+        "responsibility": "Evidence of health and of privileged access for reviews."
+      }
+    ],
+    "relationships": [
+      { "id": "r1", "sourceId": "member", "targetId": "appgw", "label": "submits claims over HTTPS", "technology": "HTTPS" },
+      { "id": "r2", "sourceId": "staff", "targetId": "appgw", "label": "administers claims over HTTPS", "technology": "HTTPS" },
+      { "id": "r3", "sourceId": "appgw", "targetId": "appsvc", "label": "routes to back end over private endpoint", "technology": "HTTPS, private" },
+      { "id": "r4", "sourceId": "appsvc", "targetId": "identity", "label": "validates member and staff tokens", "technology": "OpenID Connect" },
+      { "id": "r5", "sourceId": "appsvc", "targetId": "sql", "label": "reads and writes claims over private endpoint", "technology": "TLS SQL" },
+      { "id": "r6", "sourceId": "appsvc", "targetId": "evidence", "label": "writes evidence after scan gate", "technology": "HTTPS, private" },
+      { "id": "r7", "sourceId": "appsvc", "targetId": "keyvault", "label": "reads secrets by managed identity", "technology": "Managed identity" },
+      { "id": "r8", "sourceId": "admin", "targetId": "monitor", "label": "operates and reviews access", "technology": "HTTPS" },
+      { "id": "r9", "sourceId": "monitor", "targetId": "appsvc", "label": "collects platform and application logs", "technology": "Agent/API" },
+      { "id": "r10", "sourceId": "identity", "targetId": "staff", "label": "federates staff from Active Directory", "technology": "Hybrid identity" }
+    ],
+    "omissions": [
+      "No Kubernetes cluster is drawn; the team has no Kubernetes experience and the workload does not require it",
+      "No cross-region pair is drawn; zone redundancy is in the diagram, cross-region is the open ambiguity",
+      "No malware scanning service is named in the diagram; the scan gate is a responsibility on the evidence path, not a chosen product"
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1-availability-level",
+      "kind": "diagram-interpretation",
+      "prompt": "The diagram shows zone-redundant App Service behind Application Gateway. The business requirement is that claim submission survives a single datacenter outage. What does zone redundancy actually buy here, and what does it not buy?",
+      "tests": ["sa-azure", "sa-dr", "sa-nfr"],
+      "options": [
+        { "id": "A", "text": "It guarantees the portal survives any regional outage, because the service is replicated across the region." },
+        { "id": "B", "text": "It protects against failure of a single datacenter or availability zone within the region. It does not protect against a full regional outage; that needs a paired region and a failover story, which the diagram does not show." },
+        { "id": "C", "text": "It only improves latency; availability is determined solely by the App Service plan tier." },
+        { "id": "D", "text": "It is unnecessary because Application Gateway alone provides datacenter-level failover for the entire path." }
+      ],
+      "answers": ["B"],
+      "rationale": "Zone redundancy keeps instances and platform components spread across physical locations in one region so one zone failure does not take the service down. A whole-region failure is a different failure mode with a different cost and operational story. Option A overclaims; option C confuses performance with fault isolation; option D assigns the entire path's resilience to the edge, which cannot make a zonal data store multi-region by routing alone.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "Zone redundancy is within a region. A regional outage takes every zone in that region with it.", "mistake": "Treating multi-zone as multi-region." },
+        { "optionId": "C", "whyWrong": "Zones are fault isolation domains, not latency optimisations; tier affects scale and features, not by itself surviving zone loss.", "mistake": "Confusing performance configuration with resilience configuration." },
+        { "optionId": "D", "whyWrong": "Application Gateway is a front end; it cannot make SQL or storage available if their zone fails, and routing around a dead data plane is not failover.", "mistake": "Assuming the edge provides end-to-end resilience." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, and if leadership's 'single datacenter outage' language is later confirmed to mean regional outage, add a paired-region design with its own RTO/RPO - do not silently re-interpret the requirement as zonal.", "conditions": "Correct as the baseline; the ambiguity list already flags that leadership has not signed RPO/RTO numbers, so the interpretation must be confirmed in writing." }
+      ]
+    },
+    {
+      "id": "q2-member-identity",
+      "kind": "single-best",
+      "prompt": "Members are not in Active Directory. The audit finding requires removing the shared password database. Which identity design fits the stated constraints?",
+      "tests": ["sa-identity", "cloud-security", "sa-azure"],
+      "dependsOn": "q1-availability-level",
+      "options": [
+        { "id": "A", "text": "Sync members into Active Directory and reuse the existing domain controllers for member sign-in." },
+        { "id": "B", "text": "Use Microsoft Entra external identities for members, and federate staff sign-in to Active Directory through Microsoft Entra ID, so one identity platform fronts both populations without putting members in the domain." },
+        { "id": "C", "text": "Keep the password database but add multifactor authentication in front of it." },
+        { "id": "D", "text": "Let members authenticate with one-time emailed links only, with no identity provider." }
+      ],
+      "answers": ["B"],
+      "rationale": "The constraint is explicit: members are not in Active Directory and the password database must not migrate. External identities (or an equivalent consumer IdP) plus staff federation meets both, and gives one place to enforce MFA and conditional access. Option A pollutes the staff directory with consumer identities and creates lifecycle problems the team is not staffed for. Option C keeps the finding: a shared password store with MFA on top is still a shared password store. Option D is not an identity design; it cannot support account recovery, linked claims, or access reviews.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "It puts millions of potential consumer identities into a staff AD with no stated joiner-mover-leaver process for them.", "mistake": "Reusing an internal directory for an external population." },
+        { "optionId": "C", "whyWrong": "The audit finding is the shared password database itself; bolting MFA on does not close it.", "mistake": "Adding a control without removing the defect." },
+        { "optionId": "D", "whyWrong": "Magic links are a delivery mechanism, not an identity provider; they fail account recovery, linked multi-claim history, and privileged staff separation.", "mistake": "Mistaking a sign-in convenience for an identity architecture." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, or an equivalent consumer-capable identity provider if the group already licenses one - the mechanism is external member identity plus federated staff identity, not a specific vendor SKU.", "conditions": "Correct whenever the constraint 'members are not in Active Directory' holds and the password finding must close before go-live." }
+      ]
+    },
+    {
+      "id": "q3-storm-peak",
+      "kind": "choose-architecture",
+      "prompt": "Storm peak is roughly 12x normal claim submission volume for 48 to 72 hours. The vendor application is on a maintenance contract. Which approach best meets the peak without assuming a rewrite?",
+      "tests": ["sa-azure", "sa-scalability", "sa-options"],
+      "dependsOn": "q2-member-identity",
+      "options": [
+        { "id": "A", "text": "Scale the App Service plan vertically through the storm window, keeping a single instance, because vertical scale needs no application change." },
+        { "id": "B", "text": "Confirm whether the vendor application can scale out horizontally; if it can, scale out on a metric tied to submission load. If it cannot, treat that as a blocking discovery and size for the peak on the single path that works, with a load test before go-live. Do not assume Kubernetes is the answer." },
+        { "id": "C", "text": "Move the entire portal to Kubernetes before storm season so any scaling model is available." },
+        { "id": "D", "text": "Shed storm-peak submissions to a callback queue so the portal never needs to handle 12x." }
+      ],
+      "answers": ["B"],
+      "rationale": "The decisive unknown is whether the vendor application is horizontally scalable; the missing-information list already flags this. Option B makes that a discovery item with a load-test gate, which is what a maintenance-contract application forces. Vertical scale has hard ceilings and does not need to be rejected a priori, but it is a fallback to measure, not a plan. Kubernetes contradicts the skills constraint. Shedding claims during storms fails the business objective of the critical service.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "It treats an unknown ceiling as a plan; at 12x a single vertical instance can hit CPU, memory or connection limits that only a load test will reveal.", "mistake": "Choosing the path that avoids discovery." },
+        { "optionId": "C", "whyWrong": "It contradicts the explicit no-Kubernetes constraint and spends the nine months on platform migration rather than claim availability.", "mistake": "Solving a scaling question with an unrelated technology preference." },
+        { "optionId": "D", "whyWrong": "Claim submission during storms is the critical service; shedding it fails the objective that the redesign exists to protect.", "mistake": "Optimising infrastructure by degrading the business capability." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, with an API management or front-door rate that protects staff interfaces while member submission is prioritised.", "conditions": "Correct when scale-out is proven; the prioritisation variant applies when total capacity is finite and staff traffic is lower value during a storm." }
+      ]
+    },
+    {
+      "id": "q4-data-path",
+      "kind": "single-best",
+      "prompt": "Evidence uploads contain claim documents. The constraint prefers private connectivity for data-plane traffic. Which design is consistent with the diagram and the residency constraint?",
+      "tests": ["cloud-security", "sa-identity", "apis-networking"],
+      "dependsOn": "q3-storm-peak",
+      "options": [
+        { "id": "A", "text": "App Service writes to SQL and Blob Storage over public endpoints with firewall allowlists limited to the App Service IPs." },
+        { "id": "B", "text": "App Service uses VNet integration and private endpoints to Azure SQL and Blob Storage, so data-plane traffic stays on the Microsoft backbone and public network access can be disabled on the data services." },
+        { "id": "C", "text": "Put the database and storage on a virtual machine in the same subnet as a temporary lift-and-shift, then redesign later." },
+        { "id": "D", "text": "Upload evidence to a public shared link that staff copy into the portal, because private endpoints are complex." }
+      ],
+      "answers": ["B"],
+      "rationale": "Private endpoints plus VNet integration is the pattern shown in the baseline: data services can deny public access, which is a stronger control than an IP allowlist that drifts. Residency is satisfied by choosing UK or EU regions; privacy of the path is a separate control that the constraint asks for. Option A relies on allowlists that change and are easy to widen. Option C abandons managed data services and rebuilds the DR problem the project is meant to fix. Option D removes controls entirely.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "Public endpoints with IP allowlists still expose a public attack surface and drift as App Service scales and addresses change.", "mistake": "Confusing an allowlist with a private path." },
+        { "optionId": "C", "whyWrong": "It reintroduces self-managed SQL and storage with weaker backup and zone behaviour, against a team of three and a tape-backup history the design is meant to leave behind.", "mistake": "Lift-and-shift as a way to avoid a networking decision." },
+        { "optionId": "D", "whyWrong": "It fails least privilege, audit, and any reasonable evidence handling policy for claim documents.", "mistake": "Opting out of the security constraint for convenience." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, with service endpoints as an interim step only if private endpoints cannot be funded in phase one - and only with public access still restricted.", "conditions": "Weaker than private endpoints; acceptable only as a dated interim with a recorded exception, not as the target design." }
+      ]
+    },
+    {
+      "id": "q5-rto-tradeoff",
+      "kind": "trade-off",
+      "prompt": "Leadership has not signed an RPO or RTO. The current design uses nightly tape backups. Finance is comparing Azure run rate to GBP 9,500 per month. How should you handle recovery objectives without inventing numbers?",
+      "tests": ["sa-dr", "sa-cost", "sa-nfr"],
+      "dependsOn": "q4-data-path",
+      "options": [
+        { "id": "A", "text": "Adopt the SQL Database default restore capability as the design and treat any better objective as out of budget." },
+        { "id": "B", "text": "Present the recovery options as a decision with costs: zone-redundant backups and point-in-time restore as the baseline; geo-replication as the option if leadership wants regional recovery. Put the business cost of downtime during storm season next to each. Do not sign the objective yourself." },
+        { "id": "C", "text": "Assume the previous RTO of 'next business day' from the tape process carries over unchanged." },
+        { "id": "D", "text": "Buy the highest recovery tier available and defend it as risk management without a cost comparison." }
+      ],
+      "answers": ["B"],
+      "rationale": "Recovery objectives are business decisions; the architect's job is to make the options and their costs legible. Nightly tape is not a transferable baseline - the Azure design already changes the mechanism. Option A silently picks an objective for the business. Option C treats a tape-era practice as a requirement. Option D is the mirror image: spending without a decision record. B keeps the decision with leadership while showing exactly what storm-season downtime costs.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "It converts a budget constraint into a recovery objective without a business sign-off, which is how silent risk is created.", "mistake": "Letting the tool default become the policy." },
+        { "optionId": "C", "whyWrong": "The tape process is what the project is replacing; its recovery time was a property of that process, not a stated business requirement.", "mistake": "Mistaking current practice for agreed target." },
+        { "optionId": "D", "whyWrong": "It spends against an unsigned objective and will not survive Finance's comparison to GBP 9,500 per month without the decision record B produces.", "mistake": "Substituting spend for decision-making." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, and if leadership refuses to engage before go-live, default to the documented baseline (zone redundancy, PITR) and record the open objective as a risk with a named owner.", "conditions": "Correct when decision latency exceeds project time; the risk must still be explicit, not assumed." }
+      ]
+    },
+    {
+      "id": "q6-open-privileged",
+      "kind": "open-design",
+      "prompt": "Design privileged access for three platform engineers and the claims vendor's maintenance team. Cover how staff reach administrative interfaces without a VPN-only jump box, how vendor access is time-bound and logged, and how quarterly access reviews are supported. State what you are assuming.",
+      "tests": ["sa-identity", "cloud-security", "sa-governance"],
+      "dependsOn": "q5-rto-tradeoff",
+      "minWords": 130,
+      "rubric": [
+        {
+          "criterion": "Separates staff identity from vendor identity with different privilege levels",
+          "weight": 0.25,
+          "lookFor": ["separate", "vendor", "least privilege", "role", "break-glass", "not shared", "distinct"]
+        },
+        {
+          "criterion": "Replaces VPN-only jump boxes with an identity-centred path (conditional access, PIM or equivalent just-in-time elevation)",
+          "weight": 0.25,
+          "lookFor": ["conditional access", "PIM", "just-in-time", "elevation", "MFA", "compliant device", "no jump box", "time-bound"]
+        },
+        {
+          "criterion": "Requires vendor access to be time-bound, approved, and logged to a reviewable store",
+          "weight": 0.25,
+          "lookFor": ["time-bound", "approve", "ticket", "log", "audit", "expire", "break-glass", "session"]
+        },
+        {
+          "criterion": "Names an assumption about vendor application access or existing group licensing",
+          "weight": 0.25,
+          "lookFor": ["assum", "if ", "assuming", "need to confirm", "licence", "license", "not known", "confirm"]
+        }
+      ],
+      "rationale": "The constraints force identity-centred administration: no VPN-only path, least privilege, reviewable logs. A strong answer distinguishes three populations (platform engineers, claims staff, vendor), elevates with just-in-time or equivalent rather than standing admin, and treats vendor access like a production change window - approved, logged, expiring. The assumption to surface is usually licensing and whether the vendor will accept conditional access and PIM at all; that is a commercial conversation, not only a technical one."
+    },
+    {
+      "id": "q7-defend-no-k8s",
+      "kind": "defence",
+      "prompt": "A reviewer argues that anything short of Kubernetes is 'not a real cloud design' and will not scale for storms. Defend the App Service (or equivalent PaaS) choice against that objection, and state when Kubernetes would become the right answer.",
+      "tests": ["sa-options", "arch-tradeoffs", "sa-cost"],
+      "dependsOn": "q6-open-privileged",
+      "minWords": 100,
+      "rubric": [
+        {
+          "criterion": "Ties the choice to a stated constraint or requirement (team skills, vendor maintenance contract, deadline, or cost ceiling)",
+          "weight": 0.3,
+          "lookFor": ["Kubernetes", "skills", "vendor", "deadline", "budget", "run rate", "maintain", "ops"]
+        },
+        {
+          "criterion": "Names the concrete operational burden Kubernetes would add for three engineers",
+          "weight": 0.25,
+          "lookFor": ["cluster", "upgrade", "on-call", "control plane", "platform", "ops", "skills", "learning"]
+        },
+        {
+          "criterion": "States when Kubernetes would be right",
+          "weight": 0.25,
+          "lookFor": ["if ", "when ", "multi-language", "heterogeneous", "batch", "GPU", "portability", "at which"]
+        },
+        {
+          "criterion": "Does not claim PaaS is free of trade-offs (vendor lock-in, plan limits)",
+          "weight": 0.2,
+          "lookFor": ["lock-in", "limit", "plan", "quota", "exit", "portability", "trade-off", "constrain"]
+        }
+      ],
+      "rationale": "The objection mistakes tooling prestige for fitness. The requirements that decide here are a nine-month storm-season deadline, three engineers without Kubernetes, a vendor maintenance contract on existing application code, and a run-rate ceiling. PaaS meets those; a cluster would consume the deadline learning a platform the workload does not yet need. Kubernetes becomes right when the application portfolio is genuinely heterogeneous, when scaling or scheduling needs exceed the plan's models, or when portability is a signed requirement - none of which are stated. Naming PaaS lock-in and plan limits keeps the defence honest."
+    },
+    {
+      "id": "q8-cutover",
+      "kind": "open-design",
+      "prompt": "Cutover must be reversible within one business day after go-live. Describe the cutover approach for data and traffic, what you measure in the first 24 hours, and what triggers rollback. Be explicit that you are designing, not claiming this has been run.",
+      "tests": ["sa-dr", "cicd", "sa-azure"],
+      "dependsOn": "q7-defend-no-k8s",
+      "minWords": 120,
+      "rubric": [
+        {
+          "criterion": "Uses a reversible traffic switch (DNS TTL, traffic manager or equivalent) rather than a one-way destructive migration as step one",
+          "weight": 0.25,
+          "lookFor": ["DNS", "TTL", "traffic", "switch", "rollback", "reversible", "blue", "green", "route"]
+        },
+        {
+          "criterion": "Defines how claim data is kept consistent during the reversible window (dual-write, replication, or freeze-and-cutover with a clear owner)",
+          "weight": 0.25,
+          "lookFor": ["replicat", "dual-write", "sync", "freeze", "consistent", "delta", "cutover window", "source of truth"]
+        },
+        {
+          "criterion": "Names concrete first-24-hour measures (error rate, submission success, upload failures, auth failures)",
+          "weight": 0.25,
+          "lookFor": ["error rate", "success", "latency", "auth", "upload", "alert", "SLO", "dashboard", "measure"]
+        },
+        {
+          "criterion": "States rollback triggers as thresholds, not feelings, and admits this is a design not a completed run",
+          "weight": 0.25,
+          "lookFor": ["trigger", "threshold", "percent", "not run", "designed", "would", "rehearse", "drill"]
+        }
+      ],
+      "rationale": "Reversibility in one business day forces a traffic-level switch and a data strategy that does not destroy the on-premises source on day one. The strongest answers dual-write or replicate into Azure, cut over DNS or traffic routing with a low TTL, measure submission success and auth failures as the canaries, and define rollback as a threshold breach rather than a debate. The honesty criterion matters as much as the design: the Academy does not allow a plan to be described as if it had already been executed."
+    }
+  ],
+  "twist": {
+    "id": "twist-residency-expansion",
+    "change": "Mid-project, the group's data residency policy is tightened: claim evidence (not only claim metadata) must remain in UK or EU regions, and the Entra ID tenant used for member authentication is confirmed to process authentication telemetry outside those regions. The migration deadline is unchanged.",
+    "revisePrompt": "State which parts of your design survive and which must change. Specifically address: where evidence is stored and scanned, whether member authentication can proceed under the new reading of the policy, and what you need from legal before you block go-live. Do not assume self-hosting identity is automatically correct.",
+    "modelAnswer": "Most of the infrastructure shape survives: zone-redundant App Service, private endpoints, SQL, Key Vault, and Monitor can all be deployed in UK or EU regions, and the diagram's regional choice was already a residency decision. What changes is evidence of the authentication path. If the policy reading is that authentication telemetry itself must stay in region, the options are: pin the Entra ID tenant and associated telemetry to a UK/EU location where the feature set allows it; use a regional identity product that legal accepts; or accept a documented legal exception with compensating controls. Self-hosting a directory is the option that sounds most compliant and is usually wrong for this team: it rebuilds the identity operations burden the project is trying to shed, and it does not remove the need for a consumer-capable MFA story. What you need from legal: whether 'claim evidence' includes authentication logs and IP telemetry, and whether a signed exception with encryption and access review is acceptable for the gap period. Store evidence blobs only in UK/EU storage accounts with public access disabled; keep malware scanning in region if the scanner's processing leaves region, that is part of the same question. The availability and identity requirements do not change; the residency constraint becomes a hard gate on region selection and on any processor that touches claim data or its authentication context."
+  },
+  "deliverable": {
+    "kind": "written-recommendation",
+    "prompt": "Write a recommendation of no more than 700 words for Aisha Rahman, Tomás Ferreira and Priya Shah. It must state the availability design in terms of what survives which failure, the identity design in terms the CISO can audit, and what is still unverified (especially vendor scale-out and signed recovery objectives). Lead with the recommendation.",
+    "acceptance": [
+      "Zone versus region failure is distinguished in plain language in the first half",
+      "Member and staff identity paths are named, and the password database is stated as decommissioned at cutover",
+      "At least two items are labelled as unverified or as assumptions, separated from stated facts",
+      "The run-rate comparison to GBP 9,500 per month is addressed without inventing a signed figure",
+      "The document stays under 700 words",
+      "Nothing is claimed as implemented, tested, or rehearsed unless it actually was"
+    ]
+  },
+  "modelAnswer": {
+    "businessProblem": "A mutual insurer's member claims portal runs on aging on-premises VMs behind an out-of-support load balancer, authenticates members with a password database that is an open audit finding, and must survive storm-season peaks without losing submission availability. The business problem is not 'move to Azure'. It is: replace a failing hardware path and a failing identity model with a design that (1) keeps claim submission available through a single datacenter outage, (2) closes the password finding before go-live, and (3) stays inside a GBP 9,500 per month steady-state ceiling that Finance will compare line by line - all delivered by three engineers and a vendor maintenance contract before the next storm season.",
+    "decisiveRequirements": [
+      "NFR1, claim submission survives a single datacenter or zone failure, because storm season is the reputation window",
+      "NFR2, no shared member password database, because the audit finding must close before go-live",
+      "The nine-month deadline against a fourteen-month hardware support horizon, because delay is not free",
+      "Steady-state run rate no higher than approximately GBP 9,500 per month, because Finance will enforce the comparison"
+    ],
+    "importantConstraints": [
+      "Three platform engineers with no Kubernetes experience; anything needing a cluster is a people risk as much as a cost risk",
+      "Vendor application on a maintenance contract; scale-out may be limited by the application, not the platform",
+      "Claim data residency UK or EU; the twist tightens this to evidence and questions authentication telemetry",
+      "Cutover reversible within one business day"
+    ],
+    "pattern": "Zone-redundant PaaS web application behind Application Gateway with WAF, private endpoints for the data plane, Microsoft Entra ID for external member identity and staff federation, infrastructure as code, and Monitor for operational evidence. Deliberately not Kubernetes for this workload, deliberately not lift-and-shift VMs for the data tier, and deliberately not a VPN-only administrative path.",
+    "recommendedServices": [
+      { "name": "Application Gateway v2 with WAF, zone-redundant", "why": "Single public entry with TLS termination and WAF in front of the portal, deployable across zones so one zone failure does not remove the edge.", "cloud": "azure" },
+      { "name": "Azure App Service with VNet integration (zone-redundant instances)", "why": "Runs the vendor application without a cluster, scales out if the application allows it, and reaches data services privately.", "cloud": "azure" },
+      { "name": "Microsoft Entra ID with external identities for members and hybrid staff federation", "why": "Closes the password database finding without putting consumer identities into Active Directory, and centralises MFA and conditional access.", "cloud": "azure" },
+      { "name": "Azure SQL Database with zone-redundant backup and point-in-time restore", "why": "Replaces nightly tape as the recovery mechanism for claim records, with restore granularity tape cannot match.", "cloud": "azure" },
+      { "name": "Azure Blob Storage on private endpoint with a malware scan gate", "why": "Evidence files under retention, not on a NAS, with public access disabled and scanning before staff visibility.", "cloud": "azure" },
+      { "name": "Key Vault with managed identity access", "why": "Removes secrets from configuration files and gives an auditable access path.", "cloud": "azure" }
+    ],
+    "rejectedAlternatives": [
+      { "name": "Kubernetes for the claims portal", "whyNot": "Consumes the nine-month deadline on a platform three engineers do not operate, against a vendor application that may not need pods to scale.", "whenRight": "When the application portfolio is heterogeneous, scheduling needs exceed App Service models, or portability is a signed requirement." },
+      { "name": "Sync members into Active Directory", "whyNot": "Puts a consumer population into a staff directory with no joiner-mover-leaver process for them.", "whenRight": "Only if the firm deliberately becomes an identity operator for members at scale - a product decision, not a migration shortcut." },
+      { "name": "Lift-and-shift SQL and file shares onto VMs in Azure", "whyNot": "Rebuilds self-managed DR and patching with a team of three, failing the operational constraint and the tape-backup problem the project must fix.", "whenRight": "As a short interim only when the application cannot use managed data services at all, with a dated exit plan." },
+      { "name": "VPN-only jump boxes as the sole administrative path", "whyNot": "Explicitly rejected by the identity constraint; it also fails time-bound vendor access and modern access reviews.", "whenRight": "Never as the sole path; a break-glass path may still exist alongside identity-centred administration." }
+    ],
+    "tradeOffs": [
+      "Zone redundancy covers single-datacenter failure inside a region; a full regional outage needs a paired region that has not been funded or designed here.",
+      "Private endpoints strengthen the data path but add networking configuration the one-cloud-experienced engineer must own in code.",
+      "External member identity closes the audit finding but introduces a consumer IdP lifecycle the claims team must learn to operate.",
+      "App Service lock-in is real; the exit cost is accepted against the deadline and skills constraints, and should be recorded rather than denied."
+    ],
+    "securityControls": [
+      "WAF on Application Gateway before traffic reaches the application",
+      "Private endpoints and disabled public access on SQL and evidence storage",
+      "Managed identity to Key Vault; no secrets in source or plain configuration",
+      "Conditional access and MFA for staff; external identity MFA for members",
+      "Malware scan gate before evidence is visible to staff",
+      "Logs sufficient for quarterly privileged access review"
+    ],
+    "scalingRecoveryMonitoring": [
+      "Scale out on a metric tied to submission load, after confirming the vendor application can scale out; load test against 12x before go-live",
+      "Point-in-time restore as the baseline data recovery, with geo-recovery as a leadership decision",
+      "Alerts on submission error rate, auth failures, upload failures, and gateway unhealthy hosts",
+      "Rehearse cutover rollback before go-live, not during the incident"
+    ],
+    "assumptionsToConfirm": [
+      "Whether the vendor application supports horizontal scale-out - blocking discovery for the storm-peak design",
+      "Signed RPO/RTO for claim submission as a business service",
+      "Whether malware scanning is licensed elsewhere in the group",
+      "True current total cost of ownership versus GBP 9,500 per month",
+      "Whether the twist's residency reading includes authentication telemetry, which legal must confirm"
+    ],
+    "evidenceThatWouldChangeRecommendation": [
+      "A load test showing the application cannot scale out would force either a vendor change request or a vertical/instance-capacity design with an explicit ceiling and shed plan",
+      "Leadership signing a regional RTO would fund a paired-region design and change the availability answer beyond zones",
+      "Legal confirming authentication telemetry may leave UK/EU would remove the twist's hardest gate; a refusal would put member authentication itself on the critical path"
+    ]
+  },
+  "sources": [
+    {
+      "title": "Study guide for Exam AZ-305: Designing Microsoft Azure Infrastructure Solutions",
+      "url": "https://learn.microsoft.com/en-us/credentials/certifications/resources/study-guides/az-305",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The skill areas this scenario exercises: identity and governance, data storage, business continuity, and infrastructure including messaging, migration and networking - the same areas the evidence lesson maps to."
+    },
+    {
+      "title": "Baseline Highly Available Zone-Redundant App Service Web Application",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/web-apps/app-service/architectures/baseline-zone-redundant",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The concrete pattern of Application Gateway with WAF, App Service with VNet integration, private endpoints to SQL/Storage/Key Vault, managed identity, and zone redundancy - including the guidance that zone redundancy does not equal multi-region."
+    },
+    {
+      "title": "Azure operational security overview",
+      "url": "https://learn.microsoft.com/en-us/azure/security/fundamentals/operational-overview",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Microsoft Entra ID for IAM and SSO, Azure RBAC, Defender for Cloud, and monitoring as the operational security envelope the privileged-access question tests."
+    },
+    {
+      "title": "Architecture styles",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Selecting an architecture style by workload characteristics rather than fashion, which is the basis for rejecting Kubernetes for a single vendor application with a fixed skills constraint."
+    },
+    {
+      "title": "Azure Architecture Center",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The cross-reference point for reference architectures used in this scenario, including the zone-redundant App Service baseline."
+    }
+  ]
+}

@@ -1,0 +1,472 @@
+{
+  "id": "parking-permit-pdf-queue",
+  "bankVersion": "scenario-bank-v1",
+  "title": "Riverside: parking permits with a PDF worker",
+  "theme": "serverless-event-driven",
+  "cloudScope": "technology-neutral",
+  "difficulty": "associate",
+  "moduleId": "tech-architecture",
+  "evidenceLessonId": "well-architected-framework",
+  "competencies": [
+    "sa-options",
+    "sa-integration",
+    "sa-nfr",
+    "apis-networking",
+    "arch-tradeoffs",
+    "reliability"
+  ],
+  "timeEstimateMinutes": 75,
+  "context": {
+    "businessContext": "Riverside Borough Council (fictional, used here as a training scenario shaped like a real local-government service) runs resident parking permits through a counter and an email inbox. Staff retype applications into a word processor, generate a PDF, and post or email it. At the start of each month the inbox floods, applications wait three to five working days, and roughly one in twenty PDFs is issued with the wrong address because of a copy-and-paste error. The council wants an online application that issues a permit PDF without a person touching every application.",
+    "objectives": [
+      "Residents apply online and receive a correct permit PDF without staff rekeying",
+      "A monthly spike of about 2,000 applications must not make the public site unavailable",
+      "Wrong-address errors caused by manual rekeying must be eliminated",
+      "Staff must be able to see the status of any application without reading an email thread"
+    ],
+    "stakeholders": [
+      {
+        "name": "Helen Cartwright",
+        "role": "Parking services manager",
+        "concern": "Owns the process. Will reject anything staff cannot operate after a one-hour handover."
+      },
+      {
+        "name": "Devon Mbeki",
+        "role": "Resident and regular applicant",
+        "concern": "Wants confirmation that the application was received, and a PDF that matches the address on the application."
+      },
+      {
+        "name": "Rosa Iglesias",
+        "role": "IT officer (the whole IT team)",
+        "concern": "Will maintain this alone. Anything requiring specialist infrastructure is out."
+      }
+    ],
+    "existingInfrastructure": "A public council website on a shared hosting plan. An email inbox staffed during office hours. A SQL database used by other council forms, managed by the same IT officer. No message queue, no container platform, no dedicated operations team.",
+    "dataCharacteristics": [
+      "Application forms: name, address, vehicle registration, permit type, evidence of residency",
+      "About 2,000 applications in the first week of a month, under 200 in a typical week",
+      "Permit PDFs must be retained for the permit year for audit",
+      "No payment step in this phase; permits are free within resident zones"
+    ],
+    "compliance": [
+      "Public sector accessibility requirements for the application form",
+      "Retention of issued permits for the permit year",
+      "Personal data of residents must not appear in application logs"
+    ]
+  },
+  "requirements": {
+    "functional": [
+      "F1: A resident submits an application online and receives a reference immediately",
+      "F2: A correct permit PDF is generated and delivered without staff retyping application data",
+      "F3: Staff can look up any application by reference and see its status",
+      "F4: A failed PDF generation is visible to staff and can be retried"
+    ],
+    "nonFunctional": [
+      "NFR1: The public application form remains available during the monthly spike",
+      "NFR2: A correct application produces a permit PDF within 15 minutes under normal load",
+      "NFR3: A generation failure must not lose the application"
+    ],
+    "performanceAvailability": [
+      "Peak about 2,000 applications in a week, under 200 in a typical week",
+      "Public form availability target 99.5 percent during office hours",
+      "Permit PDF within 15 minutes where the application is complete"
+    ],
+    "budget": "No new permanent infrastructure budget. Usage-based managed services only, expected under GBP 80 per month outside the spike week.",
+    "teamSkills": "One IT officer with SQL and basic web skills. No message-broker or container experience. Will not attend multi-day training.",
+    "deadline": "Ready for the next permit cycle in ten weeks."
+  },
+  "constraints": {
+    "security": [
+      "Application logs must not contain resident addresses or vehicle registrations",
+      "Only staff accounts may look up application status"
+    ],
+    "identityNetworking": [
+      "Staff status lookup must require an authenticated council account",
+      "The public form must not expose the staff status API"
+    ],
+    "operational": [
+      "One IT officer maintains the system",
+      "No container platform and no self-managed message broker",
+      "The shared SQL database is used by other forms and must not be overloaded"
+    ]
+  },
+  "ambiguity": {
+    "explicitFacts": [
+      "About 2,000 applications in the first week of a month, under 200 otherwise",
+      "One IT officer with SQL and basic web skills",
+      "The PDF step currently fails by human rekeying error, not by software",
+      "No payment step in this phase"
+    ],
+    "assumptions": [
+      "That every application will be complete enough to generate a PDF without human review",
+      "That 15 minutes is acceptable to residents because the current process takes days",
+      "That the shared SQL database can absorb the write load of the form itself"
+    ],
+    "missingInformation": [
+      "What proportion of applications arrive incomplete and need a human check before a permit is valid",
+      "Whether the existing hosting can run a background worker at all, or only serve requests",
+      "The accessibility standard the form must meet, which is asserted but not named"
+    ],
+    "ambiguities": [
+      "'Correct PDF' is ambiguous between matching the typed application and matching a verified residency record. The first is a generation problem; the second is a rules and evidence problem.",
+      "'Within 15 minutes' does not say whether that is measured from submission or from the point the application is complete enough to issue."
+    ]
+  },
+  "diagram": {
+    "title": "Riverside parking permits - proposed shape",
+    "caption": "The web form accepts and stores the application; a queue decouples PDF generation from the public request path. Where generation fails, the application remains in the database for retry.",
+    "elements": [
+      {
+        "id": "riverside",
+        "kind": "software-system",
+        "name": "Riverside parking permits",
+        "description": "Online application and permit PDF issuance for resident parking.",
+        "responsibility": "Issues correct permits. Does not decide eligibility beyond the stated rules."
+      },
+      {
+        "id": "resident",
+        "kind": "person",
+        "name": "Resident",
+        "description": "Submits an application and expects a permit PDF.",
+        "responsibility": "Provides accurate application data."
+      },
+      {
+        "id": "staff",
+        "kind": "person",
+        "name": "Parking services staff",
+        "description": "Looks up applications by reference and retries failed generations.",
+        "responsibility": "Resolves incomplete or failed applications."
+      },
+      {
+        "id": "form",
+        "kind": "container",
+        "name": "Public application form",
+        "description": "Accepts the application, validates required fields, stores it, and enqueues generation work.",
+        "technology": "Web application on existing shared hosting",
+        "responsibility": "Intake only. Does not generate PDFs on the request path."
+      },
+      {
+        "id": "status",
+        "kind": "container",
+        "name": "Staff status page",
+        "description": "Authenticated lookup by reference, with retry for failed generation.",
+        "technology": "Web application behind council sign-in",
+        "responsibility": "Operational view of applications and generation failures."
+      },
+      {
+        "id": "worker",
+        "kind": "container",
+        "name": "PDF worker",
+        "description": "Consumes generation work and writes the permit PDF.",
+        "technology": "Scheduled or queue-driven worker on a managed runtime",
+        "responsibility": "Produces the PDF. Never accepts a new application."
+      },
+      {
+        "id": "queue",
+        "kind": "container",
+        "name": "Work queue",
+        "description": "Holds pending generation jobs so the public form does not wait on the PDF step.",
+        "technology": "Managed queue or equivalent durable buffer",
+        "responsibility": "Decouples intake from generation. Persists work until processed."
+      },
+      {
+        "id": "db",
+        "kind": "data-store",
+        "name": "Applications database",
+        "description": "Applications, status, and references. Shared with other council forms.",
+        "technology": "Existing SQL database",
+        "responsibility": "System of record for applications. Survives a generation failure."
+      },
+      {
+        "id": "pdfstore",
+        "kind": "data-store",
+        "name": "Permit store",
+        "description": "Issued permit PDFs retained for the permit year.",
+        "technology": "Object or file storage with retention",
+        "responsibility": "Stores issued permits. Not a system of record for applications."
+      }
+    ],
+    "relationships": [
+      { "id": "r1", "sourceId": "resident", "targetId": "form", "label": "submits an application", "technology": "HTTPS" },
+      { "id": "r2", "sourceId": "form", "targetId": "db", "label": "writes the application", "technology": "SQL" },
+      { "id": "r3", "sourceId": "form", "targetId": "queue", "label": "enqueues generation work", "technology": "Queue API" },
+      { "id": "r4", "sourceId": "queue", "targetId": "worker", "label": "delivers work", "technology": "Queue API" },
+      { "id": "r5", "sourceId": "worker", "targetId": "db", "label": "reads application, writes status", "technology": "SQL" },
+      { "id": "r6", "sourceId": "worker", "targetId": "pdfstore", "label": "writes the permit PDF", "technology": "Object API" },
+      { "id": "r7", "sourceId": "staff", "targetId": "status", "label": "looks up and retries", "technology": "HTTPS" },
+      { "id": "r8", "sourceId": "status", "targetId": "db", "label": "reads status", "technology": "SQL" },
+      { "id": "r9", "sourceId": "status", "targetId": "queue", "label": "re-enqueues a failed job", "technology": "Queue API" }
+    ],
+    "omissions": [
+      "No payment component: this phase has no fees",
+      "No eligibility rules engine: incomplete applications are held for staff, not auto-refused",
+      "No separate cache: at this volume the shared database is sufficient for reads"
+    ]
+  },
+  "questions": [
+    {
+      "id": "q1-where-pdf",
+      "kind": "diagram-interpretation",
+      "prompt": "Looking at the diagram, where does PDF generation run, and why does that matter for the public form during the monthly spike?",
+      "tests": ["sa-options", "sa-integration", "reliability"],
+      "options": [
+        { "id": "A", "text": "Inside the public form request, so the resident downloads the PDF before leaving the page. This is simplest and guarantees the PDF exists." },
+        { "id": "B", "text": "On the PDF worker after the work is queued. The form returns a reference immediately, so a spike in generation load cannot take the public form offline." },
+        { "id": "C", "text": "On the staff status page, so a person triggers generation only when they open the application." },
+        { "id": "D", "text": "In the database itself, using a database feature to render the PDF, so there is no separate worker." }
+      ],
+      "answers": ["B"],
+      "rationale": "The spike is in applications and therefore in PDF work. Doing generation on the request path couples the slow step to the public form, so peak PDF load becomes peak form unavailability. Queuing decouples the two rates: the form only needs to accept and store, which is fast and stable. Option C makes staff the bottleneck for a process meant to remove staff from every application. Option D loads a shared database used by other council forms with CPU-heavy rendering, which the operational constraint rules out.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "It couples the slow PDF step to the public request path, so the monthly spike in generation work directly risks form timeouts and unavailability.", "mistake": "Doing slow work on the synchronous path because it feels simpler." },
+        { "optionId": "C", "whyWrong": "That reintroduces a person into every application, which is the problem the project exists to remove, and it does not address the spike.", "mistake": "Making staff the scheduler for automated work." },
+        { "optionId": "D", "whyWrong": "PDF rendering is CPU-heavy. The constraint says the shared SQL database is used by other forms and must not be overloaded.", "mistake": "Treating the database as a compute platform." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, with a scheduled worker polling the queue if a managed queue is not available on the existing hosting.", "conditions": "Correct when hosting cannot run a queue listener; polling adds latency up to the poll interval, which must still meet the 15-minute target." }
+      ]
+    },
+    {
+      "id": "q2-spike-design",
+      "kind": "single-best",
+      "prompt": "About 2,000 applications arrive in the first week of a month and under 200 in a typical week. Which design decision best addresses the spike without over-building for the quiet weeks?",
+      "tests": ["sa-nfr", "reliability", "arch-tradeoffs"],
+      "dependsOn": "q1-where-pdf",
+      "options": [
+        { "id": "A", "text": "Provision enough workers for the peak week permanently, so the queue is always empty within a minute." },
+        { "id": "B", "text": "Let the queue absorb the spike and scale workers on queue depth (or run a small fixed worker that drains the backlog within the 15-minute target), so quiet weeks cost little and peak weeks trade latency for availability." },
+        { "id": "C", "text": "Reject applications above a daily cap during the first week, so load never spikes." },
+        { "id": "D", "text": "Move the entire first week to a second hosting account with double capacity, then move back." }
+      ],
+      "answers": ["B"],
+      "rationale": "The non-functional requirement is form availability during the spike and a 15-minute PDF target, not an empty queue. A durable queue with modest consumer capacity meets both: backlog grows briefly, then drains. Permanent peak provisioning wastes budget against the under-GBP-80 constraint. A daily cap fails the objective of accepting applications. A second hosting account is manual failover theatre without changing the processing bottleneck.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "It buys permanent peak capacity for a workload that is quiet most of the month, against a tight usage-based budget.", "mistake": "Scaling for the peak as a steady state." },
+        { "optionId": "C", "whyWrong": "It fails the business objective of accepting applications online; a cap moves the queue from the system to the residents.", "mistake": "Solving load by refusing demand." },
+        { "optionId": "D", "whyWrong": "Duplicating hosting does not change the PDF bottleneck or the shared database constraint, and it doubles operational surface for one IT officer.", "mistake": "Buying infrastructure instead of decoupling the slow step." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, with an alert on queue depth so the IT officer can add a worker if a future cycle is larger than expected.", "conditions": "Always correct at this scale; monitoring queue depth is how you learn the real distribution before it becomes an incident." }
+      ]
+    },
+    {
+      "id": "q3-failure-handling",
+      "kind": "troubleshooting",
+      "prompt": "A resident's application shows as received, but no PDF arrives. Staff can see the application. What is the correct first diagnosis and fix path?",
+      "tests": ["reliability", "sa-integration", "apis-networking"],
+      "dependsOn": "q2-spike-design",
+      "options": [
+        { "id": "A", "text": "The application was lost. Ask the resident to reapply." },
+        { "id": "B", "text": "The application is in the database with a failed or pending generation status. Inspect the worker or queue, retry generation, and treat a repeated failure as a defect in the data or template - not as a lost application." },
+        { "id": "C", "text": "The public form is down. Fail over to the second hosting account." },
+        { "id": "D", "text": "The email delivery of the PDF failed. Increase the email sending limit." }
+      ],
+      "answers": ["B"],
+      "rationale": "The design stores the application before enqueueing work, so a missing PDF with a visible application is a generation or queue problem, not a lost record. NFR3 requires that a generation failure must not lose the application; the status field and retry path are how that requirement is met. Option A discards the system of record. Option C misattributes a single-application symptom to global availability. Option D assumes delivery is the failure before generation has been confirmed.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "The application is already in the database; reapplying creates duplicates and hides the real failure.", "mistake": "Treating a downstream failure as data loss." },
+        { "optionId": "C", "whyWrong": "A single missing PDF is not evidence the public form is down; the resident already received a reference.", "mistake": "Escalating a component failure to a site failure." },
+        { "optionId": "D", "whyWrong": "You have not established that generation completed. Diagnosis starts at the queue and worker, not at email limits.", "mistake": "Assuming the last step failed without checking the middle steps." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, plus a dead-letter or failed-status path so a repeatedly failing job does not block the queue.", "conditions": "Required once more than one application can fail in the same way; otherwise one bad payload can stall every permit behind it." }
+      ]
+    },
+    {
+      "id": "q4-sync-vs-async",
+      "kind": "trade-off",
+      "prompt": "A colleague argues that a 15-minute PDF target is long enough to justify a fully synchronous design if the worker is 'usually fast'. What is the strongest rebuttal against synchronising generation with the form request?",
+      "tests": ["arch-tradeoffs", "sa-nfr", "reliability"],
+      "dependsOn": "q3-failure-handling",
+      "options": [
+        { "id": "A", "text": "Synchronous is always worse; asynchronous is a best practice." },
+        { "id": "B", "text": "Usual speed is not a design property. Under the monthly spike the synchronous path puts peak generation load on the public form, which violates the availability non-functional requirement; a queue converts that coupling into a measurable backlog that still meets the 15-minute target." },
+        { "id": "C", "text": "Synchronous would require a second database, which is over budget." },
+        { "id": "D", "text": "Residents prefer not to wait, so the PDF should be emailed later regardless of architecture." }
+      ],
+      "answers": ["B"],
+      "rationale": "The argument fails on the non-functional requirement, not on taste. Availability during the spike is the requirement that synchrony breaks; the 15-minute target is what makes async acceptable. Naming the mechanism - coupling of rates - is what makes the rebuttal architectural rather than stylistic. Option A states a preference without a mechanism. Option C invents a constraint. Option D confuses delivery channel with request coupling.",
+      "distractors": [
+        { "optionId": "A", "whyWrong": "It asserts a rule with no mechanism; a low-latency synchronous path can be correct when the work is fast and load is flat.", "mistake": "Substituting a slogan for a requirement analysis." },
+        { "optionId": "C", "whyWrong": "Nothing in the scenario requires a second database for async; the point is decoupling rates, not adding storage.", "mistake": "Inventing a technical cost to win the argument." },
+        { "optionId": "D", "whyWrong": "Email delivery is orthogonal; the resident already waits asynchronously for email under either design.", "mistake": "Changing the subject from coupling to channel." }
+      ],
+      "defensibleAlternatives": [
+        { "answer": "B, and if measured generation is consistently under a few seconds at peak, a short synchronous path with a queue fallback can be justified - but only after measurement, not on 'usually fast'.", "conditions": "Correct when load tests show the synchronous path still meets NFR1; the default remains async because the spike is documented and unmeasured." }
+      ]
+    },
+    {
+      "id": "q5-open-incomplete",
+      "kind": "open-design",
+      "prompt": "Some applications will arrive incomplete (missing evidence of residency, unreadable vehicle details). Design how the system should treat them: what the resident sees, what staff see, what is stored, and what is never logged. Be explicit about what you are assuming.",
+      "tests": ["sa-nfr", "apis-networking", "arch-tradeoffs"],
+      "dependsOn": "q4-sync-vs-async",
+      "minWords": 100,
+      "rubric": [
+        {
+          "criterion": "Distinguishes intake confirmation from permit issuance so an incomplete application is not issued a permit",
+          "weight": 0.3,
+          "lookFor": ["status", "pending", "incomplete", "hold", "not issued", "review", "complete"]
+        },
+        {
+          "criterion": "States that personal data must not appear in application logs",
+          "weight": 0.25,
+          "lookFor": ["log", "personal", "address", "registration", "redact", "reference", "pII", "not logged"]
+        },
+        {
+          "criterion": "Gives staff a concrete next action (what they do, not just that they are notified)",
+          "weight": 0.25,
+          "lookFor": ["staff", "contact", "request", "chase", "queue", "manual", "review", "complete the application"]
+        },
+        {
+          "criterion": "Names an assumption about what complete means or what evidence is required",
+          "weight": 0.2,
+          "lookFor": ["assum", "if ", "assuming", "need to confirm", "depends on", "not known", "verify"]
+        }
+      ],
+      "rationale": "Associate-level design still separates states: received, incomplete, issued, failed generation. The security constraint on logs is easy to violate by logging form payloads for debugging, so a good answer says identifiers in logs, not full applications. Naming the assumption - what counts as complete, and whether eligibility is automated or human - is what distinguishes a design from a wish."
+    },
+    {
+      "id": "q6-defend-queue",
+      "kind": "defence",
+      "prompt": "The finance lead asks why you need a queue at all when 'a loop in the website would do'. Defend the queue in terms of the stated requirements, and state the condition under which a simple loop would actually be enough.",
+      "tests": ["sa-options", "arch-tradeoffs", "reliability"],
+      "dependsOn": "q5-open-incomplete",
+      "minWords": 90,
+      "rubric": [
+        {
+          "criterion": "Ties the queue to a stated requirement (availability during spike, 15-minute target, or failure must not lose the application)",
+          "weight": 0.35,
+          "lookFor": ["spike", "availability", "15", "minutes", "failure", "lose", "NFR", "decouple", "buffer"]
+        },
+        {
+          "criterion": "Names what fails without the queue (form unavailability under peak, or lost work on process recycle)",
+          "weight": 0.3,
+          "lookFor": ["timeout", "recycle", "crash", "lost", "offline", "unavailable", "restart", "in-flight"]
+        },
+        {
+          "criterion": "States when a loop would be enough",
+          "weight": 0.2,
+          "lookFor": ["if ", "when ", "low volume", "flat", "always fast", "background", "cron", "scheduled"]
+        },
+        {
+          "criterion": "Does not overclaim that queues solve every consistency problem",
+          "weight": 0.15,
+          "lookFor": ["idempot", "duplicate", "at-least-once", "retry", "still", "does not", "not by itself"]
+        }
+      ],
+      "rationale": "The defence is requirement-shaped: the queue exists because NFR1 (availability under spike) and NFR3 (failure must not lose work) cannot both be met by in-request processing when generation is slow and load is bursty. A loop on a schedule is a weaker form of the same decoupling and can be enough when volume is flat or generation is always sub-second - but the scenario states a monthly spike and a 15-minute target, so the loop must still be outside the request path to be equivalent. At-least-once delivery means the worker must be idempotent; the queue does not remove that obligation."
+    }
+  ],
+  "twist": {
+    "id": "twist-payment",
+    "change": "The council has now decided that visitor permits in the same system will cost GBP 12 and must be paid online before a PDF is issued. Resident permits remain free. The payment provider is chosen (a standard hosted checkout); the constraint is that a paid application that fails generation must be refundable or re-issued without charging twice.",
+    "revisePrompt": "State what changes in your design and what does not. Specifically: where payment confirmation sits relative to enqueueing generation, and how you avoid charging a resident for a permit that was never issued. Do not redesign the whole system if only one boundary moves.",
+    "modelAnswer": "Most of the shape survives: the form still stores the application, a queue still decouples generation, and staff still see failures. What changes is the order of operations for paid visitor permits. Payment confirmation must be recorded against the application before generation is enqueued, or generation must be conditional on a confirmed payment status - either way, money and permit issuance are joined by a durable status on the application row, not by a happy-path sequence in one process. Double-charge is avoided by treating payment as idempotent against the application reference: a retry after a generation failure re-issues, it does not re-charge. Resident permits keep the free path unchanged. What you would need to confirm: the provider's webhook reliability and whether a charge can be reconciled asynchronously, because relying on a browser redirect alone will lose confirmations when a resident closes the tab."
+  },
+  "deliverable": {
+    "kind": "written-recommendation",
+    "prompt": "Write a short recommendation (under 400 words) for Helen Cartwright and Rosa Iglesias: the shape of the system, the one design decision that protects the monthly spike, and what you are assuming about incomplete applications. Lead with the recommendation.",
+    "acceptance": [
+      "The queue-or-equivalent decoupling decision is stated in the first third",
+      "At least one assumption about incomplete applications is labelled as an assumption",
+      "Staff action on failure is named, not just 'monitoring'",
+      "Nothing is claimed as implemented or tested",
+      "The document stays under 400 words"
+    ]
+  },
+  "modelAnswer": {
+    "businessProblem": "A council issues resident parking permits by retyping web or counter applications into a word processor. At the start of each month the inbox floods, applications wait three to five working days, and about one in twenty PDFs carries a wrong address from copy-and-paste error. The problem is not that the council lacks a PDF library; it is that a human is on the critical path of every application, and the monthly spike is absorbed by people rather than by the system. A correct design removes rekeying, keeps the public form available under the spike, and makes a generation failure visible and recoverable without losing the application - all maintainable by one IT officer.",
+    "decisiveRequirements": [
+      "NFR1, the public form remains available during the monthly spike, because the spike is documented and is the reason the current process breaks",
+      "F2, a correct permit PDF without staff retyping, because that is the error source the project exists to remove",
+      "NFR3, a generation failure must not lose the application, because the application is the system of record and the resident has already been given a reference",
+      "The one-IT-officer operational constraint, because anything requiring specialist infrastructure will not be maintained"
+    ],
+    "importantConstraints": [
+      "One IT officer with SQL and basic web skills; no broker or container experience",
+      "The shared SQL database is used by other council forms and must not be overloaded with PDF rendering",
+      "No permanent infrastructure budget; usage-based managed services under about GBP 80 per month",
+      "Application logs must not contain resident addresses or vehicle registrations"
+    ],
+    "pattern": "Web-queue-worker: a public form accepts and stores the application and enqueues generation work; a separate worker produces the PDF and writes status back; a staff page looks up by reference and retries failures. Deliberately not synchronous generation on the request path, and deliberately not PDF rendering inside the shared database.",
+    "recommendedServices": [
+      { "name": "A durable work queue (managed queue, or a status-table poll if hosting cannot run a queue listener)", "why": "Decouples intake from generation so the monthly spike becomes backlog rather than form unavailability, and survives a worker restart without losing work.", "cloud": "technology-neutral" },
+      { "name": "A separate PDF worker on a managed runtime or scheduled job", "why": "Keeps CPU-heavy rendering off the public request path and off the shared SQL database.", "cloud": "technology-neutral" },
+      { "name": "Application status stored on the existing SQL database (received, pending, issued, failed)", "why": "Makes NFR3 real: a failed generation leaves a row that staff can see and retry, rather than a lost email.", "cloud": "technology-neutral" },
+      { "name": "Authenticated staff status page with retry", "why": "Gives the one IT officer and parking staff a concrete action on failure without reading an inbox.", "cloud": "technology-neutral" }
+    ],
+    "rejectedAlternatives": [
+      { "name": "Generate the PDF inside the public form request", "whyNot": "Couples peak generation load to form availability, which breaks NFR1 exactly when demand is highest.", "whenRight": "Correct only if generation is measured to be consistently sub-second at peak and the spike is gone - neither is true here." },
+      { "name": "Render PDFs in the shared SQL database", "whyNot": "PDF rendering is CPU-heavy; the database is shared with other council forms and the operational constraint forbids overloading it.", "whenRight": "Never for this workload; databases store and query, they do not render documents." },
+      { "name": "Staff-triggered generation only", "whyNot": "Reintroduces a person into every application, which is the problem being removed, and does not address the spike.", "whenRight": "Only as a manual path for incomplete applications that fail automated checks, not as the normal path." },
+      { "name": "Permanent peak-sized worker fleet", "whyNot": "Wastes budget against a tight usage-based target for a workload that is quiet most of the month.", "whenRight": "Correct if the quiet-week volume rises enough that peak provisioning is cheaper than backlog latency - measure first." }
+    ],
+    "tradeOffs": [
+      "Async generation means the resident does not download the PDF on the form page; they get a reference and wait up to 15 minutes. That is a product choice forced by availability under the spike.",
+      "A status-table poll instead of a true queue adds latency up to the poll interval and is less durable under crash, but it is operable by one IT officer on existing hosting.",
+      "Holding incomplete applications for staff review keeps humans in the loop for edge cases, which is correct for eligibility but must not become the normal path.",
+      "Logging only references rather than full payloads makes debugging harder; that is the price of the personal-data constraint and should be accepted, not worked around."
+    ],
+    "securityControls": [
+      "Staff status API behind authenticated council sign-in; public form does not expose it",
+      "Application logs carry references, not addresses or vehicle registrations",
+      "Permit store accessible only to the worker and staff retrieval path",
+      "No secrets in source; configuration via the platform's configuration store"
+    ],
+    "scalingRecoveryMonitoring": [
+      "Scale workers on queue depth (or keep one poller and alert on backlog age against the 15-minute target)",
+      "Alert on failed-generation count and on queue depth sustained above a threshold",
+      "Retry with a dead-letter or failed-status path so one bad payload cannot stall the queue",
+      "Measure cycle time from submission to issued PDF across a real monthly spike before trusting the 15-minute target"
+    ],
+    "assumptionsToConfirm": [
+      "What proportion of applications arrive incomplete and need human review before a permit is valid",
+      "Whether the existing hosting can run a background worker or only serve HTTP, which decides queue versus status-table poll",
+      "The accessibility standard the form must meet (asserted, not named in the scenario)",
+      "That 15 minutes is acceptable to residents given the current multi-day process"
+    ],
+    "evidenceThatWouldChangeRecommendation": [
+      "A measured generation time that is sub-second even in the first week would reopen a short synchronous path with a queue fallback",
+      "Incomplete-application rate above a third would make the staff review queue the primary bottleneck, not PDF generation",
+      "Hosting that cannot run any background process would force a fully external worker (serverless function or scheduled job elsewhere) rather than an in-host loop"
+    ]
+  },
+  "sources": [
+    {
+      "title": "Web-Queue-Worker architecture style",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/web-queue-worker",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The shape of the recommendation: web front end, queue, and worker as separate components, with the queue decoupling request intake from long-running work. The pattern description is technology-neutral even though the article uses Azure product names in its deployment section."
+    },
+    {
+      "title": "Queue-Based Load Leveling pattern",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/queue-based-load-leveling",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "Why a buffer between intake and processing protects availability under intermittent heavy load, and the stated problems: queue growth when producer rate exceeds consumer rate, at-least-once delivery requiring idempotent consumers, and dead-letter handling."
+    },
+    {
+      "title": "Architecture styles",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The framing that an architecture style constrains the design and that complexity must match the domain - used to reject microservices for a single-purpose council form."
+    },
+    {
+      "title": "The C4 model",
+      "url": "https://c4model.com/",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The diagram notation: software system, containers, people, and relationships as first-class elements rather than a decorative picture."
+    },
+    {
+      "title": "AWS Well-Architected Framework",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+      "reviewed": "2026-10-18",
+      "authority": "official",
+      "supports": "The general practice of measuring a design against reliability and operational excellence pillars, which is the basis for requiring a failure path and a single-operator maintainability check rather than only a happy path."
+    }
+  ]
+}

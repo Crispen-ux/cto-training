@@ -7,6 +7,8 @@ import { DECISION_FRAMES, DECISION_STEPS, SCENARIO_STAGES } from "@/lib/scenario
 
 const scenario = getScenario("invoicing-platform-resilience")!;
 const claims = getScenario("claims-assistant-grounding")!;
+const parking = getScenario("parking-permit-pdf-queue")!;
+const azure = getScenario("northwind-claims-portal-azure")!;
 
 function q(id: string) {
   return scenario.questions.find((x) => x.id === id)!;
@@ -118,11 +120,54 @@ describe("scenario bank integrity", () => {
     }
   });
 
-  it("keeps both scenarios evidence-linked to real lessons", () => {
-    for (const s of [scenario, claims]) {
+  it("keeps every scenario evidence-linked to a real lesson", () => {
+    for (const s of [scenario, claims, parking, azure]) {
+      expect(s, "scenario must exist").toBeDefined();
       const issues = validateScenario(s).filter((i) => i.issue.includes("is not a real lesson"));
       expect(issues, s.id).toEqual([]);
     }
+  });
+
+  it("covers associate and technology-neutral as well as professional and expert", () => {
+    const usable = usableScenarios();
+    expect(usable.some((s) => s.difficulty === "associate")).toBe(true);
+    expect(usable.some((s) => s.difficulty === "professional")).toBe(true);
+    expect(usable.some((s) => s.difficulty === "expert")).toBe(true);
+    expect(usable.some((s) => s.cloudScope === "technology-neutral")).toBe(true);
+    expect(usable.some((s) => s.cloudScope === "azure")).toBe(true);
+    expect(usable.some((s) => s.cloudScope === "aws")).toBe(true);
+    expect(usable.some((s) => s.cloudScope === "cross-cloud")).toBe(true);
+  });
+
+  it("covers at least four scenario themes", () => {
+    const themes = new Set(usableScenarios().map((s) => s.theme));
+    expect(themes.size).toBeGreaterThanOrEqual(4);
+  });
+
+  it("has no structural errors in any of the four scenarios", () => {
+    for (const s of [parking, azure]) {
+      const errors = validateScenario(s).filter((i) => i.severity === "error");
+      expect(errors.map((e) => e.issue), s.id).toEqual([]);
+    }
+  });
+
+  it("keeps the associate scenario smaller and one-decisive-requirement shaped", () => {
+    expect(parking.difficulty).toBe("associate");
+    expect(parking.questions.length).toBeLessThanOrEqual(7);
+    // Every distractor still explains why it is wrong here.
+    for (const question of parking.questions) {
+      for (const d of question.distractors ?? []) {
+        expect(d.whyWrong.length, `${question.id}/${d.optionId}`).toBeGreaterThan(30);
+      }
+    }
+  });
+
+  it("keeps the Azure scenario tied to UK/EU residency and Entra identity", () => {
+    expect(azure.cloudScope).toBe("azure");
+    expect(azure.evidenceLessonId).toBe("azure-az305-solutions-architect");
+    const blob = JSON.stringify(azure);
+    expect(blob).toMatch(/UK or EU/i);
+    expect(blob).toMatch(/Entra/i);
   });
 
   it("makes difficulty come from competing requirements, not obscurity", () => {
@@ -323,9 +368,11 @@ describe("twist adaptation", () => {
 });
 
 describe("diagram", () => {
-  it("validates the scenario diagram without errors", () => {
-    const issues = validateScenarioDiagram(scenario.diagram);
-    expect(diagramHasErrors(issues)).toBe(false);
+  it("validates every scenario diagram without errors", () => {
+    for (const s of [scenario, claims, parking, azure]) {
+      const issues = validateScenarioDiagram(s.diagram);
+      expect(diagramHasErrors(issues), s.id).toBe(false);
+    }
   });
 
   it("requires every relationship to resolve to a real element", () => {
