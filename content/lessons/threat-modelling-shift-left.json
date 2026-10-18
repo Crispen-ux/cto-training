@@ -1,0 +1,221 @@
+{
+  "id": "threat-modelling-shift-left",
+  "moduleId": "tech-security",
+  "pillar": "Tech",
+  "title": "Threat modelling and shifting security left",
+  "estimatedMinutes": { "learn": 50, "build": 300, "defend": 35 },
+  "objectives": [
+    "Describe the components of a threat model and the six steps the page gives",
+    "Apply STRIDE to a data flow and write a mitigation for each threat found",
+    "Score and rank threats with DREAD-style factors and explain why the ranking needs judgement",
+    "State what shift-left security means, the practices the page lists, and what its evidence lacks",
+    "Defend a threat model and a shift-left plan to a security lead"
+  ],
+  "prerequisites": ["rest-apis"],
+  "unlock": { "prerequisites": [{ "lessonId": "rest-apis", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Threat Modelling",
+      "url": "https://www.ctoframework.com/tech/security-compliance/threat-modelling",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Shift-Left on Security",
+      "url": "https://www.ctoframework.com/tech/security-compliance/shift-left-security",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Threat Modelling page does not cover attack trees, data flow diagrams, pitfalls or common mistakes, or give a worked example (it has only brief parenthetical examples). PASTA and OCTAVE receive one-line descriptions only. OWASP Threat Dragon is listed with no description. The STRIDE worked example, the data flow, the DREAD scores and the ranking critique in this lesson are Original Academy material, illustrative and not about any real system.",
+    "The retrieved summary flagged that the page labels the Kill Chain as '(MITRE ATT&CK Framework)' and blends the two. They are distinct: the Kill Chain describes sequential attack stages, and ATT&CK is a catalogue of tactics and techniques. The page also states that threat modelling lowers later fixing costs without a source or figures. Re-read the live page to confirm.",
+    "The page defines the five DREAD factors by name only and gives no scale, weights or guidance on how to score. The 1 to 10 scale and the averaging used in this lesson are an Academy convention chosen for the exercise, not part of the page.",
+    "The Shift-Left page says 'Studies show' the cost of fixing a bug increases exponentially the later it is found, with no study, figures or source. It gives no metrics, no discussion of false positives, alert fatigue, developer friction, tool sprawl or phased adoption, no tool or vendor guidance, and no mapping of controls to GDPR, ISO 27001 or SOC 2. It does not mention secrets scanning, container scanning or SBOM generation (the SBOM appears only in site navigation).",
+    "The retrieved summary flagged two further tensions on the Shift-Left page: its fifth principle (runtime monitoring and incident response) is post-deployment work, closer to 'shift-right', and the statement that traditional siloed security teams 'are replaced' is stronger than the rest of the page supports. Re-read the live page to confirm.",
+    "Security advice is context-dependent. Nothing in this lesson is legal, regulatory or certification advice, and the exercises are defensive: they review your own designs and pipelines."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What threat modelling is",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A structured practice for finding, assessing and reducing security threats in applications, systems and networks, done proactively before problems occur. The page says it finds weaknesses early, helps rank security work by risk, lowers the cost of later fixes and strengthens defences.\n\nKey components: assets (what needs protecting: data, servers, credentials); threats (what could go wrong: breaches, denial of service); attackers (hackers, insiders, competitors); vulnerabilities (unpatched software, weak encryption); and mitigations (encryption, access controls).\n\nSix steps: define scope and objectives; identify assets and dependencies; analyse threats and vulnerabilities and identify attack vectors; assess risk and prioritise by impact and likelihood; develop and implement mitigations; review and update the model continuously. Involve security teams, developers, architects, risk management and DevOps."
+      },
+      {
+        "heading": "The methodologies the page names",
+        "sourceCategory": "Official CTO Framework",
+        "body": "STRIDE (Microsoft): six threat categories: Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service and Elevation of Privilege.\nDREAD: a risk-scoring model with five factors: Damage potential, Reproducibility, Exploitability, Affected users and Discoverability. The page gives no scale or method.\nPASTA: a risk-centric process aligning security with business objectives (one line on the page).\nOCTAVE: focused on organisational risk assessment (one line).\nKill Chain (MITRE ATT&CK): models attacker tactics and techniques across attack stages. The page conflates two distinct things here; see the verification notes.\n\nThe page lists OWASP Threat Dragon as a tool and links Penetration Testing as a way to validate threat models."
+      },
+      {
+        "heading": "STRIDE applied to a data flow",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page lists the categories but shows no example and never mentions data flow diagrams. The standard way to start is to draw how data moves: who or what sends it, what processes it, where it is stored, and where it crosses a trust boundary (between the internet and your system, or between your system and a third party). Apply STRIDE to each element and each crossing.\n\nIllustrative flow: a user's browser sends credentials to a quotation API, which reads a database and returns a quote document. Trust boundary: browser to API.\n\nSpoofing (pretending to be someone else): an attacker uses guessed or stolen credentials. Mitigation: strong authentication, rate limiting and lockout, multi-factor for staff.\nTampering (altering data): a user changes a price in the request. Mitigation: calculate prices on the server and never trust client-supplied totals; integrity checks on stored records.\nRepudiation (denying an action): a staff member denies approving a discount. Mitigation: audit logs of who did what and when, protected from change.\nInformation disclosure: one customer's quote is visible to another through a guessable identifier. Mitigation: authorisation checks on every request, non-guessable identifiers, encryption in transit and at rest.\nDenial of service: a flood of requests stops the service. Mitigation: rate limits, capacity limits, a degraded mode.\nElevation of privilege: an ordinary user reaches an administrator function. Mitigation: least privilege, server-side role checks (see the next lesson).\n\nThe output is a list: each threat, the element and boundary it applies to, the mitigation, the owner, and the status (mitigated, accepted with a named person, or open)."
+      },
+      {
+        "heading": "Ranking threats, and why scores need judgement",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page's step four is to prioritise by impact and likelihood, and it names DREAD without a scale. A common convention is to score each factor from 1 to 10 and average them. Take three illustrative threats. Threat A: damage 8, reproducibility 6, exploitability 7, affected users 9, discoverability 5: (8+6+7+9+5)/5 = 7.0. Threat B: 4, 9, 9, 3, 8: 33/5 = 6.6. Threat C: 9, 3, 2, 10, 2: 26/5 = 5.2. Ranked by average: A, B, C.\n\nNow look at what averaging hid. Threat C would be catastrophic (damage 9, affecting nearly everyone, 10) but is hard to exploit (2) and hard to find (2). It ranks last. Whether that is right depends on how you weigh a rare disaster against a likely nuisance. Multiplying damage by affected users gives C 90, A 72 and B 12, which reverses the order of B and C and puts C top. Neither ranking is objectively correct.\n\nSo treat scores as a conversation starter, not a calculation: agree the scale and what each number means before scoring, score as a group, record the reasoning, and apply a separate rule for impact so a severe but unlikely threat is never silently buried. Re-score when the system changes, as the page's sixth step says."
+      },
+      {
+        "heading": "Shift-left: what the page claims",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Shift-left security means building security into development from the start, instead of checking it as a final gate before production. The page argues flaws found late, in testing or after deployment, cost more and are harder to fix.\n\nFive principles: security by design (threat modelling, secure coding guidelines, risk assessments from architecture onward); developer-centric security (training, SAST and automated code analysis inside developer workflows); automation and tooling (security tests in CI/CD); collaboration (shared responsibility across engineering, DevOps and security, with security champions in teams); and continuous monitoring (runtime monitoring, anomaly detection, incident response).\n\nPractices named: SAST, DAST, SCA and IaC scanning; threat modelling and secure code review; developer security training; security champions; OWASP Top 10 awareness. Automated scans run on every build and deployment. It mentions GDPR, ISO 27001 and SOC 2 as compliance frameworks, with no mapping."
+      },
+      {
+        "heading": "Reading the shift-left claims critically",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page says 'studies show' that the cost of a bug rises exponentially the later it is found, but names no study and gives no figures. The direction is plausible and widely believed; the exact shape is not established by the page. Do not quote 'exponential' in a business case. Measure your own: for the last twenty security findings, record where each was found (design, code review, pipeline, test, production) and how long it took to fix. If late findings really cost more, you now have your own numbers.\n\nThe fifth principle, runtime monitoring and response, happens after deployment. That is valuable, but it is shift-right, not shift-left. A security programme needs both ends.\n\nThe page does not discuss what goes wrong. Automated scanners produce false positives, and a flood of them trains people to ignore the tool. Plan for it: start with a small set of high-signal checks, set a rule for who triages findings and by when, and track the false positive rate so you can tune.\n\nThe page also says traditional security teams are replaced. In practice shared responsibility usually sits beside a specialist function; do not dissolve your security expertise because developers now run scanners.\n\nMeasure what the page does not: findings by stage found, time to fix by severity, share of repositories with each check enabled, scan failures that block a release and how many were overridden. Without these, shift-left is a belief."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A one-page threat model and a pipeline plan (illustrative, not Cretek data)",
+      "body": "Scope: a customer portal where schools log in, view invoices and download statements. Assets: student and guardian personal data, invoices, authentication credentials, the admin interface. Attackers considered: an external opportunist, a curious or malicious customer user, and a careless or malicious insider. Trust boundaries: internet to portal, portal to database, portal to the payment provider.\n\nAnalysis with STRIDE across the data flow gives, for example: information disclosure through guessable invoice identifiers (one school viewing another's invoice); spoofing through weak or reused passwords; elevation of privilege if the admin interface relies on a hidden URL rather than a server-side role check; denial of service on the login endpoint; and repudiation if admin actions are not logged.\n\nScoring on the 1 to 10 convention, with the rule that anything scoring 9 or 10 on damage is reviewed by the technical lead whatever its average. Invoice identifier disclosure scores damage 7, reproducibility 9, exploitability 8, affected users 6, discoverability 7, average 7.4: highest. Admin URL reliance: 8, 7, 6, 4, 5, average 6.0.\n\nMitigations, owners and status: server-side authorisation check on every invoice request and non-guessable identifiers (developer, before next release, test added); password policy, rate limiting and multi-factor for staff (technical lead, quarter); server-side role check on all admin routes (developer, test added); audit log of administrative actions, write-protected (developer, next sprint); rate limiting on login (platform, this sprint). One accepted risk: a short service interruption from a sustained flood is accepted until traffic justifies a protection service, recorded with the owner and a review date.\n\nPipeline plan (shift-left): the threat model is reviewed when the data flow changes; a dependency scan and a secrets check run on every pull request; static analysis runs on every merge with findings triaged within an agreed number of days; an authorisation test for each of the threats above lives in the test suite. Measures: findings by stage found, time to fix, and the false positive rate for each tool, reviewed monthly. Unverified: how many of these threats actually exist until the system is reviewed and tested; the model is a hypothesis, not a result."
+    },
+    "misconceptions": [
+      "Believing threat modelling is a one-off document. The page's last step is to review and update it continuously.",
+      "Treating DREAD averages as objective. The page gives no scale and a different rule can reverse the ranking.",
+      "Burying a severe but unlikely threat because its average score is low.",
+      "Confusing the Kill Chain with MITRE ATT&CK. They are different models.",
+      "Quoting 'exponential' cost growth as established. The page cites no study.",
+      "Treating runtime monitoring as shift-left. It happens after deployment.",
+      "Assuming scanners remove the need for security expertise, or for tuning to control false positives."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a developer what a trust boundary is, and why you start threat modelling there."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "tm-1",
+      "question": "Which list correctly gives the six STRIDE categories?",
+      "options": [
+        "Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service, Elevation of Privilege",
+        "Spoofing, Testing, Recovery, Integrity, Detection, Escalation",
+        "Security, Threats, Risk, Impact, Detection, Exposure",
+        "Sabotage, Theft, Ransom, Intrusion, Deception, Exfiltration"
+      ],
+      "answer": 0,
+      "why": "STRIDE stands for Spoofing, Tampering, Repudiation, Information Disclosure, Denial of Service and Elevation of Privilege."
+    },
+    {
+      "id": "tm-2",
+      "question": "A user changes the price in a request and the server accepts it. Which STRIDE category is this, and what is the mitigation?",
+      "options": [
+        "Spoofing; stronger passwords",
+        "Tampering; calculate prices on the server and do not trust client-supplied totals",
+        "Repudiation; delete the logs",
+        "Denial of service; rate limit"
+      ],
+      "answer": 1,
+      "why": "Altering data in transit or in a request is tampering. The server must not trust values the client controls."
+    },
+    {
+      "id": "tm-3",
+      "question": "Using five factors scored 8, 6, 7, 9 and 5, what is the DREAD-style average?",
+      "options": ["6.0", "6.6", "7.0", "7.5"],
+      "answer": 2,
+      "why": "(8+6+7+9+5)/5 = 35/5 = 7.0. The 1 to 10 scale and averaging are an Academy convention; the page names the factors but gives no scale."
+    },
+    {
+      "id": "tm-4",
+      "question": "Why might a threat with damage 9 and 10 affected users still rank last by a DREAD average?",
+      "options": [
+        "Because averaging can hide a severe but hard-to-exploit threat, so a separate impact rule is needed",
+        "Because damage does not matter",
+        "Because DREAD requires the lowest score",
+        "Because affected users are not counted"
+      ],
+      "answer": 0,
+      "why": "Low reproducibility, exploitability and discoverability pull the average down. A separate impact rule stops a severe but unlikely threat being buried."
+    },
+    {
+      "id": "tm-5",
+      "question": "What evidence does the Shift-Left page give for its claim that fix cost rises exponentially the later a bug is found?",
+      "options": [
+        "A cited study with figures",
+        "'Studies show', with no study, source or figures named",
+        "A worked example with costs",
+        "A table of cost by stage"
+      ],
+      "answer": 1,
+      "why": "The page says 'Studies show' but names no study and gives no figures. Measure your own findings by stage instead of quoting it."
+    },
+    {
+      "id": "tm-6",
+      "question": "Which of the page's five shift-left principles is closest to 'shift-right' because it happens after deployment?",
+      "options": [
+        "Security by design",
+        "Developer-centric security",
+        "Automation and tooling",
+        "Continuous monitoring"
+      ],
+      "answer": 3,
+      "why": "Runtime monitoring, anomaly detection and incident response happen after deployment. Valuable, but it is not shifting left."
+    }
+  ],
+  "build": {
+    "business": "Cretek holds customer data and runs customer-facing systems. A CTO needs to know where the threats are, which are accepted and by whom, and to catch problems before release. This is the security-by-design capability in the CTO Operating System.",
+    "problem": "Produce a threat model for one real Cretek system, wire the highest-value checks into its pipeline, and measure the result, with a tested threat register tool.",
+    "requirements": [
+      "Choose one real Cretek system (for example the school management portal). Define scope, assets, attackers considered and the people to involve. Record who took part",
+      "Draw the data flow with trust boundaries, from the real design or code, not from memory. Keep the diagram in the repository",
+      "Apply STRIDE to each element and boundary crossing. Record each threat with the element, the category, the mitigation, the owner and the status (mitigated, accepted by a named person with a review date, or open)",
+      "Score threats on a scale and rule agreed beforehand, with an impact override so no severe threat is buried by averaging. Record the reasoning",
+      "Check at least three high-ranked threats against the real system in a test environment or by code review (for example an authorisation check on identifiers, an admin route check, a rate limit), and record what you found. Do not test systems you are not authorised to test",
+      "Add shift-left checks to the pipeline for that system: a dependency scan, a secrets check and static analysis (tools of your choice), with a written triage rule for findings (owner, time limit) and a test that proves the pipeline fails on a seeded issue",
+      "Measure for the last twenty findings or a stated sample: stage found and time to fix, and the false positive rate for each tool. Say which numbers are real and which are estimates. Do not claim cost rises exponentially",
+      "A threat register tool that stores threats and reports counts by STRIDE category, status and score, lists any threat above the impact threshold that is not mitigated or accepted by a named person, and rejects invalid entries. Automated tests required, including a missing owner on an accepted risk (reject), an unknown STRIDE category (reject), a score outside the scale (reject), a high-impact low-average threat that must still be flagged, an empty register, and a duplicate id (reject)",
+      "A one-page summary for a security lead, led by the unmitigated high-impact threats and the accepted risks with their owners",
+      "Every statement about real systems labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Test only systems you are authorised to test, in a test environment where possible",
+      "No credentials, personal data or live vulnerabilities in the repository. Record vulnerabilities in a private tracker and reference them by id",
+      "Do not publish details of an unfixed weakness",
+      "Accepted risks need a named person and a review date",
+      "Must run locally with a single command for the register tool and its tests"
+    ],
+    "design": "Write a one-page design covering the scope and trust boundaries, the scoring scale and impact override, the pipeline checks and triage rule, and one alternative you rejected, for example scoring threats by a single likelihood-times-impact number.",
+    "tasks": [
+      "Define scope, assets and attackers, and gather the people",
+      "Draw the data flow and trust boundaries from the real system",
+      "Apply STRIDE and record threats, mitigations, owners and statuses",
+      "Score with the agreed scale and impact override",
+      "Verify at least three high-ranked threats safely",
+      "Add and test the pipeline checks and the triage rule",
+      "Build the register tool with tests and write the one-page summary"
+    ],
+    "acceptance": [
+      "The data flow and trust boundaries come from the real system",
+      "Each threat has a category, mitigation, owner and status, and accepted risks have a named person and a review date",
+      "The impact override is in place and a high-impact low-average threat is flagged by the tool",
+      "At least three threats were checked in an authorised way and the findings recorded",
+      "The pipeline fails on a seeded issue, proven by a test",
+      "Stage found, time to fix and false positive rates are reported with their basis",
+      "The register tool tests pass including the rejection cases",
+      "No credentials, personal data or live vulnerability details in the repository"
+    ],
+    "deliverable": "The threat model with data flow, the register tool and tests, the pipeline checks, the measurements and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Security lead",
+    "scenario": "A security lead is reviewing your threat model and pipeline. They want to know whether it describes the real system and whether anything is slipping through.",
+    "prompts": [
+      "Show me the trust boundaries and how you know the diagram matches the system.",
+      "Which threat did you accept, who owns that decision, and when is it reviewed?",
+      "Your ranking put a catastrophic threat low. Why, and what stops it being ignored?",
+      "How many findings did the pipeline produce, how many were false positives, and what happened to them?",
+      "What does shift-left not cover in your plan?",
+      "How do you know your numbers on fix cost by stage are real?"
+    ],
+    "rubric": [
+      { "criterion": "A threat model grounded in the real data flow with complete, owned threats and statuses", "weight": 0.3 },
+      { "criterion": "Defensible risk ranking with an impact override and recorded reasoning", "weight": 0.2 },
+      { "criterion": "Working, tested pipeline checks with a triage rule and honest false-positive measurement", "weight": 0.3 },
+      { "criterion": "Safe, authorised verification and handling of vulnerability details", "weight": 0.1 },
+      { "criterion": "Clear communication to a security lead", "weight": 0.1 }
+    ]
+  }
+}

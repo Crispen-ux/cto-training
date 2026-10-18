@@ -1,0 +1,163 @@
+{
+  "id": "rto-rpo",
+  "moduleId": "delivery-metrics",
+  "pillar": "Delivery",
+  "title": "RTO and RPO: recovery targets and what they cost",
+  "estimatedMinutes": { "learn": 30, "build": 150, "defend": 30 },
+  "objectives": [
+    "Define RTO and RPO and tell them apart",
+    "Link recovery targets to the cost of downtime and the criticality of data",
+    "Tier a set of systems with justified RTO and RPO values",
+    "Connect a target to the approach needed to meet it"
+  ],
+  "prerequisites": ["sla-slo-sli"],
+  "unlock": { "prerequisites": [{ "lessonId": "sla-slo-sli", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "RTO and RPO",
+      "url": "https://www.ctoframework.com/delivery/metrics/rto-rpo",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page is short. It names real-time replication as the approach for near-zero RPO but does not discuss architecture in depth, so the design material in this lesson's Build step goes beyond the page and must be supported by supplementary sources.",
+    "The page has no pitfalls section, and one example heading reads 'ROT Example', which looks like a typo for RTO."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Recovery Time Objective (RTO)",
+        "sourceCategory": "Official CTO Framework",
+        "body": "RTO is the maximum time a system, application or process can be down after a failure before it significantly harms the business. Example from the page: an e-commerce platform loses its database. With a 2-hour RTO the team must restore service within 120 minutes. Recovery in 1 hour 45 minutes meets the target; 3 hours misses it, which can mean financial loss, SLA breaches or reputational damage.\n\nThe page says RTO is often set by the cost of downtime. If downtime costs 10,000 pounds an hour, a 4-hour outage is about 40,000 pounds in direct losses."
+      },
+      {
+        "heading": "Recovery Point Objective (RPO)",
+        "sourceCategory": "Official CTO Framework",
+        "body": "RPO is the maximum amount of data loss the business can tolerate, measured as time: how far back the recovered data may be from the moment of failure. Example from the page: with hourly backups, a crash at 12:45 and a last backup at 12:00 loses 45 minutes of data. That is acceptable for a 1-hour RPO but exceeds a 15-minute RPO, which would call for alternatives such as real-time replication.\n\nThe page ties RPO to data criticality. A financial trading system might need an RPO of zero, achieved with real-time replication. An internal HR portal might accept 12 hours, which allows daily backups."
+      },
+      {
+        "heading": "Side by side",
+        "sourceCategory": "Official CTO Framework",
+        "body": "RTO is the maximum downtime allowed, and its business impact is revenue lost per hour. RPO is the maximum tolerable data loss, and its impact is lost transactions and rework."
+      },
+      {
+        "heading": "From target to decision",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page tells you what the targets mean. The CTO's job is to pick them. Tighter targets cost more to meet, so each should be set by comparing the cost of the outage or data loss with the cost of the capability that prevents it. A target nobody has tested is a hope, not an objective: the Build step requires a restore test plan. Supplementary reading on backup, replication and disaster recovery patterns is needed for the design work; the Academy will propose vetted free sources before this lesson is used for Build."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Is a 4-hour RTO worth buying down? (illustrative numbers, not Cretek data)",
+      "body": "Suppose downtime costs 10,000 per hour (the page's figure used as an example). Today's recovery takes 4 hours, so one outage costs 40,000. A hot standby that cuts recovery to 30 minutes reduces that outage to 5,000, saving 35,000 per outage. If outages like this happen once a year, the standby needs to cost less than 35,000 a year to pay for itself on this measure alone. Real decisions also weigh reputation and SLA penalties, which is why you must defend your inputs, not just the arithmetic."
+    },
+    "misconceptions": [
+      "Confusing RTO (how long you can be down) with RPO (how much data you can lose).",
+      "Assuming every system needs the tightest targets. The page's own example gives a trading system an RPO of zero and an HR portal 12 hours.",
+      "Setting targets without testing that recovery can actually meet them (Original Academy note).",
+      "Treating the target as a technology choice when it is a business decision about cost and tolerance."
+    ],
+    "explainTask": "In 150 words or fewer, explain to the board why not every Cretek system gets the same RTO and RPO, using one cheap example and one expensive example."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "rto-1",
+      "question": "A database is backed up hourly. It crashes at 12:45 and the last backup was at 12:00. How much data is lost, and does that meet a 1-hour RPO?",
+      "options": [
+        "15 minutes lost; meets it",
+        "45 minutes lost; meets a 1-hour RPO",
+        "45 minutes lost; fails a 1-hour RPO",
+        "1 hour lost; fails it"
+      ],
+      "answer": 1,
+      "why": "The loss is 45 minutes, which is within a 1-hour RPO but exceeds a 15-minute RPO, as the page's example states."
+    },
+    {
+      "id": "rto-2",
+      "question": "Which of these does RTO describe?",
+      "options": [
+        "The most data you can lose",
+        "The maximum time a system can be down before significant business harm",
+        "How often you back up",
+        "The cost of the recovery system"
+      ],
+      "answer": 1,
+      "why": "RTO is about downtime; RPO is about data loss."
+    },
+    {
+      "id": "rto-3",
+      "question": "Which approach does the page link to near-zero RPO targets?",
+      "options": ["Daily backups", "Weekly snapshots", "Real-time replication", "Manual exports"],
+      "answer": 2,
+      "why": "The page names real-time replication for zero or near-zero RPO."
+    },
+    {
+      "id": "rto-4",
+      "question": "Downtime costs 10,000 pounds an hour. An outage lasts 4 hours. What is the direct loss on the page's logic?",
+      "options": ["10,000 pounds", "14,000 pounds", "40,000 pounds", "400,000 pounds"],
+      "answer": 2,
+      "why": "4 hours at 10,000 pounds per hour is about 40,000 pounds."
+    },
+    {
+      "id": "rto-5",
+      "question": "Service has a 2-hour RTO and is restored in 3 hours. What does the page say can follow?",
+      "options": [
+        "Nothing, the target is advisory",
+        "Financial loss, SLA breaches or reputational damage",
+        "A lower RPO automatically",
+        "A new backup schedule"
+      ],
+      "answer": 1,
+      "why": "Missing the RTO can cause financial loss, SLA breaches or reputational damage."
+    }
+  ],
+  "build": {
+    "business": "Cretek needs recovery targets that are tied to business cost and that have actually been shown to work.",
+    "problem": "Tier Cretek's systems and set justified RTO and RPO values, then test at least one recovery against its target.",
+    "requirements": [
+      "An inventory of at least five Cretek systems (for example the school management app, quotation automation, websites, automation workflows)",
+      "For each: cost of downtime per hour, with the assumptions or data source stated, and the data criticality",
+      "Proposed RTO and RPO for each, with a written justification",
+      "For each, the backup or replication approach that would meet the targets and a rough cost",
+      "A restore test plan, and the executed result for at least one system"
+    ],
+    "constraints": [
+      "No invented financial figures: real numbers or assumptions explicitly labelled as such",
+      "The recovery test must actually be run; do not report a result you did not observe"
+    ],
+    "design": "Include a diagram of the recovery path for the system you test and list what could make recovery take longer than planned.",
+    "tasks": [
+      "Build the inventory and tiering table",
+      "Estimate downtime cost and justify each target",
+      "Select supplementary sources for the backup and replication design and cite them",
+      "Run a restore test, record the measured recovery time and data loss, and compare with the target",
+      "Document operational and security considerations of backups (access, encryption, retention)"
+    ],
+    "acceptance": [
+      "Every target has a stated cost or tolerance justification",
+      "At least one restore test is executed with measured RTO and RPO recorded",
+      "Gaps between target and measured result are written up with remediation",
+      "Assumptions are labelled; supplementary sources are cited"
+    ],
+    "deliverable": "The tiering document, test record and any scripts, referenced by path or link."
+  },
+  "defend": {
+    "assessor": "Board member",
+    "scenario": "The board is asked to approve a recovery budget and wants to know whether the money is justified.",
+    "prompts": [
+      "Why do these systems get different targets? Convince me the cheapest tier is safe.",
+      "Where did your downtime cost come from? What if it is half that?",
+      "You say you can restore in two hours. Did you prove it, and what did the test miss?",
+      "What is the cheapest way to halve the RTO of your most critical system, and what would you not do?",
+      "If we cut this budget by a third, which target do you drop first and what is the risk?"
+    ],
+    "rubric": [
+      { "criterion": "Targets justified by cost and tolerance, not by habit", "weight": 0.3 },
+      { "criterion": "Evidence: measured test results, honest about gaps", "weight": 0.3 },
+      { "criterion": "Trade-offs and prioritisation under budget pressure", "weight": 0.25 },
+      { "criterion": "Clarity for a non-technical board", "weight": 0.15 }
+    ]
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "id": "python-for-ctos",
+  "moduleId": "engineering-languages",
+  "pillar": "Tech",
+  "title": "Python for CTOs",
+  "estimatedMinutes": { "learn": 45, "build": 260, "defend": 35 },
+  "objectives": [
+    "Decide when Python is the right tool",
+    "Structure Python projects for maintainability",
+    "Manage dependencies and environments",
+    "Test, type-check and deploy Python services"
+  ],
+  "prerequisites": ["solid-design-patterns"],
+  "unlock": { "prerequisites": [{ "lessonId": "solid-design-patterns", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Python documentation",
+      "url": "https://docs.python.org/3/",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "Official documentation reviewed at overview level."
+    }
+  ],
+  "verificationNotes": [
+    "Python ecosystem changes quickly; verify tooling and versions before use.",
+    "Examples are Original Academy material."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "When to use Python",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Python excels at automation, data processing, scripting, glue code and rapid prototypes. It is weaker for latency-critical systems, mobile clients and large monolithic applications where static typing and performance dominate. A CTO chooses Python for leverage and speed, not by default."
+      },
+      {
+        "heading": "Project structure",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Use a clear package layout, a single entry point, configuration via environment variables, and a README with run and test commands. Separate domain logic from I/O. Keep scripts small and reusable. Avoid global state."
+      },
+      {
+        "heading": "Dependencies and environments",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Pin dependencies with a lock file. Use virtual environments. Separate runtime and development dependencies. Avoid installing packages globally. Review transitive dependencies for security and licence risk."
+      },
+      {
+        "heading": "Quality and operations",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Use type hints with mypy or pyright, formatting with black or ruff, linting with ruff, and tests with pytest. Add logging, metrics and health checks. Containerise with a minimal base image. Automate dependency updates and security scanning."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Python service skeleton (illustrative)",
+      "body": "A small FastAPI service with a typed domain module, pydantic settings, pytest tests, ruff linting, a Dockerfile and a CI pipeline. Configuration comes from environment variables. Secrets come from a secret manager, not code."
+    },
+    "misconceptions": [
+      "Python is too slow for all production use.",
+      "Type hints are optional in large codebases.",
+      "Global installs are acceptable.",
+      "Scripts do not need tests."
+    ],
+    "explainTask": "In 120 words or fewer, explain when you would choose Python for a production system and how you would keep it maintainable."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "py-1",
+      "question": "Python is usually a strong choice for:",
+      "options": ["Latency-critical trading engines", " Automation and data processing", " Mobile client UI", " Kernel drivers"],
+      "answer": 1,
+      "why": "Python excels at automation and data processing."
+    },
+    {
+      "id": "py-2",
+      "question": "Dependencies should be:",
+      "options": [" Installed globally", " Pinned with a lock file", " Left unpinned", " Copied manually"],
+      "answer": 1,
+      "why": "Lock files make builds reproducible."
+    },
+    {
+      "id": "py-3",
+      "question": "Type hints are valuable because they:",
+      "options": [" Slow the code", " Enable static analysis", " Replace tests", " Remove runtime errors"],
+      "answer": 1,
+      "why": "Type hints support static analysis and clarity."
+    },
+    {
+      "id": "py-4",
+      "question": "A Python service should get configuration from:",
+      "options": [" Hard-coded constants", " Environment variables or a secret manager", " A spreadsheet", " Source control"],
+      "answer": 1,
+      "why": "Configuration and secrets should not be hard-coded."
+    },
+    {
+      "id": "py-5",
+      "question": "Linting and formatting tools such as ruff help by:",
+      "options": [" Replacing code review", " Enforcing consistent style and catching errors", " Speeding up runtime", " Removing tests"],
+      "answer": 1,
+      "why": "Linters enforce style and catch common errors."
+    }
+  ],
+  "build": {
+    "business": "Cretek uses Python for automation and reporting. Maintainable Python reduces risk and onboarding time.",
+    "problem": "Build a small, tested and typed Python service or automation with a reproducible environment and CI checks.",
+    "requirements": [
+      "Define the problem and success metric",
+      "Set up a virtual environment and lock file",
+      "Implement typed domain logic",
+      "Write tests with pytest",
+      "Add linting and formatting",
+      "Containerise and document run commands",
+      "Scan dependencies for vulnerabilities"
+    ],
+    "constraints": [
+      "No secrets in code",
+      "Must run locally with one command",
+      "Tests must pass in CI"
+    ],
+    "design": "Write a one-page design for the Python component.",
+    "tasks": [
+      "Scaffold the project",
+      "Implement domain logic",
+      "Add tests",
+      "Add linting and type checks",
+      "Containerise",
+      "Document run and test commands"
+    ],
+    "acceptance": [
+      "Environment is reproducible",
+      "Tests pass",
+      "Lint and type checks pass",
+      "No secrets in repository",
+      "Documentation complete"
+    ],
+    "deliverable": "Python project with tests, linting, container and documentation, referenced by path."
+  },
+  "defend": {
+    "assessor": "Engineering lead",
+    "scenario": "The engineering lead asks whether Python is the right choice for a new service and how it will be maintained.",
+    "prompts": [
+      "Why Python over another language?",
+      "How will you keep the codebase maintainable?",
+      "How are dependencies managed?",
+      "What quality gates exist?",
+      "How is it deployed and monitored?"
+    ],
+    "rubric": [
+      { "criterion": "Language choice is justified", "weight": 0.3 },
+      { "criterion": "Project structure and dependencies are sound", "weight": 0.25 },
+      { "criterion": "Quality and operations are explicit", "weight": 0.25 },
+      { "criterion": "Clear communication to engineering", "weight": 0.2 }
+    ]
+  }
+}

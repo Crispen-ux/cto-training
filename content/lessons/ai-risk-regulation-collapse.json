@@ -1,0 +1,227 @@
+{
+  "id": "ai-risk-regulation-collapse",
+  "moduleId": "tech-ai",
+  "pillar": "Tech",
+  "title": "AI risk, the EU AI Act and model collapse",
+  "estimatedMinutes": { "learn": 50, "build": 280, "defend": 35 },
+  "objectives": [
+    "Describe the four risk tiers of the EU AI Act as the framework page summarises them, and say what the page leaves out",
+    "Classify a Cretek AI use case into a hypothesised tier and prepare the question to take to counsel, without presenting it as a legal conclusion",
+    "Tag AI risks with the MIT AI Risk Repository's causal and domain taxonomies and build a risk register from them",
+    "Explain model collapse, its stated causes and mitigations, and the conditions under which it does and does not apply",
+    "Defend an AI risk position to a lawyer or regulator without overclaiming"
+  ],
+  "prerequisites": ["ai-model-selection"],
+  "unlock": { "prerequisites": [{ "lessonId": "ai-model-selection", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "EU AI Act",
+      "url": "https://www.ctoframework.com/tech/ai/eu-ai-act",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "MIT AI Risk Repository",
+      "url": "https://www.ctoframework.com/tech/ai/mit-ai-risk-repository",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Model collapse",
+      "url": "https://www.ctoframework.com/tech/ai/model-collapse",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "NOT LEGAL ADVICE. The EU AI Act page is a secondary overview of Regulation (EU) 2024/1689, not the legal text. The primary sources are the Official Journal text (EUR-Lex, CELEX 32024R1689) and the European Commission's AI Act pages. Anything that affects a real decision must be checked against those and with qualified counsel.",
+    "The EU AI Act page's retrieved summary flagged: the penalty statement ('up to 35 million euros or 7% of global turnover') omits the 'whichever is higher' rule and the lower tiers of fines; 'predictive policing' as a named prohibition is a simplification; 'cognitive manipulation' is a loose label; the list of high-risk areas is incomplete (the Annex III areas of biometrics, essential services, migration and justice are not mentioned); 'audit features' overstates what conformity assessment involves; extraterritorial scope is simplified; and the dates on the page (February 2025 prohibitions, August 2025 general-purpose AI rules, August 2026 most high-risk obligations, August 2027 for AI embedded in regulated products) may have changed. Proposals to adjust the high-risk deadlines were being discussed; their current status was not verified for this lesson. Confirm the timeline against the Commission before relying on any date.",
+    "The page does not cover: general-purpose AI model obligations (it says only that they take effect in August 2025), the full Annex III list, provider versus deployer duties, AI literacy duties, post-market monitoring, enforcement authorities, exemptions, SME provisions or the interaction with GDPR.",
+    "The MIT AI Risk Repository page states 'over 1,700 distinct risks from 70+ existing frameworks' without a source; check the repository's own publication (arXiv 2408.12648) and its current version. The page's claims that the repository 'ensures blind spots are addressed', that regulators accept it, and that it is 'standardised' and 'comprehensive' are unsupported. 'AI Impact Assessment' is used without definition. The page does not cover how the repository is maintained, its methodology, individual risks, severity scoring, how to run an assessment, mapping to regulation, licensing or limitations.",
+    "The model collapse page cites one piece of research (Shumailov et al., 'The Curse of Recursion', arXiv 2023 and Nature 2024) and gives no measured results, thresholds, costs or detection methods. The retrieved summary flagged: 'inevitable' is overstated and the condition that collapse requires recursive replacement of data is not stated; claims that watermarks are easily bypassed and that detection classifiers have high false-positive rates are unsourced; the three phases are conceptual; the 'high minimum threshold' of human data is not defined; and counter-evidence (such as work showing that accumulating real and synthetic data avoids collapse) is not discussed. I did not read that research for this lesson.",
+    "The simulation in this lesson is Original Academy material: a toy model run as Python. It illustrates a mechanism and is not evidence about real language models. Its figures are labelled SIMULATED."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The EU AI Act as the page summarises it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page presents the Act as a risk-based framework with four tiers.\n\nUnacceptable risk: prohibited. Named examples: social scoring, cognitive manipulation, predictive policing.\nHigh risk: allowed with obligations. Named areas: critical infrastructure, education, employment, law enforcement. Obligations listed: data governance, technical documentation, human oversight, robustness, a quality management system and continuous risk management.\nLimited risk: transparency duties, for example telling people they are talking to a chatbot and labelling deepfakes.\nMinimal risk: largely unregulated.\n\nThe page says general-purpose AI rules take effect in August 2025 without describing them, gives fines of up to 35 million euros or 7% of global turnover, and lists dates: February 2025 prohibitions, August 2025 general-purpose AI, August 2026 most high-risk obligations, August 2027 AI embedded in regulated products."
+      },
+      {
+        "heading": "Reading it as an engineer, not a lawyer",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "This is not legal advice. The point of the exercise is to classify well enough to ask counsel the right question.\n\nWhat the page leaves out matters. The high-risk list is shorter than the Act's, so absence from the page proves nothing. Provider and deployer duties differ, and a company that builds on someone else's model may be either. Fines depend on the breach, and the 'whichever is higher' rule changes the answer for large firms. Dates may have moved; verify against the Commission.\n\nA workable method: write the use case in a sentence (who is affected, what the system decides or influences, whether a person reviews it); check the prohibited practices; check whether it falls in a high-risk area or is part of a regulated product; check transparency duties; then record the result as a hypothesis with the reasoning and the open questions for counsel. For example, a chatbot answering quotation questions is probably limited risk (transparency: say it is an AI). A system ranking job applicants touches employment and is probably high risk. A drafting assistant for internal quotations that a person checks sits nearer minimal risk, but the answer depends on what it decides and for whom. Those are hypotheses, not conclusions.\n\nThe engineering consequences of high risk are concrete and reusable: documented data sources, logged decisions, human oversight with real power to override, testing for robustness, and a risk process that continues after launch. Build those habits for anything consequential, whatever tier it lands in."
+      },
+      {
+        "heading": "MIT AI Risk Repository: two taxonomies",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page describes the repository as a living database of over 1,700 risks drawn from 70+ existing frameworks (unsourced on the page).\n\nCausal taxonomy: Entity (human or AI), Intent (intentional or unintentional) and Timing (pre-deployment or post-deployment).\nDomain taxonomy, seven domains: Discrimination and Toxicity; Privacy and Security; Misinformation; Malicious Actors and Misuse; Human-Computer Interaction; Socioeconomic and Environmental; AI System Safety and Failures (the page places model collapse here).\n\nSuggested workflow: identify risks with the domain taxonomy, analyse them with the causal one, and fold results into AI impact assessments (a term the page does not define)."
+      },
+      {
+        "heading": "Using the taxonomies without overclaiming",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A taxonomy is a checklist for not forgetting categories, not proof that nothing is missing. The page's claim that it ensures blind spots are addressed is stronger than any checklist can support.\n\nBuild a risk register where every row has: the use case; the risk in one sentence; the domain; the causal tags (entity, intent, timing); likelihood and impact on a scale you define; the control and who owns it; and how you would detect that the risk has occurred. Tagging forces useful questions. A prompt injection that makes an agent leak data is Privacy and Security, entity AI acting on a human's intent, intentional, post-deployment. A model that quietly quotes wrong prices is AI System Safety and Failures, AI entity, unintentional, post-deployment, so the control is testing and monitoring rather than access control.\n\nCount the register by domain and by timing. If every risk is post-deployment, you have a launch plan with no pre-deployment checks. If one domain is empty, ask whether it is irrelevant or ignored. Read the repository itself, cite its version, and do not take the page's counts as current."
+      },
+      {
+        "heading": "Model collapse: what the page says",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Model collapse is degradation when models are trained recursively on data generated by earlier models. The page describes rare events (the tails) being forgotten, diversity falling and errors accumulating. Three phases: early (tail loss; the example is 100 dog breeds shrinking to the top 20), mid (mode narrowing) and late (functional collapse). Two causes: statistical approximation error (finite samples miss rare cases) and functional approximation error (the model cannot represent the true distribution). It cites Shumailov et al.\n\nMitigations listed: an immutable human-generated gold dataset; provenance tracking; mixing synthetic data with human anchor data above a 'high minimum threshold' (not specified); and anomaly and variance checks. Implications: a 'data wall', human data as a moat, and the cost of verification."
+      },
+      {
+        "heading": "A toy simulation, and its limits",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The mechanism can be shown in a few lines. Start with 100 categories with Zipf-like frequencies (a few common, many rare). Each generation draws 1,000 samples from the current distribution and refits the distribution to those samples. Any category not drawn gets probability zero and can never return.\n\nSIMULATED result, mean number of surviving categories over 20 seeds: generation 1, 96.8; generation 5, 73.5; generation 10, 55.4; generation 20, 39.0; generation 30, 30.2 (minimum final 26). One seed (42): 97, 68, 54, 43, 34 at generations 1, 5, 10, 20 and 30. The rare categories go first, as the page describes, and the loss is irreversible within the loop.\n\nWith 30% of each generation's data drawn from the original fixed human distribution, all 100 categories survived at every generation in the same setup (minimum final 100).\n\nWhat this shows: recursive training on a finite sample loses rare cases, and a fixed anchor of real data preserves them. What it does not show: how real language models behave, how much real data is enough, or whether collapse happens in practice. It applies when data is replaced by generated data each cycle. If real data is retained and synthetic data accumulates beside it, the page's 'inevitable' is too strong, and the page does not discuss that. Treat 30% as the output of a toy, not a threshold."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Risk review of an internal quotation assistant (invented, not Cretek data)",
+      "body": "Use case: an assistant drafts quotations for staff to check, using an external model, a customer price list and past quotations. It also answers customer chat questions about order status.\n\nEU AI Act hypotheses (not legal conclusions). Chat with customers: a person is interacting with an AI system, so transparency duties are likely (say it is an AI). Internal drafting with human review: not obviously in a high-risk area, no prohibited practice identified. Counsel questions: are we a deployer or a provider of the model; does anything in the use fall in an Annex III area (we believe not, to confirm); what are our duties as a deployer; has any date moved since the page was written. Status: UNVERIFIED until counsel answers.\n\nRisk register rows (domain; entity, intent, timing):\n1. Draft contains a wrong price that is sent unchecked. AI System Safety and Failures; AI, unintentional, post-deployment. Control: mandatory human review, price checks against the list, monitoring of reviewer override rate.\n2. Customer data sent to the provider. Privacy and Security; human, unintentional, pre-deployment (a design choice). Control: data handling check done before selection, as in the model selection lesson.\n3. Instruction hidden in a customer email manipulates the assistant. Privacy and Security; AI acting on human intent, intentional, post-deployment. Control: treat retrieved text as untrusted, no tool access beyond drafting, tested injection cases.\n4. Chat answers wrongly about delivery. Misinformation; AI, unintentional, post-deployment. Control: answer only from order system fields, escalate otherwise.\n5. Staff over-trust the drafts. Human-Computer Interaction; human, unintentional, post-deployment. Control: sampling audits.\n6. Later, the company fine-tunes on its own past AI-drafted quotations. Model collapse risk (AI System Safety and Failures; AI, unintentional, post-deployment). Control: keep human-written and human-approved quotations as a labelled gold set, record provenance, never train on unlabelled generated output.\n\nCount: four of six are post-deployment and only one is pre-deployment, so add a pre-launch evaluation and data review row. The Economic and Environmental domain is empty; the team writes down why (small workload) and revisits it.\n\nOutputs: a register, a list of counsel questions with owners and dates, and a rule that quotations the assistant drafted carry a provenance flag so they can be excluded from any training set."
+    },
+    "misconceptions": [
+      "Treating the framework page as the law. It is a secondary summary.",
+      "Treating a tier classification as a legal conclusion rather than a hypothesis for counsel.",
+      "Treating the fine figure as complete. The page omits 'whichever is higher' and the lower tiers.",
+      "Assuming dates on the page are current. They may have changed.",
+      "Believing a taxonomy ensures nothing is missed.",
+      "Saying model collapse is inevitable. It depends on recursive replacement of data.",
+      "Treating a toy simulation as evidence about real models or as a source for a threshold."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a colleague how to classify an AI use case under the Act's four tiers, why that classification is only a hypothesis until counsel confirms it, and what you would do regardless of tier."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "rc-1",
+      "question": "How many risk tiers does the page describe for the EU AI Act?",
+      "options": ["Two", "Three", "Four: unacceptable, high, limited and minimal", "Seven"],
+      "answer": 2,
+      "why": "The page describes four tiers: unacceptable (prohibited), high (obligations), limited (transparency) and minimal (largely unregulated)."
+    },
+    {
+      "id": "rc-2",
+      "question": "Which is a correct way to treat the page's fine of 'up to 35 million euros or 7% of global turnover'?",
+      "options": [
+        "As the complete penalty regime",
+        "As incomplete: it omits the 'whichever is higher' rule and the lower fine tiers, so check the legal text",
+        "As proof the Act is not enforced",
+        "As applying to every breach"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged the omission of the 'whichever is higher' rule and the lower tiers. Confirm against the Official Journal text."
+    },
+    {
+      "id": "rc-3",
+      "question": "What are the MIT repository's three causal dimensions on the page?",
+      "options": [
+        "Cost, speed and quality",
+        "Entity (human or AI), Intent (intentional or unintentional), Timing (pre- or post-deployment)",
+        "Likelihood, impact and owner",
+        "Provider, deployer and regulator"
+      ],
+      "answer": 1,
+      "why": "The causal taxonomy tags each risk by entity, intent and timing. The seven-domain taxonomy is separate."
+    },
+    {
+      "id": "rc-4",
+      "question": "A model quietly quotes wrong prices to customers. Using the taxonomies, how is it tagged?",
+      "options": [
+        "Malicious Actors and Misuse; human, intentional, pre-deployment",
+        "AI System Safety and Failures; AI, unintentional, post-deployment",
+        "Discrimination and Toxicity; human, intentional, post-deployment",
+        "Socioeconomic and Environmental; AI, intentional, pre-deployment"
+      ],
+      "answer": 1,
+      "why": "It is a failure of the system itself, not an attack, and it appears in use, so the control is testing and monitoring."
+    },
+    {
+      "id": "rc-5",
+      "question": "In the toy simulation, what happened to rare categories under pure recursive refitting, and what preserved them?",
+      "options": [
+        "They grew; nothing was needed",
+        "They were lost progressively and irreversibly; mixing in a fixed share of the original human distribution preserved them",
+        "They disappeared only at generation 30",
+        "They were preserved by larger models"
+      ],
+      "answer": 1,
+      "why": "Mean surviving categories fell from 96.8 at generation 1 to 30.2 at generation 30, while 30% anchor mixing kept all 100. This is a toy illustration, not evidence about real models."
+    },
+    {
+      "id": "rc-6",
+      "question": "Why is the page's statement that model collapse is 'inevitable' too strong?",
+      "options": [
+        "Collapse never occurs",
+        "The condition is recursive replacement of data; if real data is retained and synthetic data accumulates alongside it, the argument changes, and the page does not discuss this",
+        "Models are immune to synthetic data",
+        "Only image models are affected"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged that the page omits the recursive-replacement condition and counter-evidence on accumulating data."
+    }
+  ],
+  "build": {
+    "business": "Cretek will use AI in ways that touch customers and staff. A CTO needs a defensible risk register, an honest regulatory hypothesis for counsel and rules that stop the company degrading its own data. This is the AI governance capability in the CTO Operating System.",
+    "problem": "Produce an AI risk register and regulatory classification for one real Cretek AI use case, plus a tested simulation tool and a data provenance rule that protects against recursive training on generated output.",
+    "requirements": [
+      "Describe one real AI use case in a paragraph: who is affected, what the system decides or influences, whether a person reviews it, which model and data it uses",
+      "Classify it under the four tiers as a hypothesis with reasoning, record every prohibited practice you checked, and write the questions for qualified counsel with an owner and a date. Mark the status UNVERIFIED until counsel answers. Do not state any legal conclusion",
+      "Verify against the Commission or the Official Journal text the dates and obligations you rely on, cite them with the date read, and mark anything unchecked 'requires verification'",
+      "Build a risk register of at least ten rows, each tagged with a domain and the three causal dimensions, with likelihood and impact on a defined scale, a control, an owner and a detection method. Cite the repository version you used",
+      "Analyse the register by domain and by timing, and state what the counts reveal and any empty domain with your reason",
+      "Write a provenance rule: how AI-generated content is labelled, how a human gold set is kept, and what may never be used as training data. Apply it to one real data set and show the result",
+      "A model collapse simulator that takes a number of categories, a frequency shape, samples per generation, a number of generations, an anchor share and a seed, and returns surviving categories per generation. Automated tests required: determinism with a fixed seed, anchor share zero loses categories on a known seed, anchor share one preserves all, zero samples (reject), anchor share outside 0 to 1 (reject), and monotonic non-increase of survivors when the anchor is zero",
+      "Run the simulator for at least three anchor shares and report the results as SIMULATED, with an explicit statement of what the toy cannot show",
+      "A one-page summary for counsel, led by the hypothesis, the open questions and what is unverified",
+      "A one-page summary for the CEO of the top three risks and the decisions needed",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No legal conclusions. Present classifications as hypotheses for counsel",
+      "No customer data in the register or the data set examples unless approved",
+      "Do not cite the framework page as a legal source",
+      "Do not present the simulation as evidence about real models, and do not present its anchor share as a threshold",
+      "Must run locally with a single command for the simulator and its tests"
+    ],
+    "design": "Write a one-page design covering the use case, the classification method, the register structure, the provenance rule and one alternative you rejected, for example classifying everything as minimal risk without checking.",
+    "tasks": [
+      "Describe the use case",
+      "Classify as a hypothesis and verify dates and obligations from primary sources",
+      "Build and analyse the risk register",
+      "Write and apply the provenance rule",
+      "Build the simulator with tests and run the anchor comparison",
+      "Write the counsel and CEO summaries"
+    ],
+    "acceptance": [
+      "The classification is a hypothesis with counsel questions and an UNVERIFIED status",
+      "Dates and obligations are cited to primary sources with the date read",
+      "The register has at least ten rows with both taxonomies tagged and the repository version cited",
+      "The analysis states what the counts reveal and explains any empty domain",
+      "The provenance rule is applied to a real data set",
+      "Simulator tests pass including the rejection cases",
+      "The simulation limits are stated explicitly",
+      "No legal conclusion is presented as fact"
+    ],
+    "deliverable": "The use case description, classification hypothesis with counsel questions, risk register and analysis, provenance rule and application, simulator with tests and results, and both summaries, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Legal counsel",
+    "scenario": "Counsel is reviewing your AI use case. They need to know what you think the obligations are, how sure you are and what the company will do about data quality and risk.",
+    "prompts": [
+      "Which tier do you think this falls in, and what would change your mind?",
+      "Which of your dates or obligations have you checked against the legal text, and which have you not?",
+      "Are we the provider or the deployer here, and why does it matter?",
+      "Show me your risk register. What is missing?",
+      "How do you stop our own AI output ending up in our training data?",
+      "What does your simulation show, and what does it not show?"
+    ],
+    "rubric": [
+      { "criterion": "Classification presented as a hypothesis with primary sources and counsel questions, no legal overclaiming", "weight": 0.3 },
+      { "criterion": "A sound register using both taxonomies with analysis and acknowledged gaps", "weight": 0.3 },
+      { "criterion": "Correct understanding of model collapse, its conditions and the limits of the simulation", "weight": 0.25 },
+      { "criterion": "Clear communication to counsel", "weight": 0.15 }
+    ]
+  }
+}

@@ -1,0 +1,211 @@
+{
+  "id": "medallion-file-formats",
+  "moduleId": "tech-data",
+  "pillar": "Tech",
+  "title": "Medallion architecture and data file formats",
+  "estimatedMinutes": { "learn": 50, "build": 300, "defend": 35 },
+  "objectives": [
+    "Describe the Bronze, Silver and Gold layers, what belongs in each, and what is rejected between them",
+    "Compare the seven file formats on the page by orientation, schema, compression and best use",
+    "Measure format size and read cost on your own data instead of quoting a ratio",
+    "Challenge the page's unsourced figures and category mix-ups, and say what is unverified",
+    "Defend a layered data design and format choices to the head of data"
+  ],
+  "prerequisites": ["sql-vs-nosql"],
+  "unlock": { "prerequisites": [{ "lessonId": "sql-vs-nosql", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Medallion Architecture",
+      "url": "https://www.ctoframework.com/tech/architecture-design/data/medallion-architecture",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Data File Formats",
+      "url": "https://www.ctoframework.com/tech/architecture-design/data/file-formats",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Medallion page has no numbers, implementation steps, code, reference diagrams, cost or performance benchmarks, ingestion or orchestration patterns, data quality rules, access control or personal data handling, retention policy, tool comparison, migration guidance or team ownership. The layer examples and the worked example in this lesson are Original Academy material.",
+    "The retrieved summary flagged these issues on the Medallion page: Apache Iceberg and Delta Lake are open table formats while Databricks is a platform, yet all three are listed together as lakehouse platforms; ACID transactions, schema evolution and time travel are presented as shared traits though support varies by tool and version; lineage tracking is credited to the architecture though it depends on tooling; 'reduces computational overhead' and Silver as a 'reliable single source of truth' are asserted without evidence; and the page does not say which layer defines official business metrics. Re-read the live page to confirm these before quoting.",
+    "The Data File Formats page gives a seven-row comparison and two figures: 5 to 10 times compression for Parquet and ORC over raw JSON or CSV (no source), and about 1.5% of data read for a 3-column query on a 200-column Parquet table (3 / 200, which assumes equal column widths). It has no measured speeds or benchmarks. It does not cover formats such as XML, MessagePack, Thrift, HDF5, SQLite or Excel, row group or file size tuning and partitioning, compression codec trade-offs, encryption or access control, migration between formats, or cloud costs.",
+    "The retrieved summary flagged these issues on the formats page: Protobuf labelled row and Arrow labelled columnar in the table, though the text lists only CSV, JSON and Avro as row formats and calls Arrow an in-memory standard; CSV rated poor on compression although it compresses well with gzip; claims that Arrow 'powers' Pandas 2.x and Spark's vectorised execution, which overstate its role; the statement that breaking schema changes are caught at write time, which depends on the writer, a registry or a table format and not on Parquet itself; unsourced claims that ORC is 'comparable to Parquet' and Protobuf is 'smaller on the wire than Avro'; and the Schema Registry presented as part of the Avro ecosystem though it is usually a separate component. Re-read the live page before quoting any of these.",
+    "The measurements in this lesson were run by the Academy on one machine using pyarrow 26.0.0 and Python's csv, json and gzip modules, on 100,000 rows of randomly generated data with 20 columns (seed 42). They are SIMULATED, hardware-dependent, and describe that dataset only. Real data compresses differently."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The three layers",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The Medallion page describes a structured approach to organising data in a lakehouse in three layers, to improve data quality, governance and performance for analytics and machine learning.\n\nBronze (raw ingested data): keeps a faithful copy of source data for history, compliance and replay. It holds data from databases, logs, APIs and IoT devices, including duplicates, gaps and unstructured formats.\n\nSilver (cleansed and enriched): a dependable base for operational analytics. Deduplicated records, enforced schemas, corrected errors and standardised formats.\n\nGold (curated, consumption-ready): serves reporting, dashboards, AI models and decision-making. Aggregated datasets, often in a star schema or denormalised form for query performance.\n\nClaimed benefits: governance including lineage tracking; support for structured, semi-structured and unstructured data at scale; lower computational overhead through staged transformations; better inputs for BI, AI/ML and real-time use cases. The tools named are Databricks, Apache Iceberg and Delta Lake, with ACID transactions, schema evolution and time travel attributed to them."
+      },
+      {
+        "heading": "The seven formats",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page compares seven formats in row-oriented and columnar families and argues that format choice affects storage cost, query speed, schema management and interoperability. It recommends against defaulting to CSV or JSON for large-scale analytical storage.\n\nCSV (row): text, no schema, types inferred; quick exports, legacy exchange, test seed data; pitfalls are silent type coercion, quoting and delimiter issues, no nesting.\nJSON / NDJSON (row): text, self-describing but not enforced; APIs, config, event logs and Bronze ingestion; verbose, no native date, decimal or binary types, CPU-heavy to parse.\nAvro (row): binary, mandatory schema embedded in the header and evolvable; Kafka serialisation, pipeline interchange, event storage; the full row is deserialised for analytics.\nParquet (columnar): binary, rich mandatory schema with nested data; data lakes, warehouses, ML feature stores, scan-heavy work; poor for point lookups and frequent appends, slower writes.\nORC (columnar): binary, rich embedded schema; Hive, Presto and Trino analytics; strongest in the Hadoop and Hive niche.\nArrow / Feather: an in-memory columnar standard (Feather is the on-disk form); inter-process exchange and local analytics; not for long-term storage.\nProtobuf: binary, schema in external .proto files with field numbering; gRPC, service-to-service payloads, mobile transfer; not self-describing, not for data lakes."
+      },
+      {
+        "heading": "The page's guidance and figures",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Use JSON or CSV for interchange and early pipeline stages, then Avro for streaming; Parquet by default for analytics storage, paired with Iceberg or Delta Lake for ACID and time travel; ORC in Hive-centric estates; Arrow for local in-memory exchange; Protobuf for service communication. It suggests a Bronze, Silver and Gold flow: Kafka and Avro ingest, JSON or Avro landing, Parquet for Silver and Gold, and Arrow Flight or materialised views for serving.\n\nTwo figures are given. Parquet and ORC compress 5 to 10 times better than raw JSON or CSV (no source). A 3-column query on a 200-column Parquet table reads about 1.5% of the data compared with scanning a full CSV; that is 3 / 200 and assumes columns of equal width.\n\nPitfalls: defaulting to CSV or JSON everywhere, schema-less formats allowing silent type errors, columnar formats performing poorly on single-row lookups and frequent appends, and lock-in with niche formats."
+      },
+      {
+        "heading": "Measuring instead of quoting",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page's 5 to 10 times has no source, so the Academy measured. The data: 100,000 rows, 20 columns (5 descriptive columns and 15 integer measures), randomly generated with a fixed seed. These results are SIMULATED, from one machine, and will differ on real data.\n\nSizes: CSV 9,456,793 bytes. Gzipped CSV 4,254,935. NDJSON 25,856,712. Gzipped NDJSON 6,120,695. Parquet with Snappy 4,483,740. Parquet with Zstandard 3,769,175.\n\nWhat that says. Against NDJSON, Parquet was 5.8 times smaller (Snappy) and 6.9 times smaller (Zstandard): inside the page's range. Against CSV it was only 2.1 times (Snappy) and 2.5 times (Zstandard): below the page's range. Random integers compress poorly; real, repetitive business data often compresses better, so do not treat either number as a rule. Gzipped CSV (4.25 MB) was smaller than Snappy Parquet (4.48 MB) here, so file size alone does not justify the format.\n\nThe columnar advantage was in reading. Reading the whole CSV took a median of 0.029 seconds; reading the whole Parquet file 0.0085 seconds; reading one column from Parquet 0.0062 seconds, about 4.7 times faster than reading the CSV. On this small file the gap is small in absolute terms, but it grows with width and rows.\n\nCorrectness matters more than speed. CSV has no types: a postcode such as 00123 came back as the text 00123 but converts to the number 123, losing its leading zeros. JSON numbers are binary floating point: 0.1 + 0.2 serialised as 0.30000000000000004. Neither format enforces a schema, so these errors are silent."
+      },
+      {
+        "heading": "Layers as controls, not folders",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page describes what each layer holds but not the controls that make the layers worth having. Without them Bronze, Silver and Gold are only folder names.\n\nBronze: immutable and append-only, so any downstream result can be rebuilt by replay. Record where each batch came from and when.\n\nBronze to Silver: the rules live here. Define what is a duplicate, which formats are accepted, which values are rejected, and where rejects go. Rejected rows must be counted and kept, not dropped silently, otherwise totals drift without anyone knowing.\n\nSilver to Gold: define each business metric once, in one place, with an owner. The page does not say which layer defines official metrics; decide it, or two dashboards will disagree.\n\nCross-cutting: personal data handling, access control and retention are not on the page and must be decided per layer. Raw data in Bronze is the most sensitive and the least cleaned.\n\nTool claims: do not assume a tool gives you lineage, ACID or time travel because the page lists it. Check the feature in the specific product and version you will run."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A tiny Bronze to Silver to Gold run (illustrative, not Cretek data)",
+      "body": "Bronze receives five raw sales rows: customer c1 on 2026-10-01 for 100.5 in ZA; c2 on 01/10/2026 for 200 in ZA; c1 again, an exact duplicate of the first row; c3 on 2026-10-02 with the amount 'abc' in ZA; and c4 on 2026-10-03 for 50 in UK. Bronze keeps all five exactly as they arrived.\n\nBronze to Silver, with the rules written down: parse the two accepted date formats (year-month-day and day/month/year); reject any row whose amount is not a number; remove exact duplicates. Result: c1's duplicate is removed, c3 is rejected, and c2's date is standardised. Silver has 3 rows. Rejects: 1 row (c3), counted and stored with the reason 'amount not numeric'. The reconciliation is 5 raw rows = 3 in Silver + 1 duplicate removed + 1 rejected.\n\nSilver to Gold: total sales by region. ZA is 100.5 + 200 = 300.5 and UK is 50. Gold has 2 rows. Without the rejects table, someone comparing Gold to the source system would find ZA missing whatever c3 was meant to be, with no explanation.\n\nThe habit is the reconciliation line: every row that enters a layer is accounted for in the next as passed, removed as a duplicate or rejected with a reason. And each Gold metric has a named owner and a single definition.\n\nFormat choices for this flow, following the page's guidance but with your own measurements: land raw files in the format they arrive; store Silver and Gold as Parquet; keep schemas explicit, and test a schema change before it ships."
+    },
+    "misconceptions": [
+      "Believing medallion architecture is a product. It is a way of organising data, and the page lists tools of different kinds together.",
+      "Dropping bad rows between layers without counting them.",
+      "Assuming Parquet is always smaller or faster. It depends on the data and the query; gzipped CSV was smaller than Snappy Parquet on random data here.",
+      "Quoting the page's 5 to 10 times as a fact. It has no source and depends on the comparison format.",
+      "Believing a columnar file enforces schema compatibility. That depends on the writer, a registry or a table format.",
+      "Using CSV for data with leading zeros, dates or decimals without declaring types.",
+      "Letting two layers or two teams define the same business metric differently."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a finance manager why some rows are rejected between the raw and cleaned data, and how you will show them every rejected row."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "mf-1",
+      "question": "Which layer does the Medallion page describe as holding a faithful copy of source data, including duplicates and gaps, for history, compliance and replay?",
+      "options": ["Gold", "Silver", "Bronze", "Platinum"],
+      "answer": 2,
+      "why": "Bronze is raw ingested data kept for history, compliance and replay. Silver is cleansed and enriched; Gold is curated and consumption-ready."
+    },
+    {
+      "id": "mf-2",
+      "question": "Five raw rows arrive: one is an exact duplicate of another and one has a non-numeric amount. With rules to remove duplicates and reject non-numeric amounts, how many rows are in Silver, and how many rejected?",
+      "options": [
+        "5 in Silver, 0 rejected",
+        "3 in Silver, 1 rejected",
+        "4 in Silver, 1 rejected",
+        "3 in Silver, 2 rejected"
+      ],
+      "answer": 1,
+      "why": "5 raw rows = 3 in Silver + 1 duplicate removed + 1 rejected. The rejected row is counted and stored with its reason, not silently dropped."
+    },
+    {
+      "id": "mf-3",
+      "question": "Which format does the page describe as columnar, binary, with a rich mandatory schema, and best for data lakes and scan-heavy analytics?",
+      "options": ["CSV", "Avro", "Parquet", "Protobuf"],
+      "answer": 2,
+      "why": "Parquet is the columnar analytics default on the page. Avro is a row format for streaming; CSV is text; Protobuf is for service payloads."
+    },
+    {
+      "id": "mf-4",
+      "question": "On the Academy's measurements of 100,000 random rows, how did Snappy Parquet compare with NDJSON and with CSV?",
+      "options": [
+        "About 5.8 times smaller than NDJSON and about 2.1 times smaller than CSV",
+        "About 10 times smaller than both",
+        "Larger than both",
+        "The same size as CSV"
+      ],
+      "answer": 0,
+      "why": "25,856,712 / 4,483,740 is about 5.8; 9,456,793 / 4,483,740 is about 2.1. The page's unsourced 5 to 10 times held against JSON here but not against CSV, and results depend on the data."
+    },
+    {
+      "id": "mf-5",
+      "question": "A 3-column query on a 200-column Parquet table reads about what share of the data, by the page's arithmetic, and what does that assume?",
+      "options": [
+        "About 1.5%, assuming all columns are the same width",
+        "About 15%, assuming all columns are the same width",
+        "About 3%, assuming compression",
+        "About 50%, assuming rows are read whole"
+      ],
+      "answer": 0,
+      "why": "3 / 200 is 1.5%. It assumes equal column widths; real columns differ in size."
+    },
+    {
+      "id": "mf-6",
+      "question": "Which statement matches the Academy's view of the page's tool list for the lakehouse (Databricks, Apache Iceberg and Delta Lake)?",
+      "options": [
+        "All three are the same kind of thing",
+        "Iceberg and Delta Lake are open table formats while Databricks is a platform, and features like ACID and time travel vary by tool and version",
+        "None support ACID",
+        "They are interchangeable file formats"
+      ],
+      "answer": 1,
+      "why": "The retrieved page lists them together as lakehouse platforms, but they are different kinds of thing, and support for ACID, schema evolution and time travel varies by tool and version. Check the product you will run."
+    }
+  ],
+  "build": {
+    "business": "Cretek's reporting and any future analytics depend on data that is complete, defined once and reconcilable. This is the data pipeline capability in the CTO Operating System.",
+    "problem": "Build a small, tested Bronze, Silver and Gold pipeline over one real Cretek data source, with reconciliation, a format decision backed by your own measurements, and a metric dictionary.",
+    "requirements": [
+      "Choose one real data source (for example quotation or invoice exports, or school fee records) and record its owner, fields and any personal data in it",
+      "Bronze: land the raw data unchanged and append-only, recording source, batch id and arrival time. Keep the format it arrived in",
+      "Silver: write the cleansing rules (accepted formats, types, duplicate definition, rejection reasons) and apply them. Store rejects in a separate table with the reason",
+      "Gold: build at least two business metrics (for example revenue by month, quotes by status), each defined once with a named owner and a written definition",
+      "A reconciliation report for each run showing raw rows = passed + duplicates removed + rejected, and the Gold totals tied back to Silver. Fail the run if it does not balance",
+      "Measure at least three formats for your Silver data (for example CSV, NDJSON, Parquet): file size, time to read the whole file and time to read one column, using at least five repeats and reporting medians, on the same machine. Label measurements SIMULATED if the data is generated",
+      "Test the data-integrity pitfalls on your own data: leading zeros, dates, decimals, and a schema change (a new or renamed column). Show what each format does",
+      "A written decision on formats per layer with the reason and what you could not verify",
+      "A data handling note: where personal data sits in each layer, who can read each layer, retention, and how raw data is protected",
+      "A one-page summary for the head of data, led by the reconciliation result and the open risks",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No customer data in the repository. Use generated or anonymised data approved by the data owner, labelled accordingly",
+      "Bronze data is never edited in place",
+      "Rejected rows must never be dropped silently",
+      "Do not assume a tool provides lineage, ACID or time travel. Test it or state it is unverified",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the layer rules, the reconciliation check, the metric owners, the formats chosen per layer and one alternative you rejected, for example a single cleaned table with no Bronze copy.",
+    "tasks": [
+      "Choose the source and record its owner and sensitive fields",
+      "Build Bronze with source, batch and time recorded",
+      "Write and apply the Silver rules with a rejects table",
+      "Build the Gold metrics and the metric dictionary",
+      "Build the reconciliation report and make the run fail if it does not balance",
+      "Measure the formats and test the integrity pitfalls",
+      "Write the data handling note, the format decision and the one-page summary"
+    ],
+    "acceptance": [
+      "Bronze is unchanged raw data with provenance recorded",
+      "Silver rules are written and every rejected row is stored with a reason",
+      "Gold metrics each have a definition and an owner",
+      "The reconciliation passes and a deliberately broken input makes the run fail",
+      "Format measurements use repeats and medians and are labelled",
+      "Integrity pitfalls are tested, including a schema change",
+      "The data handling note covers personal data, access and retention",
+      "No customer data in the repository"
+    ],
+    "deliverable": "The pipeline, its tests, the reconciliation report, the format measurements, the metric dictionary, the data handling note and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Head of data",
+    "scenario": "The head of data is reviewing your pipeline. A manager has just asked why the dashboard total differs from the finance system, and they want to know whether your pipeline can answer.",
+    "prompts": [
+      "Show me how every row in the source is accounted for in the dashboard number.",
+      "What happened to the rows you rejected, and who sees them?",
+      "Who owns this metric, and where is it defined?",
+      "Why this file format for this layer, and what did you measure?",
+      "A source column is renamed overnight. What happens?",
+      "Where is personal data in this pipeline, and who can read the raw layer?"
+    ],
+    "rubric": [
+      { "criterion": "Reconciliation and rejected-row handling that make every number traceable", "weight": 0.3 },
+      { "criterion": "Metric ownership and single definitions", "weight": 0.2 },
+      { "criterion": "Format decisions backed by measurement and honest about unverified claims", "weight": 0.25 },
+      { "criterion": "Data handling, personal data and schema-change resilience", "weight": 0.15 },
+      { "criterion": "Clear communication to a head of data", "weight": 0.1 }
+    ]
+  }
+}

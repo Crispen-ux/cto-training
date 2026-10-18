@@ -1,0 +1,204 @@
+{
+  "id": "error-budgets-chaos",
+  "moduleId": "tech-cloud-sre",
+  "pillar": "Tech",
+  "title": "Error budgets and chaos engineering",
+  "estimatedMinutes": { "learn": 45, "build": 280, "defend": 35 },
+  "objectives": [
+    "Calculate an error budget from an SLO and a window, in minutes and in requests",
+    "Use the budget to decide whether to ship or stabilise, and write the policy before it is needed",
+    "Run the chaos experiment loop: steady state, hypothesis, failure, observation, learning",
+    "State the safety controls the page does not give (blast radius, abort conditions) and apply them",
+    "Defend a reliability policy to a product owner who wants to ship"
+  ],
+  "prerequisites": ["iac-golden-path", "sla-slo-sli"],
+  "unlock": { "prerequisites": [{ "lessonId": "iac-golden-path", "type": "knowledge_check" }, { "lessonId": "sla-slo-sli", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Error Budgets",
+      "url": "https://www.ctoframework.com/tech/devops-operations/error-budgets",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Chaos Engineering",
+      "url": "https://www.ctoframework.com/tech/devops-operations/chaos-engineering",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Error Budgets page does not write the formula out (it defines the budget as the gap between 100% and the SLO) and gives one example: an SLO of 99.9% gives a budget of 0.1% over a period such as a month. The minute conversions in this lesson are the Academy's arithmetic and were computed by running code. The page does not cover how to choose an SLO or window beyond 'such as a month', how to define and measure failure, tooling or burn-rate calculations, who decides freezes or exceptions, multiple SLOs or shared budgets, case studies or implementation steps. Its claims that the budget 'prevents over-engineering' and fosters accountability are unsupported, and its attribution to SRE is unsourced.",
+    "The page's policy actions (pause releases when the budget is exhausted or nearly so, automated alerts or deployment freezes as consumption nears its limit, hold high-risk changes until the budget is healthy, measure budget burned after incidents) are the page's. The burn rate section and the written policy template here are Academy material.",
+    "The Chaos Engineering page defines the practice and a five-step loop but does not cover blast radius (it only says good experiments are 'scoped'), hypothesis design or steady-state metric selection, abort conditions, rollback or other safety mechanisms, game days or organisational buy-in, concrete examples or case studies, how to use the tools it names (Chaos Monkey and Chaos Mesh are in the references only), costs or compliance considerations, or observability prerequisites. Its statement that traditional testing 'cannot model' combinatorial failure modes is absolute and unsupported on the page. Everything on safety controls and prerequisites in this lesson is Academy material.",
+    "The window used for the budget changes its size: a monthly budget and a quarterly budget for the same SLO differ threefold. The lesson states the window every time it gives a number.",
+    "The experiment record and the budget calculations here were run as Python arithmetic. No chaos experiment was run against any real system in preparing this lesson."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The error budget",
+        "sourceCategory": "Official CTO Framework",
+        "body": "An error budget is the amount of unreliability a service can tolerate while still meeting its reliability target. The page says it comes from Site Reliability Engineering and helps operations and development agree on service expectations. It is defined as the gap between perfect reliability and the SLO: error budget = 100% minus SLO.\n\nExample on the page: an SLO of 99.9% gives an error budget of 0.1%, the maximum acceptable failure over a period such as a month.\n\nPolicy actions when the budget is exhausted or nearly so: pause releases and focus on stability; trigger automated alerts or deployment freezes as consumption nears its limit; hold high-risk changes until the budget is healthy; after incidents, measure how much budget was burned to decide whether follow-up work is needed and how urgent."
+      },
+      {
+        "heading": "Turning percentages into minutes and requests",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page stops at 0.1%. A budget is only usable when it is concrete. These figures were computed by running the arithmetic.\n\nOver a 30-day window (43,200 minutes): an SLO of 99% allows 432 minutes (7.2 hours); 99.5% allows 216 minutes (3.6 hours); 99.9% allows 43.2 minutes; 99.95% allows 21.6 minutes; 99.99% allows 4.32 minutes. Over a 365-day year, 99.9% allows 525.6 minutes, 8.76 hours. Each extra nine divides the budget by ten, and the engineering cost of staying inside it rises steeply.\n\nFor request-based services, count requests, not minutes. A service handling 10,000,000 requests in the window with a 99.9% SLO may fail 10,000 of them.\n\nThe window matters. The page says 'such as a month' and leaves it open. Choose it deliberately and state it every time you quote a number.\n\nThe page gives no definition of failure. Decide what counts against the budget (for example, requests that returned a server error or took longer than a stated time), and measure it from the same data the SLO uses (see the SLI, SLO and SLA lesson)."
+      },
+      {
+        "heading": "Spending and burn rate",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page says to measure budget burned after an incident. Take the monthly 99.9% budget of 43.2 minutes. An 18-minute outage burns 18 / 43.2, about 41.7%, leaving 25.2 minutes. A further 30-minute outage would bring the total to 48 minutes, 111% of the budget: exhausted, so the policy applies.\n\nBurn rate is how fast you are spending relative to the allowed pace. If the allowed error rate is 0.1% and the current error rate is 0.5%, the burn rate is 5: at that pace the monthly budget is gone in 30 / 5 = 6 days. Alerting on burn rate warns you while there is still budget left to protect. The page does not cover burn rates; this is Academy material.\n\nThe agreement that matters is the policy, written before it is needed: who may freeze releases, what counts as a high-risk change, what the exception route is, and when releases resume. Without it, the first time the budget runs out is a negotiation under pressure, and the budget loses."
+      },
+      {
+        "heading": "Chaos engineering and its loop",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Chaos engineering is deliberately introducing failure into systems to learn how they behave under stress, to build confidence that they survive real incidents. The page frames resilience as something to prove, not assume: 'Systems don't fail in theory — they fail in production, under pressure.'\n\nThe loop: (1) define steady state, the normal baseline measured by latency, error rates and throughput; (2) form a hypothesis, predicting what should happen if a component fails; (3) introduce failure, for example killing instances, adding latency, blocking dependencies or expiring credentials; (4) observe whether the system degrades gracefully or collapses; (5) learn and improve, fix weaknesses, update assumptions, repeat.\n\nBenefits: exposes hidden dependencies and single points of failure, validates redundancy and failover, improves incident response and operator confidence, turns unknown risks into known ones. Safety: experiments should be scoped, observable and reversible; random destruction in production is explicitly not the approach; chaos engineering does not replace testing, monitoring or reliability engineering. The page names Chaos Monkey and Chaos Mesh in its references."
+      },
+      {
+        "heading": "Safety controls the page does not give",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page says experiments should be scoped but never explains how. Treat these as the minimum before running one.\n\nPrerequisites. You must be able to see the steady state. If you cannot measure latency and errors for the service now, you cannot tell whether the experiment hurt it. Observability first.\n\nBlast radius. Limit what the experiment can affect: one instance, one small share of traffic, a test environment before production, a time window when the team is present. State the maximum customer impact you accept.\n\nAbort conditions. Decide in advance the measurements that stop the experiment (for example, error rate above a stated threshold, or the error budget burn rate above a stated level) and who has the authority and the means to stop it immediately.\n\nReversibility. Know how to undo the failure and test the undo.\n\nBudget link. Chaos experiments spend reliability on purpose. Run them when the error budget is healthy, count their impact against it, and do not run them during a freeze.\n\nHypothesis quality. A good hypothesis is specific and falsifiable: 'If one of three application instances is killed, the error rate stays below 0.5% and recovers within 2 minutes.' A vague one ('the system should cope') cannot fail, so it teaches nothing.\n\nThe page's strongest point is the one to keep: the aim is learning, not heroics, and a result that disproves your hypothesis is the valuable one."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A policy and one experiment for a booking service (illustrative numbers, not Cretek data)",
+      "body": "A service has an SLO of 99.9% of requests succeeding over 30 days (the SLI: requests not returning a server error). The window is 30 days, so the budget is 0.1%. At about 10,000,000 requests a month (an assumption), that is 10,000 failed requests, or 43.2 minutes of total outage.\n\nThe written policy. Above 50% of budget remaining: release normally. Between 50% and 25% remaining: no risky changes (migrations, large releases) without the technical lead's approval. Below 25%, or any single incident burning more than 50% of the monthly budget: freeze feature releases, work on stability, and review before resuming. The technical lead may grant a documented exception for a security fix. Burn-rate alert: an error rate above five times the allowed rate for an hour pages the on-call person.\n\nThe month: an 18-minute outage in week one burns 41.7%, leaving 58.3% (25.2 minutes). Releases continue but the team reviews the cause. In week three a 14-minute degraded period burns another 32.4% (14 / 43.2), leaving about 25.9%. That is just above the freeze line; a further short incident will cross it, so the lead restricts risky changes.\n\nThe experiment. Budget is not healthy, so the team does not run it now; it is scheduled for the next month when the budget resets. Hypothesis: if one of three application instances is terminated during moderate traffic in the test environment, the error rate stays below 0.5% and full capacity returns within 2 minutes. Steady state: error rate about 0.05% and p95 latency under 400 ms, measured for 24 hours beforehand. Blast radius: one instance in test only. Abort: error rate above 2% for more than 1 minute; the on-call engineer stops it. Result recorded either way, with the change that follows (for example, a health check was too slow, so the load balancer kept sending traffic to the dead instance for 3 minutes).\n\nAnything not measured is labelled. The point is the discipline: the budget decides when to take risk, and the experiment is designed to teach, not to impress."
+    },
+    "misconceptions": [
+      "Believing the budget is a target to spend. It is a limit that tells you when to slow down, and unspent budget means you may be too cautious.",
+      "Quoting a budget in minutes without the window.",
+      "Defining failure after an incident. Decide it in advance and measure it from the same data as the SLO.",
+      "Negotiating the policy at the moment the budget runs out.",
+      "Believing chaos engineering means random destruction in production. The page says it does not.",
+      "Running experiments without observability, a blast radius or abort conditions.",
+      "Writing a hypothesis that cannot fail."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a product owner what happens to releases when the error budget is nearly gone, and why you agreed that in advance."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ec-1",
+      "question": "What is the error budget for an SLO of 99.9%, according to the page?",
+      "options": ["99.9%", "0.1%", "1%", "9.9%"],
+      "answer": 1,
+      "why": "Error budget = 100% minus the SLO, so 0.1%: the maximum acceptable failure over a period such as a month."
+    },
+    {
+      "id": "ec-2",
+      "question": "How many minutes of full outage does a 99.9% SLO allow over a 30-day window?",
+      "options": ["4.32", "43.2", "432", "525.6"],
+      "answer": 1,
+      "why": "0.1% of 43,200 minutes is 43.2 minutes. 4.32 is for 99.99%, 432 for 99%, and 525.6 is the 99.9% figure for a 365-day year."
+    },
+    {
+      "id": "ec-3",
+      "question": "An 18-minute outage occurs against a monthly 99.9% budget of 43.2 minutes. About how much budget has been burned?",
+      "options": ["18%", "33%", "42%", "58%"],
+      "answer": 2,
+      "why": "18 / 43.2 is about 0.417, or 41.7%, leaving 25.2 minutes."
+    },
+    {
+      "id": "ec-4",
+      "question": "The allowed error rate is 0.1% and the current rate is 0.5%. What is the burn rate, and how long until a 30-day budget is gone at that pace?",
+      "options": [
+        "Burn rate 5; about 6 days",
+        "Burn rate 0.2; about 150 days",
+        "Burn rate 5; about 150 days",
+        "Burn rate 0.5; about 60 days"
+      ],
+      "answer": 0,
+      "why": "0.5 / 0.1 = 5 times the allowed pace, so the budget lasts 30 / 5 = 6 days. Burn rate is Academy material, not on the page."
+    },
+    {
+      "id": "ec-5",
+      "question": "Which is the first step of the chaos engineering loop on the page?",
+      "options": [
+        "Introduce failure",
+        "Define steady state, the normal baseline measured by latency, error rates and throughput",
+        "Fix weaknesses",
+        "Kill random instances in production"
+      ],
+      "answer": 1,
+      "why": "The loop is: define steady state, form a hypothesis, introduce failure, observe, learn and improve. The page says random destruction in production is explicitly not the approach."
+    },
+    {
+      "id": "ec-6",
+      "question": "Which of these does the Chaos Engineering page NOT cover?",
+      "options": [
+        "The definition of the practice",
+        "The five-step loop",
+        "Blast radius and abort conditions",
+        "The statement that it does not replace testing or monitoring"
+      ],
+      "answer": 2,
+      "why": "The page says experiments should be scoped, observable and reversible but never discusses blast radius or abort conditions, so those controls come from the Academy, not the page."
+    }
+  ],
+  "build": {
+    "business": "Cretek's customers feel reliability directly. A CTO needs an agreed, measured way to decide when to ship and when to stabilise, and a safe way to test resilience. This is the reliability capability in the CTO Operating System.",
+    "problem": "Define an SLO, error budget and written policy for one real Cretek service, build a tested budget calculator, and design (and where safe, run) one controlled chaos experiment with safety controls.",
+    "requirements": [
+      "Choose one real Cretek service and define its SLI (what counts as a good event and where it is measured), SLO and window, with the reason for each choice. State the data source or label the figures ASSUMPTION",
+      "Compute the budget in minutes and in requests for your window, and show how the budget changes if you tighten or loosen the SLO by one step. Say what it would cost to meet the tighter one",
+      "Reconstruct at least three real or realistic past incidents and show how much budget each would have burned. Label SIMULATED any that are invented",
+      "Write the policy: thresholds, who can freeze releases, what counts as a high-risk change, the exception route, when releases resume, and the burn-rate alerts with their thresholds",
+      "Get the policy agreed in writing by the person who owns the product or its delivery (or record that it is a proposal awaiting agreement)",
+      "Design one chaos experiment: steady-state metrics and their baseline period, a specific falsifiable hypothesis, the failure to inject, blast radius, abort conditions with the person who can stop it, the rollback and how you tested it, and the link to the budget (when it may run)",
+      "Run the experiment in a test environment, or a production environment only if the blast radius, abort conditions and observability are demonstrably in place and approved. Record the result whichever way it went, and the change that followed",
+      "A budget calculator that takes an SLO, a window and a list of incidents (start, end, severity share if partial) and outputs the budget, the budget burned, the remaining budget, the burn rate for a given current error rate, and which policy tier applies. Automated tests required, including a 100% SLO (budget zero), an SLO above 100 or below 0 (reject), an incident outside the window, overlapping incidents (not double-counted), a partial-severity incident, a negative duration (reject) and a budget exactly at a policy threshold",
+      "A one-page summary for the product owner, led by the budget in minutes and the policy",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No experiment on a system where you cannot see the steady state",
+      "No experiment without a named person authorised to stop it and a tested way to undo it",
+      "Do not run experiments when the error budget is below the freeze threshold or during a freeze",
+      "Do not inject failure into systems holding customer data you are not authorised to affect",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the SLI, SLO and window, the policy tiers, the experiment's hypothesis and safety controls, and one alternative you rejected, for example a quarterly window instead of a monthly one.",
+    "tasks": [
+      "Define the SLI, SLO and window for the service",
+      "Compute the budget and the effect of tightening the SLO",
+      "Reconstruct incidents and measure their burn",
+      "Write the policy and get it agreed",
+      "Build the calculator with tests",
+      "Design the experiment and its safety controls",
+      "Run it safely, record the result and write the one-page summary"
+    ],
+    "acceptance": [
+      "SLI, SLO and window are defined with reasons and a data source or labelled assumption",
+      "Budget is stated in minutes and requests with the window",
+      "At least three incidents are mapped to budget burn",
+      "The policy has thresholds, owners and an exception route, and is agreed or marked as a proposal",
+      "The calculator tests pass including the edge cases",
+      "The experiment has a falsifiable hypothesis, blast radius, abort conditions and a tested rollback",
+      "The experiment result is recorded and led to a stated change",
+      "All figures labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The SLO and policy document, budget calculator with tests, incident reconstructions, experiment design and record, and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Product owner",
+    "scenario": "A product owner has a feature that must ship this week. Your service has burned most of its error budget. They want to know why they should wait, and they are suspicious of experiments that break things on purpose.",
+    "prompts": [
+      "How much budget is left, in minutes, and how did you calculate it?",
+      "Why is the threshold where it is, and who agreed it?",
+      "Can I get an exception, and what does that cost us?",
+      "Why would you break your own system on purpose?",
+      "What stops an experiment from becoming an outage, and who can stop it?",
+      "What would you change if the SLO were one nine tighter?"
+    ],
+    "rubric": [
+      { "criterion": "Correct, concrete budget reasoning with the window stated and incidents mapped to burn", "weight": 0.3 },
+      { "criterion": "A policy agreed in advance with owners and an exception route", "weight": 0.25 },
+      { "criterion": "Experiment safety: observability, blast radius, abort conditions, rollback and a falsifiable hypothesis", "weight": 0.3 },
+      { "criterion": "Clear communication to a non-technical product owner", "weight": 0.15 }
+    ]
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "id": "investment-rounds-stages",
+  "moduleId": "economics-investment",
+  "pillar": "Economics",
+  "title": "Funding stages and rebound-aware forecasting",
+  "estimatedMinutes": { "learn": 40, "build": 240, "defend": 30 },
+  "objectives": [
+    "Describe how technology priorities, team shape and challenges change from Pre-Seed to IPO or acquisition",
+    "Match a company's stage to the technology decisions it should and should not be making",
+    "Explain the Jevons paradox and why efficiency savings can raise total spend",
+    "Build a cost forecast that includes a rebound assumption and state the break-even usage growth",
+    "Defend a stage-appropriate technology plan to an investor"
+  ],
+  "prerequisites": ["roi-business-cases"],
+  "unlock": { "prerequisites": [{ "lessonId": "roi-business-cases", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Investment Rounds",
+      "url": "https://www.ctoframework.com/economics/investment/investment-rounds",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Jevons paradox",
+      "url": "https://www.ctoframework.com/economics/literature/jevons-paradox",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Investment Rounds page gives no funding amounts, no dilution examples or calculations, no definitions of terms such as product-market fit or technical debt, no explicit statement of the CTO's role, and nothing on valuations, equity, cap tables, investor terms or the fundraising process. The dilution example in this lesson is Original Academy material, not from the page. Equity and investor terms are matters for a lawyer and a finance adviser.",
+    "The page's per-stage 'challenges' are brief. The pitfalls and CTO-role statements in this lesson are Academy inferences from them and are labelled as such.",
+    "The Jevons paradox page gives no figures at all: none for the 1865 coal example, cloud spend or compute growth. It does not measure elasticity or the size of rebound effects, does not analyse AI in depth, gives no implementation steps for quotas, incentives or carbon pricing, and offers no evidence on how well they work. The numeric rebound example here is Academy material and illustrative.",
+    "Not read for this lesson: Shares & Stocks, Planning & Governance, Technology Due Diligence (covered in the next lesson)."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What the page maps",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The Investment Rounds page describes how technology priorities and the engineering team typically change across funding stages. For each stage it lists a focus, team makeup, technology goals and challenges. It is a map of what is usual, not a rulebook, and it has no figures."
+      },
+      {
+        "heading": "The six stages",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Pre-Seed: testing whether the idea is feasible with a small founding team. Goals: a proof of concept or minimum viable product, speed over scalability. Challenges: limited resources and a stack that supports fast iteration.\n\nSeed: refining the product with early user feedback and first engineering hires beyond the founders. Goals: basic automation, DevOps and security, balanced with foundational scalability. Challenges: growing technical debt and setting up lightweight engineering processes.\n\nSeries A: scaling after product-market fit, with engineering and DevOps teams expanding. Goals: CI/CD pipelines, reducing early technical debt, an architecture that can handle growth. Challenges: scaling infrastructure without over-engineering, and hiring and structuring the team.\n\nSeries B: high-growth scaling, with specialised teams (infrastructure, data, security) forming. Goals: resilience, cost and performance optimisation, advanced monitoring. Challenges: cross-team dependencies and consistency across teams.\n\nSeries C and beyond: enterprise-grade scale and efficiency, with a large, structured engineering organisation. Goals: international and multi-region deployments, compliance and security at scale, further automation and AI-driven optimisation. Challenges: keeping agility at scale, and aligning technical innovation with business growth.\n\nIPO or acquisition: long-term sustainability and regulatory compliance, with multi-layered engineering leadership. Goals: enterprise governance, risk management, infrastructure cost optimisation at scale, formal audits. Challenges: paying down debt from rapid growth, and balancing innovation with stability and security."
+      },
+      {
+        "heading": "Reading the map as a CTO",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page does not state the CTO's role at each stage, so this is the Academy's inference from the goals and challenges.\n\nThe most common stage error is doing the next stage's work early. The page's own warning at Series A, scaling without over-engineering, is the sign: building multi-region resilience before product-market fit spends scarce money on a problem you may never have. The opposite error is staying at Pre-Seed habits too long: no CI/CD, no tests and one person who understands everything, then trying to raise or sell.\n\nA useful question at any stage: which of this stage's listed goals is the business actually blocked on? Do that, and defer the rest explicitly. Write the deferral down, with the trigger that would bring it forward, so the decision is visible and not an accident of neglect.\n\nThe stage also shapes how you budget and how you present to investors. The next lesson on technology due diligence shows what an investor or acquirer will look for in your systems at the later stages."
+      },
+      {
+        "heading": "The Jevons paradox",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Definition on the page: efficiency gains can increase total resource use. It challenges the assumption that greater efficiency leads to lower consumption, because cheaper use of a resource tends to raise demand.\n\nHistory: in 1865 William Stanley Jevons observed that British coal consumption rose as steam engines became more efficient. Lower running costs made energy-intensive work cheaper and suited more uses, so more coal was burned overall. The page gives no figures.\n\nModern examples on the page: computing (cheaper compute can expand use in AI/ML, blockchain and high-frequency trading, raising total energy use); cloud (savings from optimisation or serverless migration may be reinvested in new services, experiments or hypotheses, so total cloud usage can increase); bandwidth and storage (compression, caching and deduplication can let applications serve more users, higher-resolution content or more complex features).\n\nWhat a CTO should do, per the page: treat efficiency as necessary but insufficient; account for rebound effects, forecasting cost, usage and sustainability on the assumption that demand may expand when unit costs fall; and, if the goal is a firm cap, use policy or system design (quotas, usage-based incentives, carbon pricing) alongside efficiency work."
+      },
+      {
+        "heading": "Putting a number on the rebound",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page gives no method, so this is the Academy's. A forecast of the form 'we cut the unit cost by 30%, so the bill falls by 30%' assumes usage stays flat. The right form is: new bill = old bill x (1 - unit cost reduction) x (1 + usage growth).\n\nThe useful output is the break-even usage growth: the growth at which the saving is exactly cancelled. With a 30% unit cost cut it is 1 / 0.7 - 1, about 42.9%. Below that growth, the bill falls; above it, the bill rises even though every unit is cheaper. Report this number to the CFO next to the saving, because it turns 'we will save money' into a testable claim.\n\nTwo cautions. Usage growth that comes from business growth (more customers) is not rebound; rebound is the extra use that appears because it became cheap. And you cannot assume the elasticity: the page does not measure it. Observe it from your own usage data after a change, and revise the forecast."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Two calculations (illustrative numbers, not Cretek data)",
+      "body": "1) Rebound. The cloud bill is 100,000 a month. An optimisation cuts the unit cost by 30%. If usage stays flat, the bill is 100,000 x 0.7 = 70,000. The team then uses the cheaper capacity for experiments and usage grows 60%: 100,000 x 0.7 x 1.6 = 112,000, which is 12% higher than before the optimisation. If usage grows only 40%, the bill is 100,000 x 0.7 x 1.4 = 98,000, a 2% saving. The break-even growth is about 42.9%. Report: saving of 30,000 a month if usage is flat, none above roughly 43% usage growth, and a plan to watch usage monthly.\n\n2) Dilution, to show what the page leaves out. A company raises 2,000,000 at a pre-money valuation of 8,000,000. Post-money is 10,000,000, so the new investor holds 2,000,000 / 10,000,000 = 20%. A founder holding 60% before the round holds 60% x 0.8 = 48% after. The page has no such example; this is a simplified illustration (no option pool, no other holders, no terms). Ask a lawyer and a finance adviser before relying on any ownership calculation.\n\nThe lesson: technology plans are judged against funding stage and cost forecasts are judged against behaviour, not against the unit price alone."
+    },
+    "misconceptions": [
+      "Treating the stage map as a rulebook. It is a description of what is usual.",
+      "Building next-stage capability early, for example multi-region resilience before product-market fit.",
+      "Assuming a 30% unit cost cut means a 30% lower bill.",
+      "Counting all usage growth as rebound. Growth from more customers is not rebound.",
+      "Assuming the page tells you how big the rebound is. It gives no figures.",
+      "Believing efficiency alone caps consumption. The page says it is necessary but insufficient."
+    ],
+    "explainTask": "In 150 words or fewer, explain to an investor which of your current stage's technology goals you are prioritising, which you are deferring, and what would trigger the deferred ones."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ir-1",
+      "question": "On the Investment Rounds page, which stage is described as 'scaling after product-market fit' with expanding engineering and DevOps teams and goals of CI/CD and reducing early technical debt?",
+      "options": ["Pre-Seed", "Seed", "Series A", "Series C and beyond"],
+      "answer": 2,
+      "why": "Series A is the stage of scaling after product-market fit. Pre-Seed tests feasibility, Seed refines with early feedback, and Series C and beyond targets enterprise-grade scale."
+    },
+    {
+      "id": "ir-2",
+      "question": "Which statement is true of the Investment Rounds page?",
+      "options": [
+        "It gives typical funding amounts for each round",
+        "It includes dilution calculations",
+        "It lists focus, team, goals and challenges per stage but gives no funding amounts or dilution examples",
+        "It defines the CTO's responsibilities at each stage in a table"
+      ],
+      "answer": 2,
+      "why": "The page covers focus, team makeup, technology goals and challenges. It has no amounts, no dilution examples, and does not state the CTO's role directly."
+    },
+    {
+      "id": "ir-3",
+      "question": "Which pair is listed as a Series B challenge?",
+      "options": [
+        "Limited resources and fast iteration",
+        "Cross-team dependencies and consistency across teams",
+        "Paying down debt from rapid growth",
+        "Hiring the first engineers"
+      ],
+      "answer": 1,
+      "why": "Series B (high-growth scaling, specialised teams) lists cross-team dependencies and consistency across teams. Paying down debt is the IPO or acquisition stage."
+    },
+    {
+      "id": "ir-4",
+      "question": "In the Jevons paradox, what happens when a resource is used more efficiently?",
+      "options": [
+        "Total consumption always falls",
+        "Total consumption can rise because cheaper use raises demand",
+        "Demand is unaffected",
+        "Costs always rise per unit"
+      ],
+      "answer": 1,
+      "why": "The paradox is that efficiency gains can increase total resource use because cheaper use tends to raise demand. It says 'can', not 'always'."
+    },
+    {
+      "id": "ir-5",
+      "question": "A cloud bill is 100,000 a month and the unit cost falls 30%. Usage then grows 60%. What is the new monthly bill?",
+      "options": ["70,000", "98,000", "112,000", "160,000"],
+      "answer": 2,
+      "why": "100,000 x 0.7 x 1.6 = 112,000, which is 12% higher than before the optimisation. The 70,000 figure assumes flat usage."
+    },
+    {
+      "id": "ir-6",
+      "question": "What does the Jevons page say a CTO should do when the goal is a firm cap on resource use?",
+      "options": [
+        "Rely on efficiency work alone",
+        "Use policy or system design such as quotas, usage-based incentives or carbon pricing alongside efficiency",
+        "Ignore rebound effects",
+        "Stop optimising"
+      ],
+      "answer": 1,
+      "why": "The page treats efficiency as necessary but insufficient, and recommends quotas, incentives or carbon pricing alongside it when a firm cap is the goal."
+    }
+  ],
+  "build": {
+    "business": "Cretek's technology decisions have to fit the stage of the business, and its cost forecasts have to survive contact with real usage. This is the stage-fit and forecasting capability in the CTO Operating System.",
+    "problem": "Produce a stage-fit assessment for Cretek and a rebound-aware cost forecast with a tested calculator.",
+    "requirements": [
+      "State Cretek's funding and growth stage in your own judgement, with the evidence. If it is not funded by investors, say so and choose the nearest stage on the page and explain why. Label this an Academy mapping, not an official classification",
+      "A table mapping the page's goals for that stage and the next one to Cretek's current state: done, in progress, deferred or not applicable, each with evidence",
+      "For every deferred goal, the written trigger that would bring it forward and the person who decides",
+      "A usage and cost baseline for one real Cretek cost line (for example hosting or an API), with at least three months of data, each figure REAL or labelled ASSUMPTION",
+      "A rebound-aware forecast for one planned efficiency change: unit cost reduction, usage growth scenarios (low, expected, high), resulting bill and break-even usage growth",
+      "A separation of business-driven usage growth from rebound in the usage data, and the method used. If the data cannot separate them, say so",
+      "A calculator that takes a bill, a unit cost reduction and a usage growth and outputs the new bill, the change and the break-even growth. Automated tests required, including known values from the worked example, a zero unit cost reduction, a 100% reduction (reject or define), negative growth, and a negative input (reject)",
+      "A one-page summary for an investor or CFO: stage fit, what is deferred and why, forecast with break-even, and what you will monitor",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED, with currency and period"
+    ],
+    "constraints": [
+      "No invented Cretek figures or funding history",
+      "No cap table, equity or valuation claims. Those need a lawyer and a finance adviser",
+      "Do not assume elasticity. Derive it from observed data or label it an assumption",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the calculator inputs and outputs, how a 100% reduction is handled, how the stage table is stored and one alternative you rejected, for example a spreadsheet with the formula copied between cells.",
+    "tasks": [
+      "Decide the stage, collect the evidence and complete the goal mapping",
+      "Record deferred goals, their triggers and their owners",
+      "Collect the usage and cost baseline",
+      "Build the calculator with tests",
+      "Produce the low, expected and high forecasts and the break-even growth",
+      "Write the one-page summary",
+      "Document how often the forecast is compared with actual usage and by whom"
+    ],
+    "acceptance": [
+      "Stage is stated with evidence and labelled as an Academy mapping",
+      "Every goal is mapped with evidence, and every deferral has a trigger and an owner",
+      "Baseline data is real or labelled assumption",
+      "Calculator tests pass including edge cases",
+      "Forecast shows three scenarios and the break-even growth",
+      "No equity, cap table or valuation claims appear",
+      "All figures labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The stage assessment, calculator with tests, forecast and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Investor",
+    "scenario": "An investor is reviewing your technology plan. They want to know that you are spending on what the stage demands and that your cost story will hold.",
+    "prompts": [
+      "Why is this the right stage for these priorities, and what are you deliberately not doing yet?",
+      "What would make you bring a deferred item forward, and who decides?",
+      "You say the optimisation saves 30,000 a month. What happens if usage grows because it is cheaper?",
+      "How would you tell rebound apart from ordinary customer growth in your data?",
+      "If we cut your technology budget by 15%, what do you stop first?",
+      "What are you most likely to be wrong about?"
+    ],
+    "rubric": [
+      { "criterion": "Stage-appropriate prioritisation with explicit deferrals, triggers and owners", "weight": 0.3 },
+      { "criterion": "Correct, honest forecasting including rebound and break-even", "weight": 0.3 },
+      { "criterion": "Evidence quality and clear labelling of assumptions", "weight": 0.2 },
+      { "criterion": "Clear, brief communication to an investor", "weight": 0.2 }
+    ]
+  }
+}

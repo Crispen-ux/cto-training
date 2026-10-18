@@ -1,0 +1,195 @@
+{
+  "id": "aws-solutions-architect-material",
+  "moduleId": "cloud-solutions-architecture",
+  "pillar": "Tech",
+  "title": "AWS Solutions Architect: best practices and Well-Architected material",
+  "estimatedMinutes": { "learn": 50, "build": 300, "defend": 40 },
+  "objectives": [
+    "Design on AWS using the Well-Architected pillars",
+    "Choose compute, storage, database, network and security services on AWS",
+    "Design for reliability, performance and cost on AWS",
+    "Build event driven and serverless architectures on AWS",
+    "Defend an AWS architecture to a chief executive"
+  ],
+  "prerequisites": ["cloud-providers-lockin"],
+  "unlock": { "prerequisites": [{ "lessonId": "cloud-providers-lockin", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "AWS Well-Architected Framework",
+      "url": "https://docs.aws.amazon.com/wellarchitected/latest/framework/welcome.html",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "Framework overview reviewed; individual lens documents not covered here."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Cloud Providers Comparison",
+      "url": "https://www.ctoframework.com/tech/strategy-trends/cloud-providers",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "AWS services, limits and prices change frequently. Verify every choice against AWS documentation and the current price list.",
+    "Solutions Architect exams have two levels. This lesson covers durable architecture principles, not exam-specific detail.",
+    "The worked scenarios and cost examples are Original Academy material and use illustrative prices."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The AWS Well-Architected pillars",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "The framework has six pillars: operational excellence, security, reliability, performance efficiency, cost optimisation and sustainability. Treat them as a review checklist, not a one-time design gate. A good architecture makes trade-offs explicit, for example higher cost for lower latency or more durability for more complexity.\n\nUse the Well-Architected review for a workload and act on the high-risk items before adding features."
+      },
+      {
+        "heading": "Security and identity on AWS",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Use AWS IAM for identity, with roles and temporary credentials for workloads instead of long-lived access keys. Prefer IAM Identity Center for human access. Enable MFA, least privilege, CloudTrail for audit, GuardDuty for threat detection and Security Hub for findings.\n\nEncrypt data with KMS, keep keys rotation and ownership clear, use Secrets Manager or Systems Manager Parameter Store for secrets, and segment networks with VPCs, subnets and security groups. Log everything that matters to an immutable, protected log account."
+      },
+      {
+        "heading": "Compute and containers",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "EC2 for control, Auto Scaling groups for resilience, Elastic Beanstalk and App Runner for simpler apps, Lambda for event processing, ECS and EKS for containers, Fargate for serverless containers.\n\nChoose by team capability and operational burden. A managed service that the team cannot debug is not an advantage. Use Spot instances for fault-tolerant batch work and Savings Plans or Reserved Instances for steady state after a baseline."
+      },
+      {
+        "heading": "Storage, databases and caching",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "S3 for object storage with lifecycle rules and versioning. EBS for block storage. EFS for shared file systems. Glacier for cold archive.\n\nDatabases: RDS or Aurora for relational, DynamoDB for key-value with predictable access, ElastiCache for caching, Redshift for analytics. Choose based on access patterns, not familiarity. Add ElastiCache or DynamoDB Accelerator where latency demands it, and design backups and point-in-time recovery explicitly."
+      },
+      {
+        "heading": "Networking and edge",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Design VPCs with public and private subnets across multiple availability zones. Use Application Load Balancer or Network Load Balancer for ingress, Transit Gateway for hub connectivity, Route 53 for DNS, CloudFront for content delivery and AWS Global Accelerator for global traffic. Connect hybrid networks with VPN or Direct Connect.\n\nKeep data paths private where possible using VPC endpoints and PrivateLink. Design egress costs deliberately; they dominate many bills."
+      },
+      {
+        "heading": "Event driven, integration and reliability",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Use SNS, SQS, EventBridge and Step Functions to decouple components. Prefer asynchronous, event-driven designs for resilience and scalability. Design for failure: health checks, retries with backoff, dead-letter queues, timeouts and circuit breakers.\n\nReliability also means tested backups, multi-AZ deployments, cross-region strategies where warranted, capacity planning, and documented failover. A system that fails fast and recovers is better than one that hides faults."
+      },
+      {
+        "heading": "Cost optimisation",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Tag every resource, allocate costs and review monthly. Right-size, delete unused resources, use lifecycle rules for storage and inexpensive storage classes. Use Cost Explorer and AWS Budgets with alerts. Commit to Savings Plans only after a usage baseline, and prefer Savings Plans over Reserved Instances for flexibility. Serverless is not automatically cheaper; model the workload."
+      },
+      {
+        "heading": "Decision method for AWS solutions architect work",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A defensible AWS design states the workload, the failure modes to survive, the access patterns, the security boundary, the recovery target and the cost. Then it chooses the smallest managed service that meets those constraints, and documents what would change the choice.\n\nThe trap is choosing services for familiarity. The CTO-style answer is a decision record with trade-offs and an exit price."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "AWS architecture for Cretek reporting pipeline (illustrative)",
+      "body": "Requirement: ingest nightly school data exports, transform and report, retain seven years for audit, recover within 24 hours. Design: S3 for raw landing zone with versioning and lifecycle to Glacier. AWS Glue or Lambda for transform. DynamoDB or RDS for reporting aggregates depending on query patterns. EventBridge to trigger jobs. CloudWatch alarms on failures. IAM role for the pipeline with least privilege. S3 bucket policy protecting raw data. Cost driven by storage duration and Glacier retrieval times."
+    },
+    "misconceptions": [
+      "Treating Lambda as always cheaper.",
+      "Designing a single availability zone for production.",
+      "Storing long-lived access keys on instances.",
+      "Ignoring egress and cross-region data transfer.",
+      "Adding Aurora when the workload is simple key-value.",
+      "Treating backups as a substitute for tested recovery."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a chief executive why an AWS design should start from failure modes and cost, rather than from the most popular services."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "aw-1",
+      "question": "Which AWS service provides tamper-evident audit logs of API calls?",
+      "options": ["CloudWatch Metrics", "AWS CloudTrail", "AWS Config", "AWS Systems Manager"],
+      "answer": 1,
+      "why": "CloudTrail records AWS API calls for audit and governance."
+    },
+    {
+      "id": "aw-2",
+      "question": "For a key-value workload with predictable access at low latency, which database is usually preferred?",
+      "options": ["Amazon RDS PostgreSQL", "Amazon DynamoDB", "Amazon Redshift", "Amazon EFS"],
+      "answer": 1,
+      "why": "DynamoDB is optimised for key-value and predictable low-latency access."
+    },
+    {
+      "id": "aw-3",
+      "question": "Which compute option removes server management for containerised workloads?",
+      "options": ["Amazon EC2", "AWS Fargate", "Amazon EBS", "AWS Direct Connect"],
+      "answer": 1,
+      "why": "Fargate runs containers without managing EC2 instances."
+    },
+    {
+      "id": "aw-4",
+      "question": "What is the primary purpose of a dead-letter queue?",
+      "options": ["Store cold archives", "Hold messages that could not be processed", "Cache session data", "Encrypt secrets"],
+      "answer": 1,
+      "why": "A dead-letter queue captures messages that exceed retry limits for later inspection."
+    },
+    {
+      "id": "aw-5",
+      "question": "Which AWS feature delivers content with low latency globally?",
+      "options": ["Route 53", "AWS CloudFront", "VPC Peering", "AWS Backup"],
+      "answer": 1,
+      "why": "CloudFront is a content delivery network."
+    },
+    {
+      "id": "aw-6",
+      "question": "Which practice best reduces long-term compute cost for a steady-state workload?",
+      "options": ["Always use Spot instances", "Size up VMs", "Use Savings Plans after a baseline", "Disable logging"],
+      "answer": 2,
+      "why": "Savings Plans reward steady commit after measuring usage. Spot is for fault-tolerant work, not steady baseload."
+    }
+  ],
+  "build": {
+    "business": "Cretek uses AWS for reporting and audit data. Costs, recovery and security must be defensible to schools and regulators.",
+    "problem": "Design and document a defensible AWS architecture for one reporting or audit workload, including security, network, data, async processing, recovery, observability and cost.",
+    "requirements": [
+      "State the workload, data volumes, retention and recovery target",
+      "Define the security boundary: accounts, IAM roles, KMS, logging and network isolation",
+      "Choose AWS services for compute, storage, database and integration with a reason for each",
+      "Design an event-driven or batch processing flow with failure handling and dead-letter queues",
+      "Define backups and tested recovery steps",
+      "Estimate monthly cost with a cited price list and date",
+      "Define observability with metrics, logs, traces and alarms with owners",
+      "Write a Well-Architected style risk list and mitigations",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No long-lived access keys in code or images",
+      "No production data in test environments",
+      "Cost estimates must use current AWS pricing",
+      "Infrastructure must be reproducible and documented"
+    ],
+    "design": "Write a one-page design listing failure modes, service choices, security boundary, recovery target, cost and the alternative you rejected.",
+    "tasks": [
+      "Gather workload and retention requirements",
+      "Draft the security and account structure",
+      "Design the network and data flow",
+      "Build infrastructure as code",
+      "Estimate and review cost",
+      "Document risks and recovery steps"
+    ],
+    "acceptance": [
+      "Service choices have reasons",
+      "Security boundary is documented",
+      "Recovery is designed and tested or scheduled",
+      "Cost estimate is dated and labelled",
+      "Well-Architected risks are listed with mitigations",
+      "No long-lived credentials in the repository"
+    ],
+    "deliverable": "AWS architecture decision record, infrastructure-as-code, Well-Architected risk list, cost estimate and recovery runbook, referenced by path."
+  },
+  "defend": {
+    "assessor": "Chief executive",
+    "scenario": "The chief executive wants to know if the AWS setup is secure, what a failure costs and whether it can be cheaper.",
+    "prompts": [
+      "How is patient or school data protected on AWS?",
+      "What happens if one availability zone fails?",
+      "Why these services instead of simpler or cheaper ones?",
+      "What drives the monthly bill and how could it fall?",
+      "Which risks are still open?"
+    ],
+    "rubric": [
+      { "criterion": "Security boundary and auditability are explicit", "weight": 0.3 },
+      { "criterion": "Reliability design matches the recovery target", "weight": 0.3 },
+      { "criterion": "Cost is modelled and owned", "weight": 0.2 },
+      { "criterion": "Open risks are honest and prioritised", "weight": 0.2 }
+    ]
+  }
+}

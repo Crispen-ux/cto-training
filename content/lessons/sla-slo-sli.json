@@ -1,0 +1,165 @@
+{
+  "id": "sla-slo-sli",
+  "moduleId": "delivery-metrics",
+  "pillar": "Delivery",
+  "title": "SLI, SLO, SLA and error budgets",
+  "estimatedMinutes": { "learn": 40, "build": 150, "defend": 30 },
+  "objectives": [
+    "Distinguish an SLI, an SLO and an SLA and say who each is for",
+    "Derive an error budget from an SLO and use it to prioritise work",
+    "Choose user-centric SLIs instead of infrastructure metrics",
+    "Set an external SLA with a safety margin over the internal SLO"
+  ],
+  "prerequisites": ["dora-metrics"],
+  "unlock": { "prerequisites": [{ "lessonId": "dora-metrics", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "SLA, SLO and SLI compared",
+      "url": "https://www.ctoframework.com/delivery/metrics/sla-slo-sli",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page recommends the Google SRE Book chapter on service level objectives. It was not consulted for this lesson; read it as supplementary material before the Defend step.",
+    "The page has no dedicated pitfalls section. The cautions listed here are the ones the page raises in passing."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Three terms, three jobs",
+        "sourceCategory": "Official CTO Framework",
+        "body": "SLI (Service Level Indicator): a quantitative measure of how a service is performing. It is the raw data.\nSLO (Service Level Objective): a target value or range for an SLI. An internal reliability benchmark that keeps quality high before contractual obligations are at risk.\nSLA (Service Level Agreement): a formal contract with the customer stating the promised service level. It usually includes SLOs and spells out consequences for failure, such as refunds, service credits or termination.\n\nIn short: SLIs measure, SLOs set the internal target, SLAs make promises with penalties."
+      },
+      {
+        "heading": "Examples the page gives",
+        "sourceCategory": "Official CTO Framework",
+        "body": "SLIs: availability (share of successful HTTP requests, with a note that whether 4xx responses count depends on whether user errors are excluded); latency (share of API requests under a threshold, such as p95 under 150ms); throughput (transactions per second); freshness (share of records loaded within 10 minutes); quality (share of searches returning complete results rather than a degraded fallback).\nSLOs: 99.9% availability over a rolling 30 days; 95% of API calls under 200ms per month; at least 1,000 transactions per second in core trading hours.\nSLAs: 99.9% monthly uptime, with a 10% invoice credit below 99.9% and a 30% credit below 99.0%; P1 incidents acknowledged within 15 minutes with updates every 30 minutes; 11 nines annual data durability with compensation for permanent loss."
+      },
+      {
+        "heading": "Error budgets",
+        "sourceCategory": "Official CTO Framework",
+        "body": "An error budget follows from an SLO. A 99.9% target leaves a 0.1% budget for unreliability. Teams can spend that budget on releases, updates and calculated risks. When it runs out, the focus moves to stability."
+      },
+      {
+        "heading": "Guidance for CTOs",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Prioritisation: a healthy budget supports shipping fast; an exhausted one shifts work to reliability, technical debt and performance.\nRealistic targets: align SLOs with product management so nobody demands 100% availability, which the page calls unachievable and expensive.\nSafety margin: external SLAs should be more lenient than internal SLOs. The page's example pairs an internal 99.9% SLO with an external 99.0% or 99.5% SLA, giving on-call engineers time to respond before there is financial or legal exposure.\nUser-centric indicators: SLIs should reflect user experience. The page says 95% CPU utilisation is a weak indicator if users still get fast, correct responses, and warns that poor indicators cause alert fatigue."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "What 99.9% means in minutes (arithmetic, not from the page)",
+      "body": "A 30-day month has 30 x 24 x 60 = 43,200 minutes. A 99.9% SLO allows 0.1% of that, which is 43.2 minutes of unreliability. A 99.99% SLO allows 4.32 minutes. Each extra nine cuts the budget by a factor of ten, which is why the page warns that chasing 100% is unachievable and expensive: the CTO question is what each nine costs to engineer and whether customers will pay for it."
+    },
+    "misconceptions": [
+      "Treating SLO and SLA as the same thing. One is an internal goal, the other a contract with penalties.",
+      "Setting the external SLA as strict as the internal SLO, which leaves no buffer.",
+      "Choosing indicators that are easy to measure (CPU) rather than ones users feel (latency, errors).",
+      "Thinking a 100% target is a sign of ambition. The page calls it unachievable and expensive."
+    ],
+    "explainTask": "In 150 words or fewer, tell a product manager why the team should not promise customers the same number it targets internally, and what the error budget lets the team do."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sla-1",
+      "question": "Which of the three is a formal contract with the customer, typically with consequences such as service credits?",
+      "options": ["SLI", "SLO", "SLA", "Error budget"],
+      "answer": 2,
+      "why": "The SLA is the contractual agreement with penalties for failure."
+    },
+    {
+      "id": "sla-2",
+      "question": "A service has a 99.9% availability SLO. What is its error budget?",
+      "options": ["99.9%", "1%", "0.1%", "0.01%"],
+      "answer": 2,
+      "why": "The page states that a 99.9% target leaves a 0.1% budget for unreliability."
+    },
+    {
+      "id": "sla-3",
+      "question": "Why does the page say the external SLA should be more lenient than the internal SLO?",
+      "options": [
+        "To make the product look cheaper",
+        "To give on-call engineers time to respond before financial or legal exposure",
+        "Because customers do not care about reliability",
+        "To reduce monitoring costs"
+      ],
+      "answer": 1,
+      "why": "The safety margin buys response time before penalties apply."
+    },
+    {
+      "id": "sla-4",
+      "question": "According to the page, which is the better indicator of service health for users?",
+      "options": [
+        "CPU utilisation at 95%",
+        "The share of API requests answered under a latency threshold",
+        "Number of servers",
+        "Lines of code deployed"
+      ],
+      "answer": 1,
+      "why": "The page prefers user-centric indicators and says CPU alone is weak if users still get fast, correct responses."
+    },
+    {
+      "id": "sla-5",
+      "question": "The error budget is exhausted. What does the page say the team should prioritise?",
+      "options": [
+        "More feature releases",
+        "Reliability, technical debt and performance",
+        "Lowering the SLO",
+        "Hiring"
+      ],
+      "answer": 1,
+      "why": "An exhausted budget shifts priority to stability work."
+    }
+  ],
+  "build": {
+    "business": "Cretek needs reliability targets that are honest, measurable and tied to decisions about when to ship and when to stop and fix.",
+    "problem": "Define SLIs, SLOs, an error budget policy and a proposed external SLA for one real Cretek service, with measurement.",
+    "requirements": [
+      "Choose one Cretek service and say who its users are",
+      "At least three SLIs that reflect user experience, each with an exact measurement definition (what counts as good and valid)",
+      "An SLO for each, with a window, and a computed error budget in minutes or requests",
+      "A proposed external SLA that is more lenient than the SLOs, with the margin justified",
+      "An error budget policy: what the team does when the budget is healthy and when it is exhausted",
+      "A script or query that computes SLI values from real or labelled simulated data"
+    ],
+    "constraints": [
+      "No invented Cretek reliability figures. Use real data or label the data simulated",
+      "Do not propose 100% targets"
+    ],
+    "design": "Document where each SLI is measured (client, load balancer, application) and the failure modes that measurement point cannot see.",
+    "tasks": [
+      "Write the SLI definitions and SLOs",
+      "Compute error budgets and document the arithmetic",
+      "Implement the SLI calculation with tests",
+      "Write the error budget policy and external SLA proposal",
+      "Document operational considerations: alerting, who is paged, review cadence"
+    ],
+    "acceptance": [
+      "Every SLI is user-centric and measurable from data you can show",
+      "Budgets are computed correctly and checked by tests",
+      "External SLA is more lenient than internal SLOs with a written reason",
+      "Policy states a concrete action when the budget is exhausted",
+      "Data is labelled REAL or SIMULATED"
+    ],
+    "deliverable": "A document plus script/tests in a repository, linked or referenced."
+  },
+  "defend": {
+    "assessor": "Enterprise customer",
+    "scenario": "A prospective enterprise customer is reading your proposed SLA and wants a stronger one.",
+    "prompts": [
+      "Why should I accept 99.5% when your own target is 99.9%?",
+      "Show me how you measure availability. What failures would your measurement miss?",
+      "What happens to me if you miss it? Why that remedy?",
+      "Your budget is gone halfway through the month. Walk me through what changes at Cretek.",
+      "What would it cost you to give me 99.99%, and would you?"
+    ],
+    "rubric": [
+      { "criterion": "Correct distinction and use of SLI, SLO, SLA and budget", "weight": 0.3 },
+      { "criterion": "Honest limits of measurement", "weight": 0.25 },
+      { "criterion": "Commercial reasoning about cost of each nine and the margin", "weight": 0.25 },
+      { "criterion": "Concrete operating response when the budget is exhausted", "weight": 0.2 }
+    ]
+  }
+}

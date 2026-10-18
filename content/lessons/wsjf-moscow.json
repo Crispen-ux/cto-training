@@ -1,0 +1,220 @@
+{
+  "id": "wsjf-moscow",
+  "moduleId": "delivery-execution",
+  "pillar": "Delivery",
+  "title": "Prioritisation: WSJF and MoSCoW",
+  "estimatedMinutes": { "learn": 45, "build": 260, "defend": 30 },
+  "objectives": [
+    "Calculate a WSJF score from Cost of Delay and Job Size and rank items from the scores",
+    "Spot and correct a ranking that contradicts its own scores",
+    "Explain MoSCoW's four categories and its two percentage rules of thumb",
+    "Test a scope list against the Must and Could rules, and say what the page leaves undefined",
+    "Choose between a quantitative and a qualitative method for a given decision and defend the choice"
+  ],
+  "prerequisites": ["scrum-monte-carlo"],
+  "unlock": { "prerequisites": [{ "lessonId": "scrum-monte-carlo", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Weighted Shortest Job First (WSJF)",
+      "url": "https://www.ctoframework.com/delivery/prioritisation/wsjf",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "MoSCoW Method",
+      "url": "https://www.ctoframework.com/delivery/prioritisation/moscow",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "In the WSJF page's worked example the scores are arithmetically correct (A 2.0, B 7.0, C 8.0) but, in the retrieved summary, the stated sequence puts B first and C second, and calls C 'sequenced second (score 8.0)'. Ordering by score puts C first. The page also totals CoD as 21 for Feature B (8 + 8 + 5) although 21 is not on the page's Fibonacci-style list (1, 2, 3, 5, 8, 13, 20), and it does not say how Job Size is scored beyond calling it relative (the example uses 1, 3 and 10). These are observations from the Academy review. Check the live page.",
+    "The WSJF page has a 'Sequencing Flow' heading with no content in the retrieved text. It gives no calibration guidance, units for Job Size, handling of ties, dependencies or uncertainty, re-scoring cadence, decay modelling, limitations, or comparison with MoSCoW. The page credits SAFe with popularising the method and cites Reinertsen's The Principles of Product Development Flow (2009); neither was read for this lesson.",
+    "The MoSCoW page has no worked example. It refers to a classification decision flow that was not present in the retrieved text. It does not say how to run a session, how to resolve disagreement, how to measure compliance with the 60% and 20% rules, what to do if they conflict, whether Won't-haves count toward the total, or how Won't-haves are revisited.",
+    "The Academy's tie rules, sensitivity checks and scope-list test in this lesson are Original Academy material, not from the pages."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "WSJF: the idea and the formula",
+        "sourceCategory": "Official CTO Framework",
+        "body": "WSJF is a quantitative method for sequencing features, epics or initiatives. The page says SAFe popularised it. Its aim is to optimise the economic flow of value, favouring items that deliver the most value in the least time.\n\nWSJF score = Cost of Delay / Job Size. Rank items from highest score to lowest.\n\nCost of Delay (CoD) is the economic impact of not delivering an item immediately. The page defines it as a sum of three relative components: User-Business Value (revenue, retention, cost savings), Time Criticality (how value decays: regulatory deadlines, competitive windows, seasonal needs) and Risk Reduction or Opportunity Enablement (mitigating future risk such as security or stability, or unlocking opportunities such as partner integrations).\n\nJob Size is a relative estimate of effort, complexity or duration. As the denominator, it favours smaller jobs when value is comparable. CoD components are typically scored on a Fibonacci-style scale: 1, 2, 3, 5, 8, 13, 20."
+      },
+      {
+        "heading": "The page's worked example and its ranking",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Feature A, Large Platform Update: value 13, time criticality 5, risk or opportunity 2, so CoD 20; Job Size 10; score 2.0.\nFeature B, Core Customer Integration: 8, 8, 5, so CoD 21; Job Size 3; score 7.0.\nFeature C, Minor Security Patch: 2, 1, 5, so CoD 8; Job Size 1; score 8.0.\n\nThe scores are correct. The page's reasoning also holds: C shows that a small job can outrank an item with a larger absolute CoD, and A has the largest CoD of its row set (20) but ranks last because its size is 10. The ordering, though, must follow the scores: C (8.0), then B (7.0), then A (2.0). The retrieved text sequences B before C, which contradicts the scores. Whenever a ranking and its scores disagree, trust the scores and fix the ranking, or find the error in the scores."
+      },
+      {
+        "heading": "Why the page says it matters, and where it is silent",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Per the page: sequencing by WSJF is said to minimise total Cost of Delay across a portfolio; a structured scorecard reduces the influence of the Highest Paid Person's Opinion; and because size is the denominator, teams are rewarded for slicing large epics into smaller valuable pieces. It suggests Wideband Delphi for anonymous scoring of components, which implies individual scoring can be biased.\n\nThe only cautions implied are that scores are relative and meaningful only within the same backlog, and that careful scoring matters. The page gives no anchors for what a 5 means, no unit for Job Size, nothing on ties or dependencies or uncertainty, nothing on who re-scores and when, and nothing on when WSJF is a poor fit."
+      },
+      {
+        "heading": "Using WSJF honestly",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Scores look precise but are guesses with a formula on top. Three habits keep them honest.\n\nAnchor the scale. Pick one reference item per component and score everything relative to it, so a 5 means the same thing for every item.\n\nTest sensitivity. Change a score by one step and see whether the order changes. If it does, the order is not telling you much and the decision needs another input.\n\nSet a tie rule before you score. For example: on equal scores, the item with the earlier hard deadline goes first, then the smaller job. Agree it up front so nobody tunes scores to win.\n\nAlso check the components are independent. Counting the same benefit under both value and risk reduction inflates CoD. Remember dependencies: a low-scoring item that unblocks a high-scoring one may need to go first. The page does not cover this."
+      },
+      {
+        "heading": "MoSCoW: four buckets",
+        "sourceCategory": "Official CTO Framework",
+        "body": "MoSCoW is a qualitative prioritisation framework for managing scope and aligning cross-functional teams. Requirements go into four buckets, which help set release boundaries, define an MVP and keep delivering under constraints.\n\nMust have: critical requirements the release cannot succeed without; mandatory in the current timebox.\nShould have: important, with viable workarounds; high priority, deferred only under severe constraints.\nCould have: desirable, low-impact enhancements; done only if time and budget allow.\nWon't have: explicitly agreed as out of scope for the current release; deferred, possibly revisited later."
+      },
+      {
+        "heading": "The percentage rules and how a CTO applies it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Three rules of thumb on the page. Keep Must-haves under 60% of total engineering effort, since labelling everything a Must is a common failure. Keep at least 20% of scope as Could-haves, which acts as a buffer for risk and estimation error because they can be dropped without hurting the core. Document Won't-haves explicitly, to align Sales, Product and Engineering on release boundaries.\n\nHow CTOs apply it, per the page: guarding against scope creep by forcing stakeholders to rank early; fixed-time, flexible-scope delivery, where a fixed deadline such as a regulatory date makes scope the variable and Should and Could items are dropped first (it links this to the Project Triangle); and reducing trade-off debates, because an agreed hierarchy lets engineers pause Could or Should work when behind without escalating each cut. Its pitfalls: categorising most or all items as Musts, leaving no Could buffer, and not writing down Won't-haves."
+      },
+      {
+        "heading": "Testing a scope list, and choosing a method",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page's rules are testable, but it does not say what the percentages are measured against. Decide and state it: the Academy suggests effort as a share of the candidate scope for the release, excluding Won't-haves, and says so in the plan. Then Must share = Must effort / total effort, and Could share = Could effort / total effort.\n\nA test is only useful if it can fail. A list with Must at 70% or Could at 5% fails the page's rules and should be argued down: for each Must, ask what, specifically, fails on release day without it.\n\nWhich method when? WSJF suits sequencing a long list of comparable initiatives by economic value, when you can score them and have time to. MoSCoW suits fixing the boundary of a single release against a deadline, when the conversation is about what is in and out. They answer different questions, and the page does not compare them. A common combination: MoSCoW draws the release boundary, then WSJF orders the work inside it."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Sensitivity and a scope test (illustrative numbers, not Cretek data)",
+      "body": "WSJF sensitivity, using the page's three items. Order by score: C 8.0, B 7.0, A 2.0.\n\nWhat if the Minor Security Patch (C) turns out to be size 4, not 1? Its score becomes 8 / 4 = 2.0, which ties Feature A (20 / 10 = 2.0) and drops well below B. A single estimating error moves C from first to joint last. Estimates for small jobs deserve the most scrutiny because the denominator is small and the score swings most.\n\nWhat if Feature B is sized 4, not 3? Its score becomes 21 / 4 = 5.25. It still ranks below C (8.0) and above A (2.0), so the order holds. That is a sign the B-versus-A ordering is robust and the C result is not.\n\nMoSCoW scope test. A release candidate has 100 effort points of non-Won't scope. List one: Must 55, Should 20, Could 25. Must share 55% (under 60%, passes) and Could share 25% (at least 20%, passes). List two: Must 70, Should 20, Could 10. Must share 70% fails the first rule and Could share 10% fails the second. The team has no buffer, so one estimating error cuts a Must. The fix is to challenge each Must until the list passes, or to cut scope or move the date openly.\n\nNote the pages do not say whether the percentage should be measured against capacity or against the candidate scope. State your choice."
+    },
+    "misconceptions": [
+      "Trusting a ranking without checking it against its scores. The page's own example is a warning.",
+      "Treating WSJF scores as precise. They are relative guesses, and small-job estimates swing the score most.",
+      "Comparing scores across different backlogs. The page says they are relative.",
+      "Assuming a CoD total must be on the Fibonacci list. The page's own total of 21 is not.",
+      "Labelling most items Must in MoSCoW, or leaving no Could buffer.",
+      "Not writing down Won't-haves, which leaves hidden expectations.",
+      "Treating WSJF and MoSCoW as rivals. They answer different questions."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a product owner why your release plan has a Could-have buffer, and how WSJF orders the work inside the release."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "wm-1",
+      "question": "What is the WSJF formula on the page?",
+      "options": [
+        "Job Size / Cost of Delay",
+        "Cost of Delay / Job Size",
+        "Value x Time Criticality",
+        "Cost of Delay + Job Size"
+      ],
+      "answer": 1,
+      "why": "WSJF score = Cost of Delay / Job Size, and items are ranked from the highest score to the lowest."
+    },
+    {
+      "id": "wm-2",
+      "question": "Using the page's numbers, Feature C has CoD 8 and Job Size 1; Feature B has CoD 21 and Job Size 3. Which ranks first?",
+      "options": [
+        "B, because its CoD is larger",
+        "C, because 8.0 is higher than 7.0",
+        "They tie",
+        "Neither, WSJF cannot compare them"
+      ],
+      "answer": 1,
+      "why": "C scores 8 / 1 = 8.0 and B scores 21 / 3 = 7.0, so C ranks first. A page sequence that puts B first contradicts its own scores."
+    },
+    {
+      "id": "wm-3",
+      "question": "Which three components make up Cost of Delay on the page?",
+      "options": [
+        "Cost, Risk and Schedule",
+        "User-Business Value, Time Criticality, and Risk Reduction or Opportunity Enablement",
+        "Revenue, Profit and Margin",
+        "Size, Value and Effort"
+      ],
+      "answer": 1,
+      "why": "The page defines CoD as User-Business Value plus Time Criticality plus Risk Reduction or Opportunity Enablement."
+    },
+    {
+      "id": "wm-4",
+      "question": "According to the MoSCoW page, what share of total engineering effort should Must-haves stay under?",
+      "options": ["20%", "40%", "60%", "80%"],
+      "answer": 2,
+      "why": "The page says to keep Must-haves under 60% of total engineering effort. It also says to keep at least 20% of scope as Could-haves."
+    },
+    {
+      "id": "wm-5",
+      "question": "A list has Must 70, Should 20 and Could 10 effort points (100 total). What does it do against the page's two rules?",
+      "options": [
+        "Passes both",
+        "Fails the Must rule only",
+        "Fails the Could rule only",
+        "Fails both"
+      ],
+      "answer": 3,
+      "why": "Must is 70%, which is not under 60%, and Could is 10%, which is below the 20% minimum. The team has no buffer."
+    },
+    {
+      "id": "wm-6",
+      "question": "Which statement best describes when to use each method?",
+      "options": [
+        "WSJF fixes a release boundary against a deadline; MoSCoW orders a long list by economic value",
+        "MoSCoW fixes what is in and out of a release; WSJF orders comparable items by economic value, and they can be combined",
+        "They are interchangeable",
+        "Neither works under a fixed deadline"
+      ],
+      "answer": 1,
+      "why": "MoSCoW suits setting release boundaries, especially fixed-time delivery, while WSJF suits sequencing initiatives by economics. The page does not compare them; combining them is the Academy's suggestion."
+    }
+  ],
+  "build": {
+    "business": "Cretek has more requests than capacity. A CTO needs a way to order them that clients and colleagues can see and challenge. This is the prioritisation capability in the CTO Operating System.",
+    "problem": "Build a prioritisation tool implementing WSJF and a MoSCoW scope test, applied to a real Cretek backlog, with tests and a one-page rationale.",
+    "requirements": [
+      "A real list of at least ten candidate items across Cretek's work (for example the school management application, quotation automation, websites and automation workflows, internal tooling). Each has a description and an owner",
+      "WSJF inputs for each item: value, time criticality, risk or opportunity score, and job size, with an anchored scale (one reference item per component) and the unit of job size stated. State who scored and whether scoring was independent before discussion",
+      "A WSJF calculator that returns scores and a ranking. Defined behaviour for a zero job size (reject), a negative score (reject), a missing field, and ties. The tie rule is written before scoring and implemented in code",
+      "A check that the output order is consistent with the scores, and a one-step sensitivity analysis that reports which items change rank if any single score moves by one step",
+      "A MoSCoW classification for a defined release, with the reason a Must is a Must (what fails on release day without it) and an explicit Won't-have list",
+      "A MoSCoW test that computes Must and Could shares of effort, states what the percentages are measured against, and reports pass or fail on the page's two rules, including what happens with an empty list or a zero total",
+      "A dependency check: flag any item that must precede a higher-ranked item, and show the adjusted order with the reason",
+      "A one-page rationale led by the ordered list and the three things most likely to change it",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No invented Cretek items or client commitments. Use the real backlog or label it simulated",
+      "Do not tune scores after seeing the ranking. If a score changes, record who changed it and why",
+      "Do not commit client names or confidential detail to the repository",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the input format, the tie rule, how dependencies are represented, what the MoSCoW percentages are measured against, and one alternative you rejected, for example a spreadsheet with hand-sorted rows.",
+    "tasks": [
+      "Gather the backlog and agree the scales and anchors",
+      "Score the items independently and record the scores",
+      "Build the calculator, the sensitivity check and the dependency check with tests",
+      "Classify the release scope with MoSCoW and run the test",
+      "Review the result with the people who own the items and record any change with its reason",
+      "Write the one-page rationale",
+      "Document how often the list is re-scored and by whom"
+    ],
+    "acceptance": [
+      "At least ten real items are scored with anchored scales",
+      "The calculator and the ranking agree, and the tie rule is implemented and tested",
+      "Sensitivity and dependency checks run and their output is shown",
+      "MoSCoW classification has reasons, an explicit Won't list and a pass or fail result against both rules",
+      "Edge cases are tested: zero size, negative, missing, ties, empty list",
+      "No score is changed after the fact without a record",
+      "All figures labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The tool with tests, the scored backlog, the MoSCoW test result and the one-page rationale, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Product owner",
+    "scenario": "A product owner disagrees with your ranking. Their item came out lower than they expected and they think the scoring was biased.",
+    "prompts": [
+      "My item has the largest value but ranks low. Explain why.",
+      "If I say your job size for it is wrong, how much would the rank change?",
+      "Who scored these, and how do I know the scores were not tuned to get this order?",
+      "Why is this item a Must? What exactly fails on release day without it?",
+      "Your Must share is just under 60%. Is that a result or a target you worked back from?",
+      "Which of your ranks would you least trust?"
+    ],
+    "rubric": [
+      { "criterion": "Correct calculation and honest reading of scores, including sensitivity and ties", "weight": 0.3 },
+      { "criterion": "Rigorous justification of Musts and an explicit Won't list", "weight": 0.25 },
+      { "criterion": "Integrity of the scoring process: independence, anchors and a record of changes", "weight": 0.25 },
+      { "criterion": "Clear, brief, non-defensive communication to a stakeholder", "weight": 0.2 }
+    ]
+  }
+}

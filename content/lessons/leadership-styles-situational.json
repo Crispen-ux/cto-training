@@ -1,0 +1,230 @@
+{
+  "id": "leadership-styles-situational",
+  "moduleId": "people-leadership",
+  "pillar": "People",
+  "title": "Leadership styles and choosing between them",
+  "estimatedMinutes": {
+    "learn": 40,
+    "build": 250,
+    "defend": 30
+  },
+  "objectives": [
+    "Describe the ten styles on the page, the two extra in its summary table, and the situations the page matches to each",
+    "Read the page critically: count mismatches, overlaps, the status of 'situational', and what its single reference does and does not support",
+    "Choose a style from urgency, reversibility and the readiness of the person, assessing competence and commitment separately",
+    "State the failure modes and ethical limits of each style, including time-boxing crisis command",
+    "Keep a style log, analyse it for a default style, and defend a plan to change it"
+  ],
+  "prerequisites": [
+    "raci-brooks-law"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "raci-brooks-law",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Leadership Styles",
+      "url": "https://www.ctoframework.com/people/leadership-collaboration/leadership-styles",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page has no statistics, survey results or quantitative data, cites no evidence that any style produces better outcomes, and has one reference (a Wikipedia article on Situational Leadership Theory) that is not cited in the body. Its claims that a CTO's effectiveness is 'often measured by' situational leadership and that overusing pacesetting is a common trap for technical founders are unsourced.",
+    "The retrieved summary flagged these points: the section covers ten styles but the summary table lists twelve (adding Transformational and Servant, which have no detailed entry); 'situational' is a way of choosing among styles rather than a style of the same kind; commanding (coercive) and autocratic are described almost identically; the only cited source, Situational Leadership Theory, is usually associated with a different model of four styles based on follower readiness, and the page does not explain how its list relates to it; the page's labels (visionary, coaching, affiliative, democratic, pacesetting, commanding) closely resemble a 2000 framework by Daniel Goleman that the page does not mention (this is my general knowledge and was not verified here); the page promotes an interactive assessment that is said to identify a reader's top three styles, with no description of questions, scoring or validity (the tool itself was not used); and only pacesetting carries a warning about overuse.",
+    "The page does not cover evidence of effectiveness, how to assess readiness, how to switch styles in practice or recognise a default, failure modes of most styles, psychological safety and inclusion, remote or cross-cultural teams, how long to hold a style, leading peers or boards, ethical limits on coercive approaches, or metrics for judging a style choice. The decision rules, failure modes, style log and its analysis in this lesson are Original Academy material. The log numbers are invented ASSUMPTIONS."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The page's argument and its list",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page argues that a CTO should not rely on one style: effective leaders hold a range and switch with the situation, whether a production crisis, mentoring a future VP of engineering or setting multi-year strategy.\n\nThe ten styles, each with the page's 'use when' and CTO example:\n1. Visionary (authoritative): guides people to a shared vision; use for a new direction such as an architecture migration or pivot.\n2. Coaching: long-term growth; use for developing high-potential engineers and managers, for example a succession plan.\n3. Democratic: consensus through participation; use to seek buy-in or expert input, for example choosing a core stack.\n4. Pacesetting: sets high standards and models them; use with a motivated, competent team needing quick results, for example a tiger team. The page warns it can lead to burnout if overused.\n5. Affiliative: harmony and emotional bonds; use to repair rifts or support people under stress, for example after an incident or restructuring.\n6. Commanding (coercive): demands immediate compliance; use in a crisis, a turnaround or with problem employees, for example a major breach or outage.\n7. Autocratic: decides alone with minimal input; use for high-stakes turnarounds, audits or inexperienced junior teams.\n8. Delegative (laissez-faire): hands over authority; use with principal engineers or mature, self-organising teams.\n9. Transactional: structure, supervision and rewards tied to performance; use where targets and metrics are clear, for example managing partners and support desks under SLAs.\n10. Situational: adapts to each person's readiness, skill and context; the page says to use it at all times.\n\nIts summary table adds Transformational (inspires through enthusiasm and vision) and Servant (prioritises team needs and growth). It promotes an assessment tool that identifies a reader's top three styles."
+      },
+      {
+        "heading": "Reading the page critically",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A list of labels is easy to memorise and easy to misuse. Notice the weaknesses before you rely on it.\n\nCount and category. The page says ten and tabulates twelve, so the taxonomy is not settled. 'Situational' is not a tenth style beside the others; it is the decision rule for choosing among them, and the page's own instruction to use it 'at all times' says so. Treat the other styles as behaviours and situational as the method.\n\nOverlap. Commanding and autocratic are nearly the same description. Pick one working distinction and write it down: commanding is directive behaviour in an emergency where speed matters more than input; autocratic is a leader deciding alone as a general pattern. You may prefer a different split, but define it, or two people using the labels will mean different things.\n\nThe reference. The page cites Situational Leadership Theory. That theory is generally associated with a model that chooses among a small number of styles according to follower readiness, and the page does not connect its ten or twelve styles to it. Several labels also resemble a well-known 2000 framework of leadership styles. Neither link is explained on the page, so do not assume the page's list carries the evidence or standing of either source. Read the primary sources if you want to rely on them.\n\nEvidence. The page offers none that any style works better, and 'effectiveness is often measured by situational leadership' has no source. An assessment that promises a top three but shows no questions, scoring method or validity evidence cannot be treated as valid. Use it for reflection at most.\n\nAsymmetric warnings. Only pacesetting carries a failure mode on the page. Every style has one, as the next section sets out."
+      },
+      {
+        "heading": "Choosing: urgency, reversibility, readiness",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A usable rule needs few inputs. Three:\n\nUrgency: how fast must something happen? Reversibility and stakes: can a wrong call be undone cheaply? Readiness of the person or team for this task, judged separately on competence (can they do it?) and commitment (will they, with confidence?). A new hire can be committed and not yet competent; a veteran can be competent and disengaged. They need different responses.\n\nA starting map (Academy reasoning to test, not findings from the page):\n- Urgent, high stakes, a clear safe action: commanding or directive, time-boxed, with a debrief afterwards. Example: contain a breach.\n- Low competence, high commitment: directive and coaching, with clear tasks and frequent feedback.\n- Competent but low commitment: find out why; affiliative and democratic behaviours, and a transactional agreement on expectations if needed.\n- High competence and commitment, low risk: delegate with guardrails (outcomes, limits, check-in points) and be available.\n- A change affecting many, with time to explain: visionary on the why, democratic on the how within stated limits.\n- A partner or vendor under contract: transactional, with SLAs and reviews.\n- Stress or conflict after an event: affiliative first, then coaching.\n\nFailure modes the page omits. Visionary without evidence becomes slogans. Coaching with no decisions leaves people drifting. Democratic with no named decider becomes endless consensus. Pacesetting makes the leader the bottleneck and leaves the team dependent on them. Affiliative avoiding hard feedback hides performance problems. Commanding left on after the crisis damages trust and teaches people to wait for orders. Autocratic cuts off information you need. Delegative with weak readiness is abandonment. Transactional alone reduces work to the measured targets (Goodhart again). Name the failure mode of the style you are about to use.\n\nEthical limits. Coercive and autocratic approaches carry accountability the page does not mention: they must stay proportionate, time-boxed and explained afterwards, and they are never a licence to ignore safety, law or dignity. 'Problem employees' is a matter for a documented performance process with your HR partner, not for command style."
+      },
+      {
+        "heading": "Know your default",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Most leaders have a default that they overuse under pressure, and the page itself says technical founders drift to pacesetting. You will not see your default by introspection. Measure it.\n\nKeep a style log for four weeks: each time you make a decision or give direction, record the situation, the style you used, the readiness of the person, and what happened. After four weeks count the shares, and compare the style used with the style the situation called for. A leader who uses pacesetting or commanding behaviour for 30% of logged interactions, and who has no interaction logged as delegating with a mature team, has a pattern to examine.\n\nAsk others. Self-perception differs from what the team experiences, and the next lessons on feedback show how to get it with an honest reading of small samples.\n\nChange one thing at a time: pick one situation where your default hurts (reviewing every pull request yourself) and practise a different behaviour (setting criteria and reviewing a sample), then check the result with the people affected. Judge a style by outcomes you can observe (decision speed, rework, retention, whether people raise problems early), not by whether you felt in control."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A CTO's week, and a style log (invented, not Cretek data)",
+      "body": "Five situations in a week, with the choice and the check.\n\n1. Monday: a suspected breach on the payment service. Urgent, high stakes, a clear safe action (isolate, rotate credentials). The CTO uses commanding behaviour: short instructions, one voice. Time-box: until contained. Afterwards: a blameless post-mortem, an explanation of why the CTO took command, and an invitation to challenge it. Failure mode watched: the team waiting to be told what to do next.\n\n2. Tuesday: a new junior engineer, motivated, with little experience. Low competence, high commitment. Directive and coaching: a clear first task, a pairing session, feedback the same day.\n\n3. Wednesday: a principal architect designing the data platform. High competence and commitment, moderate stakes. Delegate with guardrails: the outcome and constraints (cost, security review, a decision record), a weekly 20-minute check-in. Failure mode watched: abandonment if their context changes.\n\n4. Thursday: a move from a monolith to services across six teams. Time to explain, many people affected. Visionary on why (what the business gains, what the risks are), democratic on how within stated limits: teams choose their migration order, but the contract and security rules are fixed. Named decider for disputes: the CTO. Failure mode watched: consensus with no decider.\n\n5. Friday: an outsourced support desk missing its SLA. Transactional: the SLA, the report and the review date, and a stated consequence in the contract. Failure mode watched: gaming the measured target.\n\nThe style log. Over four weeks the CTO logs 40 leadership interactions and tags them: commanding 6, pacesetting 6, coaching 8, delegative 3, democratic 5, visionary 4, affiliative 2, transactional 4, autocratic 2. Commanding plus pacesetting is 12 of 40, which is 30%; delegative is 3 of 40 (7.5%). The CTO compares with the readiness notes: in 5 of the 6 pacesetting interactions the engineer was senior and competent. In those the CTO did the work or reviewed every detail. The finding: a pacesetting default with senior engineers, which creates a bottleneck.\n\nThe change. For the next month: with senior engineers, agree outcomes and check-ins, review a sample of the work, and stop reviewing every change. Measures (assumptions to be tested): the CTO's review queue falls, the time engineers wait for a decision falls, and the engineers report, in a short anonymous question, whether they felt trusted. After a month the log shows 3 of 8 relevant interactions pacesetting, down from 5 of 6 (all invented). The CTO reports the numbers with their small sample size and asks the team directly.\n\nWhat is unverified: all numbers are invented, and the style mapping is Academy reasoning, not evidence from the page."
+    },
+    "misconceptions": [
+      "Treating the list as a validated taxonomy. The page itself lists ten and tabulates twelve.",
+      "Treating 'situational' as one style among others. It is the choice rule.",
+      "Assuming the page's single reference supports its list of styles.",
+      "Judging readiness as one thing. Competence and commitment can differ.",
+      "Leaving a crisis style in place after the crisis.",
+      "Using 'problem employees' as a reason for coercion instead of a documented process.",
+      "Relying on introspection or an unvalidated assessment to find your default."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a new engineering manager how you decide between directing a team member and delegating to them."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ls-1",
+      "question": "What count mismatch does the page contain?",
+      "options": [
+        "It lists ten styles in the section and twelve in its summary table",
+        "It lists five styles in both places",
+        "It lists no styles",
+        "It lists twelve styles in the section and ten in the table"
+      ],
+      "answer": 0,
+      "why": "The retrieved summary flagged that Transformational and Servant appear only in the table, with no detailed entries."
+    },
+    {
+      "id": "ls-2",
+      "question": "Why is 'situational' different from the other nine styles on the page?",
+      "options": [
+        "It is a rule for choosing among styles by readiness and context, not a behaviour of the same kind",
+        "It is the same as autocratic",
+        "It is the least effective",
+        "It only applies to juniors"
+      ],
+      "answer": 0,
+      "why": "The page tells you to use it at all times, which makes it the method of selection rather than one of the behaviours selected."
+    },
+    {
+      "id": "ls-3",
+      "question": "Which statement about the page's evidence is accurate?",
+      "options": [
+        "It cites research showing which style works best",
+        "It gives no evidence that any style improves outcomes and its single reference is not cited in the body",
+        "It includes validated assessment scores",
+        "It reports a survey of CTOs"
+      ],
+      "answer": 1,
+      "why": "The page has no statistics or research. The assessment's questions and scoring are not shown."
+    },
+    {
+      "id": "ls-4",
+      "question": "A new engineer is highly motivated but has little experience. Which approach does the Academy rule suggest?",
+      "options": [
+        "Full delegation",
+        "Directive plus coaching: clear tasks and frequent feedback",
+        "Commanding with no explanation",
+        "Ignore until they ask"
+      ],
+      "answer": 1,
+      "why": "Low competence with high commitment calls for direction and coaching. Competence and commitment are judged separately."
+    },
+    {
+      "id": "ls-5",
+      "question": "In the style log, commanding plus pacesetting is 12 of 40 interactions and mostly with senior engineers. What does this suggest?",
+      "options": [
+        "A healthy balance",
+        "A pacesetting default with senior engineers that likely makes the leader a bottleneck",
+        "That the log is wrong",
+        "That delegating is unnecessary"
+      ],
+      "answer": 1,
+      "why": "12 of 40 is 30%. Comparing style with the readiness of the person shows directing competent people, which the page itself warns can lead to overuse and burnout."
+    },
+    {
+      "id": "ls-6",
+      "question": "What should happen after using commanding behaviour in a crisis?",
+      "options": [
+        "Keep it as the default",
+        "End it when the crisis is contained, explain why it was used and hold a blameless review",
+        "Never mention it",
+        "Blame those who hesitated"
+      ],
+      "answer": 1,
+      "why": "The page omits ethical limits. Crisis command should be proportionate and time-boxed, with a debrief that restores trust."
+    }
+  ],
+  "build": {
+    "business": "A CTO's behaviour sets the working pattern of the engineering organisation. Knowing your default, and choosing a style deliberately, is a core leadership capability in the CTO Operating System.",
+    "problem": "Measure your own leadership style pattern over four weeks, compare it with what situations called for, test a change and report honestly, using the page as a starting point and not as an authority.",
+    "requirements": [
+      "Write your working definitions for the ten styles and the two extra ones, including your distinction between commanding and autocratic, and note where you disagree with the page",
+      "Define the choice rule: your inputs (urgency, reversibility, competence, commitment) and the style map, with a failure mode and a limit for each style",
+      "Keep a style log for at least four weeks with at least 30 entries: situation, person or team readiness, style used, style the rule suggests, outcome observed. Use real situations with identifying details removed",
+      "Analyse the log: shares by style, mismatches between used and suggested styles, and the situations where your default appears",
+      "Collect feedback from at least three colleagues on your pattern with a short, written, anonymous form, and state the limits of such a small sample",
+      "Choose one change, define observable measures before starting, apply it for a month and report the measures with their sample sizes",
+      "Read the primary sources for situational leadership and for the 2000 styles framework (or state that you could not access them) and compare them with the page",
+      "A style log tool that reads log entries and reports shares by style, mismatch rate against suggested styles and the top three styles by count. Automated tests required, including known counts, an empty log (reject), an unknown style name (reject), ties in the top three (deterministic ordering) and shares summing to 100%",
+      "A decision memo to yourself: what you will do differently, what you will stop, and the review date",
+      "A one-page summary led by what the log showed and what it could not show",
+      "Every number labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No identifiable personal details about colleagues in shared materials",
+      "Do not use the page's assessment as evidence of your style",
+      "Do not use coercive behaviour outside a genuine emergency or without a debrief",
+      "Treat feedback from a small group as indicative, not conclusive",
+      "Must run locally with a single command for the tool and its tests"
+    ],
+    "design": "Write a one-page design covering the definitions, the choice rule, the logging method, the feedback method and one alternative you rejected, for example relying on the online assessment.",
+    "tasks": [
+      "Write definitions and the choice rule",
+      "Keep the log for four weeks",
+      "Collect colleague feedback",
+      "Build the log tool with tests and analyse",
+      "Apply and measure one change",
+      "Compare with the primary sources",
+      "Write the memo and the one-page summary"
+    ],
+    "acceptance": [
+      "Definitions and a style map with failure modes and limits exist",
+      "The log has at least 30 entries over four weeks",
+      "The analysis shows shares, mismatches and the default pattern",
+      "Feedback was collected anonymously and its sample limits stated",
+      "A change was tested with pre-defined measures",
+      "Tool tests pass including the rejection cases",
+      "The comparison with primary sources is documented or the gap is stated"
+    ],
+    "deliverable": "The definitions, choice rule, log, analysis, feedback, change report, tool with tests, memo and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Chief executive",
+    "scenario": "The CEO has asked how you lead, because two senior engineers say they feel micro-managed and the team stalls when you are away.",
+    "prompts": [
+      "Which style do you default to, and how do you know?",
+      "When did you last use a command style, and what did you do afterwards?",
+      "How do you decide when to delegate rather than direct?",
+      "What evidence do you have that your change worked?",
+      "What are the limits of the framework you started with?",
+      "How would your team describe your leadership, and how sure are you?"
+    ],
+    "rubric": [
+      {
+        "criterion": "A clear choice rule using urgency, reversibility and separate competence and commitment",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Honest measurement of own pattern and sensible reading of small samples",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Critical use of the page, with failure modes and ethical limits named",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Clear communication to a chief executive",
+        "weight": 0.15
+      }
+    ]
+  }
+}

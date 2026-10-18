@@ -1,0 +1,195 @@
+{
+  "id": "architecture-tradeoffs",
+  "moduleId": "tech-architecture",
+  "pillar": "Tech",
+  "title": "Choosing patterns and trade-offs: architecture patterns, events and CAP",
+  "estimatedMinutes": { "learn": 50, "build": 300, "defend": 30 },
+  "objectives": [
+    "Describe the five patterns on the framework page with their strengths and weaknesses",
+    "Explain event-driven architecture, its components and its costs",
+    "Apply the CAP theorem as the framework presents it, and say where the simplification stops",
+    "Choose between options for a real Cretek problem and defend the cost of complexity"
+  ],
+  "prerequisites": ["adr-c4"],
+  "unlock": { "prerequisites": [{ "lessonId": "adr-c4", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Architecture Patterns",
+      "url": "https://www.ctoframework.com/tech/architecture-design/patterns",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Event-Driven Architecture",
+      "url": "https://www.ctoframework.com/tech/architecture-design/event-driven-architecture",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "CAP Theorem",
+      "url": "https://www.ctoframework.com/tech/architecture-design/cap-theorem",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    }
+  ],
+  "verificationNotes": [
+    "The Architecture Patterns page gives no guidance on when to use any pattern, no examples, no comparison between patterns and no pitfalls section beyond each pattern's listed weaknesses. Selection guidance here is Original Academy.",
+    "The Event-Driven Architecture page does not cover idempotency, duplicate delivery, ordering, schema evolution, security or retry and dead-letter handling. The Transactional Outbox gives at-least-once delivery per the page, so consumers must tolerate duplicates; that consequence is an Academy inference.",
+    "The CAP page presents the theorem as 'two out of three' and says it does not cover latency trade-offs or extensions such as PACELC, nor specific consistency models beyond strong and eventual. Its system examples are simplified, as the page itself says. Read the original sources before making a hard claim about any named database.",
+    "None of the external references on these pages (Martin Fowler's articles, microservices.io, CloudEvents, AsyncAPI, Azure Cloud Design Patterns) were consulted."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Five patterns and what each costs",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework says choosing a pattern means balancing development speed, system complexity and organisational structure. It describes five.\n\nMicro Frontends: the UI split into independent, domain-owned applications composed at runtime or compile time. Strengths: independent deployment, freer technology choices. Weaknesses: orchestration complexity, possible performance hit from larger bundles, weaker UX consistency.\nStrangler Fig Application: an incremental migration in which a legacy monolith is replaced by routing specific API paths or frontend routes to new services until the legacy system is retired. Strengths: avoids a risky big-bang rewrite and delivers value continuously. Weaknesses: routing and proxy complexity, data synchronisation overhead.\nCQRS: separate models for writes (commands) and reads (queries) so each can scale and be optimised independently. Strengths: better read and write performance, simpler write-side domain logic. Weaknesses: eventual consistency and more infrastructure.\nMicroservices: small, loosely coupled services organised around business domains, each autonomous, communicating through lightweight APIs. Strengths: team autonomy, independent scaling, high deployment frequency. Weaknesses: operational complexity, distributed tracing difficulty, network latency.\nTransactional Outbox: instead of publishing to a broker inside a database transaction, which can leave inconsistent state if one step fails, the event is written to an Outbox table in the same local transaction and a separate relay publishes it asynchronously. Strengths: at-least-once delivery and a fix for the dual-write problem. Weaknesses: propagation latency and polling or log-tailing overhead."
+      },
+      {
+        "heading": "Event-driven architecture",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The guide describes EDA as decoupled services communicating asynchronously by publishing and consuming event notifications rather than through synchronous request-response calls.\n\nEvents are lightweight, immutable records of something that has already happened, and are distinct from commands (instructions to do something) and documents (full representations of a domain object). Producers detect state changes and emit events without knowing who consumes them. Channels and brokers receive, queue, route and deliver events (the page names Apache Kafka, RabbitMQ and AWS EventBridge). Consumers subscribe and run their own logic.\n\nPatterns: publish-subscribe, event sourcing (every state change stored as an immutable event) and the transactional outbox. The page recommends the CloudEvents specification for a common metadata format, listing the attributes specversion, type, source, id, time, datacontenttype and data.\n\nBenefits it lists: decoupling and team autonomy (add consumers without changing producers), backpressure and elastic scaling (brokers buffer spikes), fault isolation (events queue while a consumer is down) and real-time capabilities. Drawbacks: eventual consistency, observability complexity (it calls distributed tracing mandatory) and operational overhead (brokers, schema registries and dead-letter queues need specialised skills)."
+      },
+      {
+        "heading": "The CAP theorem",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The guide attributes the theorem to Eric Brewer and says a distributed system can guarantee only two of three properties at a given time.\n\nConsistency: every node holds the latest data, so a read returns the most recent write. Strong consistency often costs availability. Availability: every request gets a response even when some nodes are down, though it may be stale. Partition tolerance: the system keeps working when some nodes cannot reach others. The page says any practical distributed system must tolerate partitions, so the real choice is usually between C and A: when a data centre loses connectivity the system either halts (favouring C) or keeps responding (favouring A).\n\nThe page's guidance: financial systems lean CP (a payment system must prevent double spending even at the cost of temporary downtime); e-commerce and social media lean AP (slightly stale data is acceptable, downtime is not); hybrid designs use eventual consistency. The right choice depends on whether stale data or downtime is the more costly failure. It cautions that its examples are simplified and that a database such as DynamoDB can be configured at different points on the spectrum."
+      },
+      {
+        "heading": "What the pages leave to you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The patterns page lists costs but never says when to pay them. The framework gives no thresholds for team size, load or migration sequencing. Treat that as the CTO's job: every pattern here is a trade of complexity for a benefit, and the benefit has to be one Cretek actually needs and can operate. Ask: what specific problem do we have, which cheaper option did we rule out, who runs it at 3am, and what does it cost per month and per engineer?\n\nTwo cautions that the pages imply but do not state. First, at-least-once delivery means consumers will sometimes see the same event twice, so handlers must be safe to repeat; the EDA page does not cover this. Second, an event-driven design with no tracing and no dead-letter handling does not fail loudly, it fails silently. The page calls tracing mandatory; take it at its word."
+      },
+      {
+        "heading": "Using CAP properly",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "CAP is most useful as a question you ask about each piece of data: if the network splits, would we rather refuse to answer or answer with data that may be out of date? A bank balance and a product catalogue description deserve different answers. Decide per data item, write the answer in an ADR, and test it. The page does not cover how to test partitions; the Academy Build step asks you to simulate one."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "The dual-write problem (illustrative, not Cretek code)",
+      "body": "A service saves an order to its database, then publishes OrderPlaced to a broker. If the process crashes between the two steps, the order exists but no event was published and downstream systems never learn of it. Reversing the order is no better: the event goes out for an order that was never saved. With a transactional outbox, the order row and an outbox row are written in one local transaction, so both exist or neither does. A separate relay reads the outbox and publishes, and marks rows as sent. If the relay crashes after publishing but before marking, it will publish again, so the event can arrive twice. That is the at-least-once delivery the page describes, and the reason consumers must tolerate duplicates."
+    },
+    "misconceptions": [
+      "Choosing microservices or events because they are modern. The page lists real costs: operational complexity, tracing difficulty, eventual consistency.",
+      "Reading CAP as 'pick any two'. The page says partition tolerance is not optional in a practical distributed system, so the choice is C versus A when a partition happens.",
+      "Assuming at-least-once delivery means exactly-once. It means duplicates are possible (Academy inference).",
+      "Applying CQRS or Event Sourcing everywhere. The page lists eventual consistency and extra infrastructure as costs.",
+      "A big-bang rewrite when the Strangler Fig, which the page presents as the safer incremental route, would do."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CFO why moving to an event-driven design is not free, naming two specific costs the framework lists."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "at-1",
+      "question": "Which pattern solves the dual-write problem by saving the event to a table in the same local transaction as the data change?",
+      "options": ["Strangler Fig", "CQRS", "Transactional Outbox", "Micro Frontends"],
+      "answer": 2,
+      "why": "The Transactional Outbox writes the event to an Outbox table in the same transaction, and a separate relay publishes it."
+    },
+    {
+      "id": "at-2",
+      "question": "Which weakness does the page list for the Strangler Fig Application?",
+      "options": [
+        "Larger bundle sizes",
+        "Eventual consistency",
+        "Distributed tracing difficulties",
+        "Routing and proxy complexity and data synchronisation overhead"
+      ],
+      "answer": 3,
+      "why": "Strangler Fig adds routing and proxy complexity and data synchronisation overhead. The others belong to Micro Frontends, CQRS and Microservices."
+    },
+    {
+      "id": "at-3",
+      "question": "According to the CAP page, why is the practical choice usually between C and A?",
+      "options": [
+        "Because partitions are impossible",
+        "Because any practical distributed system must tolerate partitions",
+        "Because consistency and availability are the same thing",
+        "Because P can be ignored in the cloud"
+      ],
+      "answer": 1,
+      "why": "The page says practical distributed systems must tolerate partitions, so when one happens you choose between halting (C) and responding (A)."
+    },
+    {
+      "id": "at-4",
+      "question": "Which is a drawback of event-driven architecture the page lists?",
+      "options": [
+        "Tighter coupling between producers and consumers",
+        "Standard request logs are insufficient, so distributed tracing is mandatory",
+        "Events cannot be buffered during spikes",
+        "New consumers require changes to producers"
+      ],
+      "answer": 1,
+      "why": "The page lists observability complexity and calls distributed tracing mandatory. Decoupling, buffering and adding consumers without touching producers are benefits."
+    },
+    {
+      "id": "at-5",
+      "question": "How does the CAP page classify a payment system that must prevent double spending?",
+      "options": [
+        "AP, because stale data is acceptable",
+        "CP, accepting temporary downtime to keep data consistent",
+        "Neither, CAP does not apply to money",
+        "AP with no consistency at all"
+      ],
+      "answer": 1,
+      "why": "Financial systems lean CP: preventing double spending matters more than uninterrupted availability."
+    }
+  ],
+  "build": {
+    "business": "Cretek will keep growing its automation and quotation workflows. A CTO must choose structure that the team can actually operate, and be able to say what each choice costs.",
+    "problem": "Pick one real Cretek architecture question (for example reliable event handling in the quotation automation, or incrementally replacing a legacy component) and produce an options analysis, an ADR and a tested proof of concept for the riskiest part of your choice.",
+    "requirements": [
+      "A problem statement with the actual symptoms and constraints, from real systems",
+      "At least three options including 'do nothing or the cheapest change', each with benefits, costs and operational burden drawn from the framework pages where they apply",
+      "A per-data-item CAP analysis: for each important data store or flow, would it refuse or serve stale data during a partition, and why",
+      "A recommendation with the monthly run cost and who operates it. Costs must be real quotes or clearly labelled assumptions",
+      "An ADR in the framework template recording the decision, consequences and rejected options, linked to your C4 container diagram",
+      "A proof of concept for the riskiest assumption, with automated tests. If you choose an outbox or events, the tests must kill the process mid-way and show no lost event and safe handling of duplicates; if you choose a strangler migration, show routing between old and new with a rollback",
+      "Data labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not recommend a pattern you cannot operate. Say who runs it and what happens at 3am",
+      "Do not claim the proof of concept proves more than it tests"
+    ],
+    "design": "Include a failure-mode table: what fails, how you would know, what the user sees and how it is recovered.",
+    "tasks": [
+      "Write the problem statement and options analysis",
+      "Do the CAP analysis per data item",
+      "Write the ADR and update the C4 diagram",
+      "Build the proof of concept and tests, including the failure injection",
+      "Write the rollback plan and the monitoring you would need before going live",
+      "Document security and operational considerations"
+    ],
+    "acceptance": [
+      "At least three options compared honestly, including a cheap one",
+      "CAP analysis covers each important data item with a reason",
+      "ADR passes your Lesson 1 validator and records a negative consequence",
+      "Tests pass, including failure injection, and the write-up says what they do not cover",
+      "Run cost, operator and rollback are stated",
+      "Data labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "Options analysis, ADR, proof of concept and tests in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "CFO",
+    "scenario": "The CFO is asked to fund your recommended architecture change and wants to know why a simpler option will not do.",
+    "prompts": [
+      "Why not the cheap option? Convince me it will not be enough.",
+      "What does this cost to run each month, and who is on call when it breaks?",
+      "What happens to customers if the network between your components splits? Which data do you let go stale?",
+      "Your proof of concept passed. What did it not test?",
+      "If this goes wrong in production, how do we go back, and how long does that take?"
+    ],
+    "rubric": [
+      { "criterion": "Options compared fairly, including cost of complexity and a cheap alternative", "weight": 0.3 },
+      { "criterion": "Correct, honest use of CAP and delivery guarantees", "weight": 0.25 },
+      { "criterion": "Evidence from tests, and honesty about their limits", "weight": 0.25 },
+      { "criterion": "Operating model and rollback", "weight": 0.2 }
+    ]
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "id": "team-topologies-conway",
+  "moduleId": "people-organisation",
+  "pillar": "People",
+  "title": "Team Topologies and Conway's Law",
+  "estimatedMinutes": { "learn": 50, "build": 270, "defend": 35 },
+  "objectives": [
+    "Describe the four team types and three interaction modes the page gives, and say what the page leaves undefined (cognitive load, boundaries, transition)",
+    "State Conway's Law as an observation, and separate it from the Inverse Conway Maneuver, which is a design decision with costs",
+    "Measure how well team boundaries match a dependency graph by counting cross-team dependencies",
+    "Explain the trade-off between many small teams and fewer larger ones using the measurement",
+    "Propose a team structure change with a transition plan, a measure of success and an honest list of risks"
+  ],
+  "prerequisites": ["raci-brooks-law", "adr-c4"],
+  "unlock": { "prerequisites": [{ "lessonId": "raci-brooks-law", "type": "knowledge_check" }, { "lessonId": "adr-c4", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Team Topologies",
+      "url": "https://www.ctoframework.com/people/culture-organisation/team-topologies",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Conway's Law",
+      "url": "https://www.ctoframework.com/people/culture-organisation/conways-law",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Team Topologies page has no statistics, metrics or team-size guidance. It credits the book's two authors in the body, though the retrieved summary noted that the recommended-reading box credits only one. The book itself was not read for this lesson, so the four team types and three interaction modes here are as the page describes them, not checked against the book.",
+    "The retrieved summary flagged these points on the Team Topologies page: its claimed benefits (faster delivery, better developer experience, knowledge sharing) are unsupported by evidence; its claims about early-stage versus mature organisations are unsourced; 'cognitive load' is central but never defined or made measurable; a Two-Pizza Team link appears in the references without explanation. It does not cover how to find team boundaries or move from the current structure, any measurement of load or team health, team sizing or charters, trade-offs and anti-patterns, how each interaction mode works in practice, why these types and modes were chosen, or any case study.",
+    "The Conway's Law page says an organisation's architecture will 'inevitably mirror' its communication structure, credits Melvin Conway in 1967 and gives two examples (functional silos produce a monolithic front end, back end and shared database; cross-functional domain teams produce decoupled services with clean APIs). It has no evidence, caveats, counterarguments or measurement. The retrieved summary flagged: absolute wording ('inevitably', 'will naturally produce', and examples stated as always true); benefits asserted without data; no origin given for the Inverse Conway Maneuver; 'stream-aligned teams' and 'bounded contexts' used without definition; and the law, which is descriptive, treated as a prescriptive tool without noting the difference. The page gives 1967 as the date; the retrieved summary noted the paper is commonly cited as published in Datamation in 1968, which I recall but have not verified here. Check the primary source.",
+    "The page does not cover empirical tests of the law, exceptions, the cost and disruption of reorganising, how to identify domain boundaries or sequence a reorganisation, legacy systems, mergers, outsourcing, shared platforms or matrix structures, or how to detect misalignment.",
+    "The dependency graph, the cross-team dependency counts and the exhaustive partition search in this lesson are Original Academy material: a toy graph of 12 invented services and 19 invented dependencies, analysed in Python. They illustrate a measurement method and are not evidence about any real organisation or about whether Conway's Law holds."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Team Topologies as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page presents Team Topologies as a framework for designing and changing team structures to improve delivery, with better collaboration, lower cognitive load and faster software delivery as its aims.\n\nFour team types. Stream-aligned: aligned to a business domain or value stream and delivering end to end (a payments team). Enabling: helps other teams gain skills, tools or capabilities (an SRE team teaching reliability practices). Complicated subsystem: owns a specialised domain needing deep expertise (AI algorithms or cryptography). Platform: provides reusable services and tools to stream-aligned teams (an internal developer platform).\n\nThree interaction modes. Collaboration: teams work together for a set period to find solutions. Facilitating: an enabling team guides others without doing the work. X-as-a-Service: one team provides a capability that others consume independently.\n\nCognitive load: teams should carry a manageable load, and stream-aligned teams should not also carry unrelated concerns such as infrastructure or security. Evolution: structures should change as the organisation grows, with early-stage firms relying more on collaboration and mature ones on defined service boundaries. Claimed benefits: fewer dependencies and bottlenecks, better developer experience and autonomy, knowledge sharing and structures that scale."
+      },
+      {
+        "heading": "Using the framework without treating it as a recipe",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page gives vocabulary, not a method. Four gaps to fill.\n\nCognitive load is undefined. Make it observable. Practical signs of overload: a team cannot say what it owns; its on-call is noisy; most work arrives as interrupts; onboarding takes months; simple changes need knowledge of many systems. Count what a team owns (services, data stores, on-call rotations, compliance obligations) and ask the team whether it can hold it in its head. You cannot compute cognitive load, but you can notice and compare it.\n\nInteraction modes need terms. Collaboration is expensive and should have an end date and a stated purpose, such as discovering an interface. X-as-a-Service needs a clear contract: documentation, versioning, support hours, and a way to request change. A platform with no contract is a bottleneck with a friendly name. Facilitating means the enabling team leaves the other team more capable, which you can test: could they do it alone afterwards?\n\nThe benefits are claims, not findings. The page offers no evidence. Define what you expect and measure it before and after, using the delivery metrics from earlier lessons (lead time, change failure rate) and an engineer survey.\n\nTransition. The page says structures evolve but not how. Reorganising has costs: lost context, uncertainty, attrition risk and a temporary dip in output. Plan it as a project with owners, dates and a check at 90 days."
+      },
+      {
+        "heading": "Conway's Law as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page says systems will 'inevitably mirror' the communication structure of the organisation that builds them, credits Melvin Conway in 1967 and describes technical and organisational architectures as homomorphic. Committees, teams and departments define communication boundaries and those become system boundaries.\n\nIts examples: separate front end, back end and database teams produce a monolithic front end, a monolithic back end and a single shared database, with hand-offs appearing as tight coupling and latency; cross-functional domain teams (payments, catalogue, user accounts) build decoupled services with clean APIs.\n\nStrategic uses: the Inverse Conway Maneuver, designing the team structure to match the target architecture before writing code and splitting large groups into small, independent, cross-functional, stream-aligned teams; reducing cognitive load by aligning team boundaries with bounded contexts from domain-driven design; and lowering coordination overhead so features need less cross-team work and can deploy independently."
+      },
+      {
+        "heading": "An observation, a tendency and a decision",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Keep three things apart.\n\nThe law is an observation: systems tend to reflect the structure that produced them, because work that needs coordination across a team boundary is slower and gets avoided, while work inside a team is easy. 'Inevitably' is stronger than the observation supports. It is a strong tendency that managers can work against, and the page's functional-silo and domain-team examples are typical outcomes, not guarantees. Read the original paper before quoting it.\n\nThe Inverse Conway Maneuver is a decision: change the structure to encourage the architecture you want. It is not free. It costs a reorganisation, and it only works if the target architecture is right. Restructuring teams around the wrong boundaries locks in the wrong architecture faster.\n\nNeither tells you where boundaries should be. That needs domain knowledge (what changes together, what must be consistent, what different customers value) and data (which services change together in your repository history, which teams wait on which).\n\nThe page also treats the law as proving its examples. Counter-cases exist: a single team can build a distributed system, and several teams can build a monolith with strong shared conventions. If you cite the law to justify a reorganisation, state which dependencies and delays you actually observed."
+      },
+      {
+        "heading": "Measuring alignment: a toy experiment",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A simple measure of misalignment: of all the dependencies between components, how many cross a team boundary? Each crossing is a place where work needs coordination.\n\nSIMULATED example: 12 invented services (A to L) and 19 invented dependencies. Three ways to assign owners:\n- Four functional teams (front end, back end, data, operations), with services spread across them by layer: 17 of the 19 dependencies cross a team boundary (89.5%). Almost every change needs more than one team.\n- Two domain teams of 6 services each, grouped by which services depend on each other: 5 of 19 cross (26.3%).\n- Four domain teams of 3 services: 7 of 19 cross (36.8%). An exhaustive search over every way of splitting the 12 services into four groups of three found no split with fewer than 7 crossings, so 7 is the best possible for this graph with this team size.\n\nWhat it shows. Aligning teams to the dependency structure cut crossings from 17 to 5 or 7. And there is a trade-off the page does not state: fewer, larger teams cross boundaries less (5), but each owns twice as many services (6 against 3), which raises cognitive load. Smaller teams lower load but raise coordination (7 crossings). The right answer depends on how much a team can hold and how costly each crossing is, which is why you need both measures.\n\nWhat it does not show. It uses an invented graph, assumes every dependency costs the same and ignores how often each changes. A real analysis would weight edges by how often the two components change together (from commit history) and how long cross-team work waits. It gives a method to try on your own repositories, not proof that the law holds."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Reshaping a functional engineering organisation around domains (invented numbers, not Cretek data)",
+      "body": "Cretek's engineering department has a front-end group, a back-end group, a data group and an operations group. Quote delivery is slow. The CTO suspects the structure.\n\nStep 1, gather evidence, not a hunch. From the last six months: 38 features shipped; 31 of them (82%) needed changes owned by three or more groups; median lead time for those was 23 days against 9 days for the 7 that touched one or two groups (invented). Engineers report hand-offs as the main delay. This is a correlation: the multi-group features may also be bigger, so the CTO also compares by size band and finds the gap persists for medium-sized changes (a limitation noted).\n\nStep 2, find boundaries. The CTO maps services and their dependencies (19 edges across 12 services as in the lesson) and the product areas: quotation, orders and payments, customer accounts, and an AI drafting capability. Using the dependency counts, grouping by domain cuts cross-team dependencies from 17 of 19 to 5 to 7 of 19.\n\nStep 3, choose team types. Three stream-aligned teams (quotation, orders and payments, customer accounts). One complicated-subsystem team for the AI drafting capability (specialised models and evaluation). One platform team for the delivery pipeline and hosting, with a stated contract. One small enabling team that rotates in to help teams with reliability practice for two quarters, then moves on. Interaction modes: stream-aligned to platform is X-as-a-Service; enabling to stream-aligned is facilitating for two quarters; the AI team collaborates with quotation for the first quarter to define the interface, with an end date.\n\nStep 4, check cognitive load. Each stream-aligned team will own 3 to 4 services, one on-call rotation and one data store. The quotation team asks whether it can hold payments logic in its head and the answer is no, so payments stays with the orders team and quotation consumes it through an API.\n\nStep 5, cost and risk. A reorganisation costs about two weeks of reduced output in the move quarter (an assumption), risks losing two people who valued their discipline group (mitigated by keeping craft guilds for each discipline), and could lock in the wrong boundaries if the product direction changes. Review at 90 days.\n\nStep 6, measures. Share of features needing three or more teams (target to fall below 40%, an assumption), median lead time for multi-area features, change failure rate (a guardrail, which must not rise), and a short anonymous survey on clarity of ownership. All measured before and after, with sample sizes stated, as in the metrics lessons.\n\nWhat is unverified: all numbers and the graph are invented. The structure is a hypothesis to test, not a result."
+    },
+    "misconceptions": [
+      "Treating the framework as a recipe. The page gives vocabulary and no method.",
+      "Treating Conway's Law as inevitable. It is a strong tendency.",
+      "Restructuring teams without knowing what the right architecture boundaries are.",
+      "Believing fewer cross-team dependencies is always better. Larger teams raise cognitive load.",
+      "Having a platform team with no contract. It becomes a bottleneck.",
+      "Collaboration with no end date. It becomes permanent coupling.",
+      "Reorganising without a 90-day check and measures."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CEO why changing the team structure can change how fast features ship, and what could go wrong."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "tc-1",
+      "question": "Which is NOT one of the page's four team types?",
+      "options": ["Stream-aligned", "Enabling", "Complicated subsystem", "Matrix"],
+      "answer": 3,
+      "why": "The four are stream-aligned, enabling, complicated subsystem and platform. Matrix is a separate organisational structure covered on another page."
+    },
+    {
+      "id": "tc-2",
+      "question": "Which interaction mode has a team providing a capability that others consume independently?",
+      "options": ["Collaboration", "Facilitating", "X-as-a-Service", "Escalation"],
+      "answer": 2,
+      "why": "X-as-a-Service is consumption through a clear contract. Collaboration is working together for a time, and facilitating is guiding without doing the work."
+    },
+    {
+      "id": "tc-3",
+      "question": "What does the page leave out about 'cognitive load', which it treats as central?",
+      "options": [
+        "Nothing; it is fully defined",
+        "A definition and any way to measure it",
+        "Its Latin name",
+        "Its authors"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary noted that the concept is central but never defined or made measurable. The lesson suggests observable signs instead."
+    },
+    {
+      "id": "tc-4",
+      "question": "In the toy experiment, how many of the 19 dependencies crossed a team boundary with four functional teams?",
+      "options": ["5", "7", "17", "19"],
+      "answer": 2,
+      "why": "17 of 19 (89.5%) crossed a boundary with functional teams, against 5 with two domain teams and 7 with four domain teams of three."
+    },
+    {
+      "id": "tc-5",
+      "question": "Why did two domain teams of six services cross fewer boundaries than four teams of three, and why does that not settle the choice?",
+      "options": [
+        "Fewer boundaries exist, but each team owns twice as many services, raising cognitive load",
+        "Larger teams are always better",
+        "Crossings do not matter",
+        "The graph was wrong"
+      ],
+      "answer": 0,
+      "why": "Fewer, larger teams cross fewer boundaries (5 against 7) but own more each. The choice depends on how much a team can hold and how costly a crossing is."
+    },
+    {
+      "id": "tc-6",
+      "question": "How should Conway's Law be described, according to the lesson?",
+      "options": [
+        "A physical law that always holds",
+        "An observation of a strong tendency; the Inverse Conway Maneuver is a costly design decision that needs the right target architecture",
+        "A proof that microservices are best",
+        "An obsolete idea"
+      ],
+      "answer": 1,
+      "why": "The page's 'inevitably' overstates it. The law is descriptive; acting on it by reorganising is a decision with costs and risks."
+    }
+  ],
+  "build": {
+    "business": "Cretek's structure shapes how fast it delivers and how its systems evolve. A CTO should be able to measure whether team boundaries fit the work and to propose a change with evidence, costs and a way to check. This is the organisation design capability in the CTO Operating System.",
+    "problem": "Analyse the fit between team boundaries and dependencies for one real or realistically simulated Cretek system, propose a team structure using the four types and three modes, and plan the transition with measures.",
+    "requirements": [
+      "Map the components or services (at least 10) and their dependencies from real repositories or architecture records, or build a SIMULATED graph labelled as such with its generation method",
+      "Record current ownership and compute the number and share of dependencies that cross team boundaries. Optionally weight by how often components change together from commit history, stating the data window",
+      "Gather evidence on delivery: for a sample of recent features, the number of teams involved and the lead time, with sample sizes. Say what could confound the comparison",
+      "Propose at least two alternative structures using the four team types and three interaction modes, and compute crossings for each. Say what each does to the number of services per team",
+      "Define observable signs of cognitive load for your teams, collect them for the current structure and compare with the proposals",
+      "For each interaction mode in the proposal, state its purpose, contract and end date or review date",
+      "Write the transition plan: sequence, owners, communication, risks (attrition, lost context, wrong boundaries) and a 90-day check with measures decided in advance, including a guardrail",
+      "An alignment tool that takes a dependency list and a team assignment and returns crossings, share and a per-team count of owned components. Automated tests required, including the lesson's functional split (17 of 19), a one-team assignment (0 crossings), a component with no owner (reject), a dependency naming an unknown component (reject), a self-dependency (reject) and an empty graph (reject)",
+      "A search function that finds the minimum-crossing assignment for a small graph and team size, tested on a graph with a known answer",
+      "A decision record (ADR form) for the structure and a one-page summary for the CEO led by the evidence and the risks",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No individual performance data about named engineers in the analysis",
+      "Do not cite Conway's Law or Team Topologies as proof. They are a vocabulary and a tendency",
+      "Do not propose a structure without a cost, a risk list and a check",
+      "Do not claim benefits the page asserts without measuring them",
+      "Must run locally with a single command for the tool and its tests"
+    ],
+    "design": "Write a one-page design covering the evidence, the graph, the alternatives, the interaction modes, the transition and one structure you rejected, with the reason.",
+    "tasks": [
+      "Build the dependency graph and record ownership",
+      "Compute crossings and gather delivery evidence",
+      "Design and compare alternatives",
+      "Define cognitive load signs and modes with contracts",
+      "Write the transition plan with measures",
+      "Build the tool and the search with tests",
+      "Write the decision record and one-page summary"
+    ],
+    "acceptance": [
+      "The graph has at least 10 components with a stated source",
+      "Crossings are computed for the current structure and at least two alternatives",
+      "Delivery evidence has sample sizes and named confounders",
+      "Each interaction mode has a contract and an end or review date",
+      "The transition plan has a guardrail and a 90-day check",
+      "Tool tests pass including the rejection cases",
+      "No claim treats the law or the framework as proof"
+    ],
+    "deliverable": "The graph, ownership data, analysis, alternatives, transition plan, tool and search with tests, decision record and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Chief executive",
+    "scenario": "The chief executive has heard that Conway's Law means the company should be restructured into small autonomous teams. They want to know whether that is right for Cretek and what it would cost.",
+    "prompts": [
+      "What evidence do you have that the current structure slows delivery?",
+      "How many of our dependencies cross team boundaries today, and after your proposal?",
+      "Why this number of teams and not fewer, larger ones?",
+      "What does each interaction mode require in practice, and when does it end?",
+      "What could go wrong with the reorganisation, and how will you know?",
+      "Is Conway's Law proven?"
+    ],
+    "rubric": [
+      { "criterion": "Evidence-based diagnosis with a measured alignment and honest confounders", "weight": 0.3 },
+      { "criterion": "A structure using the types and modes with contracts, load considered and trade-offs stated", "weight": 0.3 },
+      { "criterion": "A transition plan with costs, risks, guardrail and a 90-day check", "weight": 0.25 },
+      { "criterion": "Clear communication to a chief executive without overclaiming", "weight": 0.15 }
+    ]
+  }
+}

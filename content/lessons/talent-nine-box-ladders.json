@@ -1,0 +1,258 @@
+{
+  "id": "talent-nine-box-ladders",
+  "moduleId": "people-talent",
+  "pillar": "People",
+  "title": "The 9-box grid and career ladders",
+  "estimatedMinutes": {
+    "learn": 45,
+    "build": 270,
+    "defend": 30
+  },
+  "objectives": [
+    "Describe the 9-box grid as the page gives it and say what it leaves undefined (measurement, calibration, bias, HR process)",
+    "Show by simulation how rater noise scrambles box placements and why a single rating should not drive a decision",
+    "Describe the structure of the Engineering Ladders framework (tracks, levels, five axes) as a supplementary resource, and note what the CTO Framework page itself contains",
+    "Design a career ladder with levels, dimensions and evidence, and a promotion-readiness check that is a conversation aid and not a checklist",
+    "Defend a talent review process that separates development conversations from pay and exit decisions, with HR and legal questions flagged"
+  ],
+  "prerequisites": [
+    "interviews-succession",
+    "feedback-systems-one-on-ones-360"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "interviews-succession",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "feedback-systems-one-on-ones-360",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "9-boxes",
+      "url": "https://www.ctoframework.com/people/performance-growth/9-boxes",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Career ladders",
+      "url": "https://www.ctoframework.com/people/performance-growth/career-ladders",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; the page body is a heading, a link to a levels page and six reference links with no description, so it contains no teaching content."
+    },
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Engineering Ladders (one of the references linked from the career ladders page)",
+      "url": "https://www.engineeringladders.com/",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Home page content retrieved as an automated summary; the linked role-specific pages, the repositories and the other references were not read."
+    }
+  ],
+  "verificationNotes": [
+    "NOT LEGAL OR HR ADVICE. Performance improvement plans, exits, promotions, compensation and how ratings may be used are subject to employment law and your own policies. Take the questions in this lesson to HR and legal advisers.",
+    "The CTO Framework 'Career ladders' page has almost no teaching content. Its body is a heading, a link to the Director of Engineering level page and six reference links (engineeringladders.com, two GitHub repositories, career-ladders.dev/engineering, progression.fyi and the Dropbox Engineering Career Framework) with no description. It defines no levels, tracks or dimensions and has no examples. Everything this lesson says about ladders therefore comes from the supplementary Engineering Ladders home page summary and from Original Academy reasoning. The progression.fyi link, the two GitHub repositories, career-ladders.dev and the Dropbox framework were not read.",
+    "The Engineering Ladders summary (supplementary, from its home page only) describes: a shared vocabulary for managers to discuss expectations with reports, open source and based on US tech-industry roles, to be adapted; four ladders (developer, levels 1 to 7; tech lead, 4 to 7; technical program manager, 4 to 7; engineering manager, 5 to 7), with levels 8 and above omitted as too company-specific; five axes each with five cumulative levels (technology: adopts, specializes, evangelizes, masters, creates; system: enhances, designs, owns, evolves, leads; people: learns, supports, mentors, coordinates, manages; process: follows, enforces, challenges, adjusts, defines; influence: subsystem, team, multiple teams, company, community, described as orthogonal); guidance to use it for career conversations, not as a promotion checklist, to gather evidence from one-on-ones, peers and self-evaluation, and to expect consistent performance at the next level for several months before promotion; and caveats that practice differs, people are stronger in some areas than others and behavioural examples should be defined by each team. The framework's own pages that give behavioural examples were not read. Verify its current content at the source.",
+    "The 9-box page defines performance (vertical, low to high) and potential (horizontal, low to high) axes and nine labelled boxes (high performance with low, medium and high potential: High Performer, Strong Performer, Top Talent; medium performance: Skilled but Stagnant, Core Employee, Emerging Leader; low performance: Low Performer, Underperformer, Inconsistent Talent), with brief guidance per label, three general action plans and a linked spreadsheet template. The interactive tool did not load. The retrieved summary flagged: an empty 'Talent Assessment Workflow' section; undefined phrases ('centre and growth categories', 'caution and risk rows'); an unsupported claim that the model ensures the right talent; no criteria for 'ready for promotion' or 'may not be a good fit'; no attribution or research; and vague definitions of potential. It does not cover how to measure performance and potential, rating scales and calibration, bias safeguards, cadence and tracking movement, legal and HR matters for improvement plans and exits, confidentiality and communication, links to career ladders, or team-level use.",
+    "The rater-noise simulation and the promotion-readiness example in this lesson are Original Academy material. The simulation is SIMULATED: true performance and potential are drawn independently from a standard normal distribution, each rater sees the true value plus Gaussian noise, and ratings are cut into thirds at plus or minus 0.43 standard deviations. It illustrates a mechanism and is not evidence about real raters, whose errors are usually correlated and biased in ways this simple model omits."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The 9-box as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The grid has two axes. Performance (vertical, low to high) is the employee's current contributions, achievements and results. Potential (horizontal, low to high) is the ability to grow into future leadership roles or take on more responsibility.\n\nThe nine boxes and the page's guidance. High performance: with low potential, High Performer (a valued contributor with limited growth); medium potential, Strong Performer (develop for leadership); high potential, Top Talent (ready for promotion, a star). Medium performance: low potential, Skilled but Stagnant (needs motivation or training); medium, Core Employee (stable and reliable); high, Emerging Leader (needs support to grow). Low performance: low potential, Low Performer (may not be a good fit); medium, Underperformer (needs an improvement plan); high, Inconsistent Talent (high potential, low execution).\n\nThree general action plans: nurture the high-potential boxes towards leadership, architect or principal roles; use skill-building, rotation and mentorship for the centre and growth boxes; and give structured support in the caution boxes, first working out whether the gap is skill or motivation. The page links a spreadsheet template and promises an interactive tool and a review workflow that were not available in what I retrieved."
+      },
+      {
+        "heading": "What the grid hides: measurement and noise",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The grid looks precise and rests on two judgements the page never defines. Performance can at least be tied to goals and results. Potential is a prediction about the future, and the page defines it only in general terms. Without criteria, 'ready for promotion' means whatever the rater feels.\n\nSee how much noise matters. SIMULATED: 20,000 people with independent true performance and potential, rated by two independent raters who each see the truth plus random error, with ratings cut into thirds. When rater error is moderate (spread 0.6 against a true spread of 1.0):\n- the two raters place a person in a different performance band 39% of the time and in a different potential band 39% of the time;\n- they place the person in a different box 63% of the time;\n- when one rater puts someone in the top box (high performance and high potential), the other agrees only 46% of the time.\n\nWith smaller rater error (0.3) the disagreement on box is still 42%; with larger error (1.0) it is about 75%. Real raters are not independent coin tossers. They share biases (recent events, visibility, similarity to themselves, confidence), so agreement between two raters from the same culture can look better than it should while still being wrong in the same direction.\n\nConsequences. A single rating should not decide pay, promotion or exit. Use several evidence sources, as in the 360 lesson; calibrate by having managers discuss the evidence for each placement together; and treat a box as a hypothesis to discuss with the person. Expect movement between boxes year to year, and record the evidence for any move. The page does not discuss bias; build it in: check placements by gender, ethnicity, location and tenure where your law and policy allow, and ask whether differences are explained by evidence.\n\nAlso be careful with the labels. Calling a person a 'Low Performer' or 'Skilled but Stagnant' sticks and shapes how they are treated. Separate what is observed (results this year, behaviours against the ladder) from conclusions about the person, and share the observations with them."
+      },
+      {
+        "heading": "What the career ladders page contains",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page is a heading, a link to the Director of Engineering level page and six reference links: engineeringladders.com, two GitHub repositories, career-ladders.dev/engineering, progression.fyi and the Dropbox Engineering Career Framework. It defines no levels, tracks or dimensions and gives no examples. The substance has to come from the references, so this lesson draws on one of them as a supplementary resource, and says so."
+      },
+      {
+        "heading": "Engineering Ladders as a worked reference",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "From the Engineering Ladders home page (the rest of the framework was not read): it describes itself as a shared vocabulary that lets managers have meaningful conversations with reports about role expectations and how to reach the next level. It is open source, uses US tech-industry roles and levels as a baseline and invites adaptation.\n\nFour ladders: developer (levels 1 to 7, where levels 1 to 3 are not senior), tech lead (4 to 7), technical program manager (4 to 7) and engineering manager (5 to 7). Levels 8 and above are left out because they vary too much between companies.\n\nFive axes, each with five cumulative levels: technology (adopts, specializes, evangelizes, masters, creates); system (enhances, designs, owns, evolves, leads); people (learns, supports, mentors, coordinates, manages); process (follows, enforces, challenges, adjusts, defines); influence (subsystem, team, multiple teams, company, community), which it describes as orthogonal, applying across the other axes.\n\nStated usage: a baseline to adapt; for career conversations, not as a promotion checklist; gather evidence from one-on-ones, peer and cross-team feedback and self-evaluation; expect a person to perform consistently at the next level for several months before promotion. Stated caveats: practices differ between companies; people are stronger in some areas than others, so not meeting every point is normal; and each team should define its own behavioural examples because they depend on its work, architecture and stack."
+      },
+      {
+        "heading": "Designing a ladder you can use",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A ladder answers three questions: what is expected at each level, how someone shows it, and who decides. Keep the design small.\n\nLevels. Define a modest number, each with a short statement of scope (the size of problem a person is trusted with, how much guidance they need, whose work they influence). Tracks: an individual-contributor path that goes beyond senior, and a management path, so growth does not require managing people. State that moving to management is a change of job, not a promotion.\n\nDimensions. Four to six, such as technical craft, system ownership, people and mentoring, process and delivery, and influence. Write each level's expectation as observable behaviours, not adjectives, and add examples from your own systems. 'Mentors others and raised the team's review turnaround from 4 days to 1' beats 'is a good mentor'.\n\nEvidence. For each promotion discussion, gather evidence over a period (at least several months of sustained performance at the next level, as Engineering Ladders suggests) from one-on-ones, peers, cross-team partners and the person's own account. Record it, and compare across candidates so that standards are consistent.\n\nUse it as a conversation guide, not a checklist. Engineering Ladders says people are stronger in some areas than others. A simple readiness aid for the discussion: for a move from level 4 to level 5 with five dimensions, require the next-level behaviour consistently in at least three dimensions and none below the current level minus one. Treat the output as a prompt for the panel, and write down why exceptions are made.\n\nCalibrate. Managers rate against the ladder differently, so have them discuss evidence together and measure agreement as in the interview lesson. Check outcomes for bias.\n\nSeparate purposes. A development conversation (where are you strong, where next) is different from a pay decision or an exit decision, and mixing them makes people hide weaknesses. Compensation bands, titles and formal promotion processes are not covered by the framework and need HR and your own policy.\n\nUse the ladder to give the 9-box content: define performance as results against goals and the behaviours of the current level, and define potential as demonstrated behaviour at the next level's scope (for example, someone already running an initiative across teams), not as a hunch. That ties both axes to evidence."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A talent review and a promotion discussion for the engineering team (invented, not Cretek data)",
+      "body": "Cretek's CTO and five engineering managers hold an annual talent review for 34 engineers. The CTO has read the page and decides how to avoid its weaknesses.\n\nStep 1, define the axes from the ladder. Performance: results against agreed goals this year, plus behaviours at the current level, rated on three levels with written criteria. Potential: evidence of operating at the next level's scope (running a cross-team initiative, mentoring two or more engineers, raising a process) in the last six months, rated on three levels. Each rating needs a short note of evidence.\n\nStep 2, independent ratings, then calibration. Each manager rates their own reports; for a sample of 10 engineers, a second manager who knows their work also rates. The two sets agree on box for 4 of the 10 (40%) before discussion, which the CTO expects given the noise the simulation shows. The group discusses each disagreement against the evidence. After discussion, 8 of 10 are agreed; two stay open pending more evidence.\n\nStep 3, bias check. The CTO compares ratings by tenure and by location, and sees that remote engineers are rated lower on potential on average (a small sample; noted). The managers examine the evidence and agree that remote engineers' cross-team work is less visible; they add peer input from cross-team partners to the evidence base.\n\nStep 4, actions, not labels. The grid is used to start conversations. 'Top talent' is not announced; the engineer is told which behaviours they have shown at the next level and what development is planned. For someone placed medium performance, low potential, the manager asks whether the gap is skill or motivation (the page's own prompt), finds that the engineer has been on call heavily and is exhausted, and changes the workload. For a low performance rating that persists after support, HR is involved and a documented, fair process starts; the CTO asks HR and legal advisers what is required (not legal advice).\n\nStep 5, a promotion discussion. Engineer A is considered for level 4 to 5. Evidence from six months: technology at level 5, system at level 5, people at level 4, process at level 5, influence at level 4. The readiness aid asks for next-level behaviour in at least three of five dimensions and none below the current level minus one: three at level 5, none below 3, so the aid says discuss. The panel reads the evidence (a migration led across three teams, with feedback from two partners; mentoring of two juniors; a mixed result on the process change) and decides to promote with a stated development focus on influence. The decision, the evidence and the reasons are recorded.\n\nStep 6, keep pay and development apart. Pay changes follow the company's compensation process with HR, not the box. The engineer's development conversation is held separately.\n\nStep 7, review. Next year: how many placements moved, whether movement is explained by evidence, agreement between raters (kappa), and an anonymous survey on whether people feel the process is fair.\n\nWhat is unverified: all numbers and events are invented, and the simulation and the readiness aid are Academy material, not from the pages."
+    },
+    "misconceptions": [
+      "Treating a 9-box placement as a measurement. It is a judgement with a large error.",
+      "Using a single rating to decide pay, promotion or exit.",
+      "Defining potential as a feeling instead of demonstrated behaviour at the next level.",
+      "Announcing labels such as 'Low Performer' or 'Top Talent' to people.",
+      "Using a career ladder as a promotion checklist rather than a conversation guide.",
+      "Assuming everyone must meet every point at the next level.",
+      "Mixing development conversations with pay and exit decisions."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a new manager why two reasonable managers can place the same person in different boxes, and what to do about it."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "nb-1",
+      "question": "What are the two axes of the 9-box grid on the page?",
+      "options": [
+        "Cost and quality",
+        "Performance (current results) and potential (ability to grow into more responsibility)",
+        "Age and tenure",
+        "Salary and title"
+      ],
+      "answer": 1,
+      "why": "Performance is the vertical axis and potential the horizontal axis. The page defines potential only in general terms."
+    },
+    {
+      "id": "nb-2",
+      "question": "In the simulation with moderate rater error, how often did two raters place the same person in different boxes?",
+      "options": [
+        "About 5%",
+        "About 20%",
+        "About 63%",
+        "About 99%"
+      ],
+      "answer": 2,
+      "why": "With rater error of 0.6 against a true spread of 1.0, the raters disagreed on box about 63% of the time, and a top-box placement was confirmed only about 46% of the time."
+    },
+    {
+      "id": "nb-3",
+      "question": "What does the page's 'career ladders' entry contain?",
+      "options": [
+        "A full set of levels and dimensions",
+        "A heading, a link to a levels page and six undescribed reference links, with no teaching content",
+        "A worked promotion example",
+        "A compensation table"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary found almost no content. The lesson draws on one linked reference, Engineering Ladders, as a supplementary resource."
+    },
+    {
+      "id": "nb-4",
+      "question": "How does Engineering Ladders suggest the framework be used?",
+      "options": [
+        "As a strict promotion checklist",
+        "As a baseline to adapt, for career conversations rather than as a checklist, with evidence from several sources over several months",
+        "Only for managers above level 7",
+        "To set salaries directly"
+      ],
+      "answer": 1,
+      "why": "The framework says to adapt it, use it for conversations, gather evidence from one-on-ones, peers and self-evaluation, and expect consistent performance at the next level for several months."
+    },
+    {
+      "id": "nb-5",
+      "question": "How can potential be made less of a hunch?",
+      "options": [
+        "Ask the person to rate it",
+        "Define it as demonstrated behaviour at the next level's scope, with evidence from the last several months",
+        "Use age",
+        "Use the manager's confidence"
+      ],
+      "answer": 1,
+      "why": "Tying potential to observed next-level behaviour gives raters something to cite and discuss, and reduces bias from visibility or similarity."
+    },
+    {
+      "id": "nb-6",
+      "question": "Why keep development conversations separate from pay and exit decisions?",
+      "options": [
+        "It is cheaper",
+        "Mixing them makes people hide weaknesses; pay and exits follow HR and legal processes, not a box",
+        "They are the same thing",
+        "Regulators require two meetings"
+      ],
+      "answer": 1,
+      "why": "People are less candid about development needs if every conversation affects pay. HR and legal processes govern pay and exits."
+    }
+  ],
+  "build": {
+    "business": "Cretek will grow its engineers and must decide who to develop, promote or support. A CTO needs a talent process that is fair, evidence-based and honest about its error, with ladders people can use. This is the performance and growth capability in the CTO Operating System.",
+    "problem": "Design and run a talent review and a career ladder for one real or realistically simulated Cretek engineering group, measuring rater agreement, checking for bias and producing a promotion discussion record.",
+    "requirements": [
+      "Define performance and potential with written criteria, tied to a ladder. State the evidence needed for each rating and the period it covers",
+      "Design a ladder for at least two tracks (individual contributor and management) with at least four levels and four to six dimensions, with observable behaviours and at least two examples from your own systems per level. Label what you took from Engineering Ladders (cite with date) and what you added",
+      "Run independent ratings by two raters for at least 20 people (real with permission, or SIMULATED with stated generation). Report agreement on performance, potential and box, and kappa for each",
+      "Run the rater-noise simulation for at least three noise levels and 10,000 people each. Report the share of box disagreements and top-box confirmation, and state the model's limits",
+      "Run a calibration discussion plan and a bias check across at least two groupings (where permitted by law and policy). Report what you found and what you changed",
+      "Write the use rules: what the grid is used for and not used for (not pay, not exit alone), how placements are communicated, and how people are told observations, not labels",
+      "Write a promotion-readiness aid for one level move with a stated rule, run it on three example cases and say how the panel treats exceptions",
+      "Write the questions for HR and legal advisers on improvement plans, exits, ratings use and data retention, with owners and dates. Do not state conclusions",
+      "A talent analysis tool with functions that compute agreement and Cohen's kappa for two raters' ratings, the share of box disagreements between two raters, and a readiness check against a ladder rule. Automated tests required, including a known case with known kappa, perfect agreement (kappa 1), a rating outside the scale (reject), different-length lists (reject), an empty list (reject), a person below the current level minus one in any dimension (not ready by the rule) and a simulation determinism test with a fixed seed",
+      "A one-page summary for the CEO and the people leader led by what the process can and cannot tell you",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No real names or personal data in shared materials",
+      "Do not use a single rating to decide pay, promotion or exit",
+      "Do not announce box labels to employees",
+      "No legal or HR conclusions. Mark them as questions for advisers",
+      "Must run locally with a single command for the tool and its tests"
+    ],
+    "design": "Write a one-page design covering the axes and criteria, the ladder, the calibration and bias check, the use rules and one design you rejected, for example ranking engineers by box.",
+    "tasks": [
+      "Define the axes and criteria",
+      "Design the ladder",
+      "Run ratings and compute agreement",
+      "Run the noise simulation",
+      "Run calibration and the bias check",
+      "Write the use rules and the readiness aid",
+      "Build the tool with tests",
+      "Write the questions for advisers and the one-page summary"
+    ],
+    "acceptance": [
+      "Performance and potential have written criteria tied to a ladder",
+      "The ladder has two tracks, observable behaviours and local examples, with sources cited",
+      "Agreement and kappa are reported for real or simulated ratings",
+      "The simulation covers three noise levels with limits stated",
+      "A bias check and its follow-up are recorded",
+      "Use rules separate development from pay and exit",
+      "Tool tests pass including the rejection cases",
+      "No legal or HR conclusion is stated as fact"
+    ],
+    "deliverable": "The criteria, ladder, ratings and agreement analysis, noise simulation, calibration and bias check, use rules and readiness aid, questions for advisers, analysis tool with tests and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Chief people officer",
+    "scenario": "The chief people officer is considering using the 9-box grid to decide who gets raises and who goes on improvement plans. They want to know whether it is reliable and fair.",
+    "prompts": [
+      "How reliable are the placements, and how do you know?",
+      "How do you define potential, and what evidence supports it?",
+      "What did your bias check find, and what did you do about it?",
+      "Why not use the grid directly for pay and exits?",
+      "How does the career ladder connect to the grid and to promotion?",
+      "What do we need legal and HR advisers to confirm before we use it?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Measured reliability with agreement, kappa and an honest account of noise",
+        "weight": 0.3
+      },
+      {
+        "criterion": "A usable ladder with observable behaviours and a conversation-aid readiness rule",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Bias checks, use rules separating development from pay and exit, and legal and HR points left to advisers",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Clear communication to a chief people officer",
+        "weight": 0.15
+      }
+    ]
+  }
+}

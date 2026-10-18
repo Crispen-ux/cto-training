@@ -1,0 +1,250 @@
+{
+  "id": "least-privilege-access-control",
+  "moduleId": "tech-security",
+  "pillar": "Tech",
+  "title": "Least privilege and access control models",
+  "estimatedMinutes": {
+    "learn": 50,
+    "build": 300,
+    "defend": 35
+  },
+  "objectives": [
+    "State the principle of least privilege and the five practices the page gives for it",
+    "Compare RBAC, ABAC and policy-based access control, with the weakness of each",
+    "Write an access decision as testable code that denies by default and fails closed",
+    "Design a permission pruning rule with an exception route, and explain why the page's version is risky",
+    "Defend an access control design and its audit evidence to an auditor"
+  ],
+  "prerequisites": [
+    "threat-modelling-shift-left"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "threat-modelling-shift-left",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Principle of Least Privilege",
+      "url": "https://www.ctoframework.com/tech/security-compliance/least-privilege",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Access Control Models",
+      "url": "https://www.ctoframework.com/tech/security-compliance/access-control-models",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Least Privilege page defines no metrics. It does not cover how to determine the minimum permission set in practice, JIT tooling, approval workflows or break-glass access, secrets management, credential rotation or service account lifecycle, RBAC/ABAC/PBAC (linked to a separate page), cloud-provider IAM examples, trade-offs such as developer friction, detection and monitoring specifics, or zero trust.",
+    "The retrieved summary flagged these claims on the Least Privilege page, which the Academy agrees with: that least privilege 'ensures' a compromise is isolated (it limits exposure but cannot guarantee isolation); that it is a 'mandatory requirement' for SOC 2, ISO 27001, PCI-DSS and GDPR (these require access control and least privilege is a common way to meet it, but they do not all mandate the principle by name, and GDPR does not use the term); and the labelling of NIST SP 800-53 as 'Access Control Guidelines' (it is a broad catalogue of controls, of which access control is one family). Re-read the live page to confirm.",
+    "The page's tip to automatically disable access unused for 30 to 90 days has no exception process; the Academy view is that it can lock out legitimate infrequent users such as disaster-recovery or on-call roles. The page itself says nothing about exceptions.",
+    "The Access Control Models page covers RBAC, ABAC and PBAC with Open Policy Agent and Rego. It does not mention DAC, MAC, ReBAC or ACLs, has no comparison table (the retrieved text), no Rego examples, nothing on fail-open versus fail-closed behaviour when the policy engine is unavailable, policy data caching and consistency, identity providers and authentication, migration paths, cost or effort, or compliance mapping. Its heading 'Evolution of Access Control Models' has no content.",
+    "The retrieved summary flagged these further issues on the Access Control Models page: the unqualified claim of 'sub-millisecond' policy evaluation; the loose phrase 'cryptographic history' for Git history; blurred boundaries between PBAC and ABAC (the page's PBAC examples are attribute-based, OPA can express RBAC, and 'PBAC' is not a universally defined term); and the unqualified claim that one policy can govern 'thousands of scenarios'. Re-read the live page to confirm.",
+    "The Python in this lesson (role counts, an attribute-based decision function, the pruning rule) is Original Academy material and was run. It models the ideas and is not a production authorisation system or a policy engine such as Open Policy Agent.",
+    "In a second read of the Access Control Models page for the Academy review (2026-10-14), the specific example of restricting UK Billing Administrators to accounts under 10,000 in annual recurring revenue, and the description of Open Policy Agent as a CNCF graduated project, did not appear in the retrieved summary, which describes only 'billing administrators in one country' limited to accounts under 'a certain revenue threshold'. Check both against the live page before quoting them. The worked ABAC rule in this lesson is an Academy illustration regardless."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The principle and its five practices",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Least privilege holds that any user, system, process or program receives only the access it needs for its assigned task, 'the minimum level of access permissions required to complete its designated task', to limit the damage from compromised accounts, software bugs and insider threats.\n\nFive practices: blast radius reduction (limit what one compromise can reach); separation of duties (no single role controls a critical workflow end to end; a developer should not be the sole person who can deploy to production without review and auditing); just-in-time and ephemeral access (grant temporarily, for example a token for production SSH or database access that expires automatically); service-to-service authorisation (a microservice that generates PDF invoices should not read the billing platform's raw card credentials; it calls only the one endpoint it needs); and auditability and continuous review (log, monitor and regularly audit permissions, and remove unused ones, such as credentials of former employees and deprecated integrations)."
+      },
+      {
+        "heading": "Implementation guidance on the page",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Define IAM policies in infrastructure as code so security teams can review changes in pull requests. Avoid wildcard (*) statements; use resource-level permissions and explicit actions. Limit CI/CD pipelines to build and deploy permissions: they should not delete core database backups or manage security credentials, since pipelines are high-value targets. Treat least privilege as a compliance requirement for audits. Run a quarterly 'permission pruning' exercise; the tip suggests automatically disabling accounts or access unused for 30 to 90 days.\n\nThe page defines no metrics and has no pitfalls section. Its implied warnings are wildcard policies, standing administrator rights, orphaned credentials, over-permissioned pipelines and dormant accounts."
+      },
+      {
+        "heading": "Three access control models",
+        "sourceCategory": "Official CTO Framework",
+        "body": "RBAC (role-based): permissions attach to roles (for example Billing Administrator) and users are assigned to roles, checked against a static role-permission matrix. Pros: simple to design, implement and audit, maps to organisational hierarchies, fast. Cons: role explosion (fine-grained rules create hundreds of narrow roles) and context ignorance (it cannot evaluate time of day, IP address or threat level). The page's example: restricting UK Billing Administrators to accounts under 10,000 in annual recurring revenue would need a new role. Choose it for early-stage or small organisations with straightforward needs. For microservice architectures the page says RBAC 'is insufficient'.\n\nABAC (attribute-based): decisions come from rules over four attribute categories: subject (department, clearance, role), resource (file type, creation date, project tag), action (read, write, export) and environment (time, network location, device health). Pros: very granular, one policy can cover many scenarios, context-aware (for example database access only from the corporate VPN during working hours). Cons: complexity (rules can conflict or open loopholes), performance (attributes fetched on each request), and auditability (hard to answer 'what can this user access?' because permissions are computed).\n\nPBAC and policy as code: authorisation logic is separated from application code into an external policy engine; services send request details as JSON and receive allow or deny. The page names Open Policy Agent (a CNCF graduated project) with policies in Rego. The application is the policy enforcement point; OPA is the policy decision point, often a sidecar. Pros: consistent policy across APIs, services, Kubernetes, databases and CI/CD; a Git workflow with review, tests and history. Cons: extra infrastructure and a Rego learning curve. Recommendations: stop hardcoding authorisation checks in services; use policy as code for microservices; manage changes through pull requests with tests for permission leaks; plan for data filtering, since a single decision is easy but 'list what Alice can see' is hard."
+      },
+      {
+        "heading": "Making a decision testable",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "An access rule you cannot test is a rule you cannot trust. The code below was run. It is a model of the ABAC idea, not a policy engine.\n\nThe rule: a billing administrator in the UK may read an account only if its annual recurring revenue is under 10,000, the request comes over the VPN, and the hour is between 08:00 and 18:00. A request that matches returned allow. Each of these returned deny: an account with revenue 20,000; a request from the public network; a request at 22:00; a write action; a subject in another region. A request with the environment attributes missing also returned deny.\n\nThat last case is the important design choice: the function denies by default and fails closed. If an attribute is missing, the policy engine is down or something cannot be evaluated, the answer is no. The page does not cover fail-open versus fail-closed behaviour, and the wrong default is the kind of mistake that turns a convenience into an incident.\n\nIt also shows the role explosion problem in numbers. With 3 regions, 2 revenue tiers and 2 functions (billing, support), an RBAC design that names each combination needs 3 x 2 x 2 = 12 roles. The attribute version expresses the same rules with the 7 attribute values (3 + 2 + 2) and a policy. Add a fourth dimension and the role count multiplies while the attribute count only adds.\n\nBut note the page's own cons: the ABAC version is harder to audit. 'What can this user access?' now requires evaluating policy against data. Keep a way to answer it, such as a report that runs the policy for each user against a sample, and test every rule with both allow and deny cases."
+      },
+      {
+        "heading": "Pruning without locking people out",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page suggests automatically disabling access unused for 30 to 90 days, with no mention of exceptions. Some accounts are rarely used on purpose: disaster recovery, on-call and break-glass accounts exist for the day you need them.\n\nA safer rule, run as an example with 90 days as the threshold: an account used 5 days ago is kept; one used 45 days ago is kept; one idle 95 days is disabled; and a disaster recovery account idle 200 days is not disabled but flagged for a named owner's review, because it is on an exemption list.\n\nThe design points: keep an exemption list with an owner and a review date for each entry, so exemptions are visible and do not accumulate silently; notify before disabling; make re-enabling quick and logged; and track the pruning as evidence for audits. Also test that break-glass access works, because an access path that nobody has used in 200 days may no longer function.\n\nA caution on the compliance claim. The page calls least privilege a mandatory requirement for SOC 2, ISO 27001, PCI-DSS and GDPR. Those frameworks require appropriate access control, and least privilege is a common way to show it, but they do not all name the principle. Do not quote a clause number from this page. Ask your auditor which control you are evidencing."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Reviewing a pipeline's permissions and an admin role (illustrative, not Cretek data)",
+      "body": "Review 1: the deployment pipeline. Current state: the pipeline's cloud account has an administrator policy with wildcard actions on all resources, 'because it was quicker'. The page says pipelines should be limited to build and deploy and must not delete core database backups or manage security credentials.\n\nFix: define the pipeline's permissions in infrastructure as code with explicit actions (push images, update the named service, read the named secret) on named resources. Remove delete permissions on backups and any permission to manage identities. Review the change in a pull request, and add a test or policy check that fails if a wildcard action appears. Measure: count of wildcard statements before and after (for example, from 14 to 0, as a target), and of permissions granted that were never used in the last 90 days.\n\nReview 2: the admin role. Current state: eight people hold standing administrator rights on the production database. Separation of duties: the developer who wrote a change can also approve and deploy it. Fix: no standing admin; engineers request a time-limited token (for example 60 minutes, an assumption) for production access with a recorded reason; a second person approves production deployments; all use is logged. Break-glass: one emergency account, sealed credentials, an alert whenever it is used, a post-use review, and a periodic test that it works.\n\nReview 3: authorisation in the application. Current state: role checks are scattered through the code, and one endpoint returns another customer's records when the identifier is changed. Fix: centralise the decision in one function, deny by default, and add tests for the allow and deny cases above, including the missing-attribute case. Whether RBAC suffices is a question of count and context: if rules need only a handful of roles and no context, RBAC is simpler and easier to audit. Move to attribute-based or policy-as-code rules when role counts start to multiply or decisions need context.\n\nWhat is unverified until measured: how many permissions are actually used, and whether any process depended on the removed access. Roll out in stages, in a test environment first, with a rollback."
+    },
+    "misconceptions": [
+      "Believing least privilege guarantees a compromise is isolated. It limits exposure.",
+      "Reading the page's 'mandatory requirement' as meaning each framework names the principle.",
+      "Disabling dormant accounts automatically with no exception route, which can lock out disaster-recovery and on-call roles.",
+      "Choosing ABAC or policy as code for its sophistication when a few roles would do, and losing auditability.",
+      "Allowing access when an attribute is missing or the policy engine is unreachable. Fail closed.",
+      "Leaving standing administrator rights because time-limited access is inconvenient.",
+      "Giving pipelines broad permissions because it is quicker."
+    ],
+    "explainTask": "In 150 words or fewer, explain to an auditor how a developer gets production access in your organisation and how you can prove it was removed afterwards."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "lp-1",
+      "question": "Which description matches 'just-in-time and ephemeral access' on the page?",
+      "options": [
+        "Permanent administrator rights for senior staff",
+        "Access granted temporarily when needed, for example an auto-expiring token for production SSH or database access",
+        "Access granted to everyone on a team by default",
+        "Access that is never reviewed"
+      ],
+      "answer": 1,
+      "why": "The page's example is a timed token that expires automatically, instead of permanent access."
+    },
+    {
+      "id": "lp-2",
+      "question": "Which is a stated problem of RBAC on the Access Control Models page?",
+      "options": [
+        "It cannot be audited",
+        "Role explosion and ignorance of context such as time of day or IP address",
+        "It needs an external policy engine",
+        "It is too new to use"
+      ],
+      "answer": 1,
+      "why": "The page lists role explosion and context ignorance as the cons of RBAC. Auditability is a con it attaches to ABAC."
+    },
+    {
+      "id": "lp-3",
+      "question": "In the run, a request with the environment attributes missing was denied. What design principle does this show?",
+      "options": [
+        "Fail open: allow when unsure",
+        "Deny by default and fail closed",
+        "Log and allow",
+        "Cache the previous decision"
+      ],
+      "answer": 1,
+      "why": "If an attribute is missing or cannot be evaluated, the answer is no. The page does not cover fail-open versus fail-closed behaviour."
+    },
+    {
+      "id": "lp-4",
+      "question": "With 3 regions, 2 revenue tiers and 2 functions, how many roles does an RBAC design need to name every combination?",
+      "options": [
+        "7",
+        "8",
+        "12",
+        "24"
+      ],
+      "answer": 2,
+      "why": "3 x 2 x 2 = 12 roles. The attribute approach needs only the 7 attribute values (3 + 2 + 2) plus a policy, which shows role explosion."
+    },
+    {
+      "id": "lp-5",
+      "question": "What is the risk the Academy notes in the page's tip to automatically disable access unused for 30 to 90 days?",
+      "options": [
+        "It is too slow",
+        "It could lock out legitimate infrequent users such as disaster-recovery or on-call roles, because the page gives no exception process",
+        "It is illegal",
+        "It violates separation of duties"
+      ],
+      "answer": 1,
+      "why": "Some accounts exist for rare emergencies. Use an exemption list with owners and review dates, and test that break-glass access works."
+    },
+    {
+      "id": "lp-6",
+      "question": "How does the Academy treat the page's claim that least privilege is a 'mandatory requirement' for SOC 2, ISO 27001, PCI-DSS and GDPR?",
+      "options": [
+        "As exactly correct",
+        "As overstated: these require access control, least privilege is a common way to meet it, and not all name the principle (GDPR does not)",
+        "As irrelevant",
+        "As proof that audits are optional"
+      ],
+      "answer": 1,
+      "why": "The frameworks require appropriate access control. Ask your auditor which control you are evidencing and do not quote a clause from the page."
+    }
+  ],
+  "build": {
+    "business": "Cretek's systems hold customer and school data that people could misuse by accident or on purpose. Access must be limited, reviewable and provable. This is the access control capability in the CTO Operating System.",
+    "problem": "Review and tighten access for one real Cretek system (pipeline permissions, administrator access and application authorisation), with a tested decision function, a safe pruning process and audit evidence.",
+    "requirements": [
+      "Choose one real system and inventory its access: who and what holds which permissions, from the real configuration, not from memory. Mark each permission as used or unused in the last 90 days where logs allow, or state that they do not",
+      "Review the pipeline's permissions against the page's guidance. Replace any wildcard or administrator permission with explicit actions on named resources, defined in code and reviewed in a pull request, and add a check that fails if a wildcard appears",
+      "Review administrator and standing production access. Replace standing rights with time-limited, logged, approved access where practical, and define a break-glass process with an alert, a review and a periodic test",
+      "Review application authorisation. Centralise the decision in one place, deny by default and fail closed. Show the test for each allow and deny case, including a missing attribute and an identifier belonging to another customer",
+      "Decide between RBAC and an attribute or policy approach with the evidence: role count now and expected, whether decisions need context, and how you will answer 'what can this user access?'. Record the decision and the trigger to change it",
+      "Define a pruning rule with a threshold, notification before disabling, an exemption list with owners and review dates, logging, and fast re-enable. Run it in report-only mode first and record the result",
+      "Write down what evidence an auditor would be shown: access reviews, approval records, logs, test results. Do not claim compliance with any named standard without confirming the control with the auditor",
+      "A decision-and-pruning tool: given a policy, a request and a set of attributes, it returns allow or deny with the reason; given account last-use dates, a threshold and an exemption list, it returns keep, disable or review. Automated tests required, including a missing attribute (deny), an unknown action (deny), a boundary at exactly the threshold, an exempt account idle past the threshold, a never-used account, a malformed date (reject) and a policy that grants everything (flagged)",
+      "A one-page summary for an auditor, led by the permissions removed, the access still standing and who approved it",
+      "Every statement about real systems labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Work through changes in a test environment first, with a rollback. Do not remove production access without a recovery path",
+      "No credentials, keys or personal data in the repository, tests or examples",
+      "Do not disable accounts automatically in production until report-only mode has been reviewed by a named person",
+      "Break-glass credentials must not be stored where ordinary staff can read them",
+      "Must run locally with a single command for the tool and its tests"
+    ],
+    "design": "Write a one-page design covering the inventory method, the target permissions for the pipeline and administrators, the authorisation approach, the pruning rule with exceptions and one alternative you rejected, for example automatic disabling with no exemptions.",
+    "tasks": [
+      "Inventory the real permissions and their recent use",
+      "Tighten the pipeline's permissions and add the wildcard check",
+      "Replace standing administrator access and define break-glass",
+      "Centralise application authorisation and write the allow and deny tests",
+      "Decide on the access model and record it",
+      "Build the decision-and-pruning tool with tests and run pruning in report-only mode",
+      "Write the audit evidence list and the one-page summary"
+    ],
+    "acceptance": [
+      "The inventory comes from real configuration and shows use where measurable",
+      "Pipeline permissions are explicit, in code, reviewed, and a wildcard check fails on a seeded wildcard",
+      "Standing production access is replaced or its remaining justification is recorded with an owner",
+      "Authorisation is centralised, denies by default and fails closed, with allow and deny tests including the missing-attribute and other-customer cases",
+      "The RBAC versus attribute decision is recorded with evidence and a trigger",
+      "The pruning rule has exemptions with owners and review dates and was run report-only",
+      "The tool tests pass including the rejection and boundary cases",
+      "No credentials or personal data in the repository"
+    ],
+    "deliverable": "The access inventory, permission changes, authorisation tests, decision-and-pruning tool with tests, report-only pruning result, audit evidence list and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Auditor",
+    "scenario": "An auditor is reviewing access to a system holding customer data. They want evidence, not assurances, and they will test your exceptions.",
+    "prompts": [
+      "Show me who can deploy to production and how that is approved and recorded.",
+      "How do you know no one has more access than they need? What was removed?",
+      "What happens if your authorisation service cannot evaluate a request?",
+      "Which accounts are exempt from pruning, who owns them and when were they last tested?",
+      "Which control in which standard are you evidencing, and who confirmed that?",
+      "Why this access model, and when would you change it?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Evidence of real access reviews and removals, not assertions",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Sound design: deny by default, fail closed, separation of duties, time-limited access",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Pruning and exceptions handled safely with owners and review dates",
+        "weight": 0.2
+      },
+      {
+        "criterion": "Honest, precise claims about compliance, with no overstated mappings",
+        "weight": 0.1
+      },
+      {
+        "criterion": "Clear communication to an auditor",
+        "weight": 0.1
+      }
+    ]
+  }
+}

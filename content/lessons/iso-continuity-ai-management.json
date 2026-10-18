@@ -1,0 +1,221 @@
+{
+  "id": "iso-continuity-ai-management",
+  "moduleId": "product-requirements",
+  "pillar": "Product",
+  "title": "Management system standards: ISO 22301 and ISO/IEC 42001",
+  "estimatedMinutes": { "learn": 45, "build": 270, "defend": 30 },
+  "objectives": [
+    "Explain what a management system standard is and is not, and why alignment or certification does not guarantee outcomes",
+    "Describe the five elements the page gives for ISO 22301 and run a business impact analysis with consistency checks on MTPD, RTO and RPO",
+    "Describe the elements the page gives for ISO/IEC 42001 and map them to evidence you could show an auditor",
+    "Separate what the framework pages claim about DORA, NIS2, the EU AI Act and NIST AI RMF from what a management standard can support",
+    "Defend a decision to adopt, align with or skip a standard, with its cost and its evidence"
+  ],
+  "prerequisites": ["nfr-availability", "ai-risk-regulation-collapse"],
+  "unlock": { "prerequisites": [{ "lessonId": "nfr-availability", "type": "knowledge_check" }, { "lessonId": "ai-risk-regulation-collapse", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "ISO 22301 (Business Continuity Management Systems)",
+      "url": "https://www.ctoframework.com/product/requirements/standards/ISO22301",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "ISO/IEC 42001 (AI Management Systems)",
+      "url": "https://www.ctoframework.com/product/requirements/standards/ISO42001",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "NOT LEGAL OR CERTIFICATION ADVICE. Both pages are secondary summaries, not the standards, which are paid ISO documents that were not read for this lesson. For clauses, controls and certification rules use the official standards at iso.org and the certification body you intend to use.",
+    "The ISO 22301 page describes a management system for business continuity following the Annex SL high-level structure, names Clause 8 as the operational heart and describes no other clause. It gives five elements (business impact analysis with MTPD, RTO and RPO; risk assessment; continuity strategy and solutions; continuity plans and procedures; testing and exercises) and four claimed benefits (B2B trust, architectural discipline, regulatory alignment with DORA and NIS2, resource prioritisation). It cites the ISO page for ISO 22301:2019. It has no figures, no worked example, no test frequency and no sources for its business claims.",
+    "The retrieved summary flagged these points on the ISO 22301 page: saying the framework 'directly satisfies' DORA and NIS2 is overstated, since alignment with a management system standard does not by itself meet the specific requirements of those regulations, and DORA is an EU regulation, not a global mandate; the page implies the standard requires designs such as active-active deployment, whereas the standard is technology-neutral and those are examples; 'gold standard', faster vendor security reviews and enterprise customers 'frequently' mandating proof are unsupported; and chaos engineering is listed among standard exercises although, to the summary's knowledge, the standard does not name it. I did not verify that against the standard's text. The page does not cover the other clauses, certification and audit, cost and timelines, scope and management review, effectiveness metrics, supply chain detail, related standards such as ISO 22313 or ISO 27001, or the fact that certification cannot guarantee resilience.",
+    "The ISO/IEC 42001 page describes an AI management system standard with five elements (a risk-based approach; four AI-specific controls: dataset governance and validation, transparency and explainability, human oversight, monitoring of model performance; integration with standards such as ISO 27001 and ISO 9001; lifecycle and accountability; ethics and governance) and claims about strategic benefit, with one link to iso.org. It has no clause numbers, definitions, process steps, case studies or figures.",
+    "The retrieved summary flagged these points on the ISO 42001 page: the 'first international standard' claim has no date or source; the contrast 'unlike traditional ISO standards, it introduces AI-specific controls' is overstated and the controls are tied to no clause; integration with other standards is stated without explanation; readiness for the EU AI Act and NIST AI RMF is presented as a benefit although a management standard does not by itself guarantee legal compliance and no mapping is given; 'external assurance' is not explained (certification versus audit); and 'strategic differentiator' is opinion. The page does not cover clause structure, full control lists, definitions, implementation steps, certification, supplier AI, costs, mappings to the EU AI Act or NIST, or limitations. I recall (unverified here) that the standard was published at the end of 2023 and follows the same high-level structure as other management system standards; confirm both at iso.org.",
+    "The business impact analysis, the consistency checks, the recovery-time arithmetic and the gap assessment in this lesson are Original Academy material. All figures are invented ASSUMPTIONS and the arithmetic was run in Python."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What a management system standard is",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Both standards on these pages are management system standards. They do not tell you which technology to buy. They set requirements for a system of management: scope, leadership commitment, risk assessment, documented processes, resourcing, operation, performance evaluation and continual improvement, usually described as a plan, do, check, act cycle. The pages say ISO 22301 uses the Annex SL high-level framework; I recall that the AI standard uses the same common structure, which is how such standards integrate, but the page does not say so and I have not verified it.\n\nSo three things follow. First, a certificate says your management system met the standard at audit, on a stated scope. It does not say you will survive an incident or that your AI is safe. Second, the standard asks you to define your own objectives and show evidence, so two certified firms can differ widely in how resilient they are. Third, adoption has costs: people, time, documentation and audit fees. The pages give no figures for any of these, so you must estimate them yourself and decide whether the benefit justifies them.\n\nThis lesson works from the pages and says what is missing. Neither page contains the standard's clauses."
+      },
+      {
+        "heading": "ISO 22301 as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page presents ISO 22301 as the international standard for business continuity management systems, a structured way to prepare for, respond to and recover from disruptive incidents, covering planning, implementing, operating, monitoring, reviewing, maintaining and continually improving. It says the standard follows Annex SL and that Clause 8 is its operational heart.\n\nFive elements:\n1. Business impact analysis (BIA): identify critical activities and their supporting resources, with three measures. MTPD, the maximum tolerable period of disruption, is the point beyond which viability is at risk. RTO, the recovery time objective, is the target time to restore a service to a minimum acceptable level. RPO, the recovery point objective, is the maximum tolerable data loss, expressed as time.\n2. Risk assessment: identify, analyse and evaluate threats such as cloud outages, cyberattacks, power failures and loss of key people.\n3. Continuity strategy and solutions: options to reduce risk, with examples of active-active multi-region deployment, automated database failover and diverse network routing.\n4. Continuity plans and procedures: documented steps for crisis management, incident response and disaster recovery, with activation, roles and communications.\n5. Testing and exercises: from desktop walkthroughs to full failover simulations and chaos engineering, with plans updated from lessons learned. No frequency is given.\n\nClaimed benefits: enterprise trust and faster vendor reviews, architectural discipline, alignment with digital operational resilience rules such as the EU's DORA and the NIS2 Directive, and a way to direct investment by quantifying RTOs and RPOs."
+      },
+      {
+        "heading": "A business impact analysis that checks itself",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A BIA is only useful if its numbers are consistent and testable. Apply checks.\n\nCheck 1: RTO must be shorter than MTPD, with margin. If the business cannot survive more than 4 hours without payments (MTPD) then an RTO of 4 hours leaves no room for error. Rule of thumb for the Academy (not from the page): treat an RTO above half the MTPD as a flag for discussion.\n\nCheck 2: RPO must match your data protection. If backups run every 24 hours, the worst-case data loss is 24 hours; an RPO of 4 hours is not met by that design. Either back up more often, replicate continuously or change the RPO with the owner's agreement.\n\nCheck 3: dependencies. If activity A has an RTO of 2 hours and depends on a database and an identity service, both must be recoverable within that time. A dependency with a longer recovery time breaks the objective.\n\nCheck 4: the arithmetic of recovery. List the real steps and their measured durations. Suppose restoring a database takes 90 minutes, redeploying the application 30 minutes and validating 20 minutes. Run in sequence that is 140 minutes, which fails a 120-minute RTO. If redeployment can overlap the restore, the critical path is 90 + 20 = 110 minutes, which passes with only 10 minutes spare. Time each step in a rehearsal; numbers from a runbook that has never been run are guesses.\n\nCheck 5: business agreement. The owner of each activity accepts the RTO, RPO and the cost of achieving them. Tie the choice to cost: a shorter RTO needs more standby capacity and practice."
+      },
+      {
+        "heading": "ISO/IEC 42001 as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page describes ISO/IEC 42001 as an international standard for AI management systems, offering a structure for governing and operating AI responsibly, with requirements to establish, implement, maintain and continually improve such a system, supporting internal governance and 'external assurance'.\n\nFive elements as it lists them: a risk-based approach to harms across the AI lifecycle, from bias and robustness to societal impact; AI-specific controls, with four examples (dataset governance and validation, transparency and explainability, human oversight mechanisms, monitoring of model performance over time); integration with other management system standards, naming ISO 27001 and ISO 9001; coverage of the lifecycle from design to retirement with accountability, documentation and continual improvement; and ethics and governance, formalising fairness, inclusiveness, transparency and contestability into policies and controls.\n\nStrategic claims (unsourced): it supports scaling AI in regulated sectors, raises stakeholder confidence, helps prepare for the EU AI Act and NIST AI RMF, and is a strategic differentiator. The page gives no clauses, definitions or steps."
+      },
+      {
+        "heading": "Turning the elements into evidence",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "An auditor, a customer or you yourself will ask: show me. For each element the page names, write the evidence you could produce. This is Academy reasoning, not a list of the standard's controls, which are not on the page.\n\n- Risk-based approach: an AI risk register tagged with the taxonomies from the AI governance lesson, with owners, likelihood, impact, controls and review dates.\n- Dataset governance and validation: a record of data sources and rights, a data quality check run on every training or evaluation set, and a held-out set (see the model selection and collapse lessons), with results.\n- Transparency and explainability: user-facing disclosure that AI is involved, documentation of what the system does and its limits, and a way to give reasons for a decision to a person affected.\n- Human oversight: a named reviewer with authority to override, the override rate and a sample of overridden decisions.\n- Monitoring over time: a performance dashboard on a fixed evaluation set, alert thresholds, an incident log and a schedule for re-evaluation when the model or data changes.\n- Lifecycle and accountability: a register of AI systems with owners and status from design to retirement, and change records.\n- Integration: reuse of your existing security and quality processes (access control, change control, internal audit) rather than parallel ones.\n\nThe key limit: a management system standard shows that you manage AI in a disciplined way. It is not the EU AI Act, and the page gives no mapping to it or to NIST. Whether a given system is high risk under the Act, and what that requires, is a legal question for counsel. A certificate may help you gather the evidence, but does not decide your legal obligations. As the AI governance lesson says, classify as a hypothesis and take it to counsel."
+      },
+      {
+        "heading": "Deciding whether to adopt",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Options: ignore the standard, align informally (use it as a checklist without certification), or pursue certification. Compare them on cost, evidence value and obligation.\n\nQuestions to ask. Who is asking for it? A named customer contract, a regulator or a tender requirement is a stronger reason than a general sense that it looks good; the page's claim that enterprises frequently demand proof is unsourced, so check your own sales data. What does it cost? Estimate staff time (policy writing, risk assessment, exercises, internal audit), consulting if used, and certification body fees. The pages give none. What does it replace? If you already run security and quality management systems, extend them. What scope? Certify the part of the organisation that matters rather than everything. And what do you do differently afterwards? If nothing changes, the exercise produced paper, not resilience.\n\nFor DORA and NIS2, the page says ISO 22301 alignment supports them. That is plausible as support, but those regulations have their own specific requirements, and whether you are in scope depends on your sector and size. Treat the claim that the standard 'directly satisfies' them as unproven, and ask counsel (not legal advice).\n\nFinally, plan to exercise what you document. A continuity plan that has never been run is a hypothesis. Schedule exercises, record the measured recovery times against the RTOs, and fix the gaps. The standard asks for evidence of testing; the real value is the repaired plan."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A BIA and a gap assessment for a quotation platform with an AI drafting feature (invented numbers)",
+      "body": "Scope: the quotation platform, its database, the identity service and the AI drafting assistant. Three activities.\n\nBIA (all values ASSUMPTIONS agreed with owners):\n- Payments and invoicing: MTPD 4 hours, RTO 2 hours, RPO 15 minutes.\n- Quotation drafting: MTPD 24 hours, RTO 8 hours, RPO 4 hours.\n- Management reporting: MTPD 72 hours, RTO 48 hours, RPO 24 hours.\n\nChecks. RTO below MTPD for all three. RTO above half the MTPD for none: payments is exactly half (2 of 4), so it is on the flag line and is reviewed. RPO: nightly backups give 24 hours worst-case loss, which meets reporting (24) but fails drafting (4) and payments (0.25). The team moves the database to continuous log shipping, which gives about 5 minutes of exposure (to be measured in a rehearsal, so not yet claimed).\n\nRecovery arithmetic for payments. Rehearsal timings: database restore 70 minutes, application redeploy 25 minutes (can overlap the restore), identity service switch to standby 15 minutes (can overlap), validation 20 minutes. Critical path: 70 + 20 = 90 minutes, which passes the 120-minute RTO with 30 minutes spare. Before the rehearsal the runbook claimed 45 minutes; the measured figure is the one used.\n\nDependencies. The identity service has a stated recovery of 4 hours, which breaks payments' 2-hour RTO. Options: a standby in a second region (cost estimated at 9,000 a year, assumption), cached sessions for the payments path, or accepting a manual payment process for up to 4 hours. The owner chooses cached sessions plus a manual fallback and accepts the residual risk in writing.\n\nTests planned: a desktop walkthrough each quarter, a database restore rehearsal each half year, and a regional failover test for payments once a year, with the measured recovery times recorded.\n\nAI management gap assessment. Evidence available now: a model selection record and evaluation set (strong), a risk register tagged with both taxonomies (partial: no owners yet), human review of all customer-facing drafts (strong, override rate tracked), monitoring on the fixed evaluation set (weak: runs ad hoc), a register of AI systems (missing). Actions with owners and dates: assign risk owners, schedule monitoring weekly with alert thresholds, create the register. The team records that none of this establishes EU AI Act status, which counsel will assess, and decides to align informally for now and revisit certification only if a named customer or regulator requires it.\n\nWhat is unverified: all values are invented. The clause content of both standards was not read."
+    },
+    "misconceptions": [
+      "Believing certification guarantees resilience or safe AI.",
+      "Treating alignment with a management standard as compliance with a regulation such as DORA, NIS2 or the EU AI Act.",
+      "Assuming the standards prescribe technologies such as active-active deployment. They are technology-neutral.",
+      "Writing RTOs and RPOs no design or rehearsal supports.",
+      "Treating a runbook's timings as measured when it has never been run.",
+      "Quoting the page's claims about customer demand or faster reviews as facts.",
+      "Pursuing certification without a named reason, a cost estimate and a change in practice."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CEO what an ISO 22301 certificate would and would not tell a customer about your company's ability to recover from an outage."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "is-1",
+      "question": "What does a management system standard certificate tell you?",
+      "options": [
+        "The organisation will survive any incident",
+        "A management system met the standard at audit on a stated scope; it does not guarantee outcomes",
+        "The organisation is legally compliant with all regulation",
+        "The technology is the best available"
+      ],
+      "answer": 1,
+      "why": "Both pages overstate benefits. A certificate shows a management system was audited against the standard, not that resilience or safety is guaranteed."
+    },
+    {
+      "id": "is-2",
+      "question": "In the BIA, what do MTPD, RTO and RPO stand for?",
+      "options": [
+        "Maximum tolerable period of disruption, recovery time objective, recovery point objective",
+        "Mean time per day, return to operations, recovery plan owner",
+        "Maximum total price per day, recovery time order, rapid power outage",
+        "Minimum tolerable period of downtime, recovery time order, recovery point order"
+      ],
+      "answer": 0,
+      "why": "MTPD is the point beyond which viability is at risk, RTO the target time to restore a minimum service, and RPO the maximum tolerable data loss expressed as time."
+    },
+    {
+      "id": "is-3",
+      "question": "Nightly backups give 24 hours of worst-case data loss. Which activity's RPO does that design fail?",
+      "options": [
+        "Reporting with an RPO of 24 hours",
+        "Drafting with an RPO of 4 hours",
+        "Neither",
+        "Only the one with no data"
+      ],
+      "answer": 1,
+      "why": "A 24-hour backup interval can lose up to 24 hours of data, so it fails a 4-hour RPO and a 15-minute RPO but meets a 24-hour RPO."
+    },
+    {
+      "id": "is-4",
+      "question": "Restore 70 minutes, redeploy 25 minutes and identity switch 15 minutes can overlap the restore; validation takes 20 minutes after. What is the critical path?",
+      "options": ["130 minutes", "90 minutes", "45 minutes", "25 minutes"],
+      "answer": 1,
+      "why": "The overlapping steps finish within the 70-minute restore, then validation takes 20: 70 + 20 = 90 minutes. Summing everything in sequence would give 130."
+    },
+    {
+      "id": "is-5",
+      "question": "Why is the page's claim that ISO 22301 'directly satisfies' DORA and NIS2 unsafe to repeat?",
+      "options": [
+        "Those regulations do not exist",
+        "Alignment with a management system standard may support those regulations but does not by itself meet their specific requirements; scope depends on sector and size",
+        "ISO 22301 is illegal",
+        "DORA only applies in the US"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged this overstatement. DORA is an EU regulation with its own requirements. Check applicability with counsel."
+    },
+    {
+      "id": "is-6",
+      "question": "Which is a fair statement about ISO/IEC 42001 and the EU AI Act?",
+      "options": [
+        "Certification under 42001 makes a system legally compliant with the Act",
+        "42001 is a management system standard; the page gives no mapping to the Act, and legal obligations are for counsel to assess",
+        "They are the same document",
+        "42001 replaces the Act"
+      ],
+      "answer": 1,
+      "why": "The page presents regulatory readiness as a benefit without explaining any mapping. A management standard helps organise evidence but does not decide legal obligations."
+    }
+  ],
+  "build": {
+    "business": "Cretek's customers and regulators will ask whether it can recover from disruption and whether its AI is governed. A CTO should be able to show real evidence, and to say honestly whether a standard is worth pursuing. This is the assurance capability in the CTO Operating System.",
+    "problem": "Run a business impact analysis for one real Cretek service, rehearse and measure its recovery, assess AI governance evidence against the elements the page names, and produce a decision on whether to adopt either standard.",
+    "requirements": [
+      "Define the scope and list at least three critical activities with owners. Record MTPD, RTO and RPO for each, agreed with the owner, and label values REAL or ASSUMPTION",
+      "Apply the BIA checks: RTO against MTPD, RPO against the backup or replication design, dependency recovery times, and recovery arithmetic from step timings",
+      "Rehearse a recovery (a real restore in a non-production environment, or a labelled SIMULATION) and record measured step times against the runbook's claims. Report the critical path and any gap to the RTO",
+      "Write the continuity strategy options for one gap with their estimated cost and the owner's decision, recorded in writing",
+      "Plan exercises of at least two types with frequency and success criteria, and record who runs them and where results go",
+      "Run an AI management gap assessment for one real or realistic AI system: for each element the page names, state the evidence you hold, a strength rating (strong, partial, weak, missing), the owner and the next action",
+      "Write the standards decision: ignore, align informally or certify, for each of ISO 22301 and ISO/IEC 42001, with who is asking, estimated cost, scope, what you would do differently afterwards, and the regulatory claims you cannot rely on. Do not state that certification would make you compliant with any regulation",
+      "List questions for counsel on DORA, NIS2 and the EU AI Act applicability, and for the certification body on scope and cost, with owners and dates. Mark clause-level claims 'requires verification against the standard'",
+      "A continuity checker with functions that validate a BIA table and compute the recovery critical path from steps with durations and dependencies. Automated tests required, including the lesson's examples (RTO 120 against a 140-minute sequence failing, the 90-minute critical path passing, nightly backups failing a 4-hour RPO), RTO at or above MTPD (flag), a cyclic dependency (reject), a negative duration (reject) and an empty step list (reject)",
+      "A one-page summary for the CEO led by the measured recovery time and the standards decision",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not claim certification, alignment or compliance you do not hold",
+      "Do not copy text from the standards into the repository; they are copyrighted ISO documents",
+      "Do not use runbook timings you have not measured as evidence",
+      "Do not state legal conclusions about DORA, NIS2 or the EU AI Act",
+      "Must run locally with a single command for the checker and its tests"
+    ],
+    "design": "Write a one-page design covering the scope, the BIA, the rehearsal, the gap assessment, the decision and one alternative you rejected, for example certifying the whole company first.",
+    "tasks": [
+      "Define scope and the BIA with owners",
+      "Apply the consistency checks",
+      "Rehearse a recovery and measure",
+      "Decide strategy options and plan exercises",
+      "Run the AI gap assessment",
+      "Write the standards decision and the counsel questions",
+      "Build the checker with tests",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "Each critical activity has owner-agreed MTPD, RTO and RPO",
+      "At least one real or simulated rehearsal compares measured steps with the runbook",
+      "A gap against an RTO or RPO is identified with a costed option and a written decision",
+      "The AI gap assessment covers each element with evidence and an owner",
+      "The standards decision is reasoned and makes no compliance claim",
+      "Checker tests pass including the rejection cases",
+      "No standard text is copied into the repository"
+    ],
+    "deliverable": "The scope and BIA, rehearsal results, strategy and exercise plan, AI gap assessment, standards decision, counsel questions, checker with tests and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Chief executive",
+    "scenario": "A large customer has asked whether Cretek is certified to ISO 22301 and ISO/IEC 42001. The CEO wants to know what you can truthfully say, what it would cost and whether to pursue it.",
+    "prompts": [
+      "What would a certificate tell the customer, and what would it not?",
+      "How long would we actually take to recover payments, and how do you know?",
+      "Where did the runbook's numbers differ from the rehearsal?",
+      "Which parts of our AI governance evidence are weak?",
+      "Does this make us compliant with the EU AI Act or DORA?",
+      "Given the cost, should we certify, align informally or decline?"
+    ],
+    "rubric": [
+      { "criterion": "Consistent BIA with measured recovery, not runbook claims", "weight": 0.3 },
+      { "criterion": "Honest evidence-based gap assessment and accurate limits of what a standard shows", "weight": 0.3 },
+      { "criterion": "A reasoned adopt, align or decline decision with costs, and no compliance overclaim", "weight": 0.25 },
+      { "criterion": "Clear communication to a chief executive", "weight": 0.15 }
+    ]
+  }
+}

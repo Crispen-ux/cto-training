@@ -1,0 +1,183 @@
+{
+  "id": "big-o-complexity",
+  "moduleId": "tech-engineering",
+  "pillar": "Tech",
+  "title": "Big-O notation and what it does not tell you",
+  "estimatedMinutes": { "learn": 45, "build": 240, "defend": 30 },
+  "objectives": [
+    "Describe how Big-O captures growth with input size and why it is not a measure of speed",
+    "Recognise the seven classes on the framework page and give a code example of each",
+    "Count operations to compare algorithms and explain why the counts matter at scale",
+    "Name what the page leaves out (worst versus average case, space, constants) and apply it",
+    "Defend an algorithm or data structure choice with measured numbers, not asserted ones"
+  ],
+  "prerequisites": ["solid-design-patterns"],
+  "unlock": { "prerequisites": [{ "lessonId": "solid-design-patterns", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Big-O notation",
+      "url": "https://www.ctoframework.com/tech/engineering-practices/big-o-notation",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page has seven Python snippets, one per class, with no derivation of why each has its stated complexity and no numerical tables, operation counts or timing data. The operation counts in this lesson were produced by running code and are Original Academy material.",
+    "The page does not cover formal definitions (upper bounds, Omega, Theta), best, average and worst cases, space complexity analysis, rules for simplifying expressions, deriving complexity from code, other classes such as polynomial or square root, hidden constants, cache effects, small-input behaviour, or amortised analysis.",
+    "Imprecisions in the page as retrieved, noted by the Academy: binary search is labelled divide-and-conquer, though it follows only one half (decrease-and-conquer); naive recursive Fibonacci is labelled O(2^n), a valid upper bound but more precisely about 1.618^n; the duplicate-check O(n^2) figure is a worst case and the page does not say so; the maximum-finding example fails on an empty list; merge sort's slicing uses O(n) extra memory, which is not mentioned although the definition mentions memory; the travelling salesman link is illustrative only. Re-read the live page to confirm each of these before quoting it.",
+    "The Python code shown in this lesson is Academy material and was run."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What Big-O describes",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Big-O notation describes how an algorithm's runtime or memory use grows as the input size n increases. The page says it 'focuses on scalability rather than exact speed'. It is a statement about growth, not a measure of how fast any given program runs."
+      },
+      {
+        "heading": "The seven classes",
+        "sourceCategory": "Official CTO Framework",
+        "body": "O(1), constant: runtime does not depend on input size. Example: returning the first element, arr[0].\nO(log n), logarithmic: typical of divide-and-conquer. Example: binary search, halving the range each step and returning an index or -1.\nO(n), linear: runtime grows in proportion to input. Example: one pass to find the maximum.\nO(n log n), linearithmic: associated with efficient sorting. Example: merge sort, splitting recursively and merging sorted halves.\nO(n^2), quadratic: often nested loops. Example: checking every pair of elements for a duplicate, returning early if one is found.\nO(2^n), exponential: typical of brute-force recursion. Example: naive recursive Fibonacci.\nO(n!), factorial: arises in permutation-based solutions. Example: generating all permutations of a list, with travelling salesman mentioned as a related case.\n\nThe page gives these as seven Python snippets and does not derive the complexities."
+      },
+      {
+        "heading": "Counting instead of asserting",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The best way to feel a class is to count operations. These counts come from running code.\n\nBinary search over 1,000 items needs at most 10 steps; over 1,000,000 items, at most 20. A thousand times more data costs ten more steps. That is O(log n).\n\nA duplicate check that compares every pair does n(n-1)/2 comparisons in the worst case: 499,500 for n = 1,000; 49,995,000 for n = 10,000; 499,999,500,000 for n = 1,000,000. Ten times the data costs about a hundred times the work. That is O(n^2), and it is why a function that is instant in a test with 100 rows can fall over in production with a million. A single pass that remembers what it has seen (a set) does about n operations instead, so for n = 1,000 it is about 1,000 versus 499,500.\n\nNaive recursive Fibonacci made 177 calls for n = 10, 21,891 for n = 20, 242,785 for n = 25 and 2,692,537 for n = 30. Each step up multiplies the calls by about 1.618, which is why the page's O(2^n) label is a loose upper bound. Remembering results (memoisation) cut n = 30 to 59 calls.\n\nPermutations grow faster still: 10! is 3,628,800 and 12! is 479,001,600."
+      },
+      {
+        "heading": "What the notation hides",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page does not cover these, and each changes real decisions.\n\nWorst, average and best case. The duplicate check returns early when it finds a match; its O(n^2) is the worst case, reached when there is no duplicate. Always say which case you mean.\n\nSpace. Time is only half the cost. Merge sort as written on the page copies slices, so it uses extra memory proportional to n. A faster algorithm that needs more memory than the machine has is not faster.\n\nConstants and small inputs. Big-O drops constants. An O(n log n) algorithm with a heavy constant can lose to an O(n^2) one for small n, which is why library sorts often switch method for tiny arrays. If n is always small, the simpler code may be the right answer.\n\nHardware and data layout. Cache behaviour and I/O often dominate real runtime. A database query that does one round trip per row is slow because of the round trips, not the loop count.\n\nSo the discipline is: use Big-O to find what will break as data grows, then measure the real thing at realistic sizes before deciding."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Choosing between two ways to check for duplicate orders (illustrative, not Cretek data)",
+      "body": "A nightly job must reject a batch if any order id appears twice. Option A compares every pair. Option B walks the list once, adding each id to a set and rejecting on the first repeat.\n\nCounting, worst case (no duplicate): A makes n(n-1)/2 comparisons, B does about n set operations. For n = 1,000: 499,500 versus about 1,000. For n = 10,000: 49,995,000 versus about 10,000. At 100 rows both finish instantly, which is why A passes its tests.\n\nNow the questions the page does not answer. Space: B holds n ids in memory, A holds none extra. For a million ids that may be a few tens of megabytes, which is fine; for a billion it would not be. Case: the batch is usually clean, so the worst case is the common case and the early exit rarely helps. Constants: for n of a few dozen, A is as fast and simpler.\n\nDecision: use B. The batch can grow, the worst case is typical, and the memory cost is small at expected sizes. Record the assumption (expected maximum n and available memory) and the trigger to revisit: if the batch exceeds the size at which memory becomes a concern, switch to sorting by id and comparing neighbours, which is O(n log n) time with little extra structure. Then measure at the largest realistic n before trusting the count."
+    },
+    "misconceptions": [
+      "Believing Big-O measures speed. It describes growth with input size.",
+      "Quoting O(n^2) without saying it is a worst case when the code exits early.",
+      "Ignoring memory. The page's own definition mentions it but gives no examples.",
+      "Assuming a better class always wins. Constants and small inputs can reverse the order.",
+      "Calling any recursive halving algorithm divide-and-conquer. Binary search follows only one half.",
+      "Treating O(2^n) as exact for naive Fibonacci. The growth is closer to 1.618 per step.",
+      "Optimising by class without measuring. I/O, caches and round trips often dominate."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a product manager why a feature that is fast in testing can fail at ten times the data, using one operation count."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "bo-1",
+      "question": "What does the framework page say Big-O notation focuses on?",
+      "options": [
+        "Exact running time in milliseconds",
+        "Scalability, meaning how runtime or memory grows with input size, not exact speed",
+        "Memory use only",
+        "The best-case runtime"
+      ],
+      "answer": 1,
+      "why": "The page says Big-O describes how runtime or memory grows with input size and 'focuses on scalability rather than exact speed'."
+    },
+    {
+      "id": "bo-2",
+      "question": "Which class does the page give for a function that checks every pair of elements for a duplicate?",
+      "options": ["O(n)", "O(n log n)", "O(n^2)", "O(2^n)"],
+      "answer": 2,
+      "why": "Nested loops over pairs give O(n^2). It is the worst case, reached when there is no duplicate, which the page does not state."
+    },
+    {
+      "id": "bo-3",
+      "question": "How many comparisons does a check of every pair make in the worst case for n = 1,000?",
+      "options": ["1,000", "10,000", "499,500", "1,000,000"],
+      "answer": 2,
+      "why": "n(n-1)/2 = 1,000 x 999 / 2 = 499,500."
+    },
+    {
+      "id": "bo-4",
+      "question": "Binary search over 1,000,000 sorted items needs at most about how many steps?",
+      "options": ["20", "1,000", "500,000", "1,000,000"],
+      "answer": 0,
+      "why": "Each step halves the range, so about log2(1,000,000), which is under 20 halvings, 20 steps counting the final check."
+    },
+    {
+      "id": "bo-5",
+      "question": "Which of these is something the Big-O page does NOT cover?",
+      "options": [
+        "The seven complexity classes",
+        "Python examples of each class",
+        "Best, average and worst-case distinctions",
+        "The definition of Big-O as growth with input size"
+      ],
+      "answer": 2,
+      "why": "The page does not address best, average and worst cases, even though its early-exit examples make the distinction relevant. It also leaves out space analysis, constants and amortised analysis."
+    },
+    {
+      "id": "bo-6",
+      "question": "Naive recursive Fibonacci made 2,692,537 calls for n = 30 and 242,785 for n = 25. Roughly how much does each extra step multiply the calls?",
+      "options": ["About 1.1", "About 1.618", "About 2.0 exactly", "About 3"],
+      "answer": 1,
+      "why": "(2,692,537 / 242,785)^(1/5) is about 1.618. The page's O(2^n) is a valid but loose upper bound."
+    }
+  ],
+  "build": {
+    "business": "Cretek's systems will meet more data than they were tested with. A CTO must know which operations will break first and be able to show it with numbers. This is the performance-reasoning capability in the CTO Operating System.",
+    "problem": "Find, measure and fix one real scaling problem in a Cretek codebase, and produce a tested complexity report tool.",
+    "requirements": [
+      "Choose one real operation whose input will grow (a nightly job, a report, a search, an import). Record the current and expected maximum input size, with the source of each figure or labelled ASSUMPTION",
+      "State the time and space complexity of the current implementation, and which case (best, average, worst) you mean",
+      "Measure the real runtime and memory at no fewer than four input sizes spanning at least three orders of magnitude, on the same machine, with the method stated and the runs repeated. Report medians, not single runs",
+      "Show that the measurements fit the stated class, and say plainly if they do not, with the likely reason (I/O, caches, constants)",
+      "Implement a better approach or justify keeping the current one. Measure it the same way and compare time and memory",
+      "Write down the decision, the assumption about maximum n, and the trigger that would bring a different approach back",
+      "A benchmark tool that takes a function and a list of input sizes, runs it a stated number of times, and reports the median time per size and the growth ratio between sizes. Automated tests required, including a constant-time function, a linear one, a quadratic one (the ratio between sizes must be close to the expected value within a stated tolerance), an empty size list (reject), a zero-run request (reject), and a function that raises (report, do not hide)",
+      "A one-page summary for an engineering lead, led by the numbers",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not use customer data to benchmark. Generate synthetic inputs and label them SIMULATED, or use anonymised copies approved by the data owner",
+      "Do not change production systems to measure. Use a copy or a local run",
+      "Do not claim a complexity class from one timing. Fit it from several sizes",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering how inputs are generated, how many repetitions, why median not mean, how memory is measured, and one alternative you rejected, for example timing a single run on one size.",
+    "tasks": [
+      "Choose the operation and record the expected input growth",
+      "State its complexity and the case you mean",
+      "Build the benchmark tool with tests",
+      "Measure at four or more sizes and compare with the claimed class",
+      "Implement or justify the alternative and measure it the same way",
+      "Record the decision, the assumption and the trigger",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "Operation, sizes and complexity (with case) are stated and sourced or labelled assumptions",
+      "At least four sizes across three orders of magnitude were measured with repeats and medians",
+      "Fit to the claimed class is shown or the mismatch explained",
+      "A comparison with an alternative uses the same method",
+      "The benchmark tool tests pass, including the failure cases",
+      "The decision records the assumption and a revisit trigger",
+      "No customer data is used"
+    ],
+    "deliverable": "The benchmark tool with tests, the measurements, the decision record and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Staff engineer",
+    "scenario": "A staff engineer is reviewing your performance change. They distrust claims that are not backed by measurements.",
+    "prompts": [
+      "What is the complexity of this operation, and which case are you quoting?",
+      "How did you measure it, and why should I trust the numbers?",
+      "Your fix uses more memory. At what size does that become a problem?",
+      "Would you still make this change if n will never exceed a few hundred?",
+      "The measurements do not match the class you claimed. What is going on?",
+      "What would make you revisit this decision?"
+    ],
+    "rubric": [
+      { "criterion": "Correct complexity reasoning with the case and space stated", "weight": 0.25 },
+      { "criterion": "Sound measurement method: sizes, repeats, medians, honest fit", "weight": 0.35 },
+      { "criterion": "Judgement about constants, small inputs, memory and triggers to revisit", "weight": 0.25 },
+      { "criterion": "Clear communication to a technical reviewer", "weight": 0.15 }
+    ]
+  }
+}

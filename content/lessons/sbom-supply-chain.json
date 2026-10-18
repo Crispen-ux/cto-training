@@ -1,0 +1,209 @@
+{
+  "id": "sbom-supply-chain",
+  "moduleId": "tech-security",
+  "pillar": "Tech",
+  "title": "Software bills of materials and supply chain risk",
+  "estimatedMinutes": { "learn": 40, "build": 260, "defend": 30 },
+  "objectives": [
+    "Explain what an SBOM is, what it contains, and why transitive dependencies are the point",
+    "Use an SBOM to answer 'which of our products contain this component?' when a vulnerability is disclosed",
+    "Separate what an SBOM tells you (presence) from what it does not (exploitability, fix status)",
+    "Challenge the page's unsupported claims and tool-versus-format mix-up, and say what is unverified",
+    "Defend an SBOM process, including how the SBOMs themselves are protected, to a customer's security reviewer"
+  ],
+  "prerequisites": ["least-privilege-access-control"],
+  "unlock": { "prerequisites": [{ "lessonId": "least-privilege-access-control", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Software Bill of Materials (SBOM)",
+      "url": "https://www.ctoframework.com/tech/security-compliance/sbom",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The SBOM page does not cover required or minimum SBOM fields, format versions or syntax, a sample SBOM file, step-by-step generation or CI/CD configuration, how SBOMs relate to vulnerability exchange formats or to signing and attestation, regulations beyond U.S. Executive Order 14028 (the page mentions only unnamed 'similar regulatory movements' elsewhere), costs, effort or organisation-wide rollout, limitations such as how well tools handle compiled binaries, containers or runtime-loaded components, or any evidence for its claims.",
+    "The retrieved summary flagged these issues on the page, which the Academy agrees with: SPDX and CycloneDX are listed under 'Tools' although they are formats (standards), not generators; the claim that EO 14028 'requires vendors' to provide SBOMs is incomplete (the summary noted from general knowledge, unverified here, that the order mainly directed agencies to develop guidance and that requirements reached vendors through later guidance); and the claim that organisations with SBOMs had a 'significant advantage' during Log4Shell is asserted without evidence. Read the order and the current federal guidance yourself before quoting any requirement.",
+    "The page's meta description is cut off in previews ('This includes:'). This does not affect the body.",
+    "The dependency demonstration in this lesson uses invented components and products and was run as Python. It models inventory and lookup only; it does not read any real package manager or SBOM file, and it does not model version ranges.",
+    "Nothing here is legal, regulatory or contractual advice. Licence conclusions need legal advice."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What an SBOM is",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A software bill of materials is a machine-readable inventory of the components that make up an application. The page compares it to a supply chain manifest in manufacturing, where each part's origin, quality and specification should be known.\n\nIt contains: open-source and proprietary libraries; version numbers; associated licences; direct and transitive dependencies; and metadata such as suppliers and cryptographic hashes.\n\nFormats and tools. The page names SPDX as a standard for SBOM formats and lists CycloneDX alongside the tools, though CycloneDX is also a format. It says the choice of format should suit your ecosystem and partners. Tools named: Syft for generation, and Snyk, Black Duck and GitHub Dependabot as software composition analysis tools. It recommends integrating them into CI/CD so SBOMs update with each release."
+      },
+      {
+        "heading": "What it is used for",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Cybersecurity: identify vulnerable components when a new vulnerability is disclosed. The page cites Log4Shell as an example of a widespread library vulnerability.\nCompliance: meet government and contractual requirements and check licence obligations (the page's example is GPL code in a closed-source product). It mentions U.S. Executive Order 14028 as requiring vendors that sell to federal agencies to provide SBOMs, and unnamed similar regulatory movements in healthcare, financial services and critical infrastructure.\nSupply chain risk: assess third-party software, support supplier due diligence, and plan remediation for unmaintained or deprecated components.\nOperations: faster incident response, audit support, end-of-life planning and assessing acquisition targets in M&A due diligence.\n\nChallenges the page names: data accuracy and completeness, especially capturing transitive dependencies; embedding SBOM generation in the development lifecycle so it scales; treating SBOMs as sensitive, because a mismanaged one can reveal exploitable metadata; and choosing a format that works with your partners."
+      },
+      {
+        "heading": "Why transitive dependencies are the point",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Developers know the libraries they chose. Most of the code in an application arrives through the libraries those libraries chose. The risk usually sits there, in components nobody on the team picked or has heard of.\n\nThe demonstration below uses invented components and products and was run. Three products: a portal with direct dependencies webfw, logger and pdf-lib; a quotation tool with logger and csv-tool; and a reports tool with chart-lib. Underneath, webfw brings http-core and logger, pdf-lib brings font-kit, csv-tool brings text-utils, and chart-lib also brings text-utils.\n\nResolving the whole tree: the portal has 3 direct dependencies and 5 components in total (2 transitive); the quotation tool has 2 direct and 3 in total (1 transitive); the reports tool has 1 direct and 2 in total (1 transitive).\n\nNow a vulnerability is announced in text-utils. A list of direct dependencies finds it in no product at all: nobody chose it. The resolved inventory finds it in two products, the quotation tool and the reports tool. For logger, the inventory finds the portal and the quotation tool. That difference, between 'none' and 'two', is the value of an SBOM, and it is why the page lists data accuracy and transitive coverage as the main challenge."
+      },
+      {
+        "heading": "What an SBOM does not tell you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page treats the SBOM as an answer. It is an input. Keep these limits in mind; the page covers none of them.\n\nPresence is not exploitability. An SBOM says a vulnerable component is in the product. It does not say the vulnerable function is reachable, or that your configuration exposes it. Triage is still needed, and so is a way to record 'present but not affected' with a reason so the question is not asked again.\n\nIt is only as current as its last build. An SBOM from the release process describes that release. Components change between builds; a stale SBOM can say a fixed library is still present, or miss a new one.\n\nIt may miss things. Tools differ in how well they see compiled binaries, containers, vendored copies and components loaded at runtime. The page names this as a data accuracy challenge but gives no guidance. Test your tool against a build whose contents you know.\n\nIt needs matching. A list of components is useful once matched to vulnerability data. Matching by name and version produces false positives and false negatives, so expect to curate.\n\nIt is sensitive. A full inventory is a map of your attack surface. Treat it as confidential, share it deliberately (with customers or auditors under agreement), and record who received which version."
+      },
+      {
+        "heading": "Reading the page's claims critically",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Three claims deserve checking before you repeat them.\n\nThe regulation. 'Requires vendors to provide SBOMs' may be a simplification of how the order operated. Do not tell a customer or a board that you are legally required (or not required) to produce an SBOM on the strength of this page. Read the primary source and ask whoever advises you on compliance.\n\nThe Log4Shell advantage. The page says organisations with SBOMs had a significant advantage but gives no evidence. The logic is plausible (the demonstration above shows why), but plausible is not measured. If you want to claim a faster response, measure your own: time from a disclosure to a list of affected products.\n\nTools and formats. SPDX and CycloneDX are formats. Syft is a generator. A procurement paper that confuses them will be wrong in a way that costs money. Choose the format first, based on what your customers and partners accept, then the tool that emits it.\n\nFinally the licence example. GPL code in a closed-source product is a real concern, but whether a given use triggers an obligation depends on the licence and how the code is used. An SBOM lets you find the question; it does not answer it. That needs legal advice."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A disclosure, answered in minutes instead of days (invented components, not Cretek data)",
+      "body": "Monday 09:00: a vulnerability is announced in text-utils. The question from the managing director: which of our products are affected, and what do we tell customers?\n\nWithout an inventory, the team searches repositories by hand, asks developers from memory, and finds nothing in direct dependency files because nobody chose text-utils. The honest answer would be 'we do not know yet'.\n\nWith resolved SBOMs stored per product and per release, one query returns two products: the quotation tool and the reports tool. For each, the SBOM says which release contains it and which component brought it in (csv-tool for the quotation tool, chart-lib for the reports tool), so the fix is known: upgrade that parent or override the version.\n\nThen the triage the SBOM cannot do. Is the vulnerable function reachable in either product? The quotation tool uses text-utils only on trusted internal files; the reports tool passes user-supplied text through it. The reports tool is treated as affected and patched first; the quotation tool is patched in the next release and recorded as 'present, low exposure, reason stated' with a review date.\n\nCommunication. Customers who hold the reports tool are told what happened, what was done and when. The SBOMs themselves are not sent to anyone without agreement.\n\nMeasure it: time from announcement to the list of affected products (target agreed in advance; label the target an assumption until you have data), and time to patch for each product. The ability to answer in minutes is the capability; the page asserts the advantage, and these measurements prove yours.\n\nThe process after: add the component to a watch list, rebuild, regenerate the SBOMs and confirm the fixed version appears. Do not assume the fix worked until the new SBOM says so."
+    },
+    "misconceptions": [
+      "Believing the list of direct dependencies is the SBOM. The risk is largely in the transitive ones.",
+      "Treating 'present' as 'exploitable'. Triage is still required.",
+      "Confusing SPDX and CycloneDX (formats) with generators and scanners.",
+      "Generating an SBOM once and filing it. It describes one build.",
+      "Quoting the page as legal authority on SBOM requirements.",
+      "Emailing a full SBOM to anyone who asks. It maps your attack surface.",
+      "Trusting a tool without testing it on a build whose contents you know."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a customer's security reviewer how you would tell them whether a newly announced vulnerability affects you, and how fast."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sb-1",
+      "question": "How does the page describe an SBOM?",
+      "options": [
+        "A list of the company's employees",
+        "A machine-readable inventory of the components that make up an application",
+        "A penetration test report",
+        "A cloud billing statement"
+      ],
+      "answer": 1,
+      "why": "The page calls it a machine-readable inventory of an application's components, compared to a supply chain manifest in manufacturing."
+    },
+    {
+      "id": "sb-2",
+      "question": "A vulnerability is announced in a library that no developer chose directly. Which view finds the affected products?",
+      "options": [
+        "The list of direct dependencies only",
+        "The resolved inventory including transitive dependencies",
+        "The sales pipeline",
+        "The cloud bill"
+      ],
+      "answer": 1,
+      "why": "In the demonstration, a direct-only view finds text-utils in no product, while the resolved inventory finds it in two. Transitive dependencies are why the SBOM matters."
+    },
+    {
+      "id": "sb-3",
+      "question": "In the demonstration the portal has 3 direct dependencies and 5 components in total. How many are transitive?",
+      "options": ["1", "2", "3", "5"],
+      "answer": 1,
+      "why": "5 total minus 3 direct is 2 transitive (http-core and font-kit)."
+    },
+    {
+      "id": "sb-4",
+      "question": "Which statement about SPDX and CycloneDX is accurate?",
+      "options": [
+        "They are scanners that find vulnerabilities by themselves",
+        "They are formats or standards for SBOMs, not generators; the page lists CycloneDX under tools, which is a mix-up",
+        "They are cloud providers",
+        "They are licences"
+      ],
+      "answer": 1,
+      "why": "SPDX and CycloneDX are formats. Generators such as Syft produce SBOMs in them. The page lists CycloneDX under tools, mixing the two."
+    },
+    {
+      "id": "sb-5",
+      "question": "An SBOM shows a vulnerable component is present in your product. What does that establish?",
+      "options": [
+        "That the product is certainly exploitable",
+        "That the component is present; whether it is exploitable needs triage",
+        "That the vulnerability is fixed",
+        "That no action is needed"
+      ],
+      "answer": 1,
+      "why": "Presence is not exploitability. The SBOM is an input to triage: is the vulnerable function reachable, and is your configuration exposed?"
+    },
+    {
+      "id": "sb-6",
+      "question": "Which of these does the SBOM page NOT cover?",
+      "options": [
+        "That an SBOM includes direct and transitive dependencies",
+        "That SBOMs should be treated as sensitive",
+        "Required minimum SBOM fields, a sample file and step-by-step CI/CD configuration",
+        "That tools should be integrated into CI/CD"
+      ],
+      "answer": 2,
+      "why": "The page gives no required fields, format versions, sample files or configuration steps. It does say SBOMs are sensitive and should be generated in CI/CD."
+    }
+  ],
+  "build": {
+    "business": "Customers, auditors and acquirers ask what is inside Cretek's software. A CTO should be able to answer, and to find affected products when a vulnerability is announced. This is the supply chain capability in the CTO Operating System.",
+    "problem": "Generate and maintain real SBOMs for two Cretek products, build a tested query tool that answers 'which products contain this component?', and write the handling and triage process.",
+    "requirements": [
+      "Choose two real Cretek products or repositories. Record the language, package manager and how each is built and deployed",
+      "Choose an SBOM format with a reason (what your customers or partners accept) and a generator, and state the versions used. Generate an SBOM for each product, including transitive dependencies",
+      "Test the generator on a build whose contents you know: compare its output with the dependency lock file and list any component it missed or invented. Say what it cannot see (for example vendored code, containers or runtime-loaded components) and how you checked",
+      "Add SBOM generation to the build pipeline so each release produces a new SBOM stored with the release, and show it running",
+      "Count direct versus transitive components per product and name the three most widely shared components",
+      "Build a query tool that loads the SBOMs and returns the products and releases containing a given component (and which parent brought it in), and reports 'not found' clearly. Automated tests required, including a transitive-only component, a component in several products, an unknown component, an empty SBOM, a malformed file (reject), a dependency cycle (handle without hanging) and duplicate entries",
+      "Simulate a disclosure: pick a real component in your SBOMs, treat it as newly vulnerable (SIMULATED), and measure the time from 'announcement' to the list of affected products and to the triage record",
+      "A triage record format: present, reachable or not, exposed or not, decision, owner, review date. Fill it for the simulated disclosure",
+      "A licence review of the components found, listing any copyleft or unclear licences, with a statement that legal advice is needed before drawing conclusions",
+      "A handling note: where SBOMs are stored, who can read them, who may receive them externally and under what agreement, how long they are kept and how they are protected",
+      "A one-page summary for a customer's security reviewer, led by how fast you can answer and what you cannot see",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not publish or send SBOMs outside the organisation without an agreed decision and a record of recipients",
+      "No credentials, secrets or customer data in the SBOMs, the repository or the tests",
+      "Do not claim a product is not affected without a recorded reason",
+      "Do not draw licence conclusions. Record findings and refer them for legal advice",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the format choice, the generator, where SBOMs are stored, how the query tool resolves transitive dependencies and one alternative you rejected, for example scanning repositories on demand when a disclosure arrives.",
+    "tasks": [
+      "Choose the products, the format and the generator",
+      "Generate the SBOMs and test the generator against a known build",
+      "Add generation to the pipeline",
+      "Count direct versus transitive components",
+      "Build the query tool with tests",
+      "Run the simulated disclosure and fill the triage record",
+      "Write the licence review, the handling note and the one-page summary"
+    ],
+    "acceptance": [
+      "Two products have SBOMs that include transitive dependencies",
+      "The generator was tested against a known build and its blind spots are listed",
+      "Each release produces a stored SBOM through the pipeline",
+      "The query tool tests pass including the cycle and malformed cases",
+      "The simulated disclosure has measured times and a triage record",
+      "The licence review makes no legal conclusions",
+      "The handling note covers storage, access, sharing and retention",
+      "No secrets or customer data in the repository"
+    ],
+    "deliverable": "The SBOMs, pipeline step, query tool with tests, simulated disclosure record, licence review, handling note and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Customer security reviewer",
+    "scenario": "A customer's security reviewer has asked whether a vulnerability announced this morning affects the software you supply to them. They want an answer and the evidence behind it.",
+    "prompts": [
+      "Are you affected, and how do you know?",
+      "How did you find components that nobody on your team chose?",
+      "Present is not exploitable. How did you decide for this one?",
+      "How current is your SBOM, and what could it be missing?",
+      "Who has received your SBOMs, and how are they protected?",
+      "How fast could you answer this for every product you ship?"
+    ],
+    "rubric": [
+      { "criterion": "Accurate inventory including transitive dependencies, tested against a known build", "weight": 0.3 },
+      { "criterion": "Triage that separates presence from exploitability, with recorded reasons", "weight": 0.3 },
+      { "criterion": "Honest limits: what the tool cannot see, how current the data is", "weight": 0.2 },
+      { "criterion": "Handling and clear communication to an external reviewer", "weight": 0.2 }
+    ]
+  }
+}

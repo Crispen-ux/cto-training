@@ -1,0 +1,22 @@
+# Normalise line endings in the repository to LF; check out native on Windows.
+# Without this, git warns "LF will be replaced by CRLF" and every file shows
+# as modified when the working tree is re-checked on Windows.
+* text=auto eol=lf
+
+*.ts text eol=lf
+*.tsx text eol=lf
+*.js text eol=lf
+*.json text eol=lf
+*.css text eol=lf
+*.md text eol=lf
+*.csv text eol=lf
+*.svg text eol=lf
+*.mjs text eol=lf
+*.mts text eol=lf
+
+# Binary assets must never be line-ending converted
+*.png binary
+*.jpg binary
+*.ico binary
+*.woff binary
+*.woff2 binary

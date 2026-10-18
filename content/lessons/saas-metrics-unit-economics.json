@@ -1,0 +1,234 @@
+{
+  "id": "saas-metrics-unit-economics",
+  "moduleId": "product-metrics",
+  "pillar": "Product",
+  "title": "SaaS metrics: MRR, churn, NRR, CAC and LTV",
+  "estimatedMinutes": {
+    "learn": 50,
+    "build": 270,
+    "defend": 35
+  },
+  "objectives": [
+    "Define the ten metrics on the page and write the formula the page omits for each",
+    "Build an MRR waterfall and derive net new MRR, gross and net revenue retention, and logo versus revenue churn",
+    "Compute CAC, CAC payback and LTV, and show how sensitive LTV is to churn",
+    "Explain why NRR above 100% can hide customer loss, and why the page's description of NRR as a version of churn is wrong",
+    "Defend a metrics pack to an investor or finance partner, stating every definition and time window"
+  ],
+  "prerequisites": [
+    "roi-business-cases",
+    "business-models-lean-canvas"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "roi-business-cases",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "business-models-lean-canvas",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "SaaS Metrics",
+      "url": "https://www.ctoframework.com/product/analytics/saas-metrics",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page lists ten metrics with a sentence or two each. Its only formula is gross margin, (revenue minus COGS) divided by revenue. It gives no formulas for MRR, CAC, LTV, churn, NRR, conversion, ARPU or growth, no benchmarks, no worked examples, no sources and no time windows. It names no target LTV to CAC ratio and no churn threshold.",
+    "The retrieved summary flagged these points: describing NRR as 'a more comprehensive version of churn' is wrong, because NRR is a revenue retention measure (it includes expansion) while churn is a loss measure; the page links gross margin to profit reinvestment although gross margin is revenue less direct costs, not profit; the claim that higher engagement correlates with higher retention is given without data; and definitions do not distinguish customer (logo) churn from revenue churn or state the period.",
+    "The page does not cover ARR, gross revenue retention, CAC payback, burn rate or burn multiple, cohort analysis, the Rule of 40, data sources, attribution or segmentation. The Academy lesson adds ARR-free versions of the first three and cohorts as a concept; the others are named as gaps.",
+    "All figures, the MRR waterfall, the CAC and LTV calculations and the sensitivity table are Original Academy material built on invented ASSUMPTIONS and run as Python. They describe no real company. The LTV formula used (margin per period divided by churn) assumes constant churn and no discounting and is a screening number, not a forecast."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The ten metrics as the page lists them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page frames these as the measures of a subscription business's viability and growth.\n\nMRR (monthly recurring revenue): predictable subscription revenue; track net new MRR and expansion and contraction MRR. CAC (customer acquisition cost): the cost of winning a customer, including marketing, sales and operations. LTV: total revenue expected over the relationship; the LTV to CAC ratio is described as a sustainability benchmark. Churn rate: the percentage of customers who cancel; high churn is a red flag. NRR: accounts for upgrades, downgrades and renewals; above 100% means existing customers grow revenue faster than it is lost. Conversion rate: the share of prospects who become paying customers, by funnel stage. ARPU: average revenue per customer. Gross margin: (revenue minus COGS) divided by revenue. Engagement and usage: frequency and depth of use, said to correlate with retention. Growth rate: in MRR or customers.\n\nThe page gives no formulas except for gross margin, and no benchmark values."
+      },
+      {
+        "heading": "Supplying the missing formulas",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Always fix a period and a scope. These are the Academy's working definitions, all labelled as such.\n\nMRR waterfall for a month: ending MRR = starting MRR + new + expansion - contraction - churned. Net new MRR = ending - starting.\nLogo churn = customers lost in the period / customers at the start. Revenue churn = MRR lost to cancellation / starting MRR. They differ whenever lost customers are bigger or smaller than average.\nGRR (gross revenue retention) = (starting MRR - contraction - churned) / starting MRR. It cannot exceed 100%.\nNRR = (starting MRR + expansion - contraction - churned) / starting MRR. It can exceed 100%.\nCAC = sales and marketing spend in a period / new customers won in that period (state the lag between spend and win).\nCAC payback (months) = CAC / (new-customer MRR per customer x gross margin).\nLTV = MRR per customer x gross margin / monthly churn, assuming constant churn.\nARPU = MRR / customers. Gross margin = (revenue - COGS) / revenue.\n\nNRR is not 'a more comprehensive churn'. Churn counts what you lost. NRR nets what you lost against what you grew from the same starting group, so a company can lose customers and still show NRR above 100%."
+      },
+      {
+        "heading": "A month, end to end",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Invented numbers. Start: 400 customers, MRR 100,000, so ARPU is 250. During the month: 30 new customers add 12,000 MRR (400 each); existing customers expand by 6,000 and contract by 2,000; 8 customers cancel, taking 3,000 MRR.\n\nEnding MRR = 100,000 + 12,000 + 6,000 - 2,000 - 3,000 = 113,000; net new MRR 13,000; ending customers 422.\nLogo churn = 8 / 400 = 2.0%. Revenue churn = 3,000 / 100,000 = 3.0%: the lost customers averaged 375, above the 250 average, so revenue churn is worse than logo churn.\nGRR = (100,000 - 2,000 - 3,000) / 100,000 = 95%. NRR = (100,000 + 6,000 - 2,000 - 3,000) / 100,000 = 101%.\n\nNow acquisition. Sales and marketing spend of 150,000 for 30 new customers gives CAC 5,000. At 80% gross margin and 400 MRR per new customer, payback = 5,000 / (400 x 0.8) = 15.6 months. LTV = 400 x 0.8 / churn. At 1% monthly churn LTV is 32,000 (LTV to CAC 6.4); at 2% it is 16,000 (3.2); at 3% it is 10,667 (2.1). Churn is the assumption the answer leans on, and a young product knows it least. At 2% monthly churn only about 78% of a cohort remains after a year.\n\nThe page names no target ratio. Do not import one from memory; decide your own threshold from your payback tolerance and cash position and say where it came from."
+      },
+      {
+        "heading": "Where the metrics mislead",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "NRR can mask loss. A few large customers expanding can lift NRR above 100% while many small customers leave. Always show logo churn, GRR and NRR together, and segment by customer size.\n\nBlended averages hide cohorts. A product that improved onboarding in March has two populations. Compare cohorts by start month, not one blended number.\n\nCAC depends on definition. Whether it includes salaries, tools, partner fees or founder time changes it by multiples. State the definition, and the lag between spend and win. Blended CAC hides channels: compute it per channel.\n\nGross margin is not profit. The page links it to reinvestment, but margin is before sales, engineering and administration. A business can have a healthy gross margin and still lose money. The economics lessons already show the full picture.\n\nThe engagement claim. The page says higher engagement correlates with higher retention, with no data. Test it in your own product: compare retention by usage band, and remember that correlation does not show that raising usage raises retention.\n\nGaming. Targets on a single measure invite behaviour that improves it without improving the business: discounting to lift conversion, pushing annual prepayment to flatter churn, or excluding churned trials. Pair each metric with a guardrail."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A board metrics pack for the dependency-ownership service (invented numbers)",
+      "body": "The CEO wants one page for the board. The CTO's job is to make every number reproducible and say what it hides.\n\nStep 1, definitions first. A glossary: MRR counts only recurring subscription fees, excludes one-off services and is measured on the last day of the month; a customer is an account with a paid subscription; churn is cancellation effective in the month; CAC is all sales and marketing cost (including salaries) in the quarter divided by new customers won in the quarter, with a one-quarter lag noted as not applied.\n\nStep 2, the waterfall. Using the month above: starting 100,000, new 12,000, expansion 6,000, contraction 2,000, churned 3,000, ending 113,000.\n\nStep 3, the retention triple. Logo churn 2.0%, GRR 95%, NRR 101%. The pack shows all three. Commentary: two enterprise accounts supplied 4,500 of the 6,000 expansion. Without their expansion, expansion falls to 1,500 and NRR = (100,000 + 1,500 - 2,000 - 3,000) / 100,000 = 96.5%. So the 101% headline depends on two customers, which the board should know.\n\nStep 4, acquisition. CAC 5,000, payback 15.6 months, LTV to CAC 3.2 at 2% monthly churn. A board member asks about a 3:1 rule. The CTO answers that the 3 to 1 figure is a common rule of thumb the framework page does not give, and shows what the ratio would be at 1% and 3% churn instead.\n\nStep 5, guardrails and gaps. Guardrails: logo churn beside NRR, CAC by channel, support tickets per customer beside conversion. Gaps stated: no cohort view yet (two cohorts have under 50 customers), CAC lag not applied, and churn is under six months of history. Decision requested: fund two more months of data before setting a churn target."
+    },
+    "misconceptions": [
+      "Treating NRR as a kind of churn. It nets expansion against loss and can exceed 100%.",
+      "Quoting a target LTV to CAC ratio as if the framework gave one. It does not.",
+      "Using one churn number without saying logo or revenue, and the period.",
+      "Equating gross margin with profit.",
+      "Computing CAC without a stated definition of cost and lag.",
+      "Believing engagement causes retention because the two correlate.",
+      "Presenting LTV as a forecast. It assumes constant churn and no discounting."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a non-technical board member why a company can have NRR of 101% and still be losing customers, using the numbers in this lesson."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sm-1",
+      "question": "Which statement about the page's coverage is accurate?",
+      "options": [
+        "It gives formulas and benchmarks for all ten metrics",
+        "Its only explicit formula is gross margin; it gives no benchmarks or worked examples",
+        "It gives a target LTV to CAC ratio of 3",
+        "It defines churn per month"
+      ],
+      "answer": 1,
+      "why": "The page defines gross margin as (revenue minus COGS) divided by revenue and gives no other formulas, benchmarks, examples or time windows."
+    },
+    {
+      "id": "sm-2",
+      "question": "Starting MRR 100,000; new 12,000; expansion 6,000; contraction 2,000; churned 3,000. What is NRR?",
+      "options": [
+        "95%",
+        "101%",
+        "113%",
+        "119%"
+      ],
+      "answer": 1,
+      "why": "NRR = (100,000 + 6,000 - 2,000 - 3,000) / 100,000 = 101%. New-customer MRR is excluded. GRR, which excludes expansion, is 95%."
+    },
+    {
+      "id": "sm-3",
+      "question": "Why is describing NRR as 'a more comprehensive version of churn' misleading?",
+      "options": [
+        "NRR includes expansion and can exceed 100%; churn measures only loss",
+        "NRR ignores cancellations",
+        "NRR is measured in customers",
+        "They are identical"
+      ],
+      "answer": 0,
+      "why": "NRR is a revenue retention measure that nets expansion against contraction and churn. Churn counts losses only."
+    },
+    {
+      "id": "sm-4",
+      "question": "CAC is 5,000, new-customer MRR is 400 and gross margin is 80%. What is CAC payback?",
+      "options": [
+        "12.5 months",
+        "15.6 months",
+        "20 months",
+        "6.4 months"
+      ],
+      "answer": 1,
+      "why": "5,000 / (400 x 0.8) = 15.6 months."
+    },
+    {
+      "id": "sm-5",
+      "question": "Using LTV = MRR x margin / monthly churn with MRR 400 and margin 80%, what happens to LTV when monthly churn rises from 1% to 3%?",
+      "options": [
+        "It falls from 32,000 to about 10,667",
+        "It falls from 32,000 to 24,000",
+        "It stays the same",
+        "It doubles"
+      ],
+      "answer": 0,
+      "why": "320 / 0.01 = 32,000 and 320 / 0.03 is about 10,667. LTV is very sensitive to churn, which a young product knows least."
+    },
+    {
+      "id": "sm-6",
+      "question": "Logo churn is 2% but revenue churn is 3%. What does that tell you?",
+      "options": [
+        "The customers who left were larger than average",
+        "The customers who left were smaller than average",
+        "The data is wrong",
+        "NRR must be below 100%"
+      ],
+      "answer": 0,
+      "why": "Revenue lost per lost customer (375) exceeded average MRR per customer (250). Always show both measures."
+    }
+  ],
+  "build": {
+    "business": "Investors, the board and the CEO will ask for subscription metrics. A CTO who cannot reproduce them, or does not know what they hide, loses credibility. This is the product metrics capability in the CTO Operating System.",
+    "problem": "Build a metrics pack for one real or realistically simulated Cretek subscription product, with written definitions, a tested calculator, a sensitivity analysis and an honest statement of what the numbers cannot show.",
+    "requirements": [
+      "Write a metrics glossary: MRR, customers, logo churn, revenue churn, GRR, NRR, CAC (with the cost included and any lag), ARPU, gross margin and LTV, each with its formula, period and scope",
+      "Assemble a monthly MRR waterfall for at least six months from real data, or from data clearly labelled SIMULATED with the generation method",
+      "Compute logo churn, revenue churn, GRR and NRR for each month, and show NRR with and without the largest expanding accounts",
+      "Compute CAC per channel and blended, CAC payback and LTV with a sensitivity table over churn and gross margin",
+      "Segment at least one metric by customer size and say what the segmentation reveals",
+      "State two ways each of your headline metrics could mislead, and the guardrail metric paired with each",
+      "A metrics calculator that takes a month's waterfall inputs and returns the derived measures. Automated tests required, including known values from the worked example (NRR 101%, GRR 95%, logo churn 2%, revenue churn 3%), zero starting MRR (reject), negative inputs (reject), churn of 0 for LTV (return an explicit 'undefined' result, not infinity or a crash) and GRR never above 100%",
+      "A decision memo: which two decisions this pack supports and which it cannot support yet",
+      "A one-page summary for the board, led by the retention triple and what is not yet known",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No real customer names or contract values in shared materials unless approved",
+      "Do not quote benchmarks without a cited source and date",
+      "Do not use blended figures where a segment would change the story",
+      "Do not present LTV as a forecast",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the data source, the definitions, the calculator, the segmentation and one alternative you rejected, for example reporting only NRR.",
+    "tasks": [
+      "Write the glossary and settle every definition",
+      "Assemble and check the data",
+      "Build the calculator with tests",
+      "Compute the metrics, segments and sensitivities",
+      "Identify misleading risks and guardrails",
+      "Write the decision memo and the board summary"
+    ],
+    "acceptance": [
+      "Every metric has a formula, period and scope",
+      "At least six months of waterfall data is labelled by source",
+      "Logo churn, revenue churn, GRR and NRR are all reported, with NRR also shown excluding the largest expanders",
+      "A sensitivity table exists for LTV",
+      "Calculator tests pass including the rejection and undefined cases",
+      "The memo states what the pack cannot yet support",
+      "No unsourced benchmarks"
+    ],
+    "deliverable": "The glossary, data, calculator with tests, analysis, decision memo and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Investor",
+    "scenario": "An investor is reviewing your subscription metrics and wants to know whether growth is healthy and whether the numbers can be trusted.",
+    "prompts": [
+      "How do you define churn, and why are logo churn and revenue churn different?",
+      "Your NRR is above 100%. Who is driving it, and what does it hide?",
+      "How is CAC calculated, and what is excluded?",
+      "How sensitive is your LTV to churn, and how sure are you of your churn figure?",
+      "Which numbers in this pack would you not yet rely on?",
+      "How could someone game this metric, and what stops them?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Clear, reproducible definitions with period and scope",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Correct calculation and honest use of retention measures, including what NRR hides",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Sensitivity, segmentation and open acknowledgement of limits and gaming risks",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Clear communication to an investor",
+        "weight": 0.15
+      }
+    ]
+  }
+}

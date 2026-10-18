@@ -1,0 +1,215 @@
+{
+  "id": "iac-golden-path",
+  "moduleId": "tech-cloud-sre",
+  "pillar": "Tech",
+  "title": "Infrastructure as code and the golden path",
+  "estimatedMinutes": { "learn": 50, "build": 300, "defend": 35 },
+  "objectives": [
+    "Explain declarative versus imperative infrastructure, state, idempotency and drift",
+    "Compare the IaC tools the page names and the trade-off each carries",
+    "Show with a run why an unchanged configuration produces no changes and what drift looks like",
+    "Describe what a golden path contains and the principles that keep it from becoming a mandate",
+    "Defend an IaC and golden path plan, including what you will not pave yet"
+  ],
+  "prerequisites": ["medallion-file-formats"],
+  "unlock": { "prerequisites": [{ "lessonId": "medallion-file-formats", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Infrastructure as Code",
+      "url": "https://www.ctoframework.com/tech/devops-operations/infrastructure-as-code",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Golden Path",
+      "url": "https://www.ctoframework.com/tech/devops-operations/golden-path",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The IaC page contains no code, no cost, performance, adoption or incident figures, and its GitOps section ('Provisioning Pipeline (GitOps)') is one sentence. It does not cover specific GitOps tools or the pipeline workflow, drift detection and remediation, rollback or migration from manual infrastructure, state migration, IaC testing beyond a passing mention of unit tests, secrets management beyond a warning about state files, other options such as Bicep, ARM, Crossplane or Helm, team sizing, or the linked Kubernetes, Pets vs Cattle and Infrastructure Models pages.",
+    "The retrieved summary flagged these claims on the IaC page, which the Academy agrees with: that IaC 'eliminates' drift (it reduces it; manual out-of-band changes still cause drift unless detected); that Dev, Staging and Production are identical (an ideal, not a guarantee); the unsupported claim that a full stack can be redeployed to another region 'in minutes' with no conditions or RTO figure; Ansible classed as imperative (often described as procedural or hybrid, with idempotent modules); and 'zero changes' for an unchanged configuration, which holds only if nothing outside IaC has altered the resources. Re-read the live page to confirm each.",
+    "The licensing history (HashiCorp moving Terraform to a business source licence and the community fork OpenTofu under the Linux Foundation) is the page's statement and was not independently checked. Verify before relying on it for a procurement or legal decision.",
+    "The Golden Path page credits Spotify's R&D engineering blog (2020) with pioneering the pattern, with no further history, and gives no team structure or cost, implementation steps or timelines, reference architectures, concrete metric targets or measurement methods, exception governance, template versioning or lifecycle, failure cases or criticism, or evidence for its benefits. Its heading 'Golden Path vs. Bespoke (Off-Road) Development' has no content. Claims such as 'minutes rather than days' are unsupported.",
+    "The reconcile demonstration in this lesson is Original Academy material: a toy planner in Python that was run, modelling the idea of declarative planning only. It is not Terraform and does not model provider behaviour."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What IaC is and the two styles",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Infrastructure as Code is provisioning and managing infrastructure through machine-readable definition files instead of manual configuration, interactive tools or ad-hoc scripts. The page frames it as turning infrastructure into a software engineering discipline: version control, automated testing, peer review and continuous delivery. Modern IaC is typically managed with GitOps, where a Git repository is the single source of truth for desired infrastructure state (the page gives one sentence on this).\n\nDeclarative (Terraform, OpenTofu): you describe the end state and the tool works out the changes. The page prefers it for infrastructure because it is self-documenting and easier to reason about. Imperative (Ansible, Bash): you specify the steps; flexible but harder to maintain and more prone to drift, per the page.\n\nCore concepts: state (declarative tools keep a state file mapping configuration to real resources; store it remotely and encrypted, lock it against concurrent changes, and restrict access because it can contain secrets); idempotency (the same operation repeated gives the same result, so an unchanged configuration should produce zero changes and pipelines can run on every commit); and drift."
+      },
+      {
+        "heading": "The tools the page names",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Terraform / OpenTofu: the page calls it the industry standard, using HCL. Pros: vendor-agnostic, large provider ecosystem, mature state management, separate plan and apply. Cons: HCL is restrictive for complex logic; state adds operational overhead.\nTerragrunt: a thin wrapper. Pros: DRY configuration, automatic remote state setup, orchestration across modules. Con: another tool with its own syntax.\nPulumi: infrastructure in general-purpose languages (TypeScript, JavaScript, Python, Go, C#). Pros: loops, conditionals, abstraction, unit testing, IDE support. Con: without enforced standards and review, configurations get complex and hard to debug.\nAWS CDK: AWS-specific, compiling code to CloudFormation. Pro: high-level constructs with sensible defaults (the page's example is a VPC with subnets, route tables and NAT gateways in one line). Cons: AWS lock-in and slower feedback.\nAlso mentioned: Open Policy Agent and Checkov for policy and security scanning, and Infracost for cost estimation.\n\nBenefits listed: repeatable environments; guardrails and compliance-as-code that block insecure configurations in CI/CD; disaster recovery by redeploying a stack elsewhere; and cost estimates in pull requests. Guidance for CTOs: standardise early with small modules scoped to one capability to limit blast radius; do not isolate IaC in one operations team, since developers should write and review infrastructure for their own services; and add linting and static analysis to PR pipelines from the start."
+      },
+      {
+        "heading": "Seeing declarative planning",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page describes idempotency and drift in words. This toy planner makes them visible. It was run, and it models the idea only: it is not Terraform.\n\nThe desired state is three virtual machines and a database. The planner compares desired and actual state and lists creates, updates and deletes.\n\nFirst run against nothing: four creates (vm1, vm2, vm3, db). Second run against what now exists: an empty plan, zero changes. That is idempotency: the configuration is unchanged, so nothing happens, and so the pipeline can run on every commit.\n\nNow someone changes vm2's size by hand in a console and launches an extra vm9. The next plan shows an update for vm2 and a delete for vm9. That is drift made visible. Two lessons follow. IaC does not eliminate drift, as the page says; it makes drift detectable, if you run the plan regularly and read it. And 'zero changes' holds only while nothing outside the code has touched the resources, a condition the page does not state.\n\nThe page also gives no drift procedure. Decide yours: how often a plan runs against live infrastructure, who is alerted to unexpected changes, and whether the response is to revert the resource or to update the code."
+      },
+      {
+        "heading": "What a golden path is",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A golden path, also called a paved road or paved path, is a supported, opinionated route for building and deploying software. It bundles curated tools, templates, integrations and practices into what the page calls 'the fastest, safest, and most reliable route to get code from a developer's local machine into production'. The page frames it as a strategic tool for managing cognitive load, onboarding and compliance, not only a technical standard, and credits Spotify's engineering blog (2020) with pioneering it.\n\nProblems it addresses: rumour-driven development (engineers asking peers how to set up databases, ingress or test environments); bespoke architectures per team; security and compliance gaps from manually integrated checks; and the maintenance overhead of coordinating upgrades to base libraries, security agents or pipeline runners.\n\nWhat it contains: a small curated set of pre-integrated tools; self-service templates for services, databases and environments, delivered through an Internal Developer Portal such as Backstage; embedded security, compliance, cost-estimation and architecture policies as code; and standardised CI/CD, observability, infrastructure configuration and container tooling.\n\nFour principles: opinionated but optional (teams can go off-road but lose central support and own the operations); self-service and automated (a new service in minutes, not through ticket queues); curation over proliferation; and treated as a product, with teams as customers and adoption, satisfaction and pipeline friction guiding improvement. The page ties it to platform engineering: the platform team builds and supports the paved road. Its three measures are adoption rate, developer satisfaction and pipeline friction, with no targets or formulas."
+      },
+      {
+        "heading": "Making it work, and where it fails",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The golden path page has no failure cases, so this is the Academy's reading of its implied warnings.\n\nStart narrow. Pave the most common service type first, not all of them. A path that fits half your services badly is worse than none.\n\nOptional must stay optional, but off-road needs a rule. Write down what support a team keeps and loses when it leaves the path, and who approves exceptions, or the path drifts into a mandate or the support boundary blurs and drains the platform team.\n\nMeasure honestly. The page names adoption, satisfaction and friction but gives no targets. Pick measures you can collect: the share of services created from the template; time from a new repository to a running hello-world in the real environment; the number of manual steps remaining; and a short regular survey. Set a baseline before you change anything, or you cannot show improvement.\n\nFor a small organisation the lesson is proportion. A full developer portal may be more than you need. A single documented template repository, one pipeline definition and one infrastructure module for your standard service is already a golden path. Write down the trigger that would justify more."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Paving one road for a small team (illustrative, not Cretek data)",
+      "body": "A small company runs five customer-facing web applications, each deployed differently: two by hand over SSH, one from a laptop script, two from a pipeline. Onboarding a new developer takes a week of asking colleagues (rumour-driven development, in the page's term).\n\nStep 1, baseline. Count it: 5 applications, 2 of 5 deployed by hand, 3 distinct deployment methods, onboarding about a week (an estimate to be replaced by measurement). These are the numbers you will improve against.\n\nStep 2, choose the first road. The most common service is a web application with a database. Pave that one only.\n\nStep 3, build the minimum. One template repository with the application skeleton, one pipeline that builds, tests, scans for vulnerable dependencies and deploys, and one infrastructure module (defined as code, state stored remotely and encrypted with locking, one module scoped to the database and one to the application, per the page's small-module advice). A policy check blocks a public database or unencrypted storage before deployment.\n\nStep 4, rules. Teams may leave the path. If they do, they own deployment and on-call for that service and get no platform support. Exceptions are approved by the technical lead and recorded.\n\nStep 5, measure. After one quarter: how many of the 5 are on the path (target agreed in advance, an assumption), how many deployments are still manual, how long a new developer takes to ship a hello-world to a test environment, and what the developers say is still painful.\n\nStep 6, drift. A weekly scheduled plan runs against live infrastructure. Any non-empty plan raises an alert, and the response is recorded as 'revert' or 'adopt into code'.\n\nWhat is deliberately not built yet: a developer portal, multiple service types and multi-region deployment, each with a written trigger. That restraint, with the baseline, is what makes the case defensible."
+    },
+    "misconceptions": [
+      "Believing IaC eliminates drift. It makes drift detectable if you run and read the plan.",
+      "Believing 'zero changes' always means the live system matches the code. It does only if nothing outside IaC changed it.",
+      "Treating the page's 'redeploy in minutes' as a measured recovery time. No conditions or figures are given.",
+      "Assuming Ansible is purely imperative. The classification is debated.",
+      "Putting state files in an unprotected place. They can contain secrets.",
+      "Leaving IaC to one operations team. The page says developers should write and review it.",
+      "Paving every service type at once, or letting the golden path become a de facto mandate."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a developer why a plan against live infrastructure shows changes nobody made in code, and what you want them to do about it."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ig-1",
+      "question": "On the page, which description fits declarative infrastructure tools such as Terraform and OpenTofu?",
+      "options": [
+        "You specify the exact steps to run",
+        "You describe the desired end state and the tool calculates the changes",
+        "You write shell scripts that create resources one by one",
+        "You configure resources manually in a console"
+      ],
+      "answer": 1,
+      "why": "Declarative tools take the end state and work out the changes. Imperative tools such as Ansible and Bash specify steps, which the page says are more prone to drift."
+    },
+    {
+      "id": "ig-2",
+      "question": "An unchanged configuration is planned a second time against the resources it created. What should an idempotent declarative plan show?",
+      "options": ["Recreate everything", "Update every resource", "Zero changes", "Delete the state file"],
+      "answer": 2,
+      "why": "An unchanged configuration should produce zero changes, so pipelines can run on every commit. This holds only if nothing outside the code has altered the resources."
+    },
+    {
+      "id": "ig-3",
+      "question": "After someone edits a VM by hand and launches an extra one, the plan shows an update and a delete. What is this?",
+      "options": [
+        "State locking",
+        "Drift made visible",
+        "A policy violation by the tool",
+        "Idempotency failing"
+      ],
+      "answer": 1,
+      "why": "The live system no longer matches the code: that is drift. IaC does not eliminate it, as the page claims, but makes it detectable when the plan is run and read."
+    },
+    {
+      "id": "ig-4",
+      "question": "Which statement matches the page's guidance on where infrastructure code should be written and reviewed?",
+      "options": [
+        "Only by a central operations team",
+        "By developers for their own services, not isolated in one team",
+        "Only by security staff",
+        "It should not be reviewed"
+      ],
+      "answer": 1,
+      "why": "The page warns against isolating IaC in a single operations team, saying developers should write and review infrastructure for their own services."
+    },
+    {
+      "id": "ig-5",
+      "question": "Which is one of the golden path's four principles on the page?",
+      "options": [
+        "Mandatory for every team",
+        "Opinionated but optional: teams can go off-road but lose central support",
+        "Maximise the number of supported tools",
+        "Managed by tickets"
+      ],
+      "answer": 1,
+      "why": "The four principles are opinionated but optional, self-service and automated, curation over proliferation, and treated as a product."
+    },
+    {
+      "id": "ig-6",
+      "question": "Which three measures does the golden path page name, and what does it give for them?",
+      "options": [
+        "Cost, uptime and revenue, with targets",
+        "Adoption rate, developer satisfaction and pipeline friction, with no targets or formulas",
+        "Deployment frequency, lead time and failure rate, with benchmarks",
+        "Lines of code, tickets and commits, with formulas"
+      ],
+      "answer": 1,
+      "why": "The page names adoption rate, developer satisfaction and pipeline friction but gives no targets, formulas or baselines, so you must set your own."
+    }
+  ],
+  "build": {
+    "business": "Cretek's systems are only as dependable as the way they are deployed. A CTO needs deployment that is repeatable, reviewable and measurable. This is the platform capability in the CTO Operating System.",
+    "problem": "Put one real Cretek service type on a defined, tested golden path with its infrastructure as code, a drift check and baseline measurements.",
+    "requirements": [
+      "Choose one real, common Cretek service type (for example a web application with a database). Record how services of this type are deployed today, counting the services and the deployment methods, as the baseline (REAL, or ASSUMPTION where it cannot be counted)",
+      "Define the infrastructure for the chosen service in code in small modules, each scoped to one capability, with remote, encrypted, locked state or a clearly stated reason why not at this size. Do not commit state files or secrets",
+      "A pipeline that builds, tests, scans dependencies and deploys, with at least one policy check that blocks an insecure configuration (for example a public database or unencrypted storage) before deployment, with a test that proves it blocks one",
+      "A template or starter repository that gets a new service of this type to a working deployment in a test environment, and a measured time for a person who has not done it before (or a labelled estimate)",
+      "A drift check: a scheduled or on-demand plan against live infrastructure, how unexpected changes are reported, and the rule for reverting or adopting them. Demonstrate it by making a controlled out-of-band change in a test environment",
+      "A written support boundary: what a team keeps and loses when it leaves the path, who approves exceptions, and where exceptions are recorded",
+      "Measures with a baseline and target set in advance: share of services on the path, manual deployment steps remaining, time to first deployment and a short developer survey",
+      "A reconcile planner: a small program that takes a desired-state file and an actual-state file and outputs creates, updates and deletes. Automated tests required, including an empty desired state, an unchanged state (empty plan), drift in one resource, an extra resource in actual, a malformed file (reject) and a duplicate resource name (reject)",
+      "A list of what you deliberately did not pave (for example a portal, a second service type, multi-region), each with a written trigger",
+      "A one-page summary for the engineering lead, led by the baseline and the measured change",
+      "Every statement about real Cretek systems labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No credentials, keys, state files or customer data in the repository",
+      "Do not change production to demonstrate drift. Use a test environment",
+      "Do not claim the platform 'eliminates' drift or gives identical environments without evidence from your own checks",
+      "Keep the path optional with a written boundary. Do not mandate it",
+      "Must run locally with a single command for the planner and its tests"
+    ],
+    "design": "Write a one-page design covering the service type, modules, state handling, the policy check, the exception rule and one alternative you rejected, for example a full developer portal.",
+    "tasks": [
+      "Record the baseline for the chosen service type",
+      "Define the infrastructure modules and state handling",
+      "Build the pipeline and the blocking policy check with its test",
+      "Build the template and time a first deployment",
+      "Build and demonstrate the drift check",
+      "Build the reconcile planner with tests",
+      "Write the support boundary, measures, not-paved list and one-page summary"
+    ],
+    "acceptance": [
+      "The baseline is recorded and labelled",
+      "Infrastructure is code in small modules with state handled safely and no secrets committed",
+      "The pipeline blocks a deliberately insecure configuration, proven by a test",
+      "A new service reaches a working test deployment from the template, with a measured or estimated time",
+      "Drift is detected in a controlled demonstration and the response rule is written",
+      "The planner tests pass, including the rejection cases",
+      "Support boundary, measures with targets and a not-paved list exist",
+      "All real-system statements labelled"
+    ],
+    "deliverable": "The infrastructure code, pipeline, template, planner with tests, drift check, measures and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Platform engineering lead",
+    "scenario": "A platform lead is reviewing your plan. They have seen golden paths that nobody used and ones that became a bottleneck.",
+    "prompts": [
+      "How many services are on the path today, and how do you know?",
+      "What happens when a team goes off-road, and who decides?",
+      "Show me what happens when someone changes a resource by hand.",
+      "What did you decide not to build yet, and what would change your mind?",
+      "How do you know the path is faster than the bespoke way?",
+      "Where could your state or pipeline leak a secret?"
+    ],
+    "rubric": [
+      { "criterion": "Correct IaC reasoning: state, idempotency, drift and honest limits of the claims", "weight": 0.3 },
+      { "criterion": "A narrow, measured golden path with a baseline and an exception boundary", "weight": 0.3 },
+      { "criterion": "Security and policy controls proven by tests", "weight": 0.2 },
+      { "criterion": "Clear communication to a platform lead", "weight": 0.2 }
+    ]
+  }
+}

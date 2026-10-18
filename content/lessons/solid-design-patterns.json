@@ -1,0 +1,201 @@
+{
+  "id": "solid-design-patterns",
+  "moduleId": "tech-engineering",
+  "pillar": "Tech",
+  "title": "SOLID principles and design patterns",
+  "estimatedMinutes": { "learn": 50, "build": 300, "defend": 35 },
+  "objectives": [
+    "State the five SOLID principles and recognise a violation of each in code",
+    "Name the nine patterns on the framework page, their three categories and the problem each solves",
+    "Refactor a real module to remove one SOLID violation, keeping behaviour and tests green",
+    "Explain when a principle or pattern costs more than it returns",
+    "Defend a design choice in review, including the choice not to add an abstraction"
+  ],
+  "prerequisites": [],
+  "unlock": { "prerequisites": [] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "SOLID Principles",
+      "url": "https://www.ctoframework.com/tech/engineering-practices/solid-principles",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Design Patterns",
+      "url": "https://www.ctoframework.com/tech/engineering-practices/design-patterns",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The SOLID page contains no code blocks. Its examples are prose descriptions (Report split into data and printing; a payment-method interface; Bird and Penguin; Worker split so a Robot need not eat; DatabaseService depending on a DatabaseInterface). The Python code in this lesson is Original Academy material. It was run and its output checked.",
+    "Neither page discusses trade-offs, pitfalls, over-application or when not to apply the ideas. Their stated benefits (maintainability, scalability, flexibility, testability, team efficiency) have no cited evidence. Every cost and failure mode in this lesson is Academy material.",
+    "The Design Patterns page names nine patterns in three categories with one-line descriptions. It gives no worked example for any pattern, no class diagrams, no guidance on choosing between patterns, no origin or reference (such as the original catalogue), and no patterns beyond the nine. Architectural patterns are on a separate page covered in the Tech architecture module.",
+    "The SOLID page credits Robert C. Martin and gives no further history. The page's claim that the principles apply in 'agile and clean-code practice' is not examined here.",
+    "The page frames SOLID in object-oriented terms and does not discuss functional or other paradigms. The paradigm remarks in this lesson are Academy material."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The five principles",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The SOLID page presents five object-oriented design principles credited to Robert C. Martin, meant to make code maintainable, scalable and flexible.\n\nSingle Responsibility (SRP): 'A class should have only one reason to change.' One responsibility makes a class easier to understand, maintain and test. Example on the page: a Report class that both stores data and prints it is split into a data class and a printing class.\n\nOpen/Closed (OCP): software entities should be open for extension but closed for modification. New behaviour comes from extending, typically through inheritance and interfaces, not editing existing code. Example: rather than changing a payment processor for each new payment type, define a payment-method interface and implement it per method (credit card, PayPal).\n\nLiskov Substitution (LSP): objects of a derived class must be substitutable for objects of the base class without altering correctness. Example: a Bird with fly(), and a Penguin subclass that overrides it to fail, breaks the principle; the page suggests redesigning the hierarchy to separate flying and non-flying birds.\n\nInterface Segregation (ISP): clients should not be forced to depend on interfaces they do not use. Example: a Worker interface with work() and eat() is split so a Robot need not implement eat().\n\nDependency Inversion (DIP): high-level modules should not depend on low-level modules; both should depend on abstractions. Example: a DatabaseService depends on a DatabaseInterface, so MySQL can become PostgreSQL without touching high-level logic."
+      },
+      {
+        "heading": "The claimed benefits",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page says applying SOLID improves maintainability and scalability, reduces tight coupling so code is easier to modify or extend, and improves testability because small single-purpose classes are easier to unit test. It offers no evidence or citations for these claims, and no discussion of costs."
+      },
+      {
+        "heading": "Nine patterns in three categories",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The Design Patterns page defines patterns as 'proven solutions to common software design problems' that encapsulate best practice.\n\nCreational (managing object creation): Factory Method encapsulates creation so subclasses decide which class to instantiate; Abstract Factory provides an interface for creating related objects without naming concrete classes; Singleton ensures a class has one instance, which the page suggests suits shared resources such as configuration or logging.\n\nStructural (organising components): Adapter lets incompatible interfaces work together; Decorator adds behaviour to an object dynamically without changing its structure; Proxy controls access to an object, adding security, caching or lazy initialisation.\n\nBehavioural (communication between objects): Observer implements publish-subscribe, notifying dependents of state changes; Strategy encapsulates interchangeable algorithms; Command turns requests into objects, allowing queuing, logging and undo.\n\nStated benefits: scalability, maintainability (less duplication), team efficiency (a shared vocabulary that aids communication and onboarding) and future-proofing."
+      },
+      {
+        "heading": "Seeing the principles in code",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page describes violations in prose; code shows why they hurt. The code below was run and its output checked.\n\nLSP violation:\n\nclass Bird:\n    def fly(self): return 'flying'\nclass Penguin(Bird):\n    def fly(self): raise NotImplementedError('penguins cannot fly')\ndef migrate(birds): return [b.fly() for b in birds]\nmigrate([Bird(), Penguin()])   # raises NotImplementedError\n\nThe caller was written against Bird and is now broken by a subclass. The fix is the page's: do not promise fly() on the base. Give both birds a common move() and let only the flying kind fly.\n\nOCP and DIP together:\n\nclass Card:\n    def pay(self, cents): return f'card:{cents}'\nclass EFT:\n    def pay(self, cents): return f'eft:{cents}'\ndef checkout(method, cents): return method.pay(cents)\n\nA new method (EFT) is added without editing checkout, which depends on the abstraction 'something with pay()', not on any concrete method. Running checkout over Card, PayPal and EFT objects returned card:1000, paypal:1000 and eft:1000."
+      },
+      {
+        "heading": "When principles cost more than they return",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Neither page mentions cost, so this section is the Academy's view.\n\nEvery abstraction is something a reader must learn and a maintainer must keep consistent. An interface with one implementation, added 'in case', is overhead until a second implementation exists. A common rule of practice is to introduce the abstraction when the second case arrives, because then you know what varies. Doing it earlier risks guessing the wrong seam.\n\nSingleton deserves a specific caution: a global instance is shared state, which makes tests depend on each other unless the instance is reset. Injecting the shared object (as in DIP) keeps the benefit of 'one instance' without the global.\n\nThe principles are also written for object-oriented code. In a functional style the same aims (small units, substitutability, depending on contracts) are met with functions and types. Using the vocabulary does not require classes.\n\nA useful review question for any proposed abstraction or pattern: what change does this make cheaper, and have we had that change before? If neither can be answered, leave it out and record the decision."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A review decision: add the abstraction or not (illustrative, not Cretek code)",
+      "body": "A quotation module has a function that builds a quote, applies a tax rule and writes a PDF. A developer proposes splitting it into three classes behind interfaces and adding a TaxStrategy so other countries can be supported.\n\nApply the review questions.\n\nSRP: the function has three reasons to change (pricing rules, tax rules, document layout). Splitting by reason is justified: a layout change should not risk the tax calculation. Do it, as three plain functions or classes, and add tests for each.\n\nOCP / Strategy for tax: what change does it make cheaper, and have we had it before? Suppose the business only operates in one country and has no plan to expand. There is no second case. Do not add TaxStrategy now; keep tax as one clearly named function. Write down the trigger: the first request to quote in a second tax regime. At that point the seam (what varies) is known and the Strategy can be extracted with the tests from step one protecting behaviour.\n\nDIP for the PDF writer: the module should not call the PDF library directly if tests need a real PDF each time. Passing the writer in, even as a plain function parameter, makes the quote logic testable without a file.\n\nOutcome: two of three proposed changes are made, one is deferred with a written trigger. That is a defensible design position: principles applied where they remove a real cost, restraint where they would add one."
+    },
+    "misconceptions": [
+      "Treating SOLID as a checklist to satisfy everywhere. The page gives no cost or limit; the Academy view is that each abstraction must earn its place.",
+      "Believing an interface with one implementation is automatically better design.",
+      "Using inheritance for code reuse when the subclass cannot honour the parent's contract. That is the Penguin problem.",
+      "Reading the page's benefits as measured results. They are asserted, without evidence.",
+      "Using Singleton as a convenient global. It makes tests share state; inject the shared object instead.",
+      "Thinking patterns are only for object-oriented code. Their intent can be met in other styles.",
+      "Applying a pattern because it is on the list, not because a problem called for it."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a junior engineer when you would add an interface and when you would not, using one example from code you know."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sd-1",
+      "question": "A Report class both stores data and prints it. Which principle says to split it, and how does the page describe it?",
+      "options": [
+        "Open/Closed: it should be open for extension",
+        "Single Responsibility: a class should have only one reason to change",
+        "Liskov Substitution: subclasses must be substitutable",
+        "Dependency Inversion: depend on abstractions"
+      ],
+      "answer": 1,
+      "why": "The page's SRP example splits a Report that both stores data and prints it into a data class and a printing class, because a class should have only one reason to change."
+    },
+    {
+      "id": "sd-2",
+      "question": "A Penguin subclass overrides fly() to raise an error, and a caller that works with Bird now fails. Which principle is violated?",
+      "options": ["Single Responsibility", "Interface Segregation", "Liskov Substitution", "Open/Closed"],
+      "answer": 2,
+      "why": "Objects of a derived class must be substitutable for the base class without altering correctness. A Penguin that cannot honour fly() breaks callers written against Bird."
+    },
+    {
+      "id": "sd-3",
+      "question": "A Robot is forced to implement eat() because it implements a Worker interface that includes it. Which principle is violated, and what is the fix?",
+      "options": [
+        "Dependency Inversion; make Worker concrete",
+        "Interface Segregation; split Worker into smaller interfaces such as Workable and Eatable",
+        "Open/Closed; subclass Robot",
+        "Single Responsibility; merge the interfaces"
+      ],
+      "answer": 1,
+      "why": "Clients should not depend on interfaces they do not use. The page splits Worker so a Robot need only implement work()."
+    },
+    {
+      "id": "sd-4",
+      "question": "Which of these is a Structural pattern on the page?",
+      "options": ["Singleton", "Observer", "Adapter", "Strategy"],
+      "answer": 2,
+      "why": "Adapter, Decorator and Proxy are the structural patterns. Singleton is creational; Observer and Strategy are behavioural."
+    },
+    {
+      "id": "sd-5",
+      "question": "Which pattern turns requests into objects so they can be queued, logged or undone?",
+      "options": ["Command", "Proxy", "Factory Method", "Decorator"],
+      "answer": 0,
+      "why": "Command encapsulates a request as an object, which allows queuing, logging and undo."
+    },
+    {
+      "id": "sd-6",
+      "question": "Which statement is accurate about what the Design Patterns page covers?",
+      "options": [
+        "It gives worked examples and code for each pattern",
+        "It discusses pitfalls and when not to use each pattern",
+        "It lists nine patterns with one-line descriptions and gives no worked examples or pitfalls",
+        "It compares each pattern with architectural patterns in detail"
+      ],
+      "answer": 2,
+      "why": "The page lists nine patterns in three categories with brief descriptions and stated benefits, but gives no worked examples, pitfalls, guidance on choosing between patterns, or code."
+    }
+  ],
+  "build": {
+    "business": "Cretek's applications will be maintained for years and handed between people. Code that is cheap to change and to test is a business asset. This is the engineering-quality capability in the CTO Operating System.",
+    "problem": "Refactor one real module in a Cretek codebase to remove a genuine SOLID violation, with tests that prove behaviour is unchanged, and record which proposed abstractions you rejected and why.",
+    "requirements": [
+      "Choose one real module (for example quotation generation, a report, or an integration in the school management application). Record its name, size and why it is hard to change or test",
+      "Write characterisation tests first: tests that pin down the module's current behaviour, including edge cases, and pass before any change",
+      "Identify at least two SOLID issues with evidence in the code (the line or function), and say which principle each breaks",
+      "Refactor to fix at least one, in small steps, with the tests green after each step",
+      "Introduce at most one pattern from the page's nine, with the problem it solves stated in one sentence. If no pattern is justified, say so and why",
+      "List at least two abstractions you considered and rejected, each with the trigger that would bring it back",
+      "Show before-and-after evidence: test count and runtime, the number of reasons the module has to change, and how a representative change (say, a new rule) now touches fewer places. Label anything estimated as ASSUMPTION",
+      "A short design note a reviewer could read in five minutes, with the decision record in ADR form",
+      "Every claim about the code labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not change behaviour in the same step as a refactor. Behaviour changes are separate commits",
+      "No new abstraction without a stated reason and a stated trigger for the one you rejected",
+      "No secrets, customer data or credentials in code, tests or the design note",
+      "Tests must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the module's responsibilities before and after, the seams you chose, the pattern (or none) and the rejected alternative that mattered most.",
+    "tasks": [
+      "Pick the module and record why it is a problem",
+      "Write the characterisation tests and confirm they pass",
+      "Locate and evidence the SOLID issues",
+      "Refactor in small steps with green tests after each",
+      "Write the rejected-abstractions list with triggers",
+      "Capture the before-and-after evidence",
+      "Write the design note and the ADR"
+    ],
+    "acceptance": [
+      "Characterisation tests existed and passed before the refactor and still pass after",
+      "At least two SOLID issues are evidenced and at least one is fixed",
+      "At most one pattern was introduced, with its problem stated, or none with reasons",
+      "At least two abstractions were rejected with triggers",
+      "Before-and-after evidence is shown and labelled",
+      "No behaviour changed within refactor steps",
+      "No secrets or customer data in the repository"
+    ],
+    "deliverable": "The refactored module, its tests, the design note and the ADR, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Principal engineer",
+    "scenario": "A principal engineer is reviewing your refactor. They have seen over-engineered designs before and want to know that every abstraction earned its place.",
+    "prompts": [
+      "Why did you add this abstraction, and what change does it make cheaper?",
+      "What did you decide not to abstract, and what would make you change your mind?",
+      "How do you know behaviour did not change?",
+      "Which SOLID principle did you break on purpose, if any, and why?",
+      "A new teammate has to add a rule next month. Walk me through what they touch.",
+      "Is this pattern a solution to a problem you had, or a pattern you wanted to use?"
+    ],
+    "rubric": [
+      { "criterion": "Correct identification of violations, evidenced in the actual code", "weight": 0.25 },
+      { "criterion": "Safe refactoring: tests first, small steps, behaviour preserved", "weight": 0.3 },
+      { "criterion": "Judgement: abstractions justified, rejected options recorded with triggers", "weight": 0.3 },
+      { "criterion": "Clear communication to a technical reviewer", "weight": 0.15 }
+    ]
+  }
+}

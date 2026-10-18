@@ -1,0 +1,204 @@
+{
+  "id": "ai-model-selection",
+  "moduleId": "tech-ai",
+  "pillar": "Tech",
+  "title": "Choosing and costing AI models",
+  "estimatedMinutes": { "learn": 40, "build": 260, "defend": 30 },
+  "objectives": [
+    "Name the four comparison criteria on the page (capability, speed, cost, context) and the measures under each",
+    "Build a monthly cost model for an AI workload with input, output and cached tokens, and show how sensitive it is to the unsourced ratios",
+    "Compare models by cost per successful task, not price per token",
+    "Design a task-based evaluation on your own data instead of trusting a single benchmark",
+    "Defend a model choice and a gateway or fallback design to a finance partner"
+  ],
+  "prerequisites": ["ai-sdlc-agents-md", "tco-cloud-costs"],
+  "unlock": { "prerequisites": [{ "lessonId": "ai-sdlc-agents-md", "type": "knowledge_check" }, { "lessonId": "tco-cloud-costs", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "AI Model Comparison Guide",
+      "url": "https://www.ctoframework.com/tech/ai/model-comparison",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page names no specific models or vendors, has no tables and no benchmark scores, and gives no model-specific context windows or prices. Its only figures are illustrative: context windows of '128k to 2M+ tokens', output tokens typically 3x to 5x as expensive as input, and prompt caching cutting input costs by 50% to 90% for long-context applications. None of these is sourced. All prices in this lesson are invented assumptions and do not describe any real provider.",
+    "The page does not cover data privacy, security, data residency or compliance, GPU sizing, hosting cost estimates or TCO calculations, how to run needle-in-a-haystack tests, concrete latency or throughput targets, decision matrices beyond the interactive versus background split, or benchmark contamination and saturation beyond a brief mention of LiveCodeBench.",
+    "The retrieved summary flagged these points, to be checked against the live page and current sources: the page attributes the output price premium to 'autoregressive generation overhead' although provider pricing also reflects business decisions; it says compute cost scales 'non-linearly or quadratically' with context length, where standard self-attention is quadratic but real systems use optimisations; it recommends ONNX to avoid lock-in, which is less commonly used for large generative models than some alternatives; it lists the Hugging Face Open LLM Leaderboard as a current tracker, which the summary believed was retired in 2025 (unverified here); it uses both 'LM Arena' and 'Arena'; and it mentions 'lost in the middle' degradation with no source.",
+    "This area changes quickly. The page is dated 7 October 2026 by its own metadata, and nothing in this lesson should be used as current model, price or benchmark information. Get current figures from provider price lists and your own tests.",
+    "The cost arithmetic and the cost-per-success comparison here were computed by running Python. No model was called in preparing this lesson."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Four criteria",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page gives no named models. It organises a comparison around four criteria.\n\nCapability: reasoning, human preference (Elo-style blind voting) and domain-specific performance. Benchmarks named: MMLU, SWE-bench and LiveCodeBench.\nSpeed: time to first token, inter-token latency and tokens per second, and rate limits (tokens and requests per minute).\nCost: input versus output pricing, prompt caching, and total cost of ownership for self-hosted models. Evaluation and serving tools named: vLLM, TensorRT-LLM and ONNX.\nContext: context window size, needle-in-a-haystack recall, and how well the model uses long contexts."
+      },
+      {
+        "heading": "The page's figures and advice",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Figures given, with no sources: output tokens are typically 3x to 5x more expensive than input tokens; prompt caching can cut input costs by 50% to 90% for long-context applications; context windows range from 128k to 2M+ tokens (illustrative).\n\nAdvice: for interactive applications such as chatbots and real-time interfaces, prioritise low time to first token; for background jobs, batch processing and agentic tool loops, prioritise high output throughput. Do not rely on one benchmark: combine human preference rankings with real-world task benchmarks. Use a model-agnostic routing layer or gateway to avoid lock-in and allow fallback. Keep prompt prefixes stable to improve cache hits."
+      },
+      {
+        "heading": "Turning ratios into a monthly bill",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page's ratios become useful only inside a model of your workload. The prices below are invented to show the method; replace them with current price sheets.\n\nWorkload: 10,000 requests a day for 30 days, so 300,000 requests. Each request sends 6,000 input tokens, of which 4,000 are a stable prefix (instructions and reference material) and 2,000 are new, and produces 500 output tokens. Monthly volume: 1,800 million input tokens and 150 million output tokens.\n\nAssume an input price of 2.00 per million tokens. Without caching, input costs 3,600. Output at the page's 3x premium (6.00 per million) costs 900, total 4,500. At the 5x premium (10.00 per million) output costs 1,500, total 5,100.\n\nNow caching on the stable prefix, which is two thirds of each input. At a 50% saving on cached input: input cost falls to 2,400, giving totals of 3,300 (3x) or 3,900 (5x). At a 90% saving: input cost falls to 1,440, giving totals of 2,340 or 2,940.\n\nThe spread from 2,340 to 5,100 comes entirely from two unsourced ranges. Before committing a budget, find out your provider's real output ratio and caching behaviour, measure your real cache hit rate, and rerun. The structure of the saving also matters: caching helps only the repeated prefix, so a prompt design that keeps instructions stable and puts variable content last gets the discount; one that varies the start of the prompt gets none."
+      },
+      {
+        "heading": "Cost per success, not price per token",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A cheaper model that fails more often can cost more per useful result once you count retries, review time or human rework.\n\nExample with invented figures: model X costs 0.012 per task and succeeds on 82% of your test tasks; model Y costs 0.004 per task and succeeds on 61%. Cost per successful task: X is 0.012 / 0.82, about 0.0146; Y is 0.004 / 0.61, about 0.0066. Y is cheaper per success even with a much lower success rate, if a failure costs only a retry. But if each failure then needs a person to fix it, add that cost. If a human fix costs 0.50 and Y fails 39% of the time, the expected human cost is 0.195 per task, which dwarfs the model cost; X's 18% failures cost 0.09. Then X wins decisively.\n\nThe lesson is to measure success on your own tasks, define what a failure costs, and compare total expected cost. A leaderboard rank does not tell you either number.\n\nDesign the evaluation on your own data: a fixed set of real tasks (with the answers or the acceptance rules agreed in advance), scored the same way for every model, with enough tasks that the success rates are distinguishable (a difference of a few points across fifty tasks usually is not), and run again when the model or the prompt changes. Keep a held-out set you do not tune against."
+      },
+      {
+        "heading": "Context, speed and lock-in, with caution",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Context. A larger window is not a licence to fill it. The page says to look at recall and effective use at long lengths. Cost grows with every token you send, and the page says compute grows non-linearly or quadratically with context; under naive self-attention the pairwise work scales with the square of length, so a 2,000,000-token context is about 15.6 times the tokens of 128,000 and, in that naive model, about 244 times the pairwise work. Real systems use optimisations, so treat 244 as an upper-end illustration, not a prediction. Send only what the task needs and test recall on your own material.\n\nSpeed. Time to first token matters when a person is waiting; throughput matters when a job is running. Measure both for your prompts at your expected load, and check the rate limits you will actually be given.\n\nLock-in. A routing layer or gateway lets you swap providers and fall back when one fails. It costs engineering effort and can hide provider-specific features you may want. Decide the portability boundary deliberately, as in the cloud providers lesson.\n\nWhat the page leaves out matters for real decisions: where your data is processed and stored, what the provider does with your prompts, and what your customers and regulators require. Settle those before comparing prices."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A quotation-drafting assistant: choosing, costing and falling back (invented numbers, not Cretek data)",
+      "body": "A company wants a drafting assistant that turns a short brief into a first-draft quotation for a person to check. Volume: 300 quotations a day; this is an interactive task with a person waiting, so time to first token matters more than throughput.\n\nStep 1, constraints before cost. Quotations contain customer names and prices. Requirements: the provider must not use the data to train its models (checked in the provider's own terms, cited and dated), data must be processed in an acceptable region, and a contract is needed. A candidate that fails any of these is out regardless of price.\n\nStep 2, evaluation on real tasks. Fifty past briefs with the quotation the business actually sent, scored by an agreed checklist (correct line items, correct arithmetic, tone, no invented products). Candidate X scores 41 of 50 acceptable (82%); candidate Y 30 of 50 (60%). With fifty tasks the difference of 22 points is large enough to take seriously; a 4-point gap would not be.\n\nStep 3, cost per accepted quotation. Per-task model cost: X 0.012, Y 0.004. A reviewer fixing a rejected draft takes about 6 minutes; at a loaded cost of 0.50 per minute (assumption) that is 3.00 per fix. Expected cost per task: X = 0.012 + 0.18 x 3.00 = 0.552; Y = 0.004 + 0.40 x 3.00 = 1.204. X is less than half the cost per task once review is counted. A per-token price comparison would have chosen Y.\n\nStep 4, monthly cost. 300 a day over 30 days is 9,000 tasks. At 0.552 per task: 4,968 a month, nearly all of it review time, so the real lever is improving the success rate and the prompt, not shaving the token price.\n\nStep 5, design for change. A thin gateway so the model can be swapped; a fallback to the second candidate if the first is unavailable (with its own evaluation result recorded); a stable prompt prefix to benefit from caching if the provider offers it; and the evaluation set rerun on every model or prompt change.\n\nWhat is unverified: all prices, the real success rates on tasks the evaluation did not cover, and whether review time falls as people trust the drafts. Record them as assumptions and measure."
+    },
+    "misconceptions": [
+      "Choosing a model by price per token alone. Count failures, retries and review time.",
+      "Treating one benchmark or leaderboard as evidence for your task.",
+      "Quoting the page's 3x to 5x and 50% to 90% as facts. They are unsourced ranges.",
+      "Filling the context window because it is available. You pay for every token and recall may degrade.",
+      "Believing caching helps any prompt. It helps a stable, repeated prefix.",
+      "Comparing models on too few tasks to distinguish them.",
+      "Ignoring where data goes and what the provider does with it."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a finance partner why the cheapest model per token may be the most expensive per accepted result, using one calculation."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ms-1",
+      "question": "Which four criteria does the page use to compare models?",
+      "options": [
+        "Brand, price, colour and size",
+        "Capability, speed, cost and context",
+        "Security, privacy, residency and compliance",
+        "Training data, licence, language and age"
+      ],
+      "answer": 1,
+      "why": "The page compares capability, speed, cost and context. It does not cover data privacy, residency or compliance."
+    },
+    {
+      "id": "ms-2",
+      "question": "Which is NOT true of the page?",
+      "options": [
+        "It gives unsourced ratios for output cost and caching savings",
+        "It names no specific models or vendors",
+        "It provides a table of current model prices and benchmark scores",
+        "It recommends a model-agnostic gateway to avoid lock-in"
+      ],
+      "answer": 2,
+      "why": "The page has no tables, no benchmark scores and no model-specific prices. Its only figures are illustrative ranges."
+    },
+    {
+      "id": "ms-3",
+      "question": "With 1,800 million input tokens a month at 2.00 per million and no caching, what does input cost?",
+      "options": ["900", "1,800", "3,600", "7,200"],
+      "answer": 2,
+      "why": "1,800 x 2.00 = 3,600. Output (150 million tokens) is priced separately at the output ratio."
+    },
+    {
+      "id": "ms-4",
+      "question": "In the example, two thirds of each input is a stable prefix and caching saves 50% on it. What is the input cost afterwards?",
+      "options": ["2,400", "1,800", "1,440", "3,000"],
+      "answer": 0,
+      "why": "Input cost = 3,600 x (1/3 + 2/3 x 0.5) = 3,600 x 0.667 = 2,400. At a 90% saving it would be 1,440."
+    },
+    {
+      "id": "ms-5",
+      "question": "Model X costs 0.012 per task with 82% success; model Y costs 0.004 with 61% success. What are their costs per successful task, ignoring human fixes?",
+      "options": [
+        "X about 0.0146, Y about 0.0066",
+        "X 0.012, Y 0.004",
+        "X about 0.0066, Y about 0.0146",
+        "They are equal"
+      ],
+      "answer": 0,
+      "why": "0.012 / 0.82 is about 0.0146 and 0.004 / 0.61 is about 0.0066. Adding the cost of human fixes for failures can reverse the ranking, as the worked example shows."
+    },
+    {
+      "id": "ms-6",
+      "question": "Why does the page say not to rely on a single benchmark?",
+      "options": [
+        "Benchmarks are always wrong",
+        "No single benchmark represents your task; combine human preference rankings with real-world task benchmarks, and test on your own data",
+        "Benchmarks cost money to read",
+        "Only provider claims matter"
+      ],
+      "answer": 1,
+      "why": "The page advises combining human preference rankings with real-world task benchmarks. The Academy adds a task-based evaluation on your own data with success defined in advance."
+    }
+  ],
+  "build": {
+    "business": "Cretek will spend real money on AI services. A CTO must be able to explain what a workload costs, why a model was chosen and how the choice can change. This is the AI economics capability in the CTO Operating System.",
+    "problem": "Select and cost a model for one real Cretek workload using your own evaluation set, a tested cost calculator and a documented decision, including data handling constraints.",
+    "requirements": [
+      "Choose one real workload (for example drafting quotations or summarising support messages). State whether it is interactive or background and what that means for the speed criteria",
+      "Record the data handling constraints before comparing price: what data the workload sees, where it may be processed, what the provider may do with it (from the provider's own terms, cited with date), and any customer or regulatory requirement. Eliminate candidates that fail",
+      "Build an evaluation set of at least fifty real or realistic tasks with acceptance rules agreed in advance. Keep a held-out portion. Use synthetic or anonymised data and label it",
+      "Evaluate at least two candidates on the same tasks with the same scoring, recording success rate, time to first token and total time, and the cost per task from current price sheets (cited with date and currency)",
+      "Compute cost per accepted result including the cost of failures (retries or human fixes), and show how the ranking changes as the failure cost changes",
+      "Build the monthly cost model for your volume with input, output and cached tokens, using the provider's real ratios, and show the sensitivity to the ratios and to your measured cache hit rate",
+      "Test the stable-prefix design: measure the cache hit rate with a stable prefix and with a varying one, if the provider supports caching, or state that it does not",
+      "Design the gateway and fallback: how a model is swapped, how a fallback is chosen, and what happens when the primary is unavailable. Record the evaluation result of the fallback",
+      "A cost calculator that takes request volume, input and output tokens per request, prices, an output ratio, a cacheable share and a cache saving, and returns input cost, output cost and total. Automated tests required, including known values from the worked example, a zero cacheable share, a 100% cacheable share, a saving above 100% (reject), negative tokens (reject) and zero volume",
+      "A decision record in ADR form with triggers for re-evaluation (a new model, a price change, a drop in success rate)",
+      "A one-page summary for a finance partner, led by cost per accepted result and the biggest uncertainty",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED, with currency and the date of each price"
+    ],
+    "constraints": [
+      "No customer data in prompts or the repository unless the data owner has approved and the provider terms permit it",
+      "Do not decide on price per token alone",
+      "Do not tune the prompt against the held-out set",
+      "Do not use figures from the framework page as prices or benchmarks",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the workload, the data constraints, the evaluation method, the cost model, the gateway and one alternative you rejected, for example choosing the highest benchmark rank without testing.",
+    "tasks": [
+      "Define the workload and record the data constraints",
+      "Build the evaluation set and acceptance rules",
+      "Evaluate candidates and compute cost per accepted result",
+      "Build the cost calculator with tests and run the sensitivity",
+      "Test the prefix design and design the gateway and fallback",
+      "Write the decision record",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "Data handling constraints were applied before price and sourced",
+      "The evaluation set has at least fifty tasks, agreed rules and a held-out portion",
+      "At least two candidates were scored identically",
+      "Cost per accepted result includes failure cost and its sensitivity",
+      "The calculator tests pass including the rejection cases",
+      "A gateway and fallback design exists with an evaluated fallback",
+      "The decision record has re-evaluation triggers",
+      "All prices cited with date and currency"
+    ],
+    "deliverable": "The data constraint record, evaluation set and results, cost calculator with tests, gateway design, decision record and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Finance partner",
+    "scenario": "A finance partner is reviewing the AI spend you want to commit to. They have seen vendor demos and want to know what the bill will be and why this model.",
+    "prompts": [
+      "What will this cost per month, and how sure are you?",
+      "Why this model and not the cheaper one?",
+      "Which of your assumptions would change the answer most?",
+      "What happens to the bill if usage doubles, or the price changes?",
+      "What data leaves our environment, and what does the provider do with it?",
+      "What do we do if this provider is unavailable or raises prices?"
+    ],
+    "rubric": [
+      { "criterion": "Cost per accepted result with failure cost and sensitivity, not price per token", "weight": 0.3 },
+      { "criterion": "A sound evaluation on own tasks with held-out data and enough samples", "weight": 0.3 },
+      { "criterion": "Data handling constraints applied first, and a credible gateway and fallback", "weight": 0.25 },
+      { "criterion": "Clear communication to a finance partner", "weight": 0.15 }
+    ]
+  }
+}

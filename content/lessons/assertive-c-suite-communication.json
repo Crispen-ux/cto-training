@@ -1,0 +1,254 @@
+{
+  "id": "assertive-c-suite-communication",
+  "moduleId": "people-communication",
+  "pillar": "People",
+  "title": "Assertive communication and working with the C-suite",
+  "estimatedMinutes": {
+    "learn": 45,
+    "build": 240,
+    "defend": 30
+  },
+  "objectives": [
+    "Distinguish passive, aggressive and assertive statements and rewrite one into the other two forms",
+    "Use a four-part ask (observation, impact, request, check) for hard conversations with executives",
+    "Describe what each C-suite role owns and why titles are not a reliable guide to a person's mandate",
+    "Translate one technical decision into the terms each chief cares about, with a calculation that shows when it stops being worth it",
+    "Write a decision record with one accountable owner and escalate a risk with options and a recommendation"
+  ],
+  "prerequisites": [
+    "raci-brooks-law",
+    "disagree-commit-decisions"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "raci-brooks-law",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "disagree-commit-decisions",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Assertive Communication",
+      "url": "https://www.ctoframework.com/people/communication/assertive-communication",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "C-suite",
+      "url": "https://www.ctoframework.com/people/c-suite",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "Both pages were retrieved as automated summaries, not read in full. Re-read them before relying on any detail.",
+    "The Assertive Communication page defines the style, lists six characteristics, gives one passive, one aggressive and one assertive example, and lists five benefits. According to the summary it has no framework, steps, exercises, research or guidance for handling pushback. The four-part ask here is Academy material. Similar structures are taught under several names elsewhere; I have not checked their attributions and do not cite any.",
+    "General communication guidance about eye contact and posture varies by culture and context, and the page gives no source. Treat the page's 'open body language' as a starting point to adapt, not a rule. This is my caution, not a claim the page makes.",
+    "The C-suite page lists fourteen roles (CEO, CTO, CPO, CIO, COO, CFO, CMO, CISO, CDO, CHRO, CLO or General Counsel, CRO, CSO, CAO), five shared executive outcomes and five working steps for a CTO. According to the summary it has no worked example, no metric names, no template for the decision record, no guidance on disagreements between chiefs and no content from its four 'Explore next' pages. The summary also noted malformed page metadata. Role descriptions here are paraphrased from the summary.",
+    "The expected-loss calculation is a deliberately crude model with invented inputs (ASSUMPTION): an 8% chance a year of a 2,500,000 loss, a control costing 120,000 a year that lowers the chance to 3%. Real security and risk decisions also involve legal duties and customer commitments that this arithmetic ignores. This is not legal, security or financial advice."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What the Assertive Communication page teaches",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines assertive communication as expressing thoughts, feelings and needs clearly, confidently and respectfully, a middle ground between aggressive communication (forceful and disrespectful) and passive communication (being ignored or overlooked).\n\nSix characteristics: clarity and confidence; respect for others; 'I' statements; a calm, steady tone; active listening; open body language. Examples: passive, 'I guess it's fine if we do it your way'; aggressive, 'You never listen! We're doing it my way!'; assertive, 'I understand your perspective, but I feel that we should try this approach instead.' Five benefits are listed: fewer misunderstandings, more self-confidence, stronger relationships, conflict resolution and mutual respect."
+      },
+      {
+        "heading": "Making it usable: a four-part ask",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page describes the style but, according to the summary, gives no technique. This four-part ask is Academy material.\n\n1. Observation: what happened, as a fact anyone present would agree with. 'The release date moved twice this month.'\n2. Impact: the effect on something the listener cares about. 'Support has told customers two different dates.'\n3. Request: one specific thing, with a date. 'I would like us to agree a single date source by Friday.'\n4. Check: invite correction. 'What am I missing?'\n\nWhy this works: the observation leaves little to argue with, the impact connects to the listener's goals and the request is something they can say yes or no to. The check keeps it from becoming a lecture and tests the facts you assumed.\n\nWatch the page's own example. 'I understand your perspective, but I feel that we should try this approach instead' is assertive in tone, but 'but' cancels the first half and 'I feel' hides the reasoning. A stronger version names the reasoning: 'I see the case for your approach on speed. My concern is the rollback risk, so I would pick this one unless we can cover rollback another way.'"
+      },
+      {
+        "heading": "Three CTO scenarios, three styles",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Scenario: the CEO asks for a feature by the end of the month, and it cannot be done safely.\nPassive: 'I'll see what we can do.' (A commitment you do not believe in.)\nAggressive: 'That's impossible. You never ask engineering first.'\nAssertive: 'In the time we have I can deliver the checkout change with tests, or all three changes without them. Without tests I expect a higher chance of an incident in the first two weeks. Which do you want, and can we agree what I stop if you want all three?'\n\nScenario: the CFO asks for a 15% cut in the cloud budget. Assertive: 'I can find about 6% without risk by removing idle resources. The remaining 9% means either dropping the resilience work or delaying two launches. Here is what each costs. Which trade-off do you prefer?'\n\nBeing assertive is not the same as being right. It is a way of putting your view and reasoning on the table so the decision can be made on the merits, including when you turn out to be wrong. It also is not the same as always saying no; the strongest form of the CTO's 'no' is a choice between options."
+      },
+      {
+        "heading": "What the C-suite page teaches",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page says the C-suite are the executives responsible for a company's direction, health and ability to execute, and that titles are not a fixed org chart: a startup may combine roles and a large company may split one.\n\nRoles as paraphrased: CEO (overall direction and performance); CTO (technology vision, platform, engineering effectiveness, resilience, security, technical risk, innovation); CPO (product strategy and customer value); CIO (internal systems and their cost and governance); COO (operating model and execution); CFO (cash, margin, forecasts, capital allocation, controls); CMO (brand, positioning, demand); CISO (security risk, identity, incident readiness); CDO (data quality, ownership, governance, AI readiness); CHRO (hiring, retention, culture, workforce planning); CLO or General Counsel (contracts, IP, regulation, disputes); CRO (the revenue engine); CSO (enterprise strategy and change); CAO (administration and shared services).\n\nBoundaries vary: a CPO may own product and design while the CTO owns engineering; a CIO may run internal technology while the CTO leads customer-facing technology. The advice is to confirm mandate, decision rights and success measures instead of inferring them from titles.\n\nThe team shares five outcomes: direction, value, execution, risk and learning. The page's five steps for a CTO: start with the shared outcome, state trade-offs (gains, costs, time horizon, reversibility), use evidence at the right level, clarify ownership with a RACI or decision record, and escalate risks early with options and a recommended next step. Its key question: which outcome do they own, what constraint are they protecting, and what evidence would make this an easy decision?"
+      },
+      {
+        "heading": "Translating one decision for each chief",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page says each chief discusses the same decision in their own terms. Here is a method: for each person, write the outcome they own, the constraint they protect, the evidence that would persuade them and the question they will ask first.\n\nExample decision: spend 120,000 a year on stronger access controls.\nCFO: is the return positive and how sure are you? CISO: does it reduce the risks they track and is it measurable? CPO: what does it take out of the roadmap? COO: what changes for staff day to day? General Counsel: does it meet a legal or contractual duty, which would change the decision regardless of return? CEO: does it protect the company's name and what is the trade-off against growth?\n\nA calculation (all inputs ASSUMPTIONS, run in Python). If the chance of a serious incident is 8% a year and the loss is 2,500,000, expected loss is 200,000. If the control cuts the chance to 3%, expected loss is 75,000, a reduction of 125,000. Against a 120,000 cost the net is only 5,000. The break-even loss is 120,000 / 0.05 = 2,400,000. If the loss is 1,500,000, the net is minus 45,000; at 4,000,000 it is plus 80,000. The decision is sensitive to a number nobody knows well, so a CTO who says 'this clearly pays back' is overclaiming. The honest message is 'it is close to break-even on this model; the case rests on the size of the loss and on duties the model ignores'.\n\nThe model is crude: it ignores that losses are not evenly spread, and that some are not financial. Use it to find which assumption matters, not to settle the question."
+      },
+      {
+        "heading": "A decision record and an escalation rule",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page recommends a lightweight RACI or decision record but, according to the summary, gives no template. A minimum record:\n\n- Decision and date needed.\n- Accountable: exactly one person. Recommender, deciders, contributors, informed.\n- Options considered, with gains, costs, time horizon and reversibility for each.\n- Evidence used and its source; assumptions labelled.\n- What would change the decision, and a review date.\n\nThe one-accountable rule is the commonly taught RACI discipline: two accountable owners is no owner. See the RACI lesson for detail.\n\nEscalate early, in the page's formula: the risk, the options and your recommended next step, in that order, in writing, with the date by which a decision is needed. 'We have a problem' is not an escalation; 'we have a problem, here are three ways out, and I recommend the second' is.\n\nWhen chiefs disagree, the page gives no guidance. A sequence to try: restate the other person's constraint in a way they accept; find the shared outcome; agree what evidence would settle it and get it; if still stuck, take both options and the decision record to the person who is accountable, rather than winning by persistence. The disagree-and-commit lesson covers what happens after the decision."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Pushing back on a feature date and getting a decision record (invented, not Cretek data)",
+      "body": "The CEO wants the partner integration live by 30 November. The CTO's estimate with testing is 20 December. A passive reply would be 'we'll try'. An aggressive one would be 'engineering was not consulted'.\n\nThe CTO asks for 20 minutes and uses the four-part ask. Observation: the estimate for the integration with tests is 20 December, and the team has two other commitments in November. Impact: if we ship on 30 November without tests I expect a greater chance of payment errors in the first two weeks, and Finance would reconcile by hand. Request: choose by Friday between (a) 20 December with full tests, (b) 30 November with the core flow only and a manual process for exceptions, which I estimate costs Finance about 10 hours a week (ASSUMPTION), or (c) 30 November and drop the reporting project. Check: what constraint on the date am I missing?\n\nThe CEO says the partner's marketing launch is fixed. That fact changes the options, and the CTO would not have known it without the check. They pick (b). The CTO writes a decision record: decision, 30 November core flow; accountable, CEO; recommender, CTO; contributors, CFO and COO; reversibility, the manual process can be dropped when the exceptions flow ships; evidence, the estimate and the 10-hour assumption; review date, 20 December. The CFO and COO each read it and either accept or change their part. If the payment errors in the first fortnight exceed an agreed threshold, the CTO escalates with options, not alarm.\n\nWhat made it work was the CTO choosing to be specific, offering options with costs, and recording who decided."
+    },
+    "misconceptions": [
+      "Thinking assertive means getting your way. It means stating your view and reasoning so the decision is made on the merits.",
+      "Using 'I feel' to wrap a judgment you have not explained.",
+      "Believing a title tells you what a person owns. The page says to confirm mandate, decision rights and success measures.",
+      "Presenting a technical case in technical terms to every chief instead of in the outcome each one owns.",
+      "Treating an expected-loss figure as a fact when the loss and the chance are guesses.",
+      "Naming two accountable owners in a decision record.",
+      "Escalating late, or with a problem but no options."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a new engineering manager the difference between a passive, an aggressive and an assertive reply to a CEO's request for an unsafe deadline, with one sentence of each."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "acs-1",
+      "question": "With an 8% yearly chance of a 2,500,000 loss and a control that lowers the chance to 3%, what is the reduction in expected yearly loss?",
+      "options": [
+        "50,000",
+        "75,000",
+        "125,000",
+        "200,000"
+      ],
+      "answer": 2,
+      "why": "The reduction is (0.08 - 0.03) x 2,500,000 = 125,000. 200,000 is the original expected loss and 75,000 is what remains."
+    },
+    {
+      "id": "acs-2",
+      "question": "For a control costing 120,000 a year that lowers a 8% chance to 3%, what loss size makes it break even?",
+      "options": [
+        "1,500,000",
+        "2,400,000",
+        "2,500,000",
+        "4,000,000"
+      ],
+      "answer": 1,
+      "why": "Break-even is cost / reduction in chance = 120,000 / 0.05 = 2,400,000. At 1,500,000 the net is minus 45,000 and at 4,000,000 it is plus 80,000."
+    },
+    {
+      "id": "acs-3",
+      "question": "In the same model, what is the net yearly benefit of the control if the loss is 1,500,000?",
+      "options": [
+        "Plus 5,000",
+        "Minus 45,000",
+        "Minus 120,000",
+        "Plus 75,000"
+      ],
+      "answer": 1,
+      "why": "Reduction in expected loss is 0.05 x 1,500,000 = 75,000. Minus the 120,000 cost gives minus 45,000."
+    },
+    {
+      "id": "acs-4",
+      "question": "Which statement is assertive, in the sense the page describes?",
+      "options": [
+        "I guess it's fine if we do it your way",
+        "You never listen, so we're doing it my way",
+        "I see the case for your approach on speed; my concern is rollback risk, so I'd pick this option unless we can cover rollback another way",
+        "Whatever you decide is fine"
+      ],
+      "answer": 2,
+      "why": "It states a view, gives the reasoning, respects the other position and leaves room for evidence. The first and last are passive and the second is aggressive."
+    },
+    {
+      "id": "acs-5",
+      "question": "What does the C-suite page advise about inferring a chief's mandate from their title?",
+      "options": [
+        "Trust the title, as titles are standard",
+        "Confirm mandate, decision rights and success measures rather than inferring them",
+        "Ask HR to publish a standard list",
+        "Assume the CEO owns everything"
+      ],
+      "answer": 1,
+      "why": "The page notes that boundaries vary between companies and says to confirm mandate, decision rights and success measures."
+    },
+    {
+      "id": "acs-6",
+      "question": "Which is the best form of escalation, according to the page's working steps?",
+      "options": [
+        "A message saying there is a problem",
+        "The risk, the options and a recommended next step, raised early",
+        "A recommendation with no options",
+        "A meeting invite with no agenda"
+      ],
+      "answer": 1,
+      "why": "The page says to escalate risks early, paired with options and a recommended next step."
+    }
+  ],
+  "build": {
+    "business": "A CTO sits among peers whose priorities differ and are often in tension with technology. Working with them means stating views plainly, translating decisions into their terms and leaving a record of who decided what.",
+    "problem": "Create an executive stakeholder map and decision record for a real or realistically simulated Cretek decision, with a tested calculation and scripted assertive conversations.",
+    "requirements": [
+      "Choose a real or simulated decision that touches at least four chiefs",
+      "For each chief affected, write the outcome they own, the constraint they protect, the evidence that would persuade them and the first question they will ask, and mark each as confirmed or assumed",
+      "Write the decision in each person's terms in no more than three sentences each",
+      "Build a calculation, run in a script, with inputs labelled SOURCED, ASSUMPTION or SIMULATED, and show a sensitivity range and the break-even point",
+      "Say what the calculation leaves out, including legal, contractual or non-financial reasons",
+      "Write three assertive replies to difficult requests, using the four-part ask, and for each a passive and an aggressive version",
+      "Write the decision record with exactly one accountable owner and a review date, and check it with a script that fails if there is not exactly one",
+      "Write an escalation message containing the risk, the options and a recommended next step"
+    ],
+    "constraints": [
+      "No real names",
+      "Do not present assumed figures as facts",
+      "Do not describe a person's mandate as confirmed unless you have confirmed it",
+      "Do not treat the expected-loss model as advice"
+    ],
+    "design": "Write a one-page design: the decision, the stakeholder grid, the calculation with its sensitivity, the four-part asks, the decision record and the escalation message, and one approach you rejected.",
+    "tasks": [
+      "Choose the decision",
+      "Build the stakeholder grid",
+      "Write the calculation and run it",
+      "Write the three conversations in three styles",
+      "Draft the decision record and the checker",
+      "Write the escalation message",
+      "Role-play one conversation with a colleague and record what they could not follow",
+      "Revise"
+    ],
+    "acceptance": [
+      "At least four chiefs have a complete grid entry, with confirmed or assumed marked",
+      "The calculation runs, shows a sensitivity range and a break-even, and says what it omits",
+      "Each conversation has three styles and the assertive one uses all four parts",
+      "The record has exactly one accountable owner and the checker passes and fails correctly on a bad record",
+      "The escalation contains the risk, options and a recommendation",
+      "The role-play feedback is recorded"
+    ],
+    "deliverable": "The one-page design, the stakeholder grid, the calculation script with output, the three conversations, the decision record with checker, the escalation message and the role-play feedback."
+  },
+  "defend": {
+    "assessor": "Chief financial officer",
+    "scenario": "You have asked the CFO to fund a 120,000 a year security control. The CFO says: 'On your own numbers this is break-even. Why should I approve it rather than a feature that earns revenue?'",
+    "prompts": [
+      "Where do your probability and loss figures come from?",
+      "What would have to be true for this not to be worth it?",
+      "What does your model leave out that could change the answer either way?",
+      "Who is accountable for the decision, and what happens if the loss never occurs?",
+      "What do you stop doing if I say no?",
+      "Say that again in terms of the outcome I am responsible for."
+    ],
+    "rubric": [
+      {
+        "criterion": "Calculation is correct, shows sensitivity and break-even, and labels its inputs",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Honest about what the model omits and about assumed figures",
+        "weight": 0.2
+      },
+      {
+        "criterion": "Translates the decision into the chief's outcome and constraint",
+        "weight": 0.2
+      },
+      {
+        "criterion": "Assertive, specific, respectful replies with options, not a bare yes or no",
+        "weight": 0.2
+      },
+      {
+        "criterion": "Clear ownership and a usable decision record",
+        "weight": 0.1
+      }
+    ]
+  }
+}

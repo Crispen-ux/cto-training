@@ -1,0 +1,186 @@
+{
+  "id": "azure-az305-solutions-architect",
+  "moduleId": "cloud-solutions-architecture",
+  "pillar": "Tech",
+  "title": "AZ-305 Designing Microsoft Azure Infrastructure Solutions",
+  "estimatedMinutes": { "learn": 50, "build": 300, "defend": 40 },
+  "objectives": [
+    "Design identity, governance and monitoring solutions on Azure",
+    "Design data storage and business continuity and disaster recovery solutions",
+    "Design compute, network and application architecture solutions",
+    "Choose between Azure services on cost, reliability, security and operations",
+    "Defend an Azure architecture decision to a chief executive"
+  ],
+  "prerequisites": ["cloud-providers-lockin"],
+  "unlock": { "prerequisites": [{ "lessonId": "cloud-providers-lockin", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Microsoft Learn AZ-305 study guide",
+      "url": "https://learn.microsoft.com/credentials/certifications/exams/az-305/",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "Skills outline reviewed; verify current exam objectives before relying on it."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Cloud Providers Comparison",
+      "url": "https://www.ctoframework.com/tech/strategy-trends/cloud-providers",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "AZ-305 objectives change over time. This lesson reflects the skills outline reviewed and is not a complete transcription of the exam.",
+    "Azure service capabilities, limits and pricing change. Verify every service choice against Azure documentation and the current price list before using it.",
+    "The decision examples and worked scenarios are Original Academy material and use illustrative costs."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Design identity, governance and monitoring",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Use Microsoft Entra ID for identity and access. Prefer managed identities for workloads, Entra groups for role assignment and conditional access for risky sign-ins. Separate human administrator accounts from workload identities and protect privileged access with just-in-time elevation.\n\nGovernance uses management groups, subscriptions and resource groups to organise scope. Apply Azure Policy for guardrails, template specs for repeatable deployments, resource locks for critical resources and tags for cost and ownership. Monitoring uses Azure Monitor, Log Analytics workspaces, Application Insights and diagnostic settings. Alerts should be actionable, with owners and runbooks, not dashboards nobody reads."
+      },
+      {
+        "heading": "Design data storage",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Choose storage by access pattern and consistency needs. Azure Blob Storage for object data, Azure Files for SMB shares, Azure Disk Storage for VM volumes, Cosmos DB for low-latency globally distributed data, Azure SQL Database for relational workloads and Azure Database for PostgreSQL or MySQL for open-source engines.\n\nDesign for durability, encryption, backup and lifecycle. Use redundancy options (LRS, ZRS, GRS) based on recovery requirements, not habit. Put Azure Cache for Redis in front of hot reads and Azure AI Search where query needs differ from transactional access. Keep data residency and encryption key ownership explicit."
+      },
+      {
+        "heading": "Design business continuity and disaster recovery",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Start with RTO and RPO from the business. Azure Site Recovery orchestrates VM replication and failover. Azure Backup protects VMs, databases and files. Geo-redundant storage and geo-replication protect storage and databases.\n\nDesign high availability within a region with availability zones and availability sets, and cross-region designs with paired regions. Test failover regularly: an untested recovery plan is not a plan. Record the failover steps, the decision owner and the expected data loss."
+      },
+      {
+        "heading": "Design infrastructure",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Compute choices: virtual machines for control, Azure Kubernetes Service for container platforms, Azure App Service and Functions for managed applications, Azure Virtual Desktop for desktops. Prefer managed services when they fit the workload and the team can operate them.\n\nNetwork design: virtual networks, subnets, network security groups, Azure Firewall, Application Gateway or Front Door for ingress, VPN Gateway or ExpressRoute for hybrid connectivity, and Private Link or service endpoints to keep traffic off the public internet. Design hub-and-spoke topology when many spokes share services. Cost design uses autoscaling, reserved instances or savings plans, right-sizing, tags and cost alerts."
+      },
+      {
+        "heading": "Migration and integration",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Migrate with an assessment first, then move in waves. Azure Migrate assesses and migrates servers, databases and web apps. Refactor only where the benefit exceeds the risk; lift and shift buys time. Integrate with Azure Service Bus, Event Grid and Logic Apps for messaging. Use API Management for external APIs and Azure Data Factory for data movement. Keep a rollback path for each wave."
+      },
+      {
+        "heading": "Architecture decision method",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A defensible Azure design follows six steps: state the requirement, list the hard constraints (residency, compliance, latency, skills), eliminate services that cannot meet them, score the survivors on cost, operations and reliability, price the design, and define the recovery and exit path.\n\nThe trap is listing services. The CTO-style answer is a decision record: who decided, why, what would change it, and what it costs to leave."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Azure architecture for Cretek patient data (illustrative)",
+      "body": "Requirement: serve 5,000 users, store patient records, achieve 99.9% availability and keep data in Australia. Hard constraints: data residency Australia, encryption at rest and in transit, auditable access.\n\nDesign: Azure region Australia East. Entra ID with conditional access and MFA. Azure SQL Database with geo-replication to Australia Southeast and geo-redundant backup. Blob Storage with geo-redundant replication for documents. App Service in an availability zone with autoscaling. Azure Front Door for global routing. Azure Site Recovery for the app tier. Cost estimated with a savings plan after a four-week usage baseline."
+    },
+    "misconceptions": [
+      "Treating the default configuration as production-ready.",
+      "Adding geo-redundancy without an RTO or RPO.",
+      "Choosing the largest VM size to avoid tuning.",
+      "Storing secrets in app settings instead of Key Vault.",
+      "Assuming managed services remove operational responsibility.",
+      "Designing a single region when the constraint demands resilience."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a chief executive why an Azure design should be chosen from recovery targets and hard constraints rather than from the most familiar service."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "az-1",
+      "question": "Which Azure service is best suited for low-latency globally distributed data with flexible schema?",
+      "options": ["Azure SQL Database", "Azure Cosmos DB", "Azure Blob Storage", "Azure Files"],
+      "answer": 1,
+      "why": "Cosmos DB is designed for low-latency globally distributed data with flexible schema."
+    },
+    {
+      "id": "az-2",
+      "question": "A workload needs 99.9% availability within one region. Which building block most directly supports this?",
+      "options": ["Availability zones", "Reserved instances", "Tags", "Log Analytics"],
+      "answer": 0,
+      "why": "Availability zones provide fault isolation within a region."
+    },
+    {
+      "id": "az-3",
+      "question": "Where should application secrets be stored on Azure?",
+      "options": ["In source control", "In Azure Key Vault", "In committed environment files", "In a shared spreadsheet"],
+      "answer": 1,
+      "why": "Key Vault is the managed secret store. The other options expose secrets."
+    },
+    {
+      "id": "az-4",
+      "question": "When designing recovery, which pair should be defined first?",
+      "options": ["RTO and RPO", "VM size and disk type", "Tagging strategy and budget", "Region name and zone count"],
+      "answer": 0,
+      "why": "Recovery time and recovery point objectives drive the technical design."
+    },
+    {
+      "id": "az-5",
+      "question": "Which topology is commonly used to share services across many spoke networks?",
+      "options": ["Peer-to-peer full mesh", "Hub and spoke", "Single shared subnet", "Flat network"],
+      "answer": 1,
+      "why": "Hub and spoke centralises shared services and keeps spokes isolated."
+    },
+    {
+      "id": "az-6",
+      "question": "Azure Policy is primarily used for:",
+      "options": ["Application logging", "Governance guardrails", "DNS resolution", "Secret encryption keys only"],
+      "answer": 1,
+      "why": "Azure Policy enforces organisational standards and assesses compliance."
+    }
+  ],
+  "build": {
+    "business": "Cretek delivers school software and carries patient data. Its Azure estate must meet recovery targets, data residency and cost constraints, and be defensible to customers and regulators.",
+    "problem": "Design and document a defensible Azure architecture for one Cretek workload, including identity, data, network, compute, recovery and cost, with a tested infrastructure-as-code skeleton.",
+    "requirements": [
+      "State the workload, users, data volumes and growth",
+      "List hard constraints with sources: residency, compliance, latency, availability",
+      "Choose Azure services for identity, data, compute and network with a reason for each",
+      "Define RTO and RPO and a recovery design using Azure Backup or Site Recovery",
+      "Produce infrastructure as code for at least the network and compute skeleton, tested in a non-production environment",
+      "Estimate monthly cost using the Azure price calculator with a cited date",
+      "Define monitoring, alerting and ownership for the solution",
+      "Write a decision record with triggers that reopen the decision",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not store secrets in code or templates",
+      "Do not claim compliance with a standard without provider documentation",
+      "Must run locally or in a documented environment with one command",
+      "Infrastructure as code must pass validation or a dry run"
+    ],
+    "design": "Write a one-page design listing the hard constraints, chosen services, recovery plan, cost and the main alternative you rejected.",
+    "tasks": [
+      "Gather requirements and constraints",
+      "Sketch the network and service topology",
+      "Write infrastructure as code skeleton",
+      "Validate the template in a test environment",
+      "Build the cost estimate",
+      "Write the decision record"
+    ],
+    "acceptance": [
+      "Hard constraints recorded with sources",
+      "Service choices have reasons",
+      "RTO and RPO are stated and a recovery design exists",
+      "Cost estimate is dated and labelled",
+      "Infrastructure as code validates",
+      "No secrets in the repository",
+      "Decision record written"
+    ],
+    "deliverable": "Azure architecture decision record, infrastructure-as-code skeleton with validation output, cost estimate and diagram, referenced by path."
+  },
+  "defend": {
+    "assessor": "Chief executive",
+    "scenario": "The chief executive wants a simple cloud story for a school customer: where the data lives, how long recovery takes and what it costs.",
+    "prompts": [
+      "Where does patient data live and how is it protected?",
+      "What happens if the primary region fails?",
+      "How did you choose these Azure services over simpler ones?",
+      "What would change your decision?",
+      "What is the monthly cost and what drives it?"
+    ],
+    "rubric": [
+      { "criterion": "Hard constraints and recovery targets drive the design", "weight": 0.35 },
+      { "criterion": "Service choices are justified and sourced", "weight": 0.25 },
+      { "criterion": "Cost and operational ownership are explicit", "weight": 0.2 },
+      { "criterion": "Clear communication to a non-technical executive", "weight": 0.2 }
+    ]
+  }
+}

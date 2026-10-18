@@ -1,0 +1,236 @@
+{
+  "id": "swot-pestle-synthesis",
+  "moduleId": "product-strategy",
+  "pillar": "Product",
+  "title": "SWOT and PESTLE: from lists to prioritised strategy",
+  "estimatedMinutes": {
+    "learn": 40,
+    "build": 240,
+    "defend": 30
+  },
+  "objectives": [
+    "Describe the SWOT grid and the six PESTLE factors as the framework pages present them",
+    "Spot misclassified and vague items and fix them (internal versus external, factor versus response)",
+    "Prioritise items by likelihood and impact so the output is a short ranked list, not a long list",
+    "Convert findings into strategies and owned actions, using the five forces and moats from the previous lesson",
+    "Defend a strategy built from these tools, including their limits"
+  ],
+  "prerequisites": [
+    "moats-five-forces"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "moats-five-forces",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "SWOT Analysis",
+      "url": "https://www.ctoframework.com/product/strategy/swot-analysis",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "PESTLE Analysis",
+      "url": "https://www.ctoframework.com/product/strategy/pestle-analysis",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The SWOT page has no figures, a single Wikipedia reference and no worked example. It gives no method for running a SWOT, no prioritisation or scoring, no follow-on step (it does not mention TOWS or any way of linking factors to strategies), no limitations, time horizon or review cadence, and no account of the origin of the framework.",
+    "The retrieved summary flagged these points on the SWOT page: some opportunities (reduce bureaucracy, efficiency and cost reduction) are largely internal actions, and reliance on major customers is listed as an external threat although it is arguably an internal vulnerability; 'cost forecast', 'seasonality' and 'unique characteristics' are vague; the grid treats each factor as permanently helpful or harmful; reputation and ratings appears as both strength and weakness without guidance; and the claim that SWOT identifies unique selling propositions and economic moats overstates what a brainstorm can do. The page's applicability to career and personal planning is stated without example.",
+    "The PESTLE page has no figures, a single Wikipedia reference ('PEST analysis') and no author. It gives no method, no prioritisation, no template or worked example, no limitations, no guidance on data sources and no link between the factors and technology strategy beyond a passing mention of AI and cybersecurity. The retrieved summary flagged overlapping categories (political versus legal; economic wage policy versus employment law), debatable placements (health and safety and diversity under social; CSR under environmental), vague catch-all items, an unexplained history (PEST extended to PESTLE, with variants such as PESTEL), and a dated Brexit example.",
+    "The SWOT and PESTLE pages' metadata dates were not consistent across the summaries retrieved (one reported 16 August 2026 for SWOT, another 7 October 2026). Treat the page dates as unverified.",
+    "The scoring method, the TOWS-style strategy step and the worked example in this lesson are Original Academy material. TOWS is a published extension of SWOT that I know of from general knowledge; I did not read its source for this lesson, so check it before citing. All example items and scores are invented ASSUMPTIONS and the arithmetic was run in Python."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "SWOT as the page presents it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines SWOT as a planning tool for assessing the Strengths, Weaknesses, Opportunities and Threats of a business, project or individual, to support decisions by separating internal from external factors and helpful from harmful ones.\n\nStrengths (internal, helpful): things done well, unique experience and knowledge, geographic advantages, reputation and ratings, unique characteristics. Examples: strong brand, skilled workforce, proprietary technology.\nWeaknesses (internal, harmful): financial challenges, negative reputation, geographic gaps, lack of the right people or management, low motivation. Examples: poor customer service, outdated technology, high turnover.\nOpportunities (external, helpful): partnerships, industry trends and new markets, new product development, efficiency and cost reduction, reduced bureaucracy. Examples: market expansion, technological advances, shifts in consumer behaviour.\nThreats (external, harmful): seasonality, reliance on major customers, cost forecasts, environmental and technology changes, competitor strength. Examples: economic downturn, supply chain disruption, new regulation.\n\nThe page lists benefits (informed decisions, finding unique selling propositions and moats, risk management, proactive planning)."
+      },
+      {
+        "heading": "PESTLE as the page presents it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "PESTLE assesses external forces on an organisation, industry or market. The six factors and the items the page lists:\n\nPolitical: government policy and regulation, political stability, tax and tariffs, government influence on industries, geopolitical risk (Brexit and elections are the examples).\nEconomic: inflation and interest rates, exchange rates, employment and wage policy, growth or recession, consumer spending power.\nSocial: demographics, cultural attitudes, lifestyle change, health and safety consciousness, workforce diversity and labour trends.\nTechnological: emerging technology, R&D, pace of change, digital transformation and cybersecurity, adoption (AI, automation and blockchain are named).\nLegal: employment law, consumer protection, IP and patents, industry rules, compliance with local and international law.\nEnvironmental: climate and sustainability, environmental regulation, carbon footprint and energy use, waste and pollution, CSR.\n\nThe page says the factors help businesses understand their macro-environment for informed decisions; it gives no method."
+      },
+      {
+        "heading": "Why lists fail and how to fix them",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Both pages are checklists. A checklist produces long lists, and a long list is not a strategy. Four fixes.\n\n1. Classify strictly. Test each SWOT item: could the organisation change it directly? If yes it is internal. The page's 'reduce bureaucracy' is an action you can take, so it is not an external opportunity; 'reliance on major customers' is a result of your own sales mix, so treat it as an internal weakness with an external consequence. For PESTLE, every item must be outside your control. If two factors overlap (political tax policy versus legal tax law), pick one home and note the other, so nothing is counted twice.\n\n2. Make each item specific and dated. 'Technological change' is not an item. 'A source-control vendor ships built-in ownership mapping within 12 months' is. Each item needs an observable signal.\n\n3. Prioritise. Score likelihood and impact from 1 to 5 and multiply. For example customer concentration (likelihood 4, impact 5) scores 20; key engineer attrition (3, 4) scores 12; new regulation (2, 4) scores 8; competitor feature parity (4, 3) scores 12. The scale is subjective, so the ranking is a prompt for discussion, not a measurement. Note that ties and near ties are where the debate belongs. Keep the top five to eight items and archive the rest.\n\n4. Act. The page stops at the list. A published extension known as TOWS crosses internal and external factors to produce strategies: use a strength to take an opportunity, use a strength to blunt a threat, fix a weakness to unlock an opportunity, and reduce a weakness that exposes you to a threat. Whether or not you use that name, every top-ranked item needs a response, an owner, a date and a signal that shows whether it worked.\n\nLimits to state out loud: the output is a snapshot and goes stale; it reflects who was in the room; and it does not tell you what to do unless you add the step above. Set a review date. Use the five forces and moat tests from the previous lesson to give your strengths and threats evidence, since SWOT alone will not identify a moat."
+      },
+      {
+        "heading": "Connecting the tools",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Use each tool for what it does best. PESTLE scans the macro environment: what is changing outside the industry. Five forces diagnoses the structure of the industry: where margin is pressured. Moat tests examine your specific defences. SWOT then combines internal facts with the external findings into a short list of decisions.\n\nA sensible order is PESTLE first, forces second, moats third, SWOT last, and the SWOT's opportunities and threats should mostly be drawn from the earlier outputs, with evidence. Written this way, SWOT is a summary, not a brainstorm.\n\nFor a technology leader, connect each top item to a decision the technology function owns: an architecture change (portability), a build versus buy choice, a hiring plan, a security or compliance investment, a data strategy, or a stop decision. An item with no decision attached is background."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Strategy for the dependency-ownership service, from PESTLE to SWOT (invented, not Cretek data)",
+      "body": "PESTLE scan (external only, each with a signal).\nPolitical: none material for the first market; note export or data-localisation rules if expanding. Economic: engineering budgets tightening; signal: customers asking for per-team pricing flexibility. Social: engineers resist tools that feel like surveillance; signal: objections in pilots. Technological: AI coding tools increase the volume of code and dependencies; source-control vendors may add ownership features; signal: vendor release notes. Legal: customers need contracts covering access to their source code metadata and data processing terms; signal: security questionnaires. (Not legal advice; take it to counsel.) Environmental: little relevance; recorded and moved on.\n\nFrom the previous lesson: the force most limiting margin is substitutes, and a supplier (the source-control platform) could enter the space. The moat that holds is switching cost from workflow embedding (migration about 2.2 times annual spend), not compliance (table stakes).\n\nSWOT, classified and scored (likelihood x impact):\nStrength: deep ownership data model built for multi-provider use. Strength: narrow, trusted permission scope.\nWeakness (internal): one pilot customer is 40% of revenue; likelihood of losing them 4, impact 5, score 20. Weakness: two engineers know the integration code; attrition likelihood 3, impact 4, score 12.\nOpportunity (external): AI-generated code increases ownership and dependency confusion, so the problem grows; likelihood 4, impact 4, score 16.\nThreat (external): the source-control vendor ships built-in ownership mapping; likelihood 3, impact 5, score 15. Threat: customers decide a spreadsheet is enough; likelihood 4, impact 3, score 12.\n\nRanking: customer concentration 20, opportunity from AI-generated code 16, vendor threat 15, attrition 12, spreadsheet substitute 12.\n\nStrategies (the extension step):\nStrength to opportunity: position the multi-provider data model as the answer to AI-generated code sprawl; owner product lead; signal: share of pilots citing it.\nStrength to threat: stay provider-neutral so a single vendor feature cannot replace the cross-provider view; owner CTO; signal: vendor release notes reviewed quarterly.\nFix weakness to unlock: sign three more customers so none exceeds 25% of revenue; owner sales lead; signal: top customer share.\nReduce weakness exposure: document and pair on the integration code; owner engineering manager; signal: second engineer can ship a fix.\n\nReview date: three months. What is unverified: every likelihood and impact score is a team judgement, not data; the market claims need evidence from customers; the legal points need counsel."
+    },
+    "misconceptions": [
+      "Treating a long list as a strategy.",
+      "Putting internal actions or vulnerabilities on the external side of the grid.",
+      "Using vague items such as 'technology change' with no signal or date.",
+      "Treating likelihood and impact scores as measurements.",
+      "Stopping at the grid, with no strategy, owner or review date.",
+      "Believing SWOT alone identifies a moat or a unique selling proposition.",
+      "Treating PESTLE as the only list of factors, or its categories as non-overlapping."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a team why their 40-item SWOT is not yet a strategy and what you would do to make it one."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sp-1",
+      "question": "Which pair describes the SWOT grid correctly?",
+      "options": [
+        "Strengths and Weaknesses are external; Opportunities and Threats are internal",
+        "Strengths and Weaknesses are internal; Opportunities and Threats are external",
+        "All four are internal",
+        "All four are external"
+      ],
+      "answer": 1,
+      "why": "The page separates internal factors (strengths and weaknesses) from external ones (opportunities and threats)."
+    },
+    {
+      "id": "sp-2",
+      "question": "What do the letters in PESTLE stand for?",
+      "options": [
+        "Political, Economic, Social, Technological, Legal, Environmental",
+        "Product, Economic, Strategic, Technical, Legal, Ethical",
+        "Planning, Execution, Scope, Time, Leadership, Evaluation",
+        "Political, Ethical, Social, Technical, Legal, Economic"
+      ],
+      "answer": 0,
+      "why": "PESTLE stands for Political, Economic, Social, Technological, Legal and Environmental."
+    },
+    {
+      "id": "sp-3",
+      "question": "The page lists 'reduce bureaucracy' as an external opportunity. What is wrong with that?",
+      "options": [
+        "Nothing",
+        "It is largely an action the organisation can take itself, so it is internal",
+        "Bureaucracy is always a threat",
+        "It belongs under PESTLE legal"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged this as misclassified. A strict test is whether the organisation can change the item directly."
+    },
+    {
+      "id": "sp-4",
+      "question": "Customer concentration scores likelihood 4 and impact 5. What is its priority score under likelihood times impact?",
+      "options": [
+        "9",
+        "12",
+        "20",
+        "25"
+      ],
+      "answer": 2,
+      "why": "4 x 5 = 20. The scale is subjective, so the score is a prompt for discussion, not a measurement."
+    },
+    {
+      "id": "sp-5",
+      "question": "What does the SWOT page NOT give?",
+      "options": [
+        "A definition of the four quadrants",
+        "A method for running it, a prioritisation approach, a follow-on step linking factors to strategies, or a review cadence",
+        "Examples for each quadrant",
+        "A Wikipedia reference"
+      ],
+      "answer": 1,
+      "why": "The summary lists the missing items: participants and method, scoring, any follow-on step, limitations, time horizon and review cadence."
+    },
+    {
+      "id": "sp-6",
+      "question": "In the lesson's recommended order, which tool comes last?",
+      "options": [
+        "PESTLE",
+        "Five forces",
+        "Moat tests",
+        "SWOT"
+      ],
+      "answer": 3,
+      "why": "PESTLE, forces and moats gather evidence from outside and inside; SWOT then summarises them into a short list of decisions."
+    }
+  ],
+  "build": {
+    "business": "Cretek's leaders need a strategy a team can act on, not a long list on a slide. A CTO should turn external scanning and internal facts into a few ranked, owned decisions. This is the strategy synthesis capability in the CTO Operating System.",
+    "problem": "Run a PESTLE scan and a SWOT for one real Cretek product, prioritise the results with a tested scorer, and produce a short list of owned strategies with signals and a review date.",
+    "requirements": [
+      "Run a PESTLE scan with every item external, specific and dated, each with an observable signal and an evidence source. Where factors overlap, record the single home you chose. Mark legal items 'take to counsel' and do not state legal conclusions",
+      "Use the moat and five forces results from the previous lesson as evidence for the SWOT, and cite them",
+      "Write the SWOT with every item classified by the strict internal or external test. Record any item you moved and why",
+      "Score each item for likelihood and impact on a 1 to 5 scale you define, compute the priority, and keep only the top five to eight. Record what you archived",
+      "Write at least four strategies that link a strength or weakness to an opportunity or threat, each with an owner, a date and a signal. Say which technology decision each connects to",
+      "A scoring tool that takes a list of items (name, side, likelihood, impact) and returns a ranked list, rejecting scores outside 1 to 5 and unknown sides, and flagging ties. Automated tests required, including the worked example ranking (20, 16, 15, 12, 12), an empty list, a score of 0 or 6 (reject), a missing field (reject) and a tie that preserves a stable order",
+      "State the limits: who was in the room, how stale the snapshot will become, and the review date with the trigger for an earlier review",
+      "A one-page summary for the leadership team, led by the top three items and the decisions needed",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No unsupported market claims. Mark anything unevidenced as an assumption",
+      "No legal conclusions; take legal items to counsel",
+      "No confidential competitor or customer data",
+      "Do not present priority scores as measurements",
+      "Must run locally with a single command for the scorer and its tests"
+    ],
+    "design": "Write a one-page design covering the method and order of the tools, the classification rule, the scoring scale and one alternative you rejected, for example a free-form brainstorm with no scoring.",
+    "tasks": [
+      "Run the PESTLE scan with signals and evidence",
+      "Write and classify the SWOT using earlier evidence",
+      "Score and prune the items",
+      "Build the scorer with tests",
+      "Write strategies with owners, dates and signals",
+      "Write the limits, the review date and the one-page summary"
+    ],
+    "acceptance": [
+      "PESTLE items are external, specific, dated and have signals",
+      "SWOT items pass the strict internal or external test and moved items are recorded",
+      "The top items are scored and the rest archived",
+      "The scorer tests pass including the rejection cases and tie handling",
+      "At least four strategies with owner, date, signal and a linked technology decision",
+      "Limits and a review date are stated",
+      "No unsupported claim is presented as fact"
+    ],
+    "deliverable": "The PESTLE scan, classified and scored SWOT, scorer with tests, strategies list and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Leadership team",
+    "scenario": "The leadership team has seen a SWOT slide every year and nothing changed. They want to know what is different about yours.",
+    "prompts": [
+      "Which three items matter most, and how did you rank them?",
+      "Show me an item you moved from one quadrant to another and why.",
+      "What are you going to do about the top threat, who owns it and how will we know?",
+      "What did you leave out, and what would make you add it?",
+      "How much of this is evidence and how much is judgement?",
+      "When will this be out of date?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Strict classification, specific dated items and evidence from earlier tools",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Sound prioritisation with an honest view of subjective scores",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Actionable strategies with owners, dates, signals and linked technology decisions",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Clear communication to a leadership team",
+        "weight": 0.15
+      }
+    ]
+  }
+}

@@ -1,0 +1,212 @@
+{
+  "id": "raci-brooks-law",
+  "moduleId": "delivery-execution",
+  "pillar": "Delivery",
+  "title": "Ownership and capacity: RACI and Brooks' Law",
+  "estimatedMinutes": { "learn": 40, "build": 240, "defend": 30 },
+  "objectives": [
+    "Define Responsible, Accountable, Consulted and Informed and apply the one-Accountable rule",
+    "Audit a RACI matrix for missing or duplicate Accountables, and for gaps the page does not address",
+    "State Brooks' Law and its two causes, and calculate communication channels as a team grows",
+    "Choose between adding people, cutting scope and moving the date for a late project, and justify the choice",
+    "Defend a staffing decision on a late project to a programme director"
+  ],
+  "prerequisites": ["wsjf-moscow"],
+  "unlock": { "prerequisites": [{ "lessonId": "wsjf-moscow", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "RACI Matrix",
+      "url": "https://www.ctoframework.com/delivery/project-management/raci-matrix",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Brooks' Law",
+      "url": "https://www.ctoframework.com/delivery/project-management/brooks-law",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "In the RACI page's example table as reproduced in the retrieved summary, only the 'Define Requirements' and 'Approve Deployment' rows contain an A; 'Develop Feature' and 'Test Feature' have an R, C and I entries but no A. The same summary also said each row has exactly one A, which does not match the table it reproduced. This is a transcription observation from the Academy review, not a confirmed fault on the page. Re-read the live table before quoting it.",
+    "The RACI page's only explicit rule is one A per task. It gives no limit on Rs, Cs or Is, no guidance on a missing A, no method for building a matrix or choosing task granularity, no maintenance, tooling, scaling or effectiveness guidance, and no alternatives. It links SOPs and ITIL.",
+    "The Brooks' Law page quotes the law as 'adding human resources to a late software project makes it later', credits Brooks's 1975 The Mythical Man-Month, and gives one formula, C = n(n-1)/2, for potential communication channels. It gives no worked example, no empirical evidence or studies, no ramp-up durations or productivity figures, no exceptions (it points to Wikipedia for those), no conditions under which adding people helps, and no definition of 'late'.",
+    "The page links Conway's Law and Dunbar's Number and Wikipedia entries; none was read for this lesson. The Mythical Man-Month was not read.",
+    "The capacity calculation, the RACI audit rules beyond one A, and the decision framing in this lesson are Original Academy material. The hours in the capacity example are assumptions."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "RACI: four letters and one rule",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A RACI matrix is a project management tool for defining who is responsible for each task, process or deliverable. It clarifies who does what and supports accountability.\n\nR, Responsible: the person or team that does the work.\nA, Accountable: the person who owns the work and makes the final decisions. The page states 'There should be only one per task.'\nC, Consulted: gives input and feedback before the work is finished.\nI, Informed: needs progress updates but does not take part in executing the work.\n\nThe page lists benefits: less confusion through clear roles, stronger accountability through a single accountable person, better communication by specifying who needs updates, and faster decisions by ensuring the right people are consulted."
+      },
+      {
+        "heading": "The page's example, read carefully",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page's example matrix has four tasks and five roles (Project Manager, Developer, QA Tester, Stakeholder, Legal Team):\n\nDefine Requirements: PM A, Developer C, QA I, Stakeholder R, Legal C.\nDevelop Feature: PM I, Developer R, QA C, Stakeholder I, Legal I.\nTest Feature: PM I, Developer C, QA R, Stakeholder I, Legal I.\nApprove Deployment: PM A, Developer I, QA I, Stakeholder C, Legal R.\n\nIts points: the R is not always engineering (a stakeholder does the requirements work, Legal does the approval), and roles that need not act are marked I.\n\nNow apply the page's own rule. Reading the table above, Develop Feature and Test Feature have no A. That breaks the one-A rule, or the transcription is incomplete. Either way, it is exactly the check you should run on every matrix before you publish it. The retrieved summary asserted each row has one A while reproducing rows that do not, so confirm against the live page."
+      },
+      {
+        "heading": "Auditing a matrix",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page states one rule and leaves the rest open. Academy checks that can be automated:\n\nEvery task has exactly one A. Zero means no one owns the decision; two means a dispute waiting to happen.\nEvery task has at least one R. Work with no doer is a wish.\nEvery cell holds one of R, A, C, I or blank. Reject anything else.\nNo role is empty across all tasks, and no task has all blanks.\nThe same person may hold A and R on a task. The page does not forbid it. For small teams it is normal; for approvals, separating them is often wise.\n\nThings an automated check cannot judge: whether the right person is A, whether the task granularity is useful, and whether the Cs are consulted in time to matter. Too many Cs and Is slow things down; the page sets no limit, so set your own and say so. And keep the matrix current: a stale RACI is worse than none, because people trust it. The page gives no guidance on maintenance."
+      },
+      {
+        "heading": "Brooks' Law and its two causes",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page states Brooks' Law as an empirical observation: 'adding human resources to a late software project makes it later', from Fred Brooks's 1975 The Mythical Man-Month, and calls it a foundational principle of software engineering management.\n\nIts argument: the business assumption that people's hours are interchangeable fails in software, because development is highly sequential and complex. Adding people creates two bottlenecks. Ramp-up time: new developers need onboarding and mentoring before they contribute, which pulls senior developers off their own work. Communication overhead: developers must coordinate and integrate, and this grows faster than team size.\n\nThe formula on the page: C = n(n-1)/2, where n is team size and C is the number of potential communication channels. It describes this as quadratic growth."
+      },
+      {
+        "heading": "What the page advises",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Do not add people reflexively to a late project. Instead, cut scope (drop nice-to-have features) or move the release date.\n\nIf you must scale, reduce ramp-up cost: self-service documentation, automated local environments, modular codebases and fast automated testing.\n\nKeep teams small and bounded with a decoupled architecture, following Conway's Law, so teams can work independently with less cross-team coordination."
+      },
+      {
+        "heading": "Reading the law critically",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page presents the law with no data. Brooks's argument is widely taught, but the page cites no studies, gives no ramp-up times or productivity losses, and does not say when adding people helps. Treat it as a strong warning, not a theorem. It is most likely to hold when work is hard to divide and the project is already late with little time left to absorb new people; it is less likely to hold when work is genuinely parallel and the team is already set up for fast onboarding. The page does not define 'late' or how to judge whether work can be split.\n\nThe channel formula counts potential paths, not actual ones. It is a measure of how coordination could grow, not a prediction of lost hours. Use it as an illustration to a non-technical audience, and use your own data (time spent in coordination meetings, pull request wait times, onboarding time) to say anything quantitative about your team."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "An audit and a staffing decision (illustrative numbers, not Cretek data)",
+      "body": "RACI audit of the page's table as reproduced above. Tasks: 4. Rows with exactly one A: 2 (Define Requirements, Approve Deployment). Rows with zero A: 2 (Develop Feature, Test Feature). Rows with at least one R: 4 of 4. Verdict: fails the one-A rule on two of four tasks. If the transcription is faithful, the fix is to name an owner for each: for example the PM or a tech lead as A for Develop Feature and Test Feature.\n\nChannels. n(n-1)/2: a team of 5 has 10; 8 has 28; 10 has 45; 12 has 66; 20 has 190. Adding three people to a team of five takes potential channels from 10 to 28, an increase of 18, or 2.8 times as many (28 / 10). The people grew by 60% (from 5 to 8).\n\nCapacity (all hours are ASSUMPTIONS). A late project has two senior developers who each have 30 productive hours a week, 60 in total. Three new hires each need 8 hours a week of senior mentoring for the first four weeks and, we assume, contribute nothing in that period. Mentoring demand is 3 x 8 = 24 hours a week, which is 24 / 60 = 40% of senior capacity, for four weeks. The project gets slower before it gets faster, which is the page's ramp-up argument in numbers.\n\nDecision framing. The options the page names: cut scope, move the date, or add people with ramp-up mitigation. For this project, with a fixed deadline and a MoSCoW list that has a Could buffer of 20%, the first move is to drop the Could items and re-forecast (see the Monte Carlo lesson). If the forecast still misses and the work is divisible, adding people early with onboarding support may help; adding them late costs the 40% for four weeks. State the conditions under which you would change your mind."
+    },
+    "misconceptions": [
+      "Assuming a RACI matrix is correct because it is filled in. Check one A per task.",
+      "Having two Accountables for a task, or none.",
+      "Putting every stakeholder as C or I on everything. It slows decisions.",
+      "Treating the matrix as a one-off document that never needs updating.",
+      "Believing people are interchangeable hours, the assumption the page says fails in software.",
+      "Treating the channel count as lost hours. It counts potential paths.",
+      "Quoting Brooks' Law as proven for every case. The page gives no data and no exceptions."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a programme director why you are not adding people to the late project yet, and what would change your mind."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "rb-1",
+      "question": "What does the 'A' in RACI stand for, and what does the page say about it?",
+      "options": [
+        "Assistant; there can be several per task",
+        "Accountable; there should be only one per task",
+        "Approver; it is optional",
+        "Analyst; it is only used for requirements"
+      ],
+      "answer": 1,
+      "why": "A is Accountable: the person who owns the work and makes the final decisions. The page states there should be only one per task."
+    },
+    {
+      "id": "rb-2",
+      "question": "In the page's example table as reproduced here, how many of the four tasks have an A?",
+      "options": ["Four", "Three", "Two", "None"],
+      "answer": 2,
+      "why": "Define Requirements and Approve Deployment have an A. Develop Feature and Test Feature do not, so the table as transcribed fails the page's own rule."
+    },
+    {
+      "id": "rb-3",
+      "question": "Which two causes does the page give for why adding people to a late project makes it later?",
+      "options": [
+        "Higher salaries and licences",
+        "Ramp-up time and communication overhead",
+        "Lower morale and longer meetings",
+        "Poor tooling and legal risk"
+      ],
+      "answer": 1,
+      "why": "New developers need onboarding and mentoring (ramp-up), and coordination grows faster than team size (communication overhead)."
+    },
+    {
+      "id": "rb-4",
+      "question": "Using C = n(n-1)/2, how many potential communication channels does a team of 10 have?",
+      "options": ["20", "45", "90", "100"],
+      "answer": 1,
+      "why": "10 x 9 / 2 = 45. A team of 5 has 10 and a team of 20 has 190."
+    },
+    {
+      "id": "rb-5",
+      "question": "What does the page advise instead of reflexively adding people to a late project?",
+      "options": [
+        "Cut scope or move the release date",
+        "Hire contractors on short contracts",
+        "Add more meetings",
+        "Ask the team to work longer hours"
+      ],
+      "answer": 0,
+      "why": "The page's guidance is to cut scope (drop nice-to-haves) or move the release date, and if scaling is necessary, to reduce ramp-up cost."
+    },
+    {
+      "id": "rb-6",
+      "question": "Which statement about the channel formula is most accurate?",
+      "options": [
+        "It predicts the exact hours lost to coordination",
+        "It counts potential communication paths, which illustrates how coordination can grow, not how many hours are lost",
+        "It proves Brooks' Law",
+        "It only applies to teams over 50"
+      ],
+      "answer": 1,
+      "why": "C = n(n-1)/2 counts potential channels. It illustrates quadratic growth in coordination possibilities. The page gives no figures for lost productivity."
+    }
+  ],
+  "build": {
+    "business": "Work at Cretek goes wrong when nobody is sure who decides, and when a late project is rescued by adding people. This is the ownership and capacity capability in the CTO Operating System.",
+    "problem": "Build a RACI validator and a staffing-decision calculator, applied to a real Cretek project, with tests and a one-page recommendation.",
+    "requirements": [
+      "A RACI matrix for one real Cretek project with at least eight tasks and the real roles (internal and client). If the roles cannot be real, label the matrix SIMULATED",
+      "A RACI validator that reads the matrix and reports: tasks with zero or more than one A, tasks with no R, invalid cell values, empty roles, empty tasks, and any person holding both A and R on an approval task as a warning. Exit status reflects failure",
+      "The validator is run against the framework page's example table as reproduced in this lesson, and its result is recorded",
+      "Your own limit on Cs and Is per task, with a reason, and a warning when it is exceeded",
+      "A channel calculator for n(n-1)/2, with a table for the current team and the proposed team",
+      "A capacity model for adding people to a late project: number of new people, mentoring hours per week per person, ramp-up weeks, senior capacity, and the resulting share of senior capacity consumed. Every input is REAL or labelled ASSUMPTION",
+      "A decision comparison of three options for one real late or at-risk piece of work: cut scope, move the date, add people. For each option: effect on the forecast (reuse the Monte Carlo tool where you can), cost, risk, and the condition under which you would change the choice",
+      "Automated tests: valid matrix passes; missing A; two As; no R; invalid letter; empty matrix; a one-person team (zero channels); n of zero or negative (reject); capacity above 100% flagged",
+      "A one-page recommendation for a programme director, led by the decision and the conditions that would change it",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No invented Cretek staff or client details. Use real roles or label the matrix simulated",
+      "Do not commit personal details or pay data to the repository",
+      "Do not claim Brooks' Law is proven. Cite the page and say what it does not show",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the matrix file format, the validation rules and their severities, how capacity is modelled, and one alternative you rejected, for example a wiki table with no validation.",
+    "tasks": [
+      "Draw up the RACI matrix with the people who actually do and decide the work",
+      "Build the validator and run it on your matrix and on the page's example",
+      "Build the channel and capacity calculators with tests",
+      "Compare the three options for the real piece of work",
+      "Review the matrix and recommendation with the people named in them",
+      "Write the one-page recommendation",
+      "Document how often the matrix is reviewed and who owns it"
+    ],
+    "acceptance": [
+      "A real or labelled-simulated matrix of at least eight tasks exists",
+      "The validator catches every listed fault and its result on the page's example is recorded",
+      "The channel and capacity calculators are tested including edge cases",
+      "A three-option comparison exists with change-of-mind conditions",
+      "No personal data is in the repository",
+      "The recommendation does not overclaim about Brooks' Law",
+      "All figures labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The matrix, validator, calculators with tests and the one-page recommendation, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Programme director",
+    "scenario": "A programme director wants the late project rescued quickly and has suggested adding contractors. They also want to know who is accountable for the outcome.",
+    "prompts": [
+      "Who is accountable for this task? Why is it one person and not the team?",
+      "Your own matrix has a task with no A. How did that happen and what changed?",
+      "Why not add three people? Show me the cost, not the principle.",
+      "What would make you change your mind and add people?",
+      "You cite Brooks' Law. What evidence do you have that it applies to this project?",
+      "If I cut scope instead, what does the client lose?"
+    ],
+    "rubric": [
+      { "criterion": "Clear single-point accountability and a matrix that passes its own checks", "weight": 0.3 },
+      { "criterion": "Quantified reasoning on capacity and coordination without overclaiming the law", "weight": 0.3 },
+      { "criterion": "Realistic comparison of scope, date and staffing options with change-of-mind conditions", "weight": 0.2 },
+      { "criterion": "Clear, brief communication to a senior stakeholder under pressure", "weight": 0.2 }
+    ]
+  }
+}

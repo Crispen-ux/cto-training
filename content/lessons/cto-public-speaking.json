@@ -1,0 +1,157 @@
+{
+  "id": "cto-public-speaking",
+  "moduleId": "executive-presentation-speech",
+  "pillar": "People",
+  "title": "Public speaking and speech training for CTOs",
+  "estimatedMinutes": { "learn": 40, "build": 240, "defend": 35 },
+  "objectives": [
+    "Deliver a clear and confident technical talk",
+    "Control pace, voice and body language",
+    "Adapt a message to different audiences",
+    "Handle live questions and mistakes"
+  ],
+  "prerequisites": ["storytelling-star-method"],
+  "unlock": { "prerequisites": [{ "lessonId": "storytelling-star-method", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Public speaking practice guidance",
+      "url": "https://www.toastmasters.org",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "General speaking guidance reviewed."
+    }
+  ],
+  "verificationNotes": [
+    "Speaking advice is general; practise with real audiences.",
+    "Examples are Original Academy material."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Message first",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A talk needs one central message. Every section should support it. If you cannot state the message in one sentence, the talk is not ready. Audiences remember the message and one or two stories, not the detail."
+      },
+      {
+        "heading": "Voice and pace",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Speak slower than feels natural. Pause after key points. Vary volume and pitch to signal importance. Avoid filler words by pausing instead. A microphone amplifies speed as much as volume, so slow down further on stage."
+      },
+      {
+        "heading": "Body language",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Stand still with purpose. Use open gestures. Make eye contact with different parts of the room. Avoid pacing or reading from slides. Your posture should match the confidence of the message."
+      },
+      {
+        "heading": "Audience and questions",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Adapt depth to the audience. Engineers want mechanisms and trade-offs; executives want outcomes and risk; customers want value. For questions, repeat the question, answer concisely and check understanding. If you do not know, say so and follow up."
+      },
+      {
+        "heading": "Recovery",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Mistakes are normal. Pause, correct and continue. Do not apologise excessively. The audience does not know your script; a calm recovery often looks intentional."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Five-minute CTO talk (illustrative)",
+      "body": "Message: reliability is a product feature. Story: an outage that cost a school day. Evidence: incident count and recovery time. Recommendation: invest in observability and runbooks. Close: ask the audience to adopt one reliability metric in their team."
+    },
+    "misconceptions": [
+      "Memorising a script word for word.",
+      "Speaking faster to fit more content.",
+      "Treating Q&A as an afterthought.",
+      "Believing confidence is innate rather than practised."
+    ],
+    "explainTask": "In 120 words or fewer, describe how you would prepare and deliver a ten-minute technical talk to a mixed audience."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ps-1",
+      "question": "A talk should have:",
+      "options": ["Many messages", " One central message", " No stories", " Only data"],
+      "answer": 1,
+      "why": "One central message keeps the talk focused."
+    },
+    {
+      "id": "ps-2",
+      "question": "On stage, a speaker should generally:",
+      "options": [" Speak faster", " Slow down and pause", " Read slides", " Avoid eye contact"],
+      "answer": 1,
+      "why": "Slower pace and pauses aid comprehension."
+    },
+    {
+      "id": "ps-3",
+      "question": "When answering a question you cannot answer:",
+      "options": [" Guess", " Say so and follow up", " Blame someone", " Ignore it"],
+      "answer": 1,
+      "why": "Honesty and follow-up build trust."
+    },
+    {
+      "id": "ps-4",
+      "question": "Adapting to an executive audience means focusing on:",
+      "options": [" Implementation detail", " Outcomes and risk", " Code samples", " Tooling"],
+      "answer": 1,
+      "why": "Executives care about outcomes and risk."
+    },
+    {
+      "id": "ps-5",
+      "question": "After a mistake on stage, the best response is:",
+      "options": [" Apologise repeatedly", " Pause, correct and continue", " Stop the talk", " Blame equipment"],
+      "answer": 1,
+      "why": "Calm recovery keeps credibility."
+    }
+  ],
+  "build": {
+    "business": "CTOs represent technology to customers, staff and investors. Speaking skill affects trust and influence.",
+    "problem": "Prepare and deliver a ten-minute technical talk to a mixed audience, with a recording and feedback loop.",
+    "requirements": [
+      "Write a one-sentence message",
+      "Build a short slide deck",
+      "Deliver a recorded dry run",
+      "Collect feedback from at least three people",
+      "Deliver the talk live or recorded",
+      "Answer five live questions"
+    ],
+    "constraints": [
+      "No reading from slides",
+      "Must be completable in one week",
+      "No confidential data"
+    ],
+    "design": "Write a talk outline with message, sections and timing.",
+    "tasks": [
+      "Define the message",
+      "Draft the outline",
+      "Build slides",
+      "Record a dry run",
+      "Collect feedback",
+      "Deliver and review"
+    ],
+    "acceptance": [
+      "Message is one sentence",
+      "Dry run recorded",
+      "Feedback collected",
+      "Talk delivered",
+      "Q&A handled"
+    ],
+    "deliverable": "Talk outline, slides, recording, feedback notes and Q&A log, referenced by path."
+  },
+  "defend": {
+    "assessor": "Audience",
+    "scenario": "You have just delivered a ten-minute talk and the audience can ask anything.",
+    "prompts": [
+      "What was your central message?",
+      "How did you adapt to the audience?",
+      "What would you change next time?",
+      "How did you handle questions?",
+      "What evidence supported your claims?"
+    ],
+    "rubric": [
+      { "criterion": "Central message is clear", "weight": 0.3 },
+      { "criterion": "Delivery is controlled and confident", "weight": 0.25 },
+      { "criterion": "Questions are handled well", "weight": 0.25 },
+      { "criterion": "Audience adaptation is evident", "weight": 0.2 }
+    ]
+  }
+}

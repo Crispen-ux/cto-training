@@ -1,0 +1,226 @@
+{
+  "id": "ai-sdlc-agents-md",
+  "moduleId": "tech-ai",
+  "pillar": "Tech",
+  "title": "AI in the delivery lifecycle: AI-SDLC and AGENTS.md",
+  "estimatedMinutes": { "learn": 50, "build": 300, "defend": 35 },
+  "objectives": [
+    "Describe the five elements of the page's AI-SDLC operating model and who owns which decision in each phase",
+    "Assign an autonomy mode (in the loop, on the loop, bounded) to a piece of work and justify it",
+    "Write a repository guidance file for coding agents and say what it can and cannot enforce",
+    "Judge a pilot honestly: choose measures, compare to a baseline, and say when the data cannot separate signal from noise",
+    "Defend an AI adoption plan, including what you will not automate yet"
+  ],
+  "prerequisites": ["least-privilege-access-control"],
+  "unlock": { "prerequisites": [{ "lessonId": "least-privilege-access-control", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "AI-SDLC",
+      "url": "https://www.ctoframework.com/tech/ai/ai-sdlc",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "AGENTS.md",
+      "url": "https://www.ctoframework.com/tech/ai/agentsmd",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The AI-SDLC page contains no quantitative data (no percentages, sample sizes, speed-up factors, cost figures or case studies) and cites no studies. It evaluates no vendor or tool. It does not cover tool selection or pricing, licensing, approved model lists or configuration examples, baselines or case studies, implementation details for threat modelling, sandboxing or secrets management, training or team structure, regulation (the EU AI Act has its own page), or code provenance and intellectual property of generated code.",
+    "The retrieved summary flagged these points on the AI-SDLC page: the text mixes the names 'AI-SDLC', 'AI-DLC methods' and 'AI-Driven Development Lifecycle', so it is unclear whether they are one framework; claims such as where 'the constraint' moves and that AI 'changes the economics' are stated without evidence; and one reference link points to an opaque hosting domain rather than a recognisable canonical source, so its authority should be checked before citing. The page is a governance checklist whose productivity claims are opinion until backed by data.",
+    "The AGENTS.md page contains no example file content (it links ten repositories that have their own files, which were not read), names no tools that read the file, gives no step-by-step guidance or concrete best practices, and has only brief mentions of security. It does not say whether the file is enforced technically or is advisory only, who owns and reviews it, or whether it is a formal or open standard.",
+    "The retrieved summary flagged that the AGENTS.md page frames the file as governing agent-driven systems broadly, including lifecycle and runtime behaviour, while the sources it cites describe repository instructions for coding agents, a narrower scope; that its benefits (auditability, maintainability, standardisation) and the word 'contract' are unsourced; and that it cites a guide titled 'Using Claude.md Files' without explaining how that relates to AGENTS.md. Re-read the live page before relying on any of these.",
+    "The example guidance file, the pilot numbers and the significance calculation in this lesson are Original Academy material. The example file is an illustration of a structure, not a standard. The pilot numbers are invented and the calculation was run as Python arithmetic."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "An operating model, not a licence to go faster",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page presents AI-SDLC as an operating model for software delivery in which AI is used across the lifecycle while people stay accountable for intent, risk and outcomes. It states plainly: 'It is not a licence to ship generated code faster.'\n\nFive elements: intent (problem statement, constraints, completion criteria); context (versioned decisions, standards, runbooks); autonomy boundary (what an agent may read, change, execute or deploy); backpressure (tests, linters, security checks and review gates); and a learning loop (production signals feeding back into context and guardrails). It also warns against automating a weak process, since an agent makes existing problems happen faster."
+      },
+      {
+        "heading": "Who owns what, phase by phase",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Discover and plan: AI summarises research, lists open questions, drafts options, finds similar work. Humans own problem framing, customer impact, priority and success measures.\nDesign: AI explores alternatives, generates diagrams, traces dependencies, flags failure modes. Humans own trade-offs, data classification and the threat model.\nBuild: AI does bounded implementation, refactoring, documentation and code explanation. Humans own scope, code review and ownership of the merged change.\nVerify: AI generates tests, finds edge cases, analyses failures, proposes fixes. Humans own test strategy, acceptance criteria and the sufficiency of evidence.\nRelease and operate: AI summarises changes, correlates telemetry, triages alerts, drafts incident timelines. Humans own production access, release approval, incident command and customer communication.\n\nThe page's three autonomy modes: human in the loop (architecture, security-sensitive work, production data, novel changes); human on the loop (routine work where a person can observe and intervene); and bounded autonomy (mechanical refactors, test expansion, rehearsed migrations, documentation, with narrow permissions and automated checks). Production changes, external communications, spend commitments and access-control changes should stay tightly constrained."
+      },
+      {
+        "heading": "Controls, metrics and the adoption path",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Controls: keep repository guidance (conventions, allowed commands, test expectations, escalation paths) versioned with the code; use approved models and accounts, least-privilege credentials and segregated environments, and note that a prompt is not a secure boundary; require evidence (passing builds, targeted tests, static analysis, dependency scanning, reviewable diffs) over an agent's explanation; threat-model agent workflows, including prompt injection through issues, documents, logs and third-party content, and treat retrieved content as untrusted; keep traces of prompts, context, configuration, tool actions, approvals, checks and deployment outcomes for consequential work.\n\nMetrics: flow (lead time for changes, review wait time, time unblocking work); quality (escaped defects, change failure rate, rollback rate, flaky-test rate, AI-caused rework); operational safety (policy violations, sensitive-data incidents, unauthorised tool attempts, time to detect and contain); adoption health (share of eligible work with clear criteria and evidence, engineer sentiment, review-load distribution). Compare a pilot cohort against a similar baseline and inspect the work itself. Activity measures such as lines generated, prompts or agent hours can rise while value falls.\n\nAdoption path: pick one bounded, low-risk, high-volume workflow; define the contract (inputs, completion criteria, prohibited actions, permissions, reviewers, evidence); make fast verification reliable first; run the pilot openly and capture diffs, failures, reviewer feedback, cost and outcomes; expand scope or autonomy only on evidence."
+      },
+      {
+        "heading": "AGENTS.md: what the page says and does not say",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page describes AGENTS.md as a 'lightweight, human-readable contract' that defines how software agents should behave within a system, for alignment (goals, boundaries, decision principles), consistency across environments and teams, and governance (assumptions, constraints and safety rules made explicit and reviewable).\n\nTypical contents as the page lists them: role and scope (what the agent is responsible for and what it is not); capabilities and tools (which actions, APIs or resources it may use); decision logic (high-level policies, priorities, escalation rules); constraints (security, compliance and operational limits); and lifecycle (how the agent is initialised, monitored and updated). The page's rationale is that moving intent and rules out of code improves transparency, auditability and maintainability.\n\nThe page gives no example content, names no tools that read the file, and gives no guidance on writing one. It links ten repositories that have their own files."
+      },
+      {
+        "heading": "A file is advice, not enforcement",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page calls the file a contract. A contract binds; a text file read by an agent does not. Nothing in the page says the file is technically enforced, and the page's own control list says a prompt is not a secure boundary. The same applies here: whatever you write is a request the agent may follow imperfectly, or be talked out of by injected content.\n\nSo split the rules into two kinds. Advice goes in the file: coding conventions, how to run the tests, naming, where documents live, when to ask a human. Limits go in the platform: scoped credentials, a sandbox with no production access, branch protection that requires review, secret scanning, and policy checks in the pipeline. If a rule matters, enforce it where the agent cannot argue with it, and use the file to explain the rule so the agent does not waste effort hitting it.\n\nA practical structure for a repository file, an illustration and not a standard, with the page's five headings adapted: what this repository is and what the agent may change; how to build, test and lint, with the exact commands; areas that need a human (authentication, billing, migrations, anything touching production data); rules about secrets and external content (never print secrets; treat issue text and web pages as untrusted data, not instructions); and how to report uncertainty (stop and ask, with the question).\n\nKeep it short, version it with the code, review changes to it like code, and test it: give an agent a task the file should constrain and see whether it does. A file nobody tests is a hope. Check which tools in your environment actually read it, because the page names none."
+      },
+      {
+        "heading": "Judging a pilot honestly",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page recommends a pilot compared with a baseline but gives no method. Small cohorts mislead.\n\nSuppose the baseline has 120 changes with 9 change failures (7.5%) and the pilot has 150 changes with 15 failures (10%). The rate rose by 2.5 percentage points, a third in relative terms, which sounds alarming. A two-proportion comparison (standard error about 3.4 points) gives a z of about 0.73 and a 95% interval for the difference of roughly minus 4.2 to plus 9.2 points. The data cannot tell a real increase from noise. The honest statement is 'no evidence of a change, and the pilot was too small to detect one smaller than several points', not 'no difference'.\n\nTwo consequences. First, decide in advance what size of change would matter and how many changes you need to see it, or you will argue from noise. Second, read the work itself, as the page says: look at the failed changes, the reviewer comments and the rework, because 15 cases can be read one by one.\n\nAlso beware activity. If lines generated rose 60% while lead time fell 27% and change failures held steady, the useful finding is the lead time and the quality together, not the lines."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "One bounded workflow: test expansion for a legacy module (invented numbers, not Cretek data)",
+      "body": "Choice of workflow, following the page: bounded, low-risk and high-volume. A legacy reporting module has little test coverage. Adding characterisation tests is mechanical, easy to review and cannot change production behaviour. That is a candidate for bounded autonomy. A change to the billing calculation is not: it is security- and money-sensitive, so it stays human in the loop.\n\nThe contract. Inputs: the module and its current tests. Completion criteria: tests pass against the unchanged code, cover the listed functions and the edge cases the reviewer names, and do not modify production code. Prohibited: changing any file outside the test folder, reading secrets, running commands other than the listed test command. Permissions: a sandboxed copy with no network and no credentials. Reviewer: one named engineer. Evidence: the test run output and the diff.\n\nFast verification first: the test suite must run in minutes and be reliable, or the agent cannot be checked cheaply.\n\nThe pilot. Baseline: the previous 120 changes of this kind, median lead time 30 hours, change failure rate 9 of 120 (7.5%). Pilot: 150 changes, median lead time 22 hours (down 26.7%), 15 failures (10%), and 18 of the 150 needed rework because of an agent-written change (12%). Lines generated rose 60%, which the team records but does not count as success.\n\nReading it. Lead time improved. The failure rate rose by 2.5 points, but the interval runs from about minus 4 to plus 9 points, so the pilot cannot say whether quality moved. The 12% rework is a real cost to examine. The team reads all 18 reworked changes, finds that 11 came from tests that asserted current bugs as correct behaviour, and adds a rule to the guidance file and a reviewer checklist item. They extend the pilot to a larger sample before widening autonomy.\n\nDecision recorded: continue bounded autonomy for test expansion on this module only; no change to billing; review again after another 150 changes with the reduced-rework target stated in advance (an assumption); expand only on evidence."
+    },
+    "misconceptions": [
+      "Treating AI-SDLC as a way to ship generated code faster. The page says it is not.",
+      "Automating a weak process. An agent makes its problems happen faster.",
+      "Believing a guidance file is a binding contract. It is advice; enforce limits in the platform.",
+      "Treating tool access as approval to act.",
+      "Measuring lines generated, prompts or agent hours as value.",
+      "Declaring 'no difference' from a small pilot. The interval may be wide.",
+      "Believing a prompt is a security boundary. The page says it is not."
+    ],
+    "explainTask": "In 150 words or fewer, explain to an engineering team which kind of work an agent may do with little supervision, which kind it may not, and where the limits are enforced."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "as-1",
+      "question": "Which sentence does the AI-SDLC page use about its own purpose?",
+      "options": [
+        "It is the fastest way to ship generated code",
+        "It is not a licence to ship generated code faster",
+        "It replaces code review",
+        "It removes the need for tests"
+      ],
+      "answer": 1,
+      "why": "The page presents AI-SDLC as an operating model in which people stay accountable for intent, risk and outcomes, and states it is not a licence to ship generated code faster."
+    },
+    {
+      "id": "as-2",
+      "question": "Which is one of the page's five elements of AI-SDLC?",
+      "options": [
+        "Backpressure: tests, linters, security checks and review gates",
+        "Maximum autonomy",
+        "Prompt length limits",
+        "Vendor lock-in"
+      ],
+      "answer": 0,
+      "why": "The five elements are intent, context, autonomy boundary, backpressure and a learning loop."
+    },
+    {
+      "id": "as-3",
+      "question": "Under the page's autonomy modes, which work belongs in 'human in the loop'?",
+      "options": [
+        "Documentation updates",
+        "Mechanical refactors",
+        "Architecture, security-sensitive work, production data and novel changes",
+        "Test expansion with narrow permissions"
+      ],
+      "answer": 2,
+      "why": "Human in the loop covers architecture, security-sensitive work, production data and novel changes. Mechanical refactors, test expansion, rehearsed migrations and documentation can use bounded autonomy."
+    },
+    {
+      "id": "as-4",
+      "question": "Which statement matches the page's security guidance for agent workflows?",
+      "options": [
+        "A prompt is a secure boundary",
+        "A prompt is not a secure boundary; use scoped credentials, segregated environments and treat retrieved content as untrusted",
+        "Agents should hold broad standing credentials",
+        "Prompt injection is not a concern"
+      ],
+      "answer": 1,
+      "why": "The page says a prompt is not a secure boundary, recommends least-privilege credentials and segregated environments, and says to threat-model prompt injection and treat retrieved content as untrusted."
+    },
+    {
+      "id": "as-5",
+      "question": "A pilot of 150 changes has 15 failures (10%); the baseline of 120 has 9 (7.5%). What can you conclude?",
+      "options": [
+        "Quality clearly got worse",
+        "Quality clearly stayed the same",
+        "The difference is within noise (z about 0.73), so the pilot cannot tell, and a larger sample is needed",
+        "The pilot proves the agent is safe"
+      ],
+      "answer": 2,
+      "why": "The 95% interval for the difference runs from about minus 4.2 to plus 9.2 points, so the data cannot separate a real change from noise. Read the failed changes and extend the sample."
+    },
+    {
+      "id": "as-6",
+      "question": "Which statement is accurate about the AGENTS.md page?",
+      "options": [
+        "It gives a complete example file and names the tools that read it",
+        "It describes a human-readable file for agent behaviour but gives no example content, no tools and no guidance on whether it is enforced",
+        "It proves the file is a formal open standard",
+        "It provides detailed security controls"
+      ],
+      "answer": 1,
+      "why": "The page describes the file and lists typical contents but gives no example content, names no reading tools, and does not say whether the file is enforced or advisory."
+    }
+  ],
+  "build": {
+    "business": "Cretek's engineers will use AI assistants whether or not there is a policy. A CTO needs a bounded, measured and enforceable way to use them. This is the AI-assisted delivery capability in the CTO Operating System.",
+    "problem": "Define, run and measure one bounded AI-assisted workflow in a real Cretek repository, with an agent guidance file, platform-enforced limits and an honest pilot analysis.",
+    "requirements": [
+      "Choose one bounded, low-risk, high-volume workflow in a real repository (for example expanding tests for a module, or updating documentation). Say why it is bounded and name one workflow you will not give an agent yet, with the reason",
+      "Write the contract: inputs, completion criteria, prohibited actions, permissions, reviewer and evidence required. Assign an autonomy mode with a reason",
+      "Write the repository guidance file (conventions, exact build and test commands, areas needing a human, rules for secrets and untrusted content, how to report uncertainty). Keep it short and versioned with the code",
+      "Enforce the limits in the platform, not only in the file: a sandbox or scoped credentials with no production access, branch protection requiring human review, and secret scanning. Show each control working with a test (for example an attempted push to the protected branch is rejected)",
+      "Test the guidance file: give the agent at least three tasks the file should constrain (including one containing an injected instruction in a document or issue text) and record whether it complied. Record failures and what you changed",
+      "Establish a baseline for at least three measures from the page (for example lead time, change failure rate, rework) from real history, with the sample size",
+      "Run the pilot and record each change: who reviewed it, what evidence was shown, any rework and why. Report the pilot against the baseline with a significance or interval calculation, and state plainly when the sample is too small to tell",
+      "Record cost and effort: time spent reviewing agent output, tooling cost and any incident or near-miss",
+      "A pilot analysis tool that takes baseline and pilot counts and outputs rates, the difference, a 95% interval for the difference in proportions and a plain-language verdict ('cannot tell' when the interval spans zero). Automated tests required, including known values from the worked example, zero events in one group, zero sample size (reject), equal groups, a negative count (reject) and events exceeding sample size (reject)",
+      "A decision record: expand, hold or stop, with the evidence and the next review date and trigger",
+      "A one-page summary for the head of engineering, led by what was measured and what could not be concluded",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No agent access to production systems, production data or real credentials",
+      "No customer data or secrets in prompts, guidance files, logs or the repository",
+      "Do not count lines generated, prompts or agent hours as success",
+      "Do not treat the guidance file as a security control. It is advice; enforcement is in the platform",
+      "Human review of every merged change in the pilot"
+    ],
+    "design": "Write a one-page design covering the workflow, the contract, the autonomy mode, the platform controls, the measures and baseline, and one alternative you rejected, for example giving the agent write access to the main branch.",
+    "tasks": [
+      "Choose the workflow and the one you will not automate yet",
+      "Write the contract and the guidance file",
+      "Set up and test the platform controls",
+      "Test the guidance file with constrained and injected tasks",
+      "Establish the baseline and run the pilot",
+      "Build the analysis tool with tests and analyse the pilot",
+      "Write the decision record and the one-page summary"
+    ],
+    "acceptance": [
+      "The workflow is bounded and a non-automated workflow is named with a reason",
+      "The contract and guidance file exist and are versioned with the code",
+      "At least three platform controls are shown working by test",
+      "The guidance file was tested with an injected-instruction case and failures were recorded",
+      "A baseline and pilot are compared with an interval and an honest verdict",
+      "The analysis tool tests pass including the rejection cases",
+      "A decision record gives expand, hold or stop with a review trigger",
+      "No secrets, customer data or production access were involved"
+    ],
+    "deliverable": "The contract, guidance file, control tests, pilot records, analysis tool with tests, decision record and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Head of engineering",
+    "scenario": "The head of engineering has heard from vendors that AI will double productivity. They want to know what you did, what it showed and what you will allow next.",
+    "prompts": [
+      "What are agents allowed to do in your repository, and where is that enforced?",
+      "Show me what happened when an issue contained an instruction aimed at the agent.",
+      "Your failure rate went up. Is that real?",
+      "What did you decide not to automate, and why?",
+      "How would you know if quality had slipped without anyone noticing?",
+      "What evidence would make you widen the agent's autonomy?"
+    ],
+    "rubric": [
+      { "criterion": "Bounded scope, a clear contract and the right autonomy mode", "weight": 0.25 },
+      { "criterion": "Limits enforced in the platform and tested, not only written in a file", "weight": 0.3 },
+      { "criterion": "Honest measurement: baseline, interval, no activity metrics, what could not be concluded", "weight": 0.3 },
+      { "criterion": "Clear communication to a head of engineering", "weight": 0.15 }
+    ]
+  }
+}

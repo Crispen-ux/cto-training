@@ -1,0 +1,254 @@
+{
+  "id": "devex-blameless-culture",
+  "moduleId": "people-organisation",
+  "pillar": "People",
+  "title": "Developer experience and blameless culture",
+  "estimatedMinutes": {
+    "learn": 45,
+    "build": 270,
+    "defend": 30
+  },
+  "objectives": [
+    "List the six DevEx dimensions the page gives and say how you would measure each, since the page gives no measures",
+    "Build a cost and sensitivity case for a developer-experience investment, stating which inputs are assumptions",
+    "State the five blameless-culture principles on the page and the gap the page leaves on negligence and misconduct",
+    "Rewrite a blaming incident description into a system-focused one, and design accountability that does not depend on blame",
+    "Defend a DevEx and culture programme to a finance and a people leader, including how you will know it is working"
+  ],
+  "prerequisites": [
+    "rca-post-mortems",
+    "iac-golden-path",
+    "disagree-commit-decisions"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "rca-post-mortems",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "iac-golden-path",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "disagree-commit-decisions",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "DevEx",
+      "url": "https://www.ctoframework.com/people/culture-organisation/devex",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Blameless Culture",
+      "url": "https://www.ctoframework.com/people/culture-organisation/blameless-culture",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The DevEx page defines developer experience as the total quality of the environment, tools, processes and culture engineers interact with, lists six dimensions (onboarding and ramp-up; tooling and infrastructure quality; automation and self-service; documentation, discoverability and transparency; fast and tight feedback loops; consistency and predictability), four claimed outcomes (productivity, quality, retention and satisfaction, delivery speed, which it says compound over time), four recommended actions and a closing principle of treating internal engineering teams as first-class customers. It contains no statistics, benchmarks, named metrics or frameworks (it names no DORA, SPACE, cycle time or survey instrument), no case studies and no sources.",
+    "The retrieved summary flagged these points on the DevEx page: the 'compounding effect' and the links between developer experience and retention, turnover, quality and morale are asserted as causal without data; 'fast onboarding reduces opportunity costs' is plausible but unquantified; and the page cites no sources or authors. It does not cover measurement (surveys, productivity metrics, baselines), return on investment or a business case, implementation sequence or staffing of a platform team, the tension between standardisation and autonomy, failure modes, security and compliance implications of self-service, legacy tooling, remote teams or developer input.",
+    "The Blameless Culture page lists five principles (focus on systems, not individuals; psychological safety; learning from failure through post-mortems and retrospectives; ownership and accountability without blame; fostering innovation) and has one internal link (technical post-mortems) and one Wikipedia reference. The retrieved summary flagged: no evidence for the benefits; 'every incident' as an opportunity is absolute; the page says people are not blamed but remain accountable without explaining how accountability works, which leaves the boundary unclear; 'post-mortems' and 'retrospectives' are not explained; and the single reference does not support the specific claims. It does not cover how to run a blameless post-mortem, how to treat negligence, repeated errors or deliberate harm (the most significant gap), leadership behaviour, measurement, trade-offs such as under-reporting or confusing 'no blame' with 'no accountability', related frameworks such as 'just culture', context such as remote teams or introducing the approach into a blame-oriented culture, or examples.",
+    "The 'just culture' ideas used in this lesson (separating honest error from risky behaviour and from reckless conduct, and responding differently to each) come from my general knowledge. The page does not mention them and I have not read a primary source for this lesson, so check the framework you adopt. This is not employment or legal advice: how an organisation treats misconduct is a matter for HR and legal advisers.",
+    "The cost model, sensitivity, onboarding calculation and the incident rewrites in this lesson are Original Academy material. Every input is an invented ASSUMPTION and the arithmetic was run in Python. The 50% share of waiting time treated as lost is an assumption used to show the mechanism, not a finding."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "DevEx as the page defines it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines developer experience as the total quality of the environment, tools, processes and culture engineers work in while designing, building, deploying and maintaining applications, and stresses that it is about how well tools fit daily workflows, so that engineers can focus on problems instead of friction.\n\nSix dimensions: onboarding and ramp-up (how fast a new engineer becomes productive, with code access, setup instructions, sandboxes and documentation); tooling and infrastructure quality (reliability, usability and integration of IDEs, build systems, CI/CD, monitoring and feature flags); automation and self-service (automated provisioning, testing and deployment, and the ability to spin up environments or read logs without waiting for another team); documentation, discoverability and transparency; fast and tight feedback loops; and consistency and predictability (standard workflows and coding standards, reducing cognitive load).\n\nClaimed outcomes: productivity, quality, retention and satisfaction, and delivery speed, compounding over time. Recommended actions: standardise environments (containers and templates), build internal platforms and golden paths, invest in observability and assign clear ownership of developer-facing infrastructure. Closing principle: treat internal engineering teams as first-class customers."
+      },
+      {
+        "heading": "Turning each dimension into a measure",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page names no measure for any dimension. Without measures, developer experience becomes a matter of who complains loudest. Pair a number you can compute from systems with a question you ask engineers.\n\nOnboarding: time from start date to first merged change; share of new starters who finish setup without asking for help; survey: 'I knew where to find what I needed in my first month'.\nTooling quality: CI success rate excluding genuine failures, flaky-test rate, tool uptime; survey on how often tools interrupt work.\nAutomation and self-service: share of common requests (new environment, new service, access) completed without a ticket; median time to complete each.\nDocumentation: share of services with an owner and a runbook; age of the last update; survey on whether people can find answers.\nFeedback loops: time from commit to test result, to deploy and to production signal; review turnaround time.\nConsistency: share of services on the standard template (golden path, as in the earlier lesson).\n\nThen the survey. A short, regular developer survey (five to ten questions, the same each quarter) reports trends and pain points. Report the number of responses and the response rate, and avoid comparing small teams, as with the NPS lesson: with few responses a movement of a few points is noise.\n\nBaselines and counter-metrics matter. Measure before you invest. Pair a speed measure with a quality one (faster pipeline and change failure rate) so that you do not make the dashboard green by dropping checks. Do not use these measures to rank individuals; they describe the system."
+      },
+      {
+        "heading": "Making the case: cost, sensitivity and what is guessed",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page says better developer experience improves productivity and retention but gives no business case. A case needs honest inputs.\n\nExample with invented numbers. 40 engineers each trigger 12 builds a day and wait 14 minutes for each. That is 112 hours of waiting a day, or 25,760 hours a year over 230 working days. A pipeline project that cuts the wait to 7 minutes saves 12,880 hours a year of waiting; to 4 minutes, 18,400 hours.\n\nBut waiting time is not all lost: engineers often do something else while a build runs. The share that is truly lost is the biggest unknown. At a loaded cost of 80 an hour, and with 20%, 50% or 100% of the saved waiting time really lost, the annual benefit of the 7-minute target is about 206,080, 515,200 or 1,030,400. The answer is spread over a factor of five by one assumption, so measure it: observe or survey how engineers actually spend build waits, and use the measured share.\n\nCost: suppose two engineers for half a year at 130,000 a year each plus 40,000 for infrastructure, 170,000 in total. At the middle assumption the payback is about 4 months (170,000 divided by 515,200 a year). At the pessimistic 20% assumption it is about 10 months (170,000 divided by 206,080 is 0.83 of a year). The decision survives the pessimistic case here, but you can only say so because you computed it.\n\nOnboarding: suppose 20 hires a year and the median time to first merged change falls from 12 days to 5, and a new starter is half as productive during the gap. The saved effect is 20 x 7 days x 8 hours x 80 x 50% = 44,800 a year. Smaller than the pipeline case, but it also affects retention and morale, which the page claims without data and which you can measure through the survey and exit data over time.\n\nBe wary of the page's 'compounding' claim. It is plausible that good tooling attracts and keeps people, but it needs your own evidence. Also weigh the trade-off the page omits: standardisation lowers load but can block teams with unusual needs, so the golden path should be the easiest route, not the only one."
+      },
+      {
+        "heading": "Blameless culture as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page describes a blameless culture as handling problems and accountability in a way that centres on learning and improvement instead of assigning fault, inviting open discussion of failures without fear of punishment or retaliation.\n\nFive principles: focus on systems, not individuals (examine underlying causes in processes, tools and workflows); psychological safety (people can admit mistakes and raise challenges without fearing repercussions); learning from failure (post-mortems and retrospectives find root causes and add safeguards); ownership and accountability (no blame, but people remain responsible, expressed by contributing to fixes); and fostering innovation (without fear of failure, teams experiment more).\n\nIt links to technical post-mortems and cites a Wikipedia article on blame in organisations. It gives no examples, method or evidence."
+      },
+      {
+        "heading": "What 'blameless' does and does not mean",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page says people are not blamed but remain accountable. The boundary needs stating, because teams misread 'blameless' as 'no consequences'.\n\nBlameless applies to the analysis of an incident. The question is 'how did our system make this action seem reasonable, and what would have prevented it?', not 'who is at fault?'. A person who made an honest mistake in a process that allowed it is not the root cause; the missing check is.\n\nAccountability does not disappear. It changes shape: people own the follow-up, the fix, the communication and the learning. A person is accountable for telling the truth about what happened, and for the actions agreed. Leaders are accountable for fixing the conditions.\n\nThe gap on conduct. The page says nothing on negligence, repeated errors or deliberate harm, which is the most significant gap. Some frameworks, often called 'just culture' (from my general knowledge; the page does not mention them and I have not verified a source), distinguish honest error, at-risk behaviour such as taking a shortcut believed to be safe, and reckless or malicious conduct, and respond differently: console and fix the system for honest error; coach and remove the incentive for the shortcut; apply a disciplinary process for reckless or malicious acts. Decide your own policy with your HR and legal advisers (not legal advice), write it down, and say plainly that blameless post-mortems are about learning and that a separate, fair process handles misconduct.\n\nHow it fails. People under-report if reporting leads to hidden consequences. Post-mortems become ritual with action items that are never done. Leaders say 'blameless' and then ask in a meeting who did it. A culture of no consequences for repeated carelessness frustrates the people who do the careful work.\n\nPractice. Write incident narratives about systems and decisions, not names or adjectives: instead of 'Sam pushed a bad config and took down checkout', write 'a configuration change was deployed that the validation step did not check for the missing setting; the deploy had no automated rollback and the on-call engineer needed 40 minutes to find the change'. Run the review using the post-mortem practice from the earlier lesson, record actions with owners and dates, and track them to completion.\n\nMeasure it. Psychological safety shows in behaviour: how early problems are raised, whether near misses are reported, whether leaders admit their own errors in public. A short survey item ('I can admit a mistake without fear of negative consequences') with its response count; the number of near-miss reports (a rise can be a good sign, since it may mean more reporting, not more near misses, so read it alongside the survey); and the share of post-mortem actions completed on time. Beware targets on these numbers, which invite gaming, a lesson you have seen several times."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A developer experience programme and a blameless incident review (invented numbers, not Cretek data)",
+      "body": "Part 1: choosing what to fix. Cretek's 40 engineers answer a seven-question survey (31 respond, 78%). Biggest pain points: slow builds (24 of 31 name it), unclear ownership of services (17), manual environment creation (15). Baseline measures from systems: median commit-to-test-result 14 minutes, 12 builds per engineer per day, median time to get a test environment 3 days, time to first merged change for the last 8 hires: median 12 days.\n\nCase for the pipeline project. Waiting time: 112 hours a day. Target 7 minutes. Benefit range 206,080 to 1,030,400 a year depending on the share truly lost; the team sends a two-question diary to 12 volunteers for a week and finds that engineers do other useful work in about half of build waits (so 50%, a small sample, noted). Cost 170,000; payback about 4 months at the measured share. The environment project (3 days to under 1 hour) is estimated separately. Guardrail: change failure rate must not rise, and flaky-test rate must fall.\n\nWhat the page's advice looks like locally: a golden path for new services and a template, easiest route but not mandatory; an owner and a runbook required before a service is production-ready; a platform team treating engineers as customers with a quarterly survey and a public roadmap.\n\nPart 2: an incident. At 14:05 on a Tuesday, checkout fails for 38 minutes after a configuration change. The first draft of the incident note says: 'Sam deployed a bad config'.\n\nThe review. The facilitator (not the manager of the people involved) opens by saying the purpose is to learn, not to find fault. The rewritten timeline: the change was reviewed and approved; the validation step checks syntax but not that required settings are present; the deploy tool had no automatic rollback; the alert fired after 9 minutes because it measured error rate over a 10-minute window; the on-call engineer needed 21 minutes to identify the change because deploys were not shown on the dashboard. Contributing factors are all in the system. Sam describes what seemed reasonable at the time, and the team adds: Sam was working to a deadline and the review checklist did not ask about required settings.\n\nActions with owners and dates: add validation for required settings (platform team, 2 weeks); automatic rollback on health check failure (platform, 6 weeks); alert window to 3 minutes (SRE, 1 week); deploy markers on dashboards (SRE, 2 weeks); add a checklist item and update the review template (engineering manager, 1 week). The manager tracks completion, and reports the share done on time at the next review (the previous quarter was 9 of 14, 64%, so the team also reduces the number of actions per review to the ones that matter).\n\nAccountability. Sam owns the writing of the validation test, and tells the story at the engineering meeting, voluntarily, with the manager. The manager is accountable for the deadline pressure that day. There was no indication of negligence or reckless behaviour, so no disciplinary process applies; the policy says that would be handled separately and fairly with HR.\n\nMeasures. Psychological safety item (baseline 71% agree, 31 responses; small, with a wide interval, so reported for the whole group only), near-miss reports (12 last quarter; 19 this quarter, which the team reads as improved reporting and checks against the survey), and the completion of actions on time.\n\nWhat is unverified: all numbers and events are invented, and the policy on misconduct is a decision for your own organisation with qualified advisers."
+    },
+    "misconceptions": [
+      "Believing better developer experience obviously pays for itself. It needs a case with measured inputs.",
+      "Treating all saved waiting time as recovered productivity.",
+      "Measuring developer experience with a single metric or using it to rank people.",
+      "Believing 'blameless' means 'no consequences' for any behaviour.",
+      "Naming a person as the root cause in an incident note.",
+      "Running post-mortems with actions nobody completes.",
+      "Reading a rise in near-miss reports as always bad. It can mean people feel safer reporting."
+    ],
+    "explainTask": "In 150 words or fewer, explain to an engineer why a blameless review does not mean nobody is accountable, using the incident example."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "db-1",
+      "question": "Which is NOT one of the page's six DevEx dimensions?",
+      "options": [
+        "Onboarding and ramp-up",
+        "Fast and tight feedback loops",
+        "Consistency and predictability",
+        "Executive compensation"
+      ],
+      "answer": 3,
+      "why": "The six are onboarding, tooling and infrastructure quality, automation and self-service, documentation and transparency, feedback loops, and consistency and predictability."
+    },
+    {
+      "id": "db-2",
+      "question": "40 engineers x 12 builds a day x 14 minutes of waiting. How many hours of waiting is that per day?",
+      "options": [
+        "56",
+        "112",
+        "168",
+        "672"
+      ],
+      "answer": 1,
+      "why": "40 x 12 x 14 = 6,720 minutes, which is 112 hours a day, or 25,760 hours over 230 working days."
+    },
+    {
+      "id": "db-3",
+      "question": "Cutting the wait to 7 minutes saves 12,880 hours a year. At 80 an hour, what is the benefit if only 20% of that waiting was truly lost?",
+      "options": [
+        "About 206,080",
+        "About 515,200",
+        "About 1,030,400",
+        "About 12,880"
+      ],
+      "answer": 0,
+      "why": "12,880 x 80 x 0.2 = 206,080. At 50% it is 515,200 and at 100% 1,030,400. The share truly lost is the biggest unknown and should be measured."
+    },
+    {
+      "id": "db-4",
+      "question": "Which is a significant gap the page leaves on blameless culture?",
+      "options": [
+        "It does not mention incidents",
+        "It does not say how negligence, repeated errors or deliberate harm are handled, or how accountability works without blame",
+        "It does not list principles",
+        "It is too long"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary called this the most significant gap. Blameless applies to incident analysis; a separate fair process handles misconduct."
+    },
+    {
+      "id": "db-5",
+      "question": "Which rewrite of an incident note follows the lesson?",
+      "options": [
+        "Sam deployed a bad config",
+        "A configuration change was deployed that validation did not check for a missing setting, with no automatic rollback and slow alerting",
+        "Someone made a mistake",
+        "The team was careless"
+      ],
+      "answer": 1,
+      "why": "The system-focused version describes decisions and conditions, and points to fixes, instead of naming a person or using adjectives."
+    },
+    {
+      "id": "db-6",
+      "question": "Near-miss reports rose from 12 to 19 in a quarter. How should the lesson's reader interpret this?",
+      "options": [
+        "Safety got worse",
+        "It may mean more reporting, so read it with the psychological safety survey instead of assuming either way",
+        "Reports should be banned",
+        "It proves the culture is blameless"
+      ],
+      "answer": 1,
+      "why": "A rise can reflect improved willingness to report. Pair the count with the survey and the action completion rate, and avoid setting targets on it."
+    }
+  ],
+  "build": {
+    "business": "Cretek's engineers lose time to slow tools and unclear ownership, and learn little from incidents if people fear blame. A CTO must be able to justify developer-experience investment with honest numbers and build a culture where problems surface early. This is the engineering culture capability in the CTO Operating System.",
+    "problem": "Run a developer experience measurement and business case for one real or realistically simulated Cretek team, and run a blameless incident review with tracked actions and a stated policy on conduct.",
+    "requirements": [
+      "Choose a measure for each of the six DevEx dimensions (one system-derived, one survey question), define it precisely and collect a baseline. Report survey response count and rate",
+      "Rank the pain points from the survey and systems data, and pick one project to fund",
+      "Build the cost and benefit model with every input labelled REAL or ASSUMPTION. Measure the biggest unknown (for example the share of waiting time truly lost) with a small diary or observation, and report the sample size",
+      "Show a sensitivity table over at least three values of the biggest unknown and state the payback in each case",
+      "Define counter-metrics (for example change failure rate, flaky-test rate) and a standardisation policy that keeps the golden path optional",
+      "Run or simulate a blameless review of one incident. Write the original blaming description, then the system-focused rewrite, a timeline of decisions and conditions, contributing factors and actions with owners and dates",
+      "Write your conduct policy: how honest error, risky shortcuts and reckless or malicious acts are treated differently, who decides and where HR and legal advice is needed. Mark the policy 'requires review by HR and legal advisers'",
+      "Define measures of culture (a safety survey item with its count, near-miss reports and on-time completion of post-mortem actions) and how you will read them together",
+      "A business case calculator that takes engineers, builds per day, wait minutes, new wait minutes, working days, loaded cost, share truly lost and project cost, and returns hours saved, annual benefit and payback. Automated tests required, including the lesson's values (112 hours a day, 12,880 hours saved at 7 minutes, 206,080 / 515,200 / 1,030,400 at the three shares, payback of about 4 months at 50%), a new wait above the old wait (reject), a share outside 0 to 1 (reject), zero engineers (reject) and zero project cost (return an explicit result without dividing by zero)",
+      "A one-page summary for the finance and people leaders led by the measured inputs and the recommendation",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not use DevEx measures to rank or evaluate individuals",
+      "Do not name individuals as the cause in incident documents",
+      "Do not state a conduct policy as final without HR and legal review",
+      "Do not treat waiting time as fully recovered productivity without evidence",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the measures, the chosen project, the model and its biggest unknown, the review method and one alternative you rejected, for example funding a new tool without a baseline.",
+    "tasks": [
+      "Define measures and collect a baseline and survey",
+      "Choose the project and measure the biggest unknown",
+      "Build the model and the sensitivity",
+      "Run the blameless review and write the rewrite",
+      "Write the conduct policy and culture measures",
+      "Build the calculator with tests",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "Each dimension has a system measure and a survey question with counts",
+      "The benefit model labels inputs and has a measured value for the biggest unknown",
+      "A sensitivity table shows payback under at least three values",
+      "The incident review has a rewrite, a timeline, actions with owners and dates",
+      "The conduct policy is marked for HR and legal review",
+      "Calculator tests pass including the rejection cases",
+      "No individuals are named as causes or ranked"
+    ],
+    "deliverable": "The measures and baseline, survey summary, model and sensitivity, incident review, conduct policy draft, culture measures, calculator with tests and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Finance partner",
+    "scenario": "A finance partner and the people leader are reviewing a request to fund a developer experience project and to adopt a blameless incident practice. They want to know what the money buys and what 'blameless' means for accountability.",
+    "prompts": [
+      "How much of the saved waiting time is really recovered, and how do you know?",
+      "What is the payback if you are wrong about that share?",
+      "What did you measure before you started, and how will you tell it worked?",
+      "Does blameless mean nobody is accountable?",
+      "What happens when someone is careless or deliberately breaks the rules?",
+      "How will you know people feel safe reporting problems?"
+    ],
+    "rubric": [
+      {
+        "criterion": "A measured, sensitivity-tested business case with labelled assumptions",
+        "weight": 0.3
+      },
+      {
+        "criterion": "A sound blameless review with a systems rewrite, tracked actions and clear accountability",
+        "weight": 0.3
+      },
+      {
+        "criterion": "A conduct policy that separates honest error from misconduct, with HR and legal review marked",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Clear communication to finance and people leaders",
+        "weight": 0.15
+      }
+    ]
+  }
+}

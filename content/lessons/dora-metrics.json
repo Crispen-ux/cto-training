@@ -1,0 +1,157 @@
+{
+  "id": "dora-metrics",
+  "moduleId": "delivery-metrics",
+  "pillar": "Delivery",
+  "title": "DORA Metrics: measuring delivery speed and stability",
+  "estimatedMinutes": { "learn": 40, "build": 180, "defend": 30 },
+  "objectives": [
+    "Define the four DORA metrics and which of them measure velocity versus stability",
+    "Explain why the metrics must be read together, not individually",
+    "Compute all four from a deployment log and classify a team using the benchmarks on the CTO Framework page",
+    "Defend a decision to invest in delivery tooling using these metrics"
+  ],
+  "prerequisites": [],
+  "unlock": { "prerequisites": [] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "DORA metrics",
+      "url": "https://www.ctoframework.com/delivery/metrics/dora-metrics",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "On the page, only the Deployment Frequency benchmarks are attributed (to the 2023 State of DevOps Report). The other three benchmark tables carry no source. Treat them as the framework's stated thresholds and verify against the current DORA research before quoting them to a board.",
+    "The page links a Wikipedia article and a Google Cloud blog post as references. Neither was consulted for this lesson."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What DORA metrics are",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework presents DORA metrics as a research-based way, from the DevOps Research and Assessment team, to measure software delivery performance. There are four metrics. Together they cover two things: velocity (how fast you ship) and stability (how reliably)."
+      },
+      {
+        "heading": "The four metrics",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Deployment Frequency: how often you successfully release to production. Frequent releases suggest small changes that are easier to review, test and roll back.\n\nLead Time for Changes: the time for a commit to reach production, across coding, testing, review and deployment. Short lead times point to an efficient pipeline.\n\nChange Failure Rate: the percentage of deployments that cause a service incident, a rollback or a hotfix. It checks that speed is not bought with quality.\n\nMean Time to Restore (MTTR): the average time to restore service after a user-impacting failure. It reflects resilience and operational readiness, and supports service-level objectives."
+      },
+      {
+        "heading": "Benchmark classes as stated on the page",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Deployment frequency: Elite = on demand or multiple times per day; High = daily to weekly; Medium = weekly to monthly; Low = less than monthly.\nLead time: Elite < 1 day; High = 1 day to 1 week; Medium = 1 week to 1 month; Low > 1 month.\nChange failure rate: Elite 0-15%; High 16-30%; Medium 31-45%; Low 46-60%+.\nMTTR: Elite < 1 hour; High < 1 day; Medium = 1 day to 1 week; Low > 1 week.\n\nRequires verification: see the verification notes above for sourcing."
+      },
+      {
+        "heading": "Why they matter",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page gives these reasons: a balanced view that weighs speed against stability; a common language between technical and business stakeholders; and, tracked over time, a way to find pipeline bottlenecks, justify investment in tooling or automation, connect engineering performance to customer satisfaction, and benchmark against industry standards."
+      },
+      {
+        "heading": "What the page does not cover",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page defines the metrics but does not say how to collect the data, how to define a 'failure', or how the numbers can be gamed. Those are your job in the Build step. Open questions you will have to answer yourself: where does 'deployed' get timestamped, what counts as an incident for change failure rate, and who owns the data. Be ready to defend those definitions, because a metric with a loose definition can be improved without improving anything."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Reading the metrics together (illustrative numbers, not real data)",
+      "body": "Team A deploys 10 times a day, with a 40% change failure rate and a 3-day MTTR. Team B deploys twice a week, with a 5% failure rate and a 40-minute MTTR. Judged on frequency alone Team A looks better. Read together, Team A is shipping fast but breaking things and recovering slowly, which is the exact trade-off the framework says the four metrics exist to expose. The CTO question is not 'who is faster' but 'what is stopping Team A from shipping safely, and what would fixing it cost?'"
+    },
+    "misconceptions": [
+      "Treating deployment frequency as the goal. The page frames the four as a balance of velocity and stability.",
+      "Comparing teams on a single metric.",
+      "Assuming the benchmark thresholds are universal truth. Only one table on the page is attributed to a source.",
+      "Believing a better number means a better outcome. Without agreed definitions the numbers can be gamed (Original Academy note)."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a non-technical CFO why Team A in the worked example is not the better team, and what you would ask them to fund."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "dora-1",
+      "question": "According to the CTO Framework, the four DORA metrics together cover which two things?",
+      "options": ["Cost and quality", "Velocity and stability", "Throughput and headcount", "Availability and security"],
+      "answer": 1,
+      "why": "The page says the four metrics cover velocity (speed of delivery) and stability (reliability)."
+    },
+    {
+      "id": "dora-2",
+      "question": "Which metric is the percentage of deployments that cause a service incident, a rollback or a hotfix?",
+      "options": ["Lead Time for Changes", "Mean Time to Restore", "Change Failure Rate", "Deployment Frequency"],
+      "answer": 2,
+      "why": "That is the page's definition of Change Failure Rate."
+    },
+    {
+      "id": "dora-3",
+      "question": "On the page's benchmarks, what lead time for changes is classed as Elite?",
+      "options": ["Under one hour", "Under one day", "Under one week", "Under one month"],
+      "answer": 1,
+      "why": "The page lists Elite lead time as under one day."
+    },
+    {
+      "id": "dora-4",
+      "question": "Which set of benchmarks on the page is attributed to a named source?",
+      "options": ["Deployment Frequency (2023 State of DevOps Report)", "Change Failure Rate", "Mean Time to Restore", "Lead Time for Changes"],
+      "answer": 0,
+      "why": "Only the Deployment Frequency benchmarks are attributed, to the 2023 State of DevOps Report. This is why the others are flagged as requiring verification."
+    },
+    {
+      "id": "dora-5",
+      "question": "A team deploys ten times a day but 40% of deployments cause incidents. What does the balanced view of the four metrics tell you?",
+      "options": [
+        "The team is high-performing because frequency is high",
+        "Speed is being achieved at the cost of stability",
+        "Change failure rate should be ignored for fast teams",
+        "Nothing, one metric is enough"
+      ],
+      "answer": 1,
+      "why": "The framework's rationale for four metrics is that speed must be weighed against stability. High frequency with a high failure rate is the warning sign."
+    }
+  ],
+  "build": {
+    "business": "Cretek needs an honest view of its software delivery performance so you can decide where to invest in engineering effectiveness.",
+    "problem": "Build a small tool that computes the four DORA metrics from a deployment log and places the team in the framework's benchmark classes.",
+    "requirements": [
+      "Input: a CSV with at least commit_time, deploy_time, caused_incident (true/false) and restore_time where an incident occurred",
+      "Output: deployment frequency, median lead time, change failure rate and mean time to restore, each with its benchmark class",
+      "A data-source label on every report: REAL (from Cretek systems) or SIMULATED. Simulated data must be visibly marked on the output",
+      "A written definitions page: what counts as a deployment, a failure and a restore, and who owns the data"
+    ],
+    "constraints": [
+      "No invented Cretek performance numbers. Use real data or label the data simulated",
+      "Must run locally with a single command and no paid services"
+    ],
+    "design": "Write a one-page design (data flow, where timestamps come from, how failures are recorded) before coding. Include at least one alternative you rejected and why.",
+    "tasks": [
+      "Write the definitions page and the one-page design",
+      "Implement the calculator with unit tests, including edge cases (no incidents, empty log, a deployment with a missing restore time)",
+      "Run it on real Cretek data if any exists, otherwise on a clearly labelled simulated set",
+      "Document security and operational considerations (what data is stored, who can see it, how it is refreshed)"
+    ],
+    "acceptance": [
+      "Tests pass and cover the edge cases listed",
+      "All four metrics are computed and each is classed against the page's benchmarks, with the page cited",
+      "Output is labelled REAL or SIMULATED",
+      "Definitions page exists and names the data owner",
+      "A short README explains how to run it and its known limitations"
+    ],
+    "deliverable": "A repository link (or path) containing the calculator, tests, definitions page and sample report."
+  },
+  "defend": {
+    "assessor": "CFO",
+    "scenario": "You are asking the CFO to fund six weeks of work on the deployment pipeline at Cretek. Your evidence is the DORA report you built.",
+    "prompts": [
+      "Which of the four metrics is your weakest, and what is the business cost of leaving it where it is?",
+      "How do I know these numbers are real and not gamed? What did you define as a failure, and who could change that definition?",
+      "The framework's thresholds are not all sourced. Why should I fund against them?",
+      "What would you do if deployment frequency doubled and change failure rate rose? Would you still want the funding?",
+      "How will you know in three months that the investment worked, and what do you do if it did not?"
+    ],
+    "rubric": [
+      { "criterion": "Clear reasoning from the metrics to a decision", "weight": 0.3 },
+      { "criterion": "Honest handling of data quality and definitions", "weight": 0.25 },
+      { "criterion": "Commercial awareness: cost, value, alternatives rejected", "weight": 0.25 },
+      { "criterion": "Success measures and a rollback or stop condition", "weight": 0.2 }
+    ]
+  }
+}

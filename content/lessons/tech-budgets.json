@@ -1,0 +1,199 @@
+{
+  "id": "tech-budgets",
+  "moduleId": "economics-business-cases",
+  "pillar": "Economics",
+  "title": "Technology budgets: allocation and how to set them",
+  "estimatedMinutes": { "learn": 45, "build": 260, "defend": 30 },
+  "objectives": [
+    "Name the six budget categories and the typical range the framework gives for each",
+    "Explain how the budget changes with company stage, and why the percentages are context and not targets",
+    "Compare top-down, bottom-up and hybrid budgeting, including the weakness of each",
+    "Reconcile a set of team requests against a fixed envelope and show what was left unfunded, and why",
+    "Defend a technology budget to a board, including the security and technical debt lines"
+  ],
+  "prerequisites": ["tco-cloud-costs"],
+  "unlock": { "prerequisites": [{ "lessonId": "tco-cloud-costs", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "CTO Budget Breakdown",
+      "url": "https://www.ctoframework.com/economics/budget-breakdown",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Top-Down Budgeting vs Bottom-Up Budgeting",
+      "url": "https://www.ctoframework.com/economics/top-down-vs-bottom-up-budgeting",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Budget Breakdown page is organised in three stage tabs (Early-Stage Startup, Growth & Scaleup, Mature Enterprise). Only the Growth & Scaleup figures were present in the retrieved text. The Early-Stage and Mature Enterprise allocations were not retrieved, apart from the page's approximate early-stage figures (about 50% engineering, about 30% cloud), which carry no source. Open the other two tabs yourself before using them.",
+    "None of the percentages or ranges on the Budget Breakdown page has a cited source. The page gives no dollar example, no worked budget, no external benchmark data and no method for defending a budget to executives. It cites the OODA loop as a reference for agile resource allocation but does not explain how to apply it.",
+    "The Top-Down vs Bottom-Up page gives no step-by-step process, timeline, approval workflow, decision matrix, method for checking the accuracy of team estimates or control against budget inflation. Its three $10 million examples were checked: each sums to $10 million, and the bottom-up requests total $13 million.",
+    "The Budget Breakdown page links Salaries & Compensation Benchmarking and the Strategic Economics Hub (including Planning & Governance). Neither was read for this lesson. Read Salaries before pricing headcount.",
+    "The Budget Breakdown page puts Technical Debt & Maintenance at 5-15% of budget (5% in its Growth & Scaleup split), while the Technical Debt guide used in an earlier lesson suggests reserving 20% of each sprint. The pages measure different things (budget share versus sprint capacity) and neither reconciles the two. The reconciliation in this lesson is an Academy observation."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What a CTO budget breakdown is",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework defines a CTO budget breakdown as the structured allocation of capital across engineering, infrastructure, security, research and maintenance, so that technical operations line up with business strategy. It treats budgeting as turning strategic goals into execution, and says the allocation shapes development velocity, operational stability and risk posture.\n\nThe page organises the budget by company stage, in three tabs: Early-Stage Startup, Growth & Scaleup, and Mature Enterprise."
+      },
+      {
+        "heading": "The six categories and their ranges",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Each category has a general range and example expense items.\n\n1. Engineering & Development, 30 to 50%: salaries and benefits for developers, engineers, QA and DevOps; contractors; training; recruiting and onboarding.\n2. Infrastructure & Operations, 20 to 40%: cloud services, hosting and storage, networking and security, software licensing, internal IT support.\n3. Security & Compliance, 10 to 20%: audits and penetration testing, compliance costs (GDPR, ISO, SOC 2), cybersecurity tools, legal and consulting fees.\n4. Research & Innovation, 5 to 15%: new-technology R&D, prototypes and MVPs, AI and automation investment, proofs of concept.\n5. Technical Debt & Maintenance, 5 to 15%: refactoring and upgrades, legacy support, bug fixing and performance work.\n6. Other Costs, 5 to 10%: leadership team expenses, travel and events, IT asset purchases.\n\nThe Growth & Scaleup allocation shown on the page (Series A to C) is: Engineering & Development 45%, Infrastructure & Operations 25%, Security & Compliance 10%, Research & Innovation 10%, Technical Debt & Maintenance 5%, Other Costs 5%. Security and technical debt sit at the bottom of their ranges."
+      },
+      {
+        "heading": "How the mix changes with stage",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Growth & Scaleup: rapid growth raises recruiting and onboarding costs, infrastructure costs climb (the page recommends early optimisation and CDN scaling), compliance audits such as SOC 2 or ISO 27001 become important for closing business clients, and technical debt must be managed to protect developer velocity.\nEarly-stage startups: the page says they spend more on engineering (about 50%) and cloud (about 30%), with minimal compliance overhead.\nMature enterprises: more on security, compliance and technical debt, because stability and risk mitigation matter more.\nTech-driven organisations (SaaS, AI, fintech): more on research, to maintain a competitive edge.\n\nThe page does not give a pitfalls section. Its implied warnings are letting infrastructure costs grow without optimisation, delaying compliance until enterprise deals require it, and neglecting technical debt, which erodes velocity. Its guidance is to tie each category to business strategy, adjust the mix to stage and risk profile, and treat the budget as an execution plan and not only an administrative exercise."
+      },
+      {
+        "heading": "Three ways to set the number",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Top-down: senior management sets the overall budget from strategic goals, past performance and expected financial constraints, then divides it among departments or teams, who prioritise within their limits. Strengths: control and alignment with strategy. Weaknesses: leadership may lack detail on operational needs, which can mean impractical allocations, and teams may be underfunded for critical technical debt or unexpected problems. Example on the page: a $10 million R&D budget split $4M AI/ML, $3M backend and infrastructure, $2M frontend and UX, $1M DevOps and security.\n\nBottom-up: teams propose budgets from their project needs and expected expenses, and leadership consolidates and reviews them, with negotiation, trade-offs and possible scope cuts. Strengths: more detailed and realistic, grounded in operational insight. Weaknesses: without central control there is a risk of exceeding available funds, and teams may inflate estimates to secure funding, which can pull the budget away from strategy. Example: requests of $5M AI/ML, $4M backend, $2M frontend and $2M DevOps total $13M against a $10M ceiling, so leadership must cut $3M.\n\nHybrid: leadership sets an overall total, teams propose allocations, and leadership reviews and adjusts them. Example, still $10M: AI/ML $4.5M (trimmed from $5M), backend $3M (matching leadership's original figure), frontend $1.5M (lower-priority UI experiments cut), DevOps $1M (security investment kept stable). The page says the choice depends on organisational structure, financial strategy and the balance between flexibility and control, gives no decision matrix, and notes that many organisations use the hybrid."
+      },
+      {
+        "heading": "What the pages leave to you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The pages describe the approaches but not how to run one. You have to supply the process, and the places it goes wrong.\n\nThe ranges are a sanity check, not a recipe. Their lows add up to 75% and their highs to 150%, so they cannot all be applied at once, and none has a cited source. Use them to ask 'why are we outside this range?', never as a target to hit.\n\nBottom-up needs a control against inflation, which the page names as a risk but does not solve. Practical Academy controls: require each request to show last year's actual spend and explain any large increase; require a priority tier (must, should, could) on every item; and ask what happens if the item is not funded, in specific terms. A request whose consequence of not funding is vague is usually a could-have.\n\nTop-down needs a control against underfunding, which the page also names. Before fixing the envelope, list the non-negotiables (security obligations, committed contracts, legal or compliance deadlines) and check the envelope covers them.\n\nIn every approach, publish what was left unfunded and why. The unfunded list is the real output of a budget conversation, because it shows the board which risks it accepted."
+      },
+      {
+        "heading": "Reconciling the budget with technical debt",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The Budget Breakdown page gives technical debt and maintenance 5% in its growth split, and the Technical Debt guide from the Tech architecture module suggests reserving 20% of each sprint for debt, refactoring and upgrades. These are not the same measure, but a board will notice if you quote both without explaining them. Take a 1,000,000 budget on the growth split: the debt and maintenance line is 50,000, while 20% of the 450,000 engineering line is 90,000, which is more than the whole debt line. The honest answer is to decide where that capacity is booked and say so: either it is funded inside the engineering line as engineers' time (and you track it as such), or the debt line is larger. Whichever you choose, make the debt spend visible, because debt hidden inside feature work gets cut first when a deadline slips."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Reconciling requests against an envelope (illustrative numbers, not Cretek data)",
+      "body": "The envelope is 1,000,000. Six requests arrive, totalling 1,230,000 (engineering 520,000; infrastructure 300,000; security 140,000; research 120,000; technical debt 90,000; other 60,000), so the plan is 230,000 or 23% over.\n\nEvery item is tiered. Across all requests, must-have items total 780,000, should-have 310,000 and could-have 140,000 (780,000 + 310,000 + 140,000 = 1,230,000). Fund the must-haves first: 1,000,000 - 780,000 leaves 220,000. The should-have tier needs 310,000, so only 220,000 of it can be funded, leaving 90,000 unfunded, and the could-have tier is unfunded entirely (140,000). The unfunded total is 90,000 + 140,000 = 230,000, matching the overrun.\n\nThe work is not finished yet. Is each must-have really one? Test them: what, specifically, breaks if it is deferred? And which unfunded items carry a risk the board must knowingly accept (for example a compliance audit moved a quarter)? That list, with the consequence beside each item, is what goes into the board paper. If one of the must-haves cannot be shown to be one, the envelope may not be as tight as it looks."
+    },
+    "misconceptions": [
+      "Using the page's percentages as targets or as an industry benchmark. They have no cited source, and the ranges cannot all be met at once.",
+      "Believing one approach is always right. The page says the choice depends on structure, strategy and flexibility, and that many organisations use the hybrid.",
+      "Accepting bottom-up requests at face value. The page names estimate inflation as a risk.",
+      "Letting the top-down envelope squeeze out security, compliance and technical debt, which the page lists as risks of underfunding.",
+      "Treating the budget as an administrative exercise. The page calls it an execution plan.",
+      "Hiding technical debt inside feature estimates so it never appears as a line that can be argued for (Academy observation)."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a board member why your technology budget does not simply copy a benchmark split, and what you will show them instead."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "tb-1",
+      "question": "According to the CTO Budget Breakdown page, what is the typical range for Security & Compliance?",
+      "options": ["5 to 10%", "10 to 20%", "20 to 40%", "30 to 50%"],
+      "answer": 1,
+      "why": "The page gives 10 to 20% for Security & Compliance. 5 to 10% is Other Costs, 20 to 40% is Infrastructure & Operations and 30 to 50% is Engineering & Development."
+    },
+    {
+      "id": "tb-2",
+      "question": "Which pair matches the Growth & Scaleup (Series A to C) allocation shown on the page?",
+      "options": [
+        "Engineering 30%, Infrastructure 40%",
+        "Engineering 45%, Infrastructure 25%",
+        "Engineering 50%, Infrastructure 30%",
+        "Engineering 25%, Infrastructure 45%"
+      ],
+      "answer": 1,
+      "why": "The Growth & Scaleup tab shows Engineering & Development at 45% and Infrastructure & Operations at 25%. About 50% and about 30% are the page's approximate early-stage figures."
+    },
+    {
+      "id": "tb-3",
+      "question": "Which weakness does the page name for top-down budgeting?",
+      "options": [
+        "Teams may inflate their estimates",
+        "The total may exceed the funds available",
+        "It gives leadership too little control",
+        "Leadership may lack detail on operational needs, so critical work such as technical debt can be underfunded"
+      ],
+      "answer": 3,
+      "why": "Leadership may not know operational needs, so allocations can be impractical and teams underfunded for technical debt or unexpected problems. Inflation and overspending are the bottom-up risks."
+    },
+    {
+      "id": "tb-4",
+      "question": "Bottom-up requests of $5M, $4M, $2M and $2M arrive against a $10M ceiling. How much must leadership cut?",
+      "options": ["$1M", "$2M", "$3M", "$13M"],
+      "answer": 2,
+      "why": "The requests total $13M, so $3M must be cut to reach the $10M ceiling."
+    },
+    {
+      "id": "tb-5",
+      "question": "Which description matches the hybrid approach on the page?",
+      "options": [
+        "Leadership sets an overall total, teams propose allocations, and leadership reviews and adjusts them",
+        "Teams set the total and leadership divides it",
+        "Leadership sets both the total and the exact split with no team input",
+        "Each team funds itself from its own revenue"
+      ],
+      "answer": 0,
+      "why": "The hybrid fixes the total at the top but takes allocations from teams, then adjusts them, balancing strategic priorities with team-level insight."
+    }
+  ],
+  "build": {
+    "business": "Cretek spends money on technology every month, and a CTO has to be able to say what it spends, why, and what was left unfunded. This is the budget capability in the CTO Operating System.",
+    "problem": "Build a categorised baseline of Cretek's real technology spend, a 12-month budget built three ways (top-down, bottom-up and hybrid), and a tested reconciliation tool that shows what was funded and what was not.",
+    "requirements": [
+      "A baseline of the last 12 months (or the best period available) of real Cretek technology spend, grouped into the page's six categories, with each amount traced to an invoice, ledger or bank record. Where a figure cannot be traced, label it ASSUMPTION and say why",
+      "The share of each category compared with the page's Growth & Scaleup split and ranges, with a written explanation of each variance. State which stage Cretek is at and why. The page's figures are unsourced, so present them as context, not as the target",
+      "A top-down envelope for the next 12 months, with the person who has the authority to set it. If that figure is not available, use a clearly labelled ASSUMPTION",
+      "Bottom-up requests from at least four real areas of Cretek's technology (for example the school management application, quotation automation, websites and automation workflows, security and compliance). Each request has: the item, the cost, the priority tier (must, should, could), last year's actual for comparison, the evidence, and the specific consequence of not funding it",
+      "An inflation check: flag every request that exceeds last year's actual by more than a threshold you set and justify, and record what was said when the requester was asked to explain it",
+      "A hybrid reconciliation: the funded and unfunded lists, each trim with a written reason, and the named person who accepted each unfunded risk",
+      "A statement of what is funded for technical debt and security, how it relates to the 20% capacity guidance from the Technical Debt lesson, and where that capacity is booked",
+      "A reconciliation script that takes an envelope and a list of requests and outputs funded, partly funded and unfunded items. Rules: fund by tier (must, then should, then could); break ties by a stated, deterministic rule; fund partially only when a request is marked divisible; flag a conflict, and do not silently drop an item, when the must-have items alone exceed the envelope. Automated tests required",
+      "A one-page budget summary that a board member could read in five minutes, led by the unfunded list",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED, and the currency stated"
+    ],
+    "constraints": [
+      "No invented Cretek spend. Use real records or labelled assumptions",
+      "Do not commit individual salaries or personal compensation data to the repository. Aggregate headcount cost by category, and keep the detail where finance already holds it",
+      "Do not cut security or compliance obligations (contracted audits, legal deadlines) to make the numbers fit. If the envelope cannot cover them, report the conflict",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the input format for requests, the funding rules and tie-break, how must-have overflow is reported, where the baseline data comes from, and one alternative you rejected, for example a single spreadsheet with manual colouring of cells.",
+    "tasks": [
+      "Gather and categorise the baseline spend, noting the source of every figure",
+      "Compare the baseline with the page's split and write the variance explanations",
+      "Collect the bottom-up requests with tiers, last year's actuals and consequences of not funding",
+      "Build the reconciliation script with tests: requests below the envelope, exactly equal to it, above it, must-haves alone above it, a zero envelope, a negative amount (reject), a divisible partial item, and a tie that must resolve the same way every time",
+      "Run the inflation check and the reconciliation, and record the decisions and who made them",
+      "Write the technical debt and security statement and the one-page board summary",
+      "Document security and operational considerations: who may see the budget data, where the inputs live, how often the baseline is refreshed"
+    ],
+    "acceptance": [
+      "Baseline is categorised and every figure is traced or labelled an assumption",
+      "Variance against the page's split is explained, and the page's figures are not used as targets",
+      "Three budgets (top-down, bottom-up, hybrid) exist, and the hybrid shows funded and unfunded lists with a reason and an accepting owner for each unfunded risk",
+      "The reconciliation script passes tests covering every case listed and flags must-have overflow",
+      "The technical debt and security lines are stated and explained",
+      "No individual compensation data is in the repository",
+      "All figures labelled REAL, ASSUMPTION or SIMULATED, with the currency"
+    ],
+    "deliverable": "The baseline, the three budgets, the reconciliation script and tests, and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Board member",
+    "scenario": "A board member is reviewing your proposed technology budget. They suspect that either you have padded it or that you have squeezed the things that will hurt later.",
+    "prompts": [
+      "Your security line is smaller than the framework's range. Is that a decision or an oversight, and who accepted the risk?",
+      "Show me what you did not fund. What is the worst consequence among those items, and how likely is it?",
+      "How do I know the team requests were not inflated, and what did you do about it?",
+      "You hold 20% of capacity for technical debt but the debt line is 5%. Explain how those fit together.",
+      "If I cut the envelope by 10%, which items go first, and what does that do to delivery?",
+      "Why a hybrid approach and not a plain top-down budget?"
+    ],
+    "rubric": [
+      { "criterion": "Allocation tied to business strategy and evidence, with the benchmark used only as context", "weight": 0.3 },
+      { "criterion": "Reconciliation logic: tiers, inflation control, unfunded list with accepted risks", "weight": 0.25 },
+      { "criterion": "Trade-offs on security, compliance and technical debt under pressure", "weight": 0.25 },
+      { "criterion": "Clear, brief communication to a non-technical board", "weight": 0.2 }
+    ]
+  }
+}

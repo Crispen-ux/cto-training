@@ -1,0 +1,200 @@
+{
+  "id": "build-buy-outsourcing",
+  "moduleId": "economics-costs",
+  "pillar": "Economics",
+  "title": "Build, buy or outsource: decision lenses and commercial models",
+  "estimatedMinutes": { "learn": 50, "build": 280, "defend": 30 },
+  "objectives": [
+    "Apply the four build-versus-buy lenses and the 80% rule to a real capability",
+    "Compute build and buy costs with the framework's formulas and state what they leave out",
+    "Choose among the five outsourcing pricing models using the page's decision variables",
+    "Write a decision memo that an executive can approve or challenge, with the exit route stated"
+  ],
+  "prerequisites": ["tco-cloud-costs"],
+  "unlock": { "prerequisites": [{ "lessonId": "tco-cloud-costs", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Build vs. Buy Decision Framework",
+      "url": "https://www.ctoframework.com/economics/build-vs-buy",
+      "reviewed": "2026-10-12",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Outsourcing Pricing Models",
+      "url": "https://www.ctoframework.com/economics/costs/outsourcing-pricing-models",
+      "reviewed": "2026-10-12",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Build vs. Buy page gives no scoring system or weighting beyond the 80% rule, no worked numerical example, no named vendors, no discounting or net present value method, no method for quantifying opportunity cost and no vendor selection or contract guidance. Its figure that annual maintenance averages 20% to 30% of the initial build cost is attributed only to unnamed 'standard industry metrics'. Treat it as an assumption to test against your own history, not a fact.",
+    "The page uses Wardley mapping, via a Wikipedia reference, to identify core versus commodity components. Neither Wikipedia nor Wardley mapping was consulted for this lesson. If you use the technique in your Build, cite a proper source.",
+    "The Outsourcing Pricing Models page gives no rates, retainer amounts, percentages or benchmarks. Its 'Risk vs. Flexibility Alignment Spectrum' heading has no content under it, and its comparison table covers three of the five models. It does not cover change-request mechanics, termination terms, IP ownership, liability, vendor selection, acceptance testing, legal or jurisdictional issues or onshore versus offshore. All of those are Original Academy additions in this lesson, or left to you.",
+    "The page's Wikipedia references on Time and Materials and fixed-price contracts were not consulted."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Build versus buy is a resource allocation problem",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework treats build versus buy as a resource allocation problem, not a price comparison. It gives four lenses.\n\n1. Core versus context. Core capabilities differentiate the business and power its competitive advantage, so build them to keep control and proprietary IP. Context capabilities are necessary but give no edge, such as authentication, payroll or email delivery, and should be bought. The page warns: never build a custom system for a problem that has already been commoditised.\n2. Opportunity cost. Building pulls engineers off other work, so the real cost includes the revenue-generating features they could have built. The page's example question: what customer value is delayed if a six-month custom billing engine is built?\n3. Total cost of ownership. Do not compare a vendor's annual licence fee with the salary cost of a prototype. Build costs include design, coding, testing, hosting, security compliance, documentation, bug fixes and ongoing updates, and the page says annual maintenance averages 20% to 30% of the initial build cost. Buy costs include licensing, integration, customisation, vendor lock-in risk, training and upgrade cycles.\n4. Time to market. Buying allows fast integration and deployment. Building adds latency and delivery risk."
+      },
+      {
+        "heading": "Rules of thumb and the cost model",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The 80/20 rule: if a commercial off-the-shelf product meets 80% or more of the functional requirements, default to buying. Cover the remaining gap with custom integrations, wrapper APIs or plugins, which the page says is usually cheaper than building everything.\n\nNot-invented-here bias: engineers tend to prefer building their own tools, so the CTO should enforce financial and strategic discipline. The page's tip is to require a formal business case for any internal build that is not tied to the core product, with the burden of proof on the build side for non-core work.\n\nThe financial model compares options over three to five years:\n- Cost to build = initial development cost + (annual maintenance cost x years)\n- Cost to buy = integration and setup cost + (annual licence fee x years)\n\nIf the costs are similar, the page recommends buying, because the vendor absorbs maintenance, security patching and product updates and frees the internal team to work on core features."
+      },
+      {
+        "heading": "Five outsourcing pricing models",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page says the choice of commercial model should follow product discovery maturity and technical uncertainty, not just the lowest hourly rate: preserving strategic flexibility is often more important than choosing the cheapest bid.\n\nFixed price: a defined, unchangeable scope for an agreed total cost and timeline. Budget certainty is high and client exposure low; the client must specify requirements heavily up front. Suited to stable, well-documented requirements with low technical uncertainty, such as legacy migrations or compliance upgrades. Pitfalls: heavy specification effort and expensive change requests.\nTime and materials: the client pays for actual hours at agreed rates. The client takes budget variability and must supply strong internal product leadership. Suited to agile delivery, evolving roadmaps and early-stage builds. Benefit: flexibility, including weekly reprioritisation.\nDedicated team: a cross-functional team fully allocated to the client for a monthly retainer. Costs are predictable, knowledge retention is strong; the client carries underutilisation risk and long-term commitment. Suited to long-term product scaling and core platform ownership. Pitfalls: idle capacity if the backlog stalls.\nMilestone-based: payments tied to delivery and acceptance of predefined milestones. Risk is shared and incentives tied to performance. Suited to multi-phase enterprise programmes. Pitfalls: ambiguous milestone definitions and administrative overhead, including disputes over acceptance criteria.\nOutcome or value-based: compensation linked to measurable business outcomes, for example a cost-savings percentage, processing speed, revenue share or customer acquisition metrics. Incentives and risk are shared as fully as possible. Suited to mature partnerships on performance-driven work. Pitfalls: complex negotiation, attribution disputes over who caused an outcome, and demanding requirements for operational data transparency."
+      },
+      {
+        "heading": "Choosing a model",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page suggests four variables: requirements clarity, internal governance, technical uncertainty and focus metric. Its comparison table covers three models. Fixed price: complete and frozen requirements, low governance overhead, low technical uncertainty, cost minimisation. Time and materials: evolving requirements in high flux, high governance (active backlog management), moderate to high uncertainty, iteration velocity. Dedicated team: high-level vision, moderate governance (a product or technical lead), high uncertainty, IP and quality.\n\nThe page notes that hybrids are common, for example a discovery phase on time and materials, core features under milestone pricing and scaling under a dedicated team."
+      },
+      {
+        "heading": "What the pages leave to you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The pages give you lenses, one threshold (80%), two cost formulas and five model descriptions. They give you no weights, no way to put a number on opportunity cost and nothing on contracts. You have to supply those, and say so.\n\nOpportunity cost: name the specific work that would not be done, and an estimate of its value with the basis. If you cannot estimate it, say what is delayed and for how long, which is the page's own example question, instead of leaving the line blank.\n\nMaintenance rate: the 20% to 30% figure is unsourced. Use your own history of maintenance effort on similar systems if you have it, and show the result at two or three rates.\n\nThe formulas leave out things that matter: the exit cost of a vendor (the TCO guide lists data extraction and contract exit penalties), the cost of lock-in, and the risk that the vendor changes price or direction. Add them as explicit lines.\n\nFor outsourcing, the pages say nothing about who owns the code you commission, what happens when you terminate, how acceptance is tested or what liability the vendor takes. Make those decisions in writing, and treat them as a requirement for legal review, not something this lesson settles."
+      },
+      {
+        "heading": "A decision sequence",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The framework does not give an order. A workable Academy sequence: (1) classify the capability as core or context; (2) for context, test whether a product meets 80% or more of the requirements; (3) compare build and buy with the page's formulas over the same horizon, plus exit and lock-in; (4) if you build, decide who builds it, in-house or with a partner, and pick the pricing model from the four variables; (5) record the decision in an ADR with the alternatives rejected. Each step can end the analysis early, which is the point: most context decisions should end at step 2."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Applying the page's formulas (illustrative numbers, not Cretek data, not vendor prices)",
+      "body": "A context capability. Build: initial development 120,000, maintenance 25% of that, so 30,000 a year. Cost to build over five years = 120,000 + (30,000 x 5) = 270,000. Buy: integration and setup 20,000, licence 40,000 a year. Cost to buy over five years = 20,000 + (40,000 x 5) = 220,000. Buying is 50,000 cheaper before opportunity cost, and the page says to buy when the costs are similar, so the result is not close.\n\nTest the assumption. If maintenance were 15% (18,000 a year), build would be 120,000 + 90,000 = 210,000, which is cheaper than 220,000. So the answer is sensitive to the maintenance rate, and since that rate is the page's unsourced figure, say so and check it against your own history. The 80% rule: if the product meets 17 of 20 requirements, that is 85%, so the default is to buy and cover the other three with wrapper APIs. Estimate those wrappers as a separate cost line, and add the vendor's exit cost, before you present the comparison."
+    },
+    "misconceptions": [
+      "Comparing a licence fee with the salary cost of a prototype. The page warns against it.",
+      "Building because it is interesting. The page names this not-invented-here bias and puts the burden of proof on non-core builds.",
+      "Choosing the outsourcing partner or model on the lowest hourly rate rather than on requirements clarity and uncertainty.",
+      "Using fixed price when requirements are still changing, which leads to expensive change requests.",
+      "Using time and materials with no strong internal product leadership. The page says the client must supply it.",
+      "Accepting vague milestones. The page names disputes over acceptance criteria as a pitfall.",
+      "Agreeing to outcome-based pricing without access to the operational data needed to attribute results."
+    ],
+    "explainTask": "In 150 words or fewer, explain to an enthusiastic engineer why the team should buy a context capability even though it could build a better one."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "bbo-1",
+      "question": "According to the page, which of these is a context (commodity) capability that should usually be bought?",
+      "options": [
+        "The pricing engine that differentiates your product",
+        "Authentication, payroll or email delivery",
+        "A proprietary recommendation algorithm",
+        "The workflow that gives you competitive advantage"
+      ],
+      "answer": 1,
+      "why": "The page's examples of context capabilities are authentication, payroll and email delivery. Core capabilities differentiate the business and are built."
+    },
+    {
+      "id": "bbo-2",
+      "question": "A commercial product meets 85% of your functional requirements. What does the page's 80/20 rule say?",
+      "options": [
+        "Always build, because 15% is missing",
+        "Split the budget 80/20 between build and buy",
+        "Build only the missing part as a new product",
+        "Default to buying and cover the gap with integrations, wrapper APIs or plugins"
+      ],
+      "answer": 3,
+      "why": "At 80% or more coverage the default is to buy, and the page says covering the gap with integrations or plugins is usually cheaper than building everything."
+    },
+    {
+      "id": "bbo-3",
+      "question": "Build: initial development 120,000 and maintenance 30,000 a year. Buy: setup 20,000 and licence 40,000 a year. Using the page's formulas over five years, which is cheaper and by how much?",
+      "options": ["Build, by 50,000", "Buy, by 50,000", "Buy, by 100,000", "They are equal"],
+      "answer": 1,
+      "why": "Build = 120,000 + 30,000 x 5 = 270,000. Buy = 20,000 + 40,000 x 5 = 220,000. Buy is 50,000 cheaper."
+    },
+    {
+      "id": "bbo-4",
+      "question": "Which pricing model does the page suit to stable, well-documented requirements with low technical uncertainty, such as a compliance upgrade?",
+      "options": ["Fixed price", "Time and materials", "Dedicated team", "Outcome or value-based"],
+      "answer": 0,
+      "why": "Fixed price fits complete, frozen requirements. Its pitfalls are heavy upfront specification and expensive change requests."
+    },
+    {
+      "id": "bbo-5",
+      "question": "Which pitfalls does the page list for outcome or value-based pricing?",
+      "options": [
+        "Idle capacity if the backlog stalls",
+        "Expensive change requests",
+        "Attribution disputes over who caused an outcome, and demanding operational data transparency",
+        "Budget variability from hours worked"
+      ],
+      "answer": 2,
+      "why": "Outcome pricing shares risk but needs agreement on attribution and access to operational data. The other pitfalls belong to dedicated teams, fixed price and time and materials."
+    }
+  ],
+  "build": {
+    "business": "Cretek regularly faces the choice between building a capability, buying a product and engaging an outside team. A CTO has to make those choices on evidence and be able to explain them.",
+    "problem": "Write a decision memo for one real Cretek capability, with a tested calculator, that takes the decision through the four lenses, the 80% test, a build-versus-buy cost model and, if work is to be commissioned externally, a justified pricing model and an exit plan.",
+    "requirements": [
+      "One real decision (for example a component of the quotation automation or the school management application) with the decision owner and date",
+      "A core versus context classification with the reasoning. If you use Wardley mapping, cite a source for the method",
+      "A requirements coverage table for at least one real candidate product, with the percentage covered, and your reading of the 80% rule",
+      "Build and buy costs over three and five years using the page's two formulas, with every input sourced or labelled an assumption, and sensitivity of the answer to the maintenance rate",
+      "Opportunity cost stated: the specific work delayed or displaced, for how long, and an estimate of its value with the basis, or an explicit statement of why it cannot be estimated",
+      "Extra lines the formulas omit: vendor exit cost, lock-in, price-change risk, and the cost of wrapper integrations for the uncovered requirements",
+      "If any build work would be commissioned externally: a choice among the five pricing models using the four variables (requirements clarity, internal governance, technical uncertainty, focus metric), with the reasons for the models rejected and any hybrid phasing",
+      "A list of the contract matters that need legal review (IP ownership, termination, acceptance testing, liability), without presenting your list as legal advice",
+      "A calculator script that computes build and buy costs from an input file, with automated tests",
+      "An ADR recording the decision, using the Tech architecture lesson's template, with a negative consequence and the alternatives rejected",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED, and the currency stated"
+    ],
+    "constraints": [
+      "No invented vendor prices, Cretek costs or maintenance history. Use real quotes, real records or labelled assumptions",
+      "The 20-30% maintenance range may be shown as a comparison case only. Your base case must use your own data or an explicit assumption you justify",
+      "Do not present contract terms as legal advice"
+    ],
+    "design": "Describe the memo's structure, how the calculator takes its inputs, and one alternative you rejected, for example a weighted scorecard, and why you chose the formulas the framework gives.",
+    "tasks": [
+      "Classify the capability and write the reasoning",
+      "Build the requirements coverage table and apply the 80% test",
+      "Collect real quotes and internal effort records, and build the calculator with tests: zero maintenance, a longer horizon, a missing input, a product that meets exactly 80%",
+      "Run the sensitivity analysis on the maintenance rate and name the assumption that would flip the decision",
+      "Write the opportunity cost section and the extra cost lines",
+      "If commissioning externally, choose and justify the pricing model, and list the contract points for legal review",
+      "Write the ADR and the two-page memo",
+      "Document operational and security considerations of the chosen option, including data ownership and access"
+    ],
+    "acceptance": [
+      "The capability is classified and the 80% test is applied to a real candidate",
+      "Build and buy are compared with the page's formulas at two horizons, and the flip assumption is named",
+      "Opportunity cost, exit cost and lock-in are present as explicit lines",
+      "Any external model is chosen with the four variables and the alternatives are explained",
+      "Tests pass and cover the cases listed; the ADR passes your ADR validator",
+      "All figures are labelled REAL, ASSUMPTION or SIMULATED, with the currency",
+      "No contract term is presented as legal advice"
+    ],
+    "deliverable": "The memo, ADR, calculator and tests in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "CEO",
+    "scenario": "The CEO is asked to approve your recommendation. They are wary of engineers who want to build things and of vendors who want long contracts.",
+    "prompts": [
+      "Why is this not a commodity you should simply buy? Or, if it is, why are we building anything at all?",
+      "What did you not include in the cost comparison, and what would it do to the answer?",
+      "If the maintenance rate is half what you assumed, does your recommendation change?",
+      "What are we giving up by doing this instead of the other work? Who agreed that was worth it?",
+      "How do we get out if this goes wrong in two years, and what does leaving cost?",
+      "Why this commercial model for the outside team, and what stops us paying for work that does not ship?"
+    ],
+    "rubric": [
+      { "criterion": "Correct, honest use of the lenses and the 80% rule, including bias towards non-core builds", "weight": 0.25 },
+      { "criterion": "Cost model quality: consistent horizon, sourced inputs, sensitivity, omitted costs added", "weight": 0.3 },
+      { "criterion": "Opportunity cost and exit or lock-in reasoning", "weight": 0.2 },
+      { "criterion": "Commercial model choice matched to requirements clarity and uncertainty", "weight": 0.15 },
+      { "criterion": "Clear recommendation and what would change it", "weight": 0.1 }
+    ]
+  }
+}

@@ -1,0 +1,256 @@
+{
+  "id": "feedback-systems-one-on-ones-360",
+  "moduleId": "people-leadership",
+  "pillar": "People",
+  "title": "Feedback systems: one-on-ones, skip levels and 360 feedback",
+  "estimatedMinutes": {
+    "learn": 50,
+    "build": 270,
+    "defend": 35
+  },
+  "objectives": [
+    "Describe the one-on-one structure, skip level purpose and 360 sources and pitfalls the pages give",
+    "Compute the time cost of one-on-ones and skip levels for a real span of control and choose a sustainable cadence",
+    "Design a skip level that does not undermine managers, with confidentiality limits and follow-up",
+    "Read 360 results honestly: small-rater noise, anonymity thresholds and the self-other gap with an interval",
+    "Defend a feedback system to an engineering team and to HR, including what it will not be used for"
+  ],
+  "prerequisites": [
+    "disagree-commit-decisions"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "disagree-commit-decisions",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "One-on-ones",
+      "url": "https://www.ctoframework.com/people/leadership-collaboration/one-on-ones",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Skip levels",
+      "url": "https://www.ctoframework.com/people/leadership-collaboration/skip-levels",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "360 feedback",
+      "url": "https://www.ctoframework.com/people/leadership-collaboration/360-feedback",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "None of the three pages contains statistics, case studies or citations. The one-on-ones page recommends the book Radical Candor without explaining its relevance (the book was not read for this lesson). The skip levels page has no steps, sample questions or templates. The 360 page has no rating scales, sample questions or worked examples.",
+    "The retrieved summary flagged these points on the one-on-ones page: calling the meeting the 'most critical tool' is unsupported; the 'never cancel' rule is absolute and its reasoning (cancelling signals low priority) is asserted, though the page also says to reschedule if you must; the '10/10/10 rule' name is given without origin; and coaching over directing is presented as a rule for all managers. It lists what the page omits: templates, variations in length and frequency, remote formats, difficult conversations, confidentiality, effectiveness measures, manager self-assessment and worked examples.",
+    "The retrieved summary flagged these points on the skip levels page: 'unfiltered' insight is overstated because employees still choose what to share and the page does not say how candour is ensured; transparency and open dialogue are asserted without mechanism; identifying emerging talent is claimed without a method or a way to avoid bias; and 'avoid undermining middle managers' names a risk without guidance. It lists what the page omits: frequency, format, invitees, agenda and sample questions, preparing the direct manager, confidentiality and escalation, follow-up tracking, risks and effectiveness measures.",
+    "The retrieved summary flagged these points on the 360 page: reduced bias is asserted though multi-rater feedback has its own biases such as popularity and rater effects; describing traditional reviews as purely top-down is a generalisation; the rule against using 360 results for promotions or firing is stated without rationale or evidence; the anonymity claim is unsupported; 'trained facilitators' is undefined. It lists what the page omits: process steps, question design and scales, minimum rater numbers and handling small teams, difficult results, frequency, tooling and cost, data storage and access, effectiveness measures, cultural context, and links to related pages.",
+    "The time calculations, the rater-noise simulation, the self-other gap interval and the examples here are Original Academy material. The simulation is SIMULATED, using five-point integer ratings with a mean of 3.48 and a standard deviation of 1.06, and I re-ran it to replace earlier rounder figures that matched a normal approximation. The 95% interval for the six-rater example uses a t distribution with five degrees of freedom. All figures are invented ASSUMPTIONS. HR and employment law matters (for example how feedback may be used in employment decisions, retention of records and consent) are for qualified HR and legal advisers; nothing here is legal advice."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "One-on-ones as the page describes them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines a one-on-one as a recurring dedicated meeting between an engineering manager and each direct report, owned by the engineer, covering productivity, career development, motivation and wellbeing, and not a status update.\n\nPurpose, as listed: an early-warning system for team issues, building trust, understanding motivations, aligning personal goals with the organisation and addressing performance problems early.\n\nStructure, the page's '10/10/10 rule': a 30-minute meeting, weekly or biweekly, in three parts. The engineer's time (they set the agenda; no status checks). The manager's time (feedback, organisational news, coaching questions, performance). Future time (long-term aspirations, skills, training and action items).\n\nFocus areas: wellbeing and morale, with open questions; productivity and roadblocks; a feedback loop of small continuous feedback, including asking the engineer for feedback on the manager; and career growth against the progression framework. Best practices: never cancel (reschedule instead), keep a shared written record of notes, goals and actions, and listen without multitasking. It recommends Radical Candor."
+      },
+      {
+        "heading": "Making the rhythm sustainable",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A one-on-one only works if it happens. Calculate the load before you promise it.\n\nA manager with 8 reports meeting each weekly for 30 minutes spends 4 hours a week, 10% of a 40-hour week, before preparation and notes. With 10 reports weekly it is 5 hours. With 12 reports every two weeks it is 3 hours. A manager at the span limit with a full delivery load will cancel; the page's 'never cancel' is a rule that a bad span of control will break. If the load does not fit, change the cadence for experienced reports (biweekly), change the span, or protect the time in the diary, but do not announce a cadence you cannot keep.\n\nThe page's rule that cancelling tells the engineer they are not a priority is plausible but asserted. Test it by asking your people. A rescheduled meeting with notice is different from a pattern of cancellations, and the second is what damages trust.\n\nUse the structure as a default and adapt. The three-part split is a prompt, not a law; a new starter may need more manager time, and someone in difficulty may need all of it for them. Keep a written record in a shared document, and agree what is private: notes about performance or personal matters need a decision about who sees them. The page does not address confidentiality or the limits of it; a manager cannot promise to keep secret a safety issue, harassment or something the company must act on, and should say so at the start.\n\nAsk the questions the page implies: What would make your week easier? What is slowing you down? What feedback do you have for me? Where do you want to be in two years? What is the one thing you would change here? Ask for feedback on yourself, and then act on one item and say so, or the question teaches people not to answer.\n\nMeasure whether it works: do engineers raise problems earlier, do agreed actions get completed, do engineers say in a short anonymous check that the meeting is useful. The page gives no measure."
+      },
+      {
+        "heading": "Skip levels as the page describes them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A skip level is a meeting in which a senior leader talks directly with people who report to their direct reports, bypassing a management layer. The page says it bridges communication gaps, gives unfiltered views across the organisation and supports transparency.\n\nBenefits listed: firsthand insight into challenges, morale and workflow; identifying emerging talent; reinforcing culture and strategy; and surfacing concerns that may not reach leaders through middle management. Best practices: structure the meeting to encourage honest feedback, avoid undermining middle managers and produce actionable follow-ups. The page gives no steps, data, sample questions or templates."
+      },
+      {
+        "heading": "Designing a skip level that works",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "'Unfiltered' is too strong. People still decide what to say to a senior leader, and a leader's presence changes what they say. Design for candour; do not assume it.\n\nSet the rules in advance. Tell the middle manager the purpose, the schedule and that you will not give direction to their team through the meeting; ask them what they would like you to learn. Agree what you will do if you hear a concern about them: share themes, not names, unless the issue is safety, harassment or legal, in which case follow the proper process and say so beforehand. Tell participants what will be shared and what will not.\n\nFormat. Small groups of 4 to 6 (so that nobody is singled out) are often easier for candour than one-to-one, though some people prefer private conversations; offer both. Keep it to 30 to 45 minutes, with open questions: What is getting in your way? What should we start, stop or continue? What do you wish leadership understood about your work? What is one thing that would make you more effective? What would make you stay, or leave? Avoid asking people to rate their manager.\n\nLoad. A CTO with 5 directors each having 6 reports has 30 people at that layer. A 30-minute one-to-one each is 15 hours a quarter; five group sessions of 45 minutes is 3.75 hours. Choose the format that matches your time and the topics.\n\nFollow-up. Write down what you heard as themes, share the themes with the middle managers, pick two things to act on, and tell the participants what you did or why you did not. If nothing visible happens, people stop talking. Do not take a one-off comment as a fact about a manager; look for patterns across several sessions.\n\nRisks the page leaves out: eroding trust in managers, participants feeling exposed or later blamed, and the leader contradicting a manager in front of their team. The main defence is not to make decisions in the room; hear, then take issues back through the proper channel.\n\nIdentifying emerging talent is also a risk: first impressions in a short session are weak evidence and favour the confident. Use skip levels to notice, and use performance evidence to judge."
+      },
+      {
+        "heading": "360 feedback as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines 360-degree feedback as a performance evaluation method in which a person receives feedback from multiple sources: managers, peers, direct reports, self-evaluation and, where applicable, external stakeholders such as customers, vendors or partners. The aim is a well-rounded view of strengths, weaknesses and growth areas, contrasted with traditional top-down reviews.\n\nBenefits listed: a holistic perspective, development, reduced bias compared with a single reviewer, better self-awareness from comparing self and others, and a more open culture. Pitfalls: lack of anonymity may reduce honesty, misuse as a performance tool (the page says it is best for development, not promotions or firing), feedback overload and implementation complexity. Best practices: keep peer and direct-report feedback anonymous, make it constructive and actionable, use trained facilitators and follow up with development plans."
+      },
+      {
+        "heading": "Reading 360 results honestly",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page says 360 feedback reduces bias. It can add other biases (popularity, recent events, rater leniency or harshness), and with few raters it adds noise.\n\nNoise from small groups. Suppose a person's true average rating from everyone who works with them is about 3.5 on a five-point scale and individual ratings spread by about one point (the simulation below uses 3.48 and 1.06). SIMULATED (100,000 repeats per group size, ratings drawn from a distribution over 1 to 5 with mean 3.48 and standard deviation 1.06): with 3 raters, the group average was at least half a point away from the long-run average in about 44% of cases; with 5 raters about 31%; with 8 about 19%; with 12 about 10%. A three-person average moving by half a point means very little.\n\nAnonymity thresholds. In a team of four reports, a category of 'direct reports' with 3 raters is hardly anonymous, and if one is known to be difficult, comments identify them. Set a minimum (commonly at least 3 raters per category before showing a separate result, but the page gives none, so decide and state it), merge small categories, and strip identifying text from comments. Be honest with raters about what anonymity can and cannot guarantee.\n\nSelf-other gap with an interval. Suppose a manager rates themselves 4.5 on 'gives clear feedback' and six raters give 3, 4, 3, 2, 4 and 3. The mean is 3.17 with a sample standard deviation of 0.75. A 95% interval for the true average (t with 5 degrees of freedom, standard error 0.31) is about 2.4 to 4.0. The self-rating of 4.5 sits above the whole interval, so the gap (1.3 points) is probably real; but the interval is wide, so treat the ranking against a colleague who scored 3.3 as meaningless.\n\nUse for development, as the page suggests. If scores feed into pay or promotion, people game the process, soften honest feedback or trade favours. The page gives no reason; this is one. Check the rules with HR and legal advisers (not legal advice) before deciding how results are used and stored.\n\nProcess the page omits: choose raters with the person; use a short validated or at least pilot-tested set of questions with behavioural wording ('gives specific feedback within a week' beats 'is a good communicator'); include free-text prompts (start, stop, continue); collect over a fixed window; report averages, spread and comments by category; discuss results with a trained facilitator or a coach; and agree two or three actions. Repeat after six to twelve months and compare, remembering the noise."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Building a feedback system for a growing engineering organisation (invented numbers)",
+      "body": "Cretek has a CTO, five engineering managers and 34 engineers. Managers say one-on-ones slip; two engineers say they never see leadership; the CTO wants a 360 for managers.\n\nStep 1, one-on-one load. The managers have reports of 9, 8, 7, 6 and 4. Weekly 30-minute meetings would cost 4.5, 4, 3.5, 3 and 2 hours a week: 11% for the largest span. The CTO agrees: weekly for new starters and people in difficulty, biweekly for others. The largest span now costs about 3 hours a week. Spans above 8 are reviewed at the next reorganisation. Notes are in a shared document with a confidentiality statement: private unless safety, harassment or legal issues arise.\n\nStep 2, check it works. A three-question anonymous pulse each quarter: 'My one-on-ones are useful', 'I can raise problems early with my manager', 'My manager acts on feedback' (agree to disagree scale). Baseline taken; the team sizes are small, so results are reported only for the whole group, not per manager.\n\nStep 3, skip levels. The CTO has five managers with 34 engineers across them. Group sessions of 5 to 6 engineers: 6 sessions of 45 minutes, 4.5 hours a quarter. Each manager is told the purpose, the questions and how themes will be shared; the CTO makes no decisions in the room. Themes after the first round (invented): slow code review turnaround (raised in 4 of 6 sessions), unclear priorities (3 of 6), and good support from managers (5 of 6). The CTO shares themes with managers, picks two actions (a review-time target and a monthly priorities note) and reports back to the groups in a month.\n\nStep 4, the manager 360. With 5 to 9 reports each, raters per manager are: direct reports 4 to 9, peers 4, the CTO 1, self 1. The CTO sets the threshold: show direct-report results only if at least 4 responded; with fewer, combine with peers under 'colleagues'. One manager has 4 reports and 3 responses, so their results are combined. Questions are behaviours, with a five-point scale and a text prompt each.\n\nStep 5, reading a result. Manager A rates themselves 4.5 on 'gives clear feedback'. Six raters give 3, 4, 3, 2, 4 and 3: mean 3.17, interval about 2.4 to 4.0. The facilitator tells her the gap is probably real, but that the sample is small and she should look at the comments. Comments say feedback arrives late, in group channels. She chooses two actions: give feedback within a week and in private, and ask each report once a month 'what was one thing I could have done better?'.\n\nStep 6, the rules. Results go to the manager and a facilitator; the CTO sees themes, not individual comments; results are not used in pay or promotion decisions (the CTO's rule, to confirm with HR); records are kept for one year (a proposed period to be checked with HR and legal advisers). In six months the team repeats a shorter version and notes the sample limits.\n\nWhat is unverified: all numbers are invented. Whether the system helps has to be tested with the pulse measures and with outcomes such as retention and earlier problem reports."
+    },
+    "misconceptions": [
+      "Promising a one-on-one cadence the span of control makes impossible.",
+      "Treating the 10/10/10 split as a law and the 'never cancel' rule as proven.",
+      "Believing a skip level gives unfiltered truth.",
+      "Using a skip level to give orders to another manager's team.",
+      "Believing 360 feedback removes bias. It can add other biases and, with few raters, noise.",
+      "Reporting small-group 360 results by category without an anonymity threshold.",
+      "Using 360 results for pay or promotion and expecting honest answers."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a manager with ten direct reports how you would keep one-on-ones going and what you would change if it does not fit."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "fs-1",
+      "question": "A manager has 10 reports and meets each weekly for 30 minutes. How much time is that per week, before preparation?",
+      "options": [
+        "2 hours",
+        "5 hours",
+        "10 hours",
+        "30 minutes"
+      ],
+      "answer": 1,
+      "why": "10 x 0.5 hours = 5 hours, 12.5% of a 40-hour week. The load is a reason to adjust cadence or span rather than promise the impossible."
+    },
+    {
+      "id": "fs-2",
+      "question": "Which part of the one-on-one page is most clearly an unsupported absolute?",
+      "options": [
+        "The meeting is 30 minutes",
+        "'Never cancel', with the claim that cancelling signals the engineer is not a priority, asserted without evidence",
+        "Listen without multitasking",
+        "Keep a written record"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged the rule and its rationale as unsupported, noting the page also says to reschedule if necessary."
+    },
+    {
+      "id": "fs-3",
+      "question": "Why is the skip level page's claim of 'unfiltered' insight overstated?",
+      "options": [
+        "Skip levels never work",
+        "Employees still choose what to say, a senior leader's presence changes what is said, and the page gives no mechanism for candour",
+        "Managers always attend",
+        "The page says it is unfiltered by law"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged this. Design for candour with small groups, clear confidentiality rules and visible follow-up."
+    },
+    {
+      "id": "fs-4",
+      "question": "A CTO has 5 directors with 6 reports each. How long do 30-minute one-to-one skip levels take compared with five 45-minute group sessions?",
+      "options": [
+        "15 hours a quarter against 3.75 hours",
+        "3.75 hours against 15 hours",
+        "They take the same",
+        "30 hours against 3.75 hours"
+      ],
+      "answer": 0,
+      "why": "30 people x 0.5 hours = 15 hours; 5 sessions x 0.75 hours = 3.75 hours. Choose the format to fit your time and the topic."
+    },
+    {
+      "id": "fs-5",
+      "question": "In the simulation, how often did a 3-rater average differ from the long-run average by at least half a point?",
+      "options": [
+        "About 44% of the time",
+        "About 5%",
+        "Never",
+        "About 90%"
+      ],
+      "answer": 0,
+      "why": "With 3 raters the average moved by at least 0.5 about 44% of the time in the simulation, falling to about 10% with 12 raters. Small-rater 360 results are noisy."
+    },
+    {
+      "id": "fs-6",
+      "question": "A manager rates themselves 4.5. Six raters average 3.17 with a 95% interval of about 2.4 to 4.0. What can you say?",
+      "options": [
+        "The self-rating is above the whole interval, so the gap is probably real, though the interval is wide",
+        "There is no gap",
+        "The raters are biased",
+        "The result proves the manager is poor"
+      ],
+      "answer": 0,
+      "why": "4.5 lies above 4.0, so the gap is probably real; the width of the interval shows the sample is small, so avoid fine distinctions."
+    }
+  ],
+  "build": {
+    "business": "A CTO needs reliable ways to learn how work and leadership are experienced at every layer, without making people feel exposed. A feedback system with honest measurement is a core people capability in the CTO Operating System.",
+    "problem": "Design, run and evaluate a feedback system for one real engineering organisation: one-on-ones, skip levels and a 360 for managers, with sustainable cadence, confidentiality rules and honest reading of small-sample results.",
+    "requirements": [
+      "Calculate the one-on-one load for every manager's span and set a cadence you can keep. Define the structure, the shared notes format and what is private and what is not",
+      "Define a short anonymous pulse (three to five items) for one-on-one usefulness, collect a baseline and a follow-up, and report only at group sizes that keep people anonymous",
+      "Design the skip level programme: purpose, format, group size, questions, preparation of managers, confidentiality limits and escalation, follow-up and reporting of themes. Run at least one round (real, or a SIMULATED rehearsal with colleagues) and record themes, actions and the report-back",
+      "Design the manager 360: raters, questions in behavioural wording with a scale and text prompts, anonymity threshold, results routing, facilitation, and the rule on how results may and may not be used, with HR and legal questions listed as open",
+      "Run the 360 for at least one participant (real with consent, or SIMULATED), report averages, spread and interval by category, the self-other gap with its interval, and the comments themes, and say what the sample cannot show",
+      "Run the rater-noise simulation for 3, 5, 8 and 12 raters with at least 5,000 repeats each and report the share of repeats that differ from the long-run average by at least half a point",
+      "A 360 analysis tool that takes self and rater scores per question and returns the mean, standard deviation, 95% interval (t distribution), self-other gap, whether the gap lies outside the interval, and suppresses any category with fewer raters than the threshold. Automated tests required, including the lesson's example (3.17 mean, interval about 2.4 to 4.0, gap 1.33 outside), fewer raters than the threshold (suppressed), a single rater (no interval, suppressed), a score outside 1 to 5 (reject), an empty list (reject) and a non-integer score (reject)",
+      "A statement of how the system will not be used (for example not in pay or promotion decisions), with the open HR and legal questions and who will answer them",
+      "A one-page summary for the engineering team led by what will happen, who sees what and what will not happen",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No real names or identifiable comments in shared materials",
+      "Participation in the 360 only with informed consent and the stated rules",
+      "Do not show category results below the anonymity threshold",
+      "Do not use 360 results in pay or promotion decisions unless HR and legal advisers have approved it in writing",
+      "Do not give direction to another manager's team through a skip level",
+      "Must run locally with a single command for the tool and its tests"
+    ],
+    "design": "Write a one-page design covering cadence, privacy rules, the three mechanisms, the measures of success and one alternative you rejected, for example a quarterly all-hands survey only.",
+    "tasks": [
+      "Compute loads and set cadences",
+      "Design and baseline the pulse",
+      "Design and run a skip level round",
+      "Design and run the 360",
+      "Run the rater-noise simulation",
+      "Build the analysis tool with tests",
+      "Write the rules and the one-page summary"
+    ],
+    "acceptance": [
+      "Cadence is calculated against real spans and is sustainable",
+      "The skip level design has preparation, confidentiality limits and a follow-up report",
+      "The 360 design has an anonymity threshold and a use policy",
+      "Results include intervals and a statement of limits",
+      "Tool tests pass including suppression and rejection cases",
+      "No identifiable data is shared",
+      "Open HR and legal questions have owners"
+    ],
+    "deliverable": "The cadence calculation, pulse and results, skip level design and themes, 360 design and results, simulation, analysis tool with tests, rules statement and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Head of people",
+    "scenario": "The head of people supports the idea but worries about confidentiality, managers feeling undermined, and 360 results being used in ways people did not agree to.",
+    "prompts": [
+      "How many hours does your one-on-one cadence cost, and can managers actually keep it?",
+      "How do you stop a skip level undermining a manager?",
+      "What happens if an engineer reports something serious in a skip level?",
+      "Is a 360 from six raters reliable? What does the interval say?",
+      "How is anonymity protected in a small team?",
+      "What will the results never be used for, and who agreed that?"
+    ],
+    "rubric": [
+      {
+        "criterion": "A sustainable, calculated cadence and sound meeting design",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Confidentiality, escalation and manager-protecting rules for skip levels and 360",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Honest statistics: rater noise, interval, anonymity threshold and limits",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Clear communication to a head of people",
+        "weight": 0.15
+      }
+    ]
+  }
+}

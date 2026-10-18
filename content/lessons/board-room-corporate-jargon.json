@@ -1,0 +1,148 @@
+{
+  "id": "board-room-corporate-jargon",
+  "moduleId": "board-room-corporate-jargon",
+  "pillar": "People",
+  "title": "Board room and corporate jargon",
+  "estimatedMinutes": { "learn": 35, "build": 180, "defend": 30 },
+  "objectives": [
+    "Recognise common corporate jargon and its plain meaning",
+    "Translate jargon into clear executive language",
+    "Avoid jargon that obscures risk or decisions",
+    "Defend a recommendation in plain language to a board"
+  ],
+  "prerequisites": ["storytelling-star-method"],
+  "unlock": { "prerequisites": [{ "lessonId": "storytelling-star-method", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Corporate jargon and plain language guidance",
+      "url": "https://www.plainlanguage.gov",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "General plain-language guidance reviewed."
+    }
+  ],
+  "verificationNotes": [
+    "Jargon lists are illustrative and drawn from common usage, not a single authoritative source.",
+    "Plain-language rewrites are Original Academy material."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Why jargon matters",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Jargon can signal membership and speed up expert discussion, but it often hides uncertainty, risk and decision ownership. In a board room, unclear language leads to unclear decisions. A CTO should be able to switch from expert shorthand to plain language on demand."
+      },
+      {
+        "heading": "Common phrases and plain meanings",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Synergy: working together. Leverage: use. Bandwidth: capacity. Move the needle: make a measurable difference. Circle back: return to the topic. Take this offline: discuss separately. Single source of truth: one authoritative data set. Boil the ocean: attempt too much. Low-hanging fruit: easy wins. The phrase is not the problem; the missing number, owner or date is."
+      },
+      {
+        "heading": "Jargon as a risk",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Jargon becomes dangerous when it replaces evidence. 'We will leverage synergies to move the needle' says nothing about cost, time or owner. Boards need decisions, trade-offs and measures. Translate every abstract phrase into a concrete ask, number and date."
+      },
+      {
+        "heading": "Plain-language rules",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Prefer short sentences, active voice and concrete nouns. Name the decision, the owner, the cost and the date. Define technical terms on first use. Avoid acronyms unless everyone shares them. If a phrase cannot be rewritten plainly, the idea may not be clear yet."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Rewriting a board update (illustrative)",
+      "body": "Jargon version: 'We are leveraging cloud synergies to optimise our digital transformation and move the needle on operational excellence.'\n\nPlain version: 'We are moving three systems to one cloud provider. This should cut hosting cost by 15 percent and reduce recovery time from 24 hours to 4 hours. Total cost is 120,000 over six months. I recommend approval; the main risk is migration delay.'"
+    },
+    "misconceptions": [
+      "Assuming jargon proves expertise.",
+      "Thinking plain language is less professional.",
+      "Using acronyms without defining them.",
+      "Hiding uncertainty behind abstract phrases."
+    ],
+    "explainTask": "In 120 words or fewer, explain a technical decision to a board in plain language."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "jr-1",
+      "question": "Which phrase is clearest for a board update?",
+      "options": ["We will leverage synergies", "We will reduce hosting cost by 15 percent", "We will move the needle", "We will optimise transformation"],
+      "answer": 1,
+      "why": "A specific percentage is clearer than abstract jargon."
+    },
+    {
+      "id": "jr-2",
+      "question": "Jargon becomes risky when it:",
+      "options": ["Is short", "Replaces evidence and ownership", "Uses active voice", "Names a date"],
+      "answer": 1,
+      "why": "Jargon is risky when it hides the real decision, cost, owner or date."
+    },
+    {
+      "id": "jr-3",
+      "question": "A good plain-language update should include:",
+      "options": ["Only acronyms", "Decision, owner, cost and date", "No numbers", "Only technical detail"],
+      "answer": 1,
+      "why": "Boards need the decision, owner, cost and date."
+    },
+    {
+      "id": "jr-4",
+      "question": "Which is the best rewrite of 'take this offline'?",
+      "options": ["Ignore it", "Discuss it separately after the meeting", "Cancel it", "Hide it"],
+      "answer": 1,
+      "why": "'Take this offline' means discuss it separately."
+    },
+    {
+      "id": "jr-5",
+      "question": "Acronyms should be:",
+      "options": ["Used freely", "Defined on first use unless shared", " Avoided entirely", " Used to save time"],
+      "answer": 1,
+      "why": "Define acronyms unless the audience shares them."
+    }
+  ],
+  "build": {
+    "business": "Cretek presents to a board that includes non-technical members. Clear language improves decisions and accountability.",
+    "problem": "Build a jargon-to-plain-language translator and apply it to three real board or executive updates.",
+    "requirements": [
+      "Collect at least 20 jargon phrases with plain meanings",
+      "Rewrite three real updates in plain language",
+      "Include decision, owner, cost and date in each rewrite",
+      "Build a small translator or glossary tool with tests",
+      "Document before and after examples"
+    ],
+    "constraints": [
+      "Do not remove necessary technical detail, translate it",
+      "Must run locally with one command",
+      "No customer data in examples"
+    ],
+    "design": "Write a one-page communication standard for Cretek executive updates.",
+    "tasks": [
+      "Collect jargon phrases",
+      "Rewrite three updates",
+      "Build the glossary tool",
+      "Write the communication standard"
+    ],
+    "acceptance": [
+      "Glossary contains at least 20 phrases",
+      "Three rewrites include decision, owner, cost and date",
+      "Tool tests pass",
+      "Communication standard written"
+    ],
+    "deliverable": "Glossary, three rewritten updates, glossary tool with tests, and communication standard, referenced by path."
+  },
+  "defend": {
+    "assessor": "Board",
+    "scenario": "The board complains that technical updates are hard to follow and asks for clearer communication.",
+    "prompts": [
+      "Why does jargon cause poor decisions?",
+      "How will you make updates clearer?",
+      "What will each update now include?",
+      "How will you measure improvement?",
+      "How do you balance precision with simplicity?"
+    ],
+    "rubric": [
+      { "criterion": "Jargon is identified and translated", "weight": 0.3 },
+      { "criterion": "Updates include decision, owner, cost and date", "weight": 0.3 },
+      { "criterion": "A practical communication standard is proposed", "weight": 0.2 },
+      { "criterion": "Board-level clarity", "weight": 0.2 }
+    ]
+  }
+}

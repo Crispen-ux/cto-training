@@ -1,0 +1,256 @@
+{
+  "id": "experimentation-mvp",
+  "moduleId": "product-metrics",
+  "pillar": "Product",
+  "title": "Experiments and MVPs: A/B/N testing done honestly",
+  "estimatedMinutes": {
+    "learn": 55,
+    "build": 300,
+    "defend": 35
+  },
+  "objectives": [
+    "Explain A/B/N testing, traffic allocation and the multiple-comparison problem the page raises, and correct the page's description of Bonferroni",
+    "Size an experiment: sample per variant for a baseline rate and a minimum detectable effect, and see how adding variants or corrections raises it",
+    "Show by simulation why unadjusted multiple variants and repeated peeking inflate false positives",
+    "Check an experiment's data quality with a sample ratio mismatch test",
+    "Design an MVP as an experiment with a decision rule written before the test, and read a small sample's interval honestly"
+  ],
+  "prerequisites": [
+    "nps-north-star"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "nps-north-star",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "A/B/N Testing",
+      "url": "https://www.ctoframework.com/product/experimentation/abn-testing",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Minimum Viable Product (MVP)",
+      "url": "https://www.ctoframework.com/product/experimentation/minimum-viable-product",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The A/B/N page has no formulas, sample-size calculations, significance levels, confidence intervals, durations or results. Its only example is testing four product page layouts. It does not cover power, minimum detectable effect, stopping rules, worked examples, interaction effects, novelty effects, guardrail metrics, sample ratio mismatch, hypothesis formulation, ethics and consent, tooling, or what to do when no variant wins.",
+    "The retrieved summary flagged these errors on the A/B/N page: Bonferroni is listed under false discovery rate control although it controls the family-wise error rate (Benjamini-Hochberg controls the false discovery rate); the frequentist description of a p-value as the chance that differences are 'not due to chance' is imprecise (a p-value is the probability of data at least this extreme if there were no true difference); the claim that more variants reduce false negatives sits against the page's own warning that more variants raise false positives; randomisation balances confounders on average and does not 'prevent' them from affecting a given experiment; sequential testing for early winners raises false positives unless repeated looks are corrected, which the page omits; and multi-armed bandits are a form of adaptive allocation, not a separate category. Its efficiency claims (faster cycles, better resource use) are unsupported, and testing more variants needs more total traffic.",
+    "The MVP page's examples (Airbnb, Zappos, Uber, LinkedIn, Spotify) have no sources or dates, and its figures (an acquisition by Amazon for 1.2 billion dollars, an acquisition by Microsoft for 26 billion dollars) are unverified here. All examples are successes, so survivorship bias applies; causes of growth are attributed to the MVP alone; the page says an MVP is not a prototype while its Zappos example is a manual concierge-style test; its guidance on scale is ambiguous; GDPR and HIPAA are named without saying when each applies (HIPAA concerns specific US healthcare contexts); and success criteria are asked for but no thresholds are given. The retrieved summary suggested the Spotify launch was invite-only, which the page does not say; that is unverified. The page does not cover feature prioritisation methods, cost and team, pivot criteria, concierge or Wizard of Oz or landing-page tests, the origin of the term, risks of a poor launch, or products where an MVP is inappropriate (regulated or safety-critical).",
+    "The sample-size calculations, the A/A simulation, the sample ratio mismatch test, the Benjamini-Hochberg example and the Wilson intervals are Original Academy material run in Python. The simulation is SIMULATED and uses invented conversion rates. The large-sample normal approximation is used throughout; for rare events or tiny samples use exact methods."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "A/B/N testing as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A/B/N testing is a controlled experiment comparing more than two variants at once against a control. The page's example is an e-commerce site testing four product page layouts.\n\nIt covers four ideas. Randomisation: users are assigned to groups at random. Traffic allocation: equal splits, adaptive allocation that shifts traffic towards better performers, and multi-armed bandits that reallocate continuously. Statistical approach: frequentist (predefined sample size, confidence interval) or Bayesian (probabilities updated as data arrives). False discovery: more variants raise the chance of a false positive, with Bonferroni and Benjamini-Hochberg named as mitigations.\n\nIt claims faster optimisation, richer insight into which variant wins, better resource use and fewer false negatives. Challenges: larger samples, harder analysis, diluted traffic and longer tests, with mitigations of limiting variants to researched hypotheses, sequential testing to drop weak variants, and phased tests. Use cases: onboarding and navigation, checkout and pricing, recommendation and ranking models, and marketing creative."
+      },
+      {
+        "heading": "Corrections to the page",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Several statements need correcting before you teach from the page.\n\nBonferroni controls the family-wise error rate (the chance of any false positive across the set of comparisons) by testing each at alpha divided by the number of comparisons. The Benjamini-Hochberg procedure controls the false discovery rate (the expected share of declared wins that are false). They are different guarantees and the page files both under false discovery control.\n\nA p-value is the probability of seeing a difference at least this large if there were no true difference. It is not the probability that the difference is due to chance.\n\nRandomisation balances confounders on average across many assignments. It does not guarantee balance in a given test, which is why you check for imbalance.\n\nMore variants do not reduce false negatives for free. Each extra variant splits traffic, so each comparison has less power unless you add traffic. Faster cycles and better resource use depend on having that traffic.\n\nA multi-armed bandit is a kind of adaptive allocation. It maximises reward during the test, which is useful for short-lived content, but its uneven sampling makes clean inference about every variant harder. Choose it for the goal, not as an upgrade."
+      },
+      {
+        "heading": "Sizing an experiment",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page gives no sample-size method. Before running anything, decide the baseline rate, the smallest effect worth acting on (the minimum detectable effect), the significance level and the power (the chance of detecting a real effect of that size).\n\nWith a baseline conversion of 4%, a significance level of 0.05 (two-sided) and 80% power, the sample needed per variant is about:\n- to detect 4.0% to 4.5% (half a percentage point): 25,551;\n- to detect 4.0% to 5.0% (one point): 6,745;\n- to detect 4.0% to 6.0% (two points): 1,863.\n\nSmall effects need very large samples: halving the effect roughly quadruples the sample. With three variants against a control and a Bonferroni correction (alpha 0.05 / 3 = 0.0167 per comparison), the half-point case rises to about 34,081 per variant, and four arms need four times the traffic, not twice. If your site has 100,000 eligible visitors a month, that decides what you can test.\n\nIf a test cannot reach the size you need in a reasonable time, say so and either test a bigger change, use a metric closer to the change, or accept a decision under uncertainty with the interval stated, rather than running an underpowered test and reading noise."
+      },
+      {
+        "heading": "Why uncorrected variants and peeking fail",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Take a control and three variants, all identical (an A/A/A/A test, so no real difference exists). At 0.05 per comparison, the chance that at least one of three comparisons looks significant is 1 - 0.95^3, about 14.3% (18.5% with four comparisons).\n\nSIMULATED check: 1,500 simulated A/A/A/A experiments of 2,000 users per arm at a 4% rate, comparing each variant to control at 0.05. A false win appeared in 12.9% of experiments. Applying Bonferroni (0.0167 per comparison) cut this to 4.1%. A single two-arm test gave 5.2%, close to the nominal 5%.\n\nPeeking: a two-arm A/A test checked at 10 evenly spaced points, stopping at the first p below 0.05, gave a false win in 19.7% of simulated experiments. This is the page's 'sequential testing to detect early winners' without correction. If you want to stop early, use a method designed for it (planned group sequential or always-valid methods) and decide the rule before the test.\n\nBenjamini-Hochberg on four p-values 0.008, 0.020, 0.041 and 0.30 at 0.05: sorted thresholds are k/4 x 0.05 = 0.0125, 0.025, 0.0375, 0.05. The largest k with p at or below its threshold is 2, so two results are declared; Bonferroni (threshold 0.0125) would declare only the first. BH is less strict because it accepts that a small share of declared wins may be false. For one high-stakes launch decision you may prefer the stricter family-wise control."
+      },
+      {
+        "heading": "Check the plumbing before reading the result",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A sample ratio mismatch (SRM) means the groups are not the size the design says they should be. If you planned 50/50 and the counts are 10,000 and 10,400, the difference is 400 on 20,400 users. The z-statistic is (10,400 - 10,000) / sqrt(20,400), about 2.80, which has a two-sided p-value of about 0.005. A split that uneven would be very rare by chance, so something is broken: bot filtering that treats variants differently, a redirect that drops users, a bug that crashes one variant, or a logging gap. Fix the cause before trusting any result. The page does not mention SRM.\n\nRead results as an estimate with an interval. Suppose control converts 800 of 20,000 (4.0%) and a variant 880 of 20,000 (4.4%). The difference is 0.4 points, z about 1.99, p about 0.046, with a 95% interval of roughly +0.01 to +0.79 points. It is just under 0.05 for one planned comparison, but the interval says the true effect might be anywhere from nothing to nearly double the estimate, and the test was smaller than the 25,551 per arm needed to detect half a point. If this had been one of three variants tested, the Bonferroni threshold of 0.0167 would not have been met. Add guardrail metrics (refunds, latency, support contacts), and remember novelty effects: users may click on something just because it is new, so check that a lift persists."
+      },
+      {
+        "heading": "The MVP as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines an MVP as a product version with just enough features to satisfy early adopters and generate feedback, to test the core idea with minimal resources before major investment. Reasons given: test a business hypothesis, show investors a working product, reduce time and cost.\n\nDo list (as summarised): focus on the primary benefit, set measurable success criteria such as engagement, retention or conversion, test with a controlled group of real users using qualitative and quantitative data, keep the architecture extensible but not production-grade, use third-party services and low-code tools, be willing to pivot, handle basic security and legal obligations (it names GDPR and HIPAA), build a feedback loop, and communicate the long-term vision.\n\nDon't list: overload with features, compromise basic usability, skip market and problem validation, build for hypothetical scale, ignore monetisation entirely, treat it as a concept demo, rely on internal assumptions over feedback, launch without a roadmap for outcomes, skip minimal documentation, persist with a failing idea.\n\nExamples given: Airbnb, Zappos, Uber, LinkedIn and Spotify, each with a short story and a successful outcome."
+      },
+      {
+        "heading": "Making an MVP a real experiment",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page asks for success criteria but gives none, offers only success stories, and does not say when to stop. Supply the missing discipline.\n\nWrite the hypothesis and the decision rule before building. A hypothesis names the customer, the problem and the behaviour you expect, for example: 'at least 30% of 20 interviewed engineering leaders will pay for a manual ownership report'. State what you will do for each range of outcomes.\n\nRead small samples with their intervals. Wilson 95% intervals: 3 of 20 paying (15%) is about 5% to 36%; 4 of 20 (20%), 8% to 42%; 5 of 20 (25%), 11% to 47%; 6 of 20 (30%), 15% to 52%; 12 of 40 (30%), 18% to 45%; 0 of 20, 0% to 16%. A small test can reject a hopeless idea (0 of 20 makes a rate above about 16% implausible) but cannot confirm a good one.\n\nChoose the cheapest test that answers the riskiest assumption. Concierge (a person does the service by hand), Wizard of Oz (the front looks automatic, a person acts behind it) and landing page tests (measure sign-up intent before building) are named here as general methods; the page names none of them. The page's Zappos example is a manual test of demand in this spirit, which sits uneasily beside its warning that an MVP is not a prototype.\n\nSurvivorship bias: five famous successes tell you nothing about how often the approach fails. Do not use them to estimate your odds.\n\nKnow when an MVP is the wrong approach. For regulated or safety-critical products, a minimal launch can mean unacceptable harm. The page names GDPR and HIPAA without saying when they apply: GDPR concerns personal data of people in the EU, and HIPAA concerns certain US health information. Check applicability with counsel before collecting real data (not legal advice).\n\nAnd decide the kill criterion in advance: the evidence at which you stop. The page says to avoid persisting with a failing idea but gives no rule."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Testing an onboarding change for the dependency-ownership service (invented numbers)",
+      "body": "Hypothesis from the previous lesson: accounts that resolve an ownership gap early retain better. The team proposes an onboarding change that surfaces the top five unowned services on first login. Success metric: share of new accounts resolving at least one gap in their first 7 days. Baseline: 20% (assumption from the last quarter). Smallest effect worth acting on: 5 points (20% to 25%). Guardrails: support tickets per new account, time to first map, 14-day re-open rate.\n\nSizing. For 20% to 25% at 0.05 and 80% power the sample is about 1,094 per arm (calculated with the same formula used above). With 60 new accounts a week, one variant against a control needs about 37 weeks, which is not a decision anyone can wait for. The team has three options: test a larger change, move up to a metric measured per user instead of per account (more units), or accept a smaller, qualitative test with the interval stated. They choose to measure at the level of invited engineers, giving about 1,200 users a week, so a two-arm test of two weeks reaches the size.\n\nDesign. Two arms only, not four: with three variants the Bonferroni threshold and the traffic requirement would push the test past a quarter. Random assignment by account, so all users of an account see the same version. A planned stop date of two weeks and a single analysis at the end. An SRM check on day 3 and at the end.\n\nResult. Control: 1,200 of 6,000 users resolving within seven days (20.0%) and variant 1,320 of 6,000 (22.0%). Difference 2.0 points, z about 2.7, p about 0.007, 95% interval about +0.5 to +3.5 points. The SRM check passes (6,000 and 6,000 assigned). Guardrails unchanged. The effect is real by the test but below the 5 points the team set as worth acting on; the interval excludes 5. The decision rule written first said to ship only above 5 points, so the team does not ship it as a win, and records it as a small positive effect, deciding that further work should aim for a larger change.\n\nWhat is unverified: all rates and counts are invented. The interval uses a normal approximation, and a follow-up should check whether the lift persists beyond two weeks (novelty)."
+    },
+    "misconceptions": [
+      "Believing more variants always mean faster learning. They need more traffic and add false positives.",
+      "Treating Bonferroni as false discovery rate control. It controls the family-wise error rate.",
+      "Describing a p-value as the probability the result is due to chance.",
+      "Stopping a test when it first looks significant.",
+      "Reading a result without checking the sample ratio.",
+      "Believing randomisation guarantees balanced groups in every test.",
+      "Treating five famous MVP successes as evidence the approach works for you.",
+      "Starting an MVP without a decision rule and a kill criterion."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a product manager why testing four variants at once is not four times faster, using one number from this lesson."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ex-1",
+      "question": "Which statement corrects the page about multiple-comparison methods?",
+      "options": [
+        "Bonferroni controls the false discovery rate",
+        "Bonferroni controls the family-wise error rate; Benjamini-Hochberg controls the false discovery rate",
+        "Both are the same",
+        "Neither is used in experiments"
+      ],
+      "answer": 1,
+      "why": "The page lists both under false discovery control. Bonferroni protects against any false positive across the set; Benjamini-Hochberg limits the expected share of false wins among those declared."
+    },
+    {
+      "id": "ex-2",
+      "question": "In the simulated A/A/A/A test, what was the false-win rate for three uncorrected comparisons, and what did Bonferroni do?",
+      "options": [
+        "About 12.9% uncorrected; about 4.1% with Bonferroni",
+        "About 5% in both cases",
+        "About 50% uncorrected; 0% with Bonferroni",
+        "About 1% uncorrected; 5% with Bonferroni"
+      ],
+      "answer": 0,
+      "why": "Theory gives 1 - 0.95^3 = 14.3%; the simulation gave 12.9%. Bonferroni at 0.05/3 per comparison gave 4.1%."
+    },
+    {
+      "id": "ex-3",
+      "question": "Roughly how many users per arm are needed to detect 4.0% to 4.5% at 0.05 and 80% power?",
+      "options": [
+        "About 1,863",
+        "About 6,745",
+        "About 25,551",
+        "About 255"
+      ],
+      "answer": 2,
+      "why": "Small effects need very large samples: about 25,551 per arm for half a point, 6,745 for one point and 1,863 for two points."
+    },
+    {
+      "id": "ex-4",
+      "question": "Why does checking a two-arm A/A test ten times and stopping at the first p below 0.05 mislead?",
+      "options": [
+        "It does not; more looks are always better",
+        "Repeated looks inflate false positives; in the simulation about 19.7% of identical-arm tests declared a win",
+        "It lowers power to zero",
+        "It makes randomisation fail"
+      ],
+      "answer": 1,
+      "why": "Each look is another chance to see a chance extreme. Unless a method designed for repeated looks is used, the false-positive rate rises well above 5%."
+    },
+    {
+      "id": "ex-5",
+      "question": "A planned 50/50 test records 10,000 and 10,400 users. What should you do first?",
+      "options": [
+        "Report the result",
+        "Treat it as a sample ratio mismatch (z about 2.8, p about 0.005) and find the cause before trusting any result",
+        "Delete the larger group",
+        "Ignore it because randomisation is perfect"
+      ],
+      "answer": 1,
+      "why": "A split this uneven is very unlikely by chance. Something in assignment, filtering or logging may be broken, which can bias the result."
+    },
+    {
+      "id": "ex-6",
+      "question": "What does 0 of 20 interviewed leaders paying tell you, with a Wilson 95% interval of 0% to about 16%?",
+      "options": [
+        "That the true rate is exactly 0",
+        "That a rate above about 16% is implausible, so a hopeless idea can be rejected, but a good idea could not have been confirmed by 20 people",
+        "That the idea is excellent",
+        "Nothing at all"
+      ],
+      "answer": 1,
+      "why": "Small samples can rule out high rates but give wide intervals, so they cannot confirm that a promising result is truly high."
+    }
+  ],
+  "build": {
+    "business": "Cretek will ship changes and early products on instinct unless it learns to test them. A CTO should be able to design an experiment that can actually answer the question, run it cleanly and say honestly what it showed. This is the experimentation capability in the CTO Operating System.",
+    "problem": "Design and run (or simulate) a real experiment on a Cretek product change, with sizing, a pre-written decision rule, data quality checks and an honest analysis. Add an MVP test plan with a kill criterion for one new idea.",
+    "requirements": [
+      "State a hypothesis, the primary metric, the baseline (from real data or labelled ASSUMPTION), the minimum detectable effect and the guardrail metrics",
+      "Size the experiment for your baseline and effect, at 0.05 and 80% power, and state how long it will take at your real traffic. If it cannot reach size, say what you will do instead",
+      "Write the decision rule before the experiment: the outcomes and the action for each, and the stopping rule",
+      "Run it, or simulate it clearly labelled SIMULATED, with random assignment by the right unit and a planned analysis date",
+      "Check sample ratio mismatch at least twice and report the result",
+      "Analyse with an effect estimate, a 95% interval and a p-value, and apply a multiple-comparison correction if more than two arms. Name the correction and what it controls",
+      "Report guardrails and say whether novelty could explain the lift",
+      "Run an A/A simulation of at least 1,000 experiments showing the false-positive rate for your design: uncorrected, corrected and with repeated looks",
+      "Plan an MVP for one new idea: hypothesis, cheapest test (concierge, Wizard of Oz or landing page), sample, decision rule with Wilson intervals for each outcome range, a kill criterion, and the data and legal checks needed before collecting real data (not legal advice)",
+      "An experiment analysis tool that takes counts for two arms and returns rates, difference, 95% interval, z, p-value and an SRM check against the planned split. Automated tests required, including the lesson's examples (800 of 20,000 against 880 of 20,000: z about 1.99, p about 0.046; SRM 10,000 and 10,400: z about 2.80), zero users in an arm (reject), conversions greater than users (reject), identical arms (difference 0, p 1) and a planned split that does not sum to 1 (reject)",
+      "A decision memo ('ship', 'do not ship' or 'extend') with the reasoning and what remains unknown",
+      "A one-page summary led by the effect and its interval, not the p-value",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No user-identifying data in shared materials",
+      "Do not stop early on the first significant result unless a sequential method was planned",
+      "Do not run more variants than the traffic can power",
+      "Do not claim a win below the effect size you set as worth acting on",
+      "Must run locally with a single command for the tool and its tests"
+    ],
+    "design": "Write a one-page design covering the hypothesis, metrics, sizing, assignment, the decision rule and one alternative you rejected, for example testing four variants at once.",
+    "tasks": [
+      "Write the hypothesis, metrics and decision rule",
+      "Size the experiment",
+      "Run or simulate it with SRM checks",
+      "Build the analysis tool with tests and analyse",
+      "Run the A/A false-positive simulation",
+      "Plan the MVP test with a kill criterion",
+      "Write the decision memo and summary"
+    ],
+    "acceptance": [
+      "Sizing is stated and the decision rule was written before results",
+      "SRM was checked twice",
+      "The analysis reports an effect, a 95% interval and any correction applied",
+      "The A/A simulation shows uncorrected, corrected and repeated-look false-positive rates",
+      "The MVP plan has Wilson intervals for outcome ranges and a kill criterion",
+      "Analysis tool tests pass including the rejection cases",
+      "The memo states what remains unknown"
+    ],
+    "deliverable": "The experiment design, sizing, decision rule, data and analysis, A/A simulation, analysis tool with tests, MVP plan, memo and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Head of product",
+    "scenario": "The head of product wants to roll out a change because a test 'won'. They want to know whether the result can be trusted and whether the next idea deserves an MVP.",
+    "prompts": [
+      "How big did the test need to be, and did it reach that?",
+      "How many comparisons did you make, and what correction did you apply?",
+      "Did you check the sample ratio? What would a mismatch have meant?",
+      "The p-value is 0.046. Should we ship?",
+      "What was your decision rule before the test, and did you follow it?",
+      "What would make you kill the MVP idea?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Sound design: sizing, assignment, a decision rule set in advance, guardrails",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Correct analysis: interval, multiple comparison control, peeking and SRM",
+        "weight": 0.3
+      },
+      {
+        "criterion": "An MVP plan with honest small-sample reading and a kill criterion",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Clear communication to a product leader",
+        "weight": 0.15
+      }
+    ]
+  }
+}

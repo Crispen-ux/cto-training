@@ -1,0 +1,259 @@
+{
+  "id": "storytelling-star-method",
+  "moduleId": "people-communication",
+  "pillar": "People",
+  "title": "Storytelling and the STAR method for technical leaders",
+  "estimatedMinutes": {
+    "learn": 45,
+    "build": 240,
+    "defend": 30
+  },
+  "objectives": [
+    "Name the six narrative frameworks on the Storytelling page and match each to a CTO situation",
+    "Turn a technical problem into a story with a baseline, friction, cost, option and ask, and put numbers in it that can be checked",
+    "Separate a true story from a metaphor and flag which one you are using",
+    "Answer a question in STAR form with a measurable, honest Result, and say what you did rather than what 'we' did",
+    "Spot the ambiguity in a claim such as '99.9% uptime improvement' and rewrite it"
+  ],
+  "prerequisites": [
+    "technical-debt",
+    "roi-business-cases"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "technical-debt",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "roi-business-cases",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Storytelling",
+      "url": "https://www.ctoframework.com/people/communication/story-telling",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "The S.T.A.R. Method",
+      "url": "https://www.ctoframework.com/people/communication/star-method",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "Both pages were retrieved as automated summaries, not read in full. Re-read them before relying on any detail.",
+    "The Storytelling page lists six frameworks, three strategic uses and two case studies. According to the summary it gives no procedure for building a narrative, no template and no data on whether storytelling improves outcomes. This lesson adds a procedure and labels it as Academy material.",
+    "The page itself says the 'space pencil' story is historically inaccurate and still uses it as a metaphor. The summary noted a wording inconsistency in that section. Re-read it to see how it is framed.",
+    "The JFK janitor anecdote: according to the summary the page gives no citation for it, and its linked reference covers the speech, not the anecdote. This lesson treats it as a widely retold illustration and has not verified it. Do not present it to others as established fact.",
+    "The STAR page's two examples quote 99.9% uptime, a 30% infrastructure cost reduction and a 40% drop in security incidents. The page does not say these come from real projects, so treat them as illustrative. '99.9% uptime improvement' is ambiguous because 99.9% is a level, not an amount of improvement.",
+    "According to the summary the STAR page gives no guidance on answer length, preparing a story bank, follow-up questions, common mistakes, cases with no metrics, or the origin of the method. Everything on those topics here is Academy material, not from the page.",
+    "Word budgets, speaking pace (140 words a minute) and the 15/10/50/25 split are my ASSUMPTIONS for practice, not rules from the page. All business figures in the examples are invented (ASSUMPTION or SIMULATED) and are not Cretek data."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What the Storytelling page teaches",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page treats storytelling as a strategic leadership capability, not a soft skill: turning technical complexity, roadmaps and business goals into narratives that prompt action and align teams. It names uses such as building consensus, securing budget and building a mission-driven culture.\n\nIt lists six frameworks. (1) The Hero's Journey, for vision: the company or customer is the hero, obstacles are debt, scale or disruption, and the CTO is the mentor who brings tools and a roadmap. (2) Conflict and resolution, for problem solving: define the problem and the cost of inaction, then give a structured way forward. (3) Emotional engagement: pair data with human impact, such as users facing latency or developers fighting poor tooling. (4) Simplicity and clarity: use analogies and business metrics for non-technical listeners. (5) The narrative arc, for change: baseline, friction, future benefit. (6) Authenticity and trust: share failures, lessons and the reasoning behind hard decisions.\n\nThree uses are named: presenting debt paydown as the friction it causes rather than as 'refactoring', explaining technology value across functions, and telling failure stories so calculated risk is treated as learning."
+      },
+      {
+        "heading": "What the page leaves out, and a procedure",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "According to the summary the page gives no steps. Here is a five-part procedure built on its narrative arc. It is my own, not from the page.\n\n1. Baseline: what is true today, with a number and a date.\n2. Friction: what it stops people doing, in the listener's terms.\n3. Cost: what that friction costs per month or year, with inputs shown and labelled.\n4. Option: the smallest thing that changes the baseline, its cost, and what you would stop doing to fund it.\n5. Ask: one decision for one person by one date.\n\nTwo tests before you tell it. The number test: can every figure be traced to a source, a calculation or a label saying it is an assumption? The audience test: does the first sentence use words the listener would use? A story with no ask is a talk. A story with an invented figure shown as fact is a risk to your credibility the first time someone checks."
+      },
+      {
+        "heading": "True stories, metaphors and anecdotes",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page is candid about the space pencil: the popular story (NASA spent millions on a pen, the Soviets used pencils) is, on its own account, historically inaccurate, yet it is used as a metaphor for avoiding over-engineering. That is a good habit to copy: say which kind of story you are telling.\n\nThree kinds. A true story from your own work, which you can defend with facts. A metaphor, which you introduce as one ('think of it as...'). An anecdote you have not verified, such as the janitor at NASA, which you either skip or introduce as 'the story goes'. Mixing them up is how a leader ends up defending a myth in front of someone who knows better.\n\nThe page's lesson from the pencil is useful on its own merits: before building something bespoke, ask what the simplest working version is and what it would cost to buy or reuse. That connects to the build versus buy and technical debt lessons."
+      },
+      {
+        "heading": "The STAR method",
+        "sourceCategory": "Official CTO Framework",
+        "body": "STAR stands for Situation, Task, Action, Result. The page presents it as a structured way to give clear, concise answers about experience, especially in interviews or performance evaluations.\n\nSituation: the context or challenge (a technical issue, a bottleneck, a strategic decision). Task: your responsibility or objective. Action: the steps you took, with emphasis on strategy, leadership, decisions or execution. Result: the outcome, ideally measurable, such as efficiency, cost, security or delivery.\n\nIt gives two examples. A cloud migration: a legacy system failing under demand, a phased migration with monitoring, and a result of '99.9% uptime improvement' and a 30% infrastructure cost reduction. A security audit: critical vulnerabilities in authentication, an MFA rollout with encryption and training, and a result of compliance and a 40% drop in incidents. The page does not say whether the figures are real."
+      },
+      {
+        "heading": "Making STAR work: what the page does not cover",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The summary reports that the page gives no advice on length, preparation, follow-ups or mistakes. Academy additions, all labelled as practice rules:\n\nLength. For a spoken answer of about 150 words at about 140 words a minute (ASSUMPTION), that is roughly 64 seconds. A practice split of 15% Situation, 10% Task, 50% Action and 25% Result gives about 22, 15, 75 and 38 words. The reason for the weighting is that most weak answers spend their time on background.\n\nI versus we. Say what you decided and did, and credit the team for what they did. A listener cannot assess a 'we'.\n\nResults without metrics. Say so, then give the best available evidence: a before-and-after comparison, a quote from a customer or colleague, a leading indicator, or what you would measure next time. Never invent a figure.\n\nFollow-ups. Expect 'what would you do differently?' and 'what did it cost?' Prepare a sentence on each.\n\nA story bank. Keep five to eight stories (a failure, a conflict, a hard hire, a big trade-off, a delivery under pressure) and map each to the questions it can answer. In this Academy's Defend mode the assessor questions work like interview follow-ups."
+      },
+      {
+        "heading": "Putting numbers in stories, and checking them",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Debt as friction (all inputs ASSUMPTIONS, computed in Python). Six engineers lose 30% of their time to workarounds. At a loaded cost of 90,000 a year that is 6 x 0.30 x 90,000 = 162,000 a year. The fix is two engineers for six months, 90,000. If the fix removes 60% of the friction it saves 97,200 a year and pays back in about 11.1 months. At 100% removal about 6.7 months, at 30% about 22.2 months. The story is stronger when it shows that range than when it quotes one figure.\n\nThe ambiguous uptime claim. 99.9% uptime allows 8.76 hours of downtime a year (8,760 x 0.001). If the old level was 99.0% (87.6 hours), moving to 99.9% cuts downtime by 90%, not by '99.9%'. A good Result says 'availability rose from 99.0% to 99.9% over the six months after cut-over, cutting downtime from about 88 hours a year to about nine'.\n\nA cost claim needs a baseline and a price. A 30% cut on a 1,200,000 annual bill is 360,000 a year. If the migration cost 400,000, payback is about 13.3 months. A Result that omits the 400,000 is half a story."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Asking the CEO to fund debt paydown (invented numbers, not Cretek data)",
+      "body": "Weak version: 'We need to refactor the order service. It is a mess and slows us down.' The listener cannot act on it.\n\nStory version, using the procedure.\n\nBaseline: releases of the order service take on average 3 weeks to ship a change (ASSUMPTION), up from 1 week two years ago.\nFriction: the three features sales promised for next quarter wait behind a manual test cycle, and the same six engineers handle every customer incident for it.\nCost: those six engineers lose about 30% of their time to workarounds, about 162,000 a year at 90,000 loaded each (ASSUMPTION). That is before the delayed revenue, which I cannot yet size.\nOption: two engineers for six months, 90,000, to add automated tests and split the service. If it removes 60% of the friction it saves about 97,200 a year, payback about 11 months. If it removes only 30%, payback is about 22 months and I would stop after the first quarter and tell you.\nAsk: approve the two engineers from the roadmap now, in exchange for deferring one low-priority feature, with a review on 31 January.\n\nIn STAR form for an interview: Situation, releases slowed from one week to three. Task, I owned delivery speed for the order service. Action, I measured the friction, proposed a staged fix and agreed a stop rule. Result, release time fell from 21 days to 9 over two quarters (an invented figure, which you would replace with your real one), and I reported that the saving was lower than forecast.\n\nNotice what is absent: a hero's journey, an analogy about a house with bad plumbing. Those can help, but the numbers and the ask do the work."
+    },
+    "misconceptions": [
+      "Believing storytelling means embellishing. A story is an order for true facts, not a licence to invent them.",
+      "Treating a story as a replacement for numbers instead of a way of carrying them.",
+      "Presenting an unverified anecdote or a myth as a fact.",
+      "Ending a story with no decision for the listener.",
+      "Quoting '99.9% improvement' without a baseline and a period.",
+      "Saying 'we' throughout a STAR answer so no one can tell what you did.",
+      "Using the page's example figures as if they were benchmarks. The page does not say they are real."
+    ],
+    "explainTask": "In 150 words or fewer, tell a non-technical executive why the legacy order service should be fixed, using a baseline, friction, cost, option and ask, with one number labelled as an assumption."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sts-1",
+      "question": "A system's availability moves from 99.0% to 99.9%. By roughly what percentage does annual downtime fall?",
+      "options": [
+        "10%",
+        "50%",
+        "90%",
+        "99.9%"
+      ],
+      "answer": 2,
+      "why": "99.0% allows 87.6 hours a year; 99.9% allows 8.76 hours. The reduction is 1 - 8.76/87.6 = 90%. 'A 99.9% improvement' is a different, wrong statement."
+    },
+    {
+      "id": "sts-2",
+      "question": "Six engineers lose 30% of their time at a loaded cost of 90,000 each. A fix costing 90,000 removes 60% of that loss. About how many months to pay back?",
+      "options": [
+        "6.7",
+        "11.1",
+        "13.3",
+        "22.2"
+      ],
+      "answer": 1,
+      "why": "Annual friction is 162,000. Sixty percent is 97,200 a year. 90,000 / 97,200 x 12 is about 11.1 months. 6.7 assumes the fix removes all of it, and 22.2 assumes it removes 30%."
+    },
+    {
+      "id": "sts-3",
+      "question": "The page admits the space pencil story is historically inaccurate yet uses it. What is the best way to use such a story with an executive?",
+      "options": [
+        "Tell it as a true story, because it makes the point",
+        "Introduce it as a metaphor and say it is one",
+        "Avoid all stories because some are false",
+        "Replace it with another unverified anecdote"
+      ],
+      "answer": 1,
+      "why": "A flagged metaphor still carries the idea (look for the simple version) without asking the listener to accept a false claim as fact."
+    },
+    {
+      "id": "sts-4",
+      "question": "According to the STAR page, what should the Result ideally include?",
+      "options": [
+        "Measurable impact",
+        "A list of every team member",
+        "An apology for any delay",
+        "The names of the tools used"
+      ],
+      "answer": 0,
+      "why": "The page says to share the outcome, ideally with measurable impact such as efficiency gains, cost savings, improved security or successful delivery."
+    },
+    {
+      "id": "sts-5",
+      "question": "A migration cut a 1,200,000 annual bill by 30% and cost 400,000 to carry out. About how many months is the payback?",
+      "options": [
+        "6.7",
+        "13.3",
+        "16.7",
+        "20.0"
+      ],
+      "answer": 1,
+      "why": "Savings are 360,000 a year. 400,000 / 360,000 x 12 is about 13.3 months. A Result that quotes the 30% without the 400,000 hides the cost."
+    },
+    {
+      "id": "sts-6",
+      "question": "Which Result is strongest in a STAR answer?",
+      "options": [
+        "Things improved a lot and everyone was happy",
+        "We achieved 99.9% uptime improvement",
+        "Availability rose from 99.0% to 99.9% over six months, cutting downtime from about 88 hours a year to about nine",
+        "The migration was completed successfully"
+      ],
+      "answer": 2,
+      "why": "It has a baseline, a new level, a period and the consequence, and avoids the ambiguity of 'improvement'."
+    }
+  ],
+  "build": {
+    "business": "Cretek's CTO has to win decisions from people who do not share a technical vocabulary. Communication is part of the CTO Operating System: the same facts have to be carried into the board, finance, product and engineering.",
+    "problem": "Write one decision story for a real or realistically simulated Cretek technical investment, and a bank of STAR answers drawn from your own work, with every figure traced or labelled.",
+    "requirements": [
+      "Choose a real decision, or a clearly simulated one, and name the listener and the date of the decision",
+      "Write the story in the five parts: baseline, friction, cost, option, ask, in no more than 400 words",
+      "Show the cost calculation in a script you run. Label each input SOURCED, ASSUMPTION or SIMULATED, and give a range, not a single value",
+      "State which of the page's six frameworks you used and why",
+      "Write at least five STAR answers of 120 to 180 words each, with a stated word split, a measurable Result or an honest statement that none exists",
+      "Each STAR answer must say what you did, not what the team did, and credit others separately",
+      "For each answer prepare a one-sentence reply to 'what would you do differently?' and to 'what did it cost?'",
+      "Identify any metaphor or anecdote you use and say whether it is verified",
+      "Rewrite one ambiguous claim, such as '99.9% uptime improvement', into a precise one"
+    ],
+    "constraints": [
+      "Do not invent figures and present them as real",
+      "No real customer or employee names",
+      "Do not use the page's example figures as evidence",
+      "Keep the story under 400 words"
+    ],
+    "design": "Write a one-page design: the listener, the decision, the five-part story, the calculation with inputs and ranges, the story bank map and one version of the story you rejected and why.",
+    "tasks": [
+      "Pick the decision and listener",
+      "Draft the five parts",
+      "Write and run the calculation",
+      "Check every figure against the number test",
+      "Write the STAR answers and time yourself",
+      "Prepare the follow-up replies",
+      "Test the story on one person and note what they could not follow",
+      "Revise"
+    ],
+    "acceptance": [
+      "The story has all five parts and a single ask with a date",
+      "Every figure is traced to a source, a calculation or an assumption label",
+      "The calculation runs and shows a range",
+      "At least five STAR answers fit in 180 words each and have a measurable or honestly absent Result",
+      "I and we are used accurately",
+      "Metaphors and unverified anecdotes are flagged",
+      "The ambiguous claim is rewritten precisely",
+      "A listener's feedback is recorded"
+    ],
+    "deliverable": "The one-page design, the story, the calculation script and its output, the STAR bank with the question map, the follow-up replies and the listener feedback."
+  },
+  "defend": {
+    "assessor": "Chief executive officer",
+    "scenario": "You have asked the CEO to approve two engineers for six months on debt paydown. The CEO says: 'Every engineer says their project is urgent. Why should I believe your numbers, and what happens if you are wrong?'",
+    "prompts": [
+      "Which of your figures are measured and which are assumptions?",
+      "What range of payback did you calculate, and what would make you stop?",
+      "What is the cost of doing nothing, and how did you work it out?",
+      "What does the story leave out that could change my decision?",
+      "Which part of the story is a metaphor, and would it still hold without it?",
+      "Tell me about a time you were wrong and what you did next."
+    ],
+    "rubric": [
+      {
+        "criterion": "Story has baseline, friction, cost, option and a single dated ask",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Figures are traced or labelled, shown as a range, and computed correctly",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Honest handling of uncertainty, metaphors and unverified anecdotes",
+        "weight": 0.2
+      },
+      {
+        "criterion": "STAR answers are concise, specific, first-person and have measurable or honestly absent Results",
+        "weight": 0.15
+      },
+      {
+        "criterion": "Calm, direct answers to follow-up challenge",
+        "weight": 0.1
+      }
+    ]
+  }
+}

@@ -1,0 +1,253 @@
+{
+  "id": "interviews-succession",
+  "moduleId": "people-talent",
+  "pillar": "People",
+  "title": "CTO interviews and succession planning",
+  "estimatedMinutes": {
+    "learn": 45,
+    "build": 270,
+    "defend": 30
+  },
+  "objectives": [
+    "Describe the page's 20 interview questions and five categories, and say what the page promises but does not deliver",
+    "Turn a question list into a structured interview with anchored scoring, weights and calibration",
+    "Measure interviewer agreement and recognise when score differences are noise",
+    "Describe the page's six-step succession framework and what it omits (sudden departure, retention risk, no ready successor, bias, governance)",
+    "Compute bench strength and the cost of a vacancy under stated assumptions, and design a succession plan you can defend"
+  ],
+  "prerequisites": [
+    "hiring-models-tco",
+    "feedback-systems-one-on-ones-360"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "hiring-models-tco",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "feedback-systems-one-on-ones-360",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "CTO Interview Questions",
+      "url": "https://www.ctoframework.com/people/talent-acquisition/cto-interview-questions",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Succession Planning in Technical Leadership",
+      "url": "https://www.ctoframework.com/people/talent-acquisition/succession-planning",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "NOT LEGAL OR HR ADVICE. Hiring and promotion decisions are subject to employment and anti-discrimination law, and succession planning involves confidentiality and fair treatment of candidates. Check your process with HR and legal advisers.",
+    "The CTO Interview Questions page lists 20 questions in five categories (leadership and vision, 5; technology strategy and architecture, 5; people and culture, 5; governance, security and risk, 3; business alignment and stakeholder management, 2) and describes an interactive practice mode. Its description says each question is followed by pointers to what an ideal answer might cover, but the retrieved page text contains no such pointers: there are no answer outlines, rubrics, red flags, follow-up prompts or time allocations. The practice mode (timer, random selection, resource suggestions) could not be verified from the page text. The page is tagged for the VP of Engineering level though titled for the CTO, without explanation.",
+    "The page does not cover sample answers, scoring criteria, interviewer guidance on follow-ups or weak answers, expectations by company size, stage or industry, interview format (panel, take-home or case), how the practice mode works, or why the categories are uneven. The answer pointers, rubric anchors and scoring examples in this lesson are therefore Original Academy material, not content from the page.",
+    "The Succession Planning page defines the process as a deliberate way to fill critical roles smoothly, lists five key elements (identify pivotal roles, define required skills, spot and develop internal talent, document institutional knowledge, create a transition plan), a six-step framework for technical environments (role mapping, talent audit, development pathways, knowledge transfer systems, transition protocols, review and adjust quarterly) and benefits (resilience, engagement through visible growth paths, lower cost and risk of external hiring under pressure). It has no evidence, examples, templates or metrics, and its only figure is the quarterly review.",
+    "The retrieved summary flagged these points on the succession page: benefits asserted without data; the closing claim that the next person will be fully prepared and take over without breaking stride is idealised; the framework assumes a suitable internal successor exists and does not say what to do if none does; the quarterly interval is unexplained. It does not cover measuring success, successor retention and flight risk, selection criteria and bias, contingency for sudden departures, external candidates, governance (ownership, confidentiality, board reporting), executive succession, resistance from current leaders, legal and HR considerations, single points of failure among non-leaders, or tools and budgets.",
+    "The interviewer agreement figures, the weighted scoring example, the bench-strength numbers and the vacancy cost model in this lesson are Original Academy material run in Python. The agreement data are SIMULATED (40 answers scored by two interviewers on a four-point scale, with true quality of mean 2.6 and spread 0.8 and scoring error of spread 0.6, averaged over 2,000 repeats) and every cost input is an invented ASSUMPTION. I recall that research commonly finds structured interviews more predictive than unstructured ones but I have not verified a source for this lesson, so treat that as an unverified general claim."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The question list as the page gives it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page presents 20 questions in five categories and a practice mode.\n\nLeadership and vision (5): your leadership style and how it has evolved; developing and communicating a long-term technology vision; balancing short-term delivery with long-term innovation; a time you transformed a technology organisation; measuring team success beyond delivery.\nTechnology strategy and architecture (5): evaluating and adopting emerging technology; build versus buy; ensuring scalability and resilience; cloud adoption and hybrid environments; managing technical debt.\nPeople and culture (5): attracting, developing and retaining talent; handling disagreements between engineering and product; building a culture of innovation and accountability; assessing and improving diversity and inclusion; knowledge sharing and documentation.\nGovernance, security and risk (3): information security and compliance; prioritising cybersecurity investment; managing technology risk at executive and board level.\nBusiness alignment and stakeholders (2): aligning technology with business objectives; presenting technical strategy to non-technical stakeholders.\n\nThe page's description promises pointers to what an ideal answer covers. The retrieved page text has none."
+      },
+      {
+        "heading": "From a list of questions to a structured interview",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A list of questions is a start, not a process. Without anchors, each interviewer decides alone what a good answer is, and the same candidate gets different scores.\n\nFor each question you use, write what a strong, adequate and weak answer contains. Example for 'How do you manage technical debt?' (Academy pointers, not the page's): a strong answer defines debt in terms of its cost (slower change, defects, risk), gives a way to find and rank it, describes funding it with a stated share of capacity or tied to product work, and cites a real case with a measured result and a lesson. An adequate answer has a sensible approach but no evidence from experience. A weak answer treats debt as only a developer complaint, has no way to prioritise, or gives only generalities. Add follow-ups that probe depth: 'what did it cost, how did you know, what would you do differently?'\n\nSelect criteria from the role and weight them before interviewing, not after meeting candidates. For a CTO role at a company at Cretek's stage you might choose: technology strategy, technical depth, people leadership, security and risk, and communication with executives. Ask every candidate the same core questions in the same order, with behavioural prompts ('tell me about a time') alongside hypotheticals, and have each interviewer score independently on the anchored scale before any discussion. Take notes against evidence, not impressions.\n\nThe page's categories are uneven: five on each of three topics but only three on governance and two on stakeholders. If those matter more for your role, rebalance. For a candidate, the same list is a preparation tool; the later communication lessons cover how to structure answers."
+      },
+      {
+        "heading": "How much do scores differ by interviewer?",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Measure it. SIMULATED example: two interviewers independently score the same 40 answers on a four-point scale (1 weak to 4 strong). The true quality of the answers varies (mean 2.6, spread 0.8) and each interviewer's score is the true quality plus random error with a spread of 0.6, rounded and limited to 1 to 4. Averaged over 2,000 repeats of this experiment, the two interviewers gave identical scores on about 47% of answers and scores within one point on about 93%. Some of that agreement is expected by chance. Cohen's kappa corrects for it: kappa = (observed agreement - chance agreement) / (1 - chance agreement). Here chance agreement is about 0.29, so kappa is about 0.25, fair agreement. A single run of 40 answers swings a lot: three single runs gave kappa between about 0.15 and 0.33. Even a high within-one figure (93%) hides that the interviewers often differ by a point.\n\nConsequence: small differences in total score between candidates are noise. Three candidates scored on five weighted criteria (strategy 30%, technical depth 25%, people 20%, security 15%, communication 10%): P scores 4, 3, 3, 4, 2; Q scores 3, 4, 4, 3, 3; R scores 4, 2, 4, 3, 4. Weighted totals: P 3.35, Q 3.45, R 3.35. With equal weights: P 3.2, Q 3.4, R 3.4. The ordering changes with the weights, and the gaps of 0.1 are well inside what two interviewers disagree about. The honest conclusion is that Q is slightly ahead on this weighting and that the data cannot separate P and R, so decide on the evidence in the notes, the specific gaps that matter for the role and reference checks, not on the third decimal place.\n\nPractice: score a few recorded or mock interviews together and discuss every disagreement of two points or more; revisit the anchors; repeat. Track agreement over time. Record the weights before the first interview and do not change them after seeing the candidates. Research commonly reports that structured interviews predict job performance better than unstructured ones; I have not verified a source here, so check before you quote it."
+      },
+      {
+        "heading": "Succession planning as the page describes it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines succession planning as a deliberate process to make sure critical leadership and technical roles can be filled smoothly when a leader leaves, retires or changes role, for continuity of momentum, expertise and direction.\n\nFive elements: identify pivotal roles; define required skills, experience and capabilities; spot and develop internal talent through stretch assignments, mentoring and cross-functional exposure; document institutional knowledge; create a clear transition plan.\n\nSix-step framework: role mapping (mission-critical roles with competencies, stack knowledge and leadership behaviours); talent audit (skills matrices and performance data to identify successors); development pathways (ownership of high-impact projects, rotation and mentors); knowledge transfer systems (living documentation, show-and-tell sessions); transition protocols (handover with shadowing); review and adjust, quarterly or after major changes. It claims resilience, engagement through visible growth paths and lower risk and cost than external hiring under pressure."
+      },
+      {
+        "heading": "Making a plan that survives reality",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page describes a smooth handover. Reality includes a sudden departure, no ready successor, a named successor who then leaves, and a leader who resists.\n\nStart with a readiness view. For each pivotal role, record the best successor and a readiness level: ready now, ready in one to two years, or none. SIMULATED example for 8 pivotal roles: 2 have a ready-now successor, 3 have someone ready in one to two years, and 3 have no successor. Bench strength is then 2 of 8, or 25%, ready now, and 5 of 8, or 62.5%, within two years. The three roles with no successor are the priority. The number alone is not a goal; use it to direct development and hiring.\n\nCost the risk with assumptions you state. Suppose a vacancy in a pivotal role costs about 1,500 for each day the role is not effectively filled. An external hire takes 120 days to find and then 90 days to reach half productivity: 120 x 1,500 + 90 x 0.5 x 1,500 = 247,500. An internal ready-now successor takes about 20 days to move and then 60 days at a 25% productivity loss: 20 x 1,500 + 60 x 0.25 x 1,500 = 52,500. The difference of 195,000 is the value of having a ready successor in this role, under these inputs. It tells you how much investment in development and retention could be justified, and the inputs are guesses you should replace.\n\nAdd what the page omits. Sudden departure: keep an emergency cover list and a knowledge map for each pivotal role (who holds the credentials, decisions and relationships), a runbook, and delegated authority for an interim. No ready successor: plan for an external search, an interim and a development path, and say so. Retention risk: naming a successor can make them a target for competitors or disappoint those not named, so combine it with a growth and compensation conversation and be honest about what is and is not promised. Selection and bias: use the same criteria for every candidate, evidence from performance and demonstrated behaviours, and a calibration discussion, not who is most visible or most similar to the incumbent. Governance: one owner, confidentiality rules, an annual review with the executive team or board, and fairness. Resistance: leaders who see their successor as a threat need a reason to share knowledge, for example recognition for developing others. Checks with HR and legal advisers are needed for how candidates are informed and treated.\n\nMeasure whether it works: bench strength, the time to fill pivotal roles, the share filled internally, the retention of named successors and the performance of successors after the move. Review quarterly as the page says, and say why that interval suits you or choose another."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Hiring a head of engineering and planning for the CTO's own succession (invented numbers, not Cretek data)",
+      "body": "Part 1: the hiring process. Cretek needs a head of engineering. The CTO and the CEO choose five criteria and weights before seeing candidates: technology strategy 30%, technical depth 25%, people leadership 20%, security and risk 15%, communication 10%. From the page's 20 questions they select 8 core questions (two each for strategy, people and technology, one each for security and communication), rebalancing toward people because that is the gap on the team. For each they write strong, adequate and weak answer anchors and two follow-ups, and a case exercise: 'plan the migration of the quotation platform with a team that has lost two engineers'.\n\nThree interviewers score independently on a four-point scale and then discuss. The panel practises first on two recorded mock interviews; agreement on those is 5 of 10 exactly and 9 of 10 within one point, close to what the simulation suggests, so the panel agrees to discuss every gap of two or more.\n\nScores for three finalists: P 3.35, Q 3.45, R 3.35 by weight. The panel does not choose on 0.1. They read the notes: Q is strongest on strategy and technical depth but vague on a time they managed underperformance; R is strongest on communication and has a clear example of building a team; P is weakest on communication (2) which matters for a role that presents to the board. They run reference checks focused on the gaps, ask Q for a follow-up on a people scenario and decide after that. Because the data cannot separate P and R, they say so in the record.\n\nPart 2: succession. The CTO runs the plan for pivotal roles: CTO, head of platform, head of security, lead data engineer, quotation platform lead, AI lead, head of people partner and finance business partner. Bench strength: 2 ready now (platform and security), 3 within two years (quotation lead, data lead, finance partner), 3 with no successor (CTO, AI lead, people partner). The CTO role has no internal successor.\n\nCost of the gap. Using 1,500 a day: an external search for the CTO role would cost about 247,500 by the lesson's model, against about 52,500 for a ready successor; the difference of 195,000 justifies a development investment. Actions with owners and dates: the new head of engineering begins a 12-month development plan with CTO-level exposure (board prep, budget ownership) and a mentor outside the company; the AI lead role gets a deputy hire; a knowledge map and runbook for each pivotal role in 90 days; an emergency cover list for the CTO role agreed with the CEO (who acts, who holds access, who talks to the board).\n\nRetention and fairness. The CTO talks honestly with the potential successor: development is planned, no promotion is promised, and compensation will be reviewed on the usual cycle. HR confirms how this is documented and communicated. Selection criteria are written and applied equally to internal candidates.\n\nReview. Quarterly: bench strength, time since the knowledge map was updated, retention of named successors, and one tested emergency drill per year. The first drill, a tabletop exercise on the CTO being unavailable for two weeks, finds that only the CTO holds the production break-glass credentials, which is fixed within a week.\n\nWhat is unverified: all numbers are invented and the interview results are simulated. The cost model is a set of assumptions."
+    },
+    "misconceptions": [
+      "Treating a list of questions as an interview process. It needs anchors, weights and calibration.",
+      "Deciding between candidates on small score differences that are within interviewer noise.",
+      "Changing the weights after meeting the candidates.",
+      "Assuming raw exact agreement is good agreement. Correct for chance.",
+      "Assuming a named successor exists, will stay and will be ready.",
+      "Planning only for a smooth handover and ignoring sudden departure.",
+      "Choosing successors by familiarity or similarity to the incumbent."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CEO why a candidate who scores 3.45 against another's 3.35 should not simply be hired, and what to do instead."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "is2-1",
+      "question": "What does the page promise but not deliver?",
+      "options": [
+        "A list of questions",
+        "Pointers to what an ideal answer covers: the retrieved text has no answer outlines, rubrics or red flags",
+        "A category for security",
+        "A practice timer"
+      ],
+      "answer": 1,
+      "why": "The page's description says each question is followed by answer pointers, but the page text contains none. The lesson supplies its own as Original Academy material."
+    },
+    {
+      "id": "is2-2",
+      "question": "Two interviewers agree exactly on 47% of answers, with chance agreement of about 0.29. What is Cohen's kappa?",
+      "options": [
+        "About 0.47",
+        "About 0.25",
+        "About 0.29",
+        "About 0.76"
+      ],
+      "answer": 1,
+      "why": "kappa = (0.47 - 0.29) / (1 - 0.29) is about 0.25, fair agreement once chance is removed."
+    },
+    {
+      "id": "is2-3",
+      "question": "Weighted totals are P 3.35, Q 3.45 and R 3.35, and with equal weights P 3.2, Q 3.4, R 3.4. What follows?",
+      "options": [
+        "Q is clearly best",
+        "The ordering shifts with the weights and gaps of 0.1 are inside interviewer noise, so rely on the evidence in the notes and references",
+        "P is clearly worst",
+        "Interviews are useless"
+      ],
+      "answer": 1,
+      "why": "The data cannot separate the candidates by 0.1. Fix weights in advance and look at the specific gaps that matter for the role."
+    },
+    {
+      "id": "is2-4",
+      "question": "Of 8 pivotal roles, 2 have a ready-now successor and 3 are ready in one to two years. What is the bench strength ready now, and within two years?",
+      "options": [
+        "25% and 62.5%",
+        "50% and 100%",
+        "2% and 5%",
+        "37.5% and 62.5%"
+      ],
+      "answer": 0,
+      "why": "2 of 8 is 25%; 5 of 8 is 62.5%. The three roles with no successor are the priority."
+    },
+    {
+      "id": "is2-5",
+      "question": "With a vacancy cost of 1,500 a day, what is the external-hire cost (120 days search and 90 days at half productivity)?",
+      "options": [
+        "180,000",
+        "247,500",
+        "52,500",
+        "135,000"
+      ],
+      "answer": 1,
+      "why": "120 x 1,500 = 180,000 plus 90 x 0.5 x 1,500 = 67,500, which totals 247,500. The internal route in the lesson costs about 52,500."
+    },
+    {
+      "id": "is2-6",
+      "question": "Which is a gap in the page's succession framework?",
+      "options": [
+        "It mentions a quarterly review",
+        "It does not address sudden departure, successor retention risk, bias in selection or what to do when no successor exists",
+        "It names roles",
+        "It lists elements"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary lists these omissions. The lesson adds emergency cover, retention conversations, equal criteria and governance."
+    }
+  ],
+  "build": {
+    "business": "Cretek's most important hires and its dependence on a few key people are strategic risks. A CTO needs a fair, structured way to interview, and a succession plan that covers the unhappy cases as well as the smooth ones. This is the talent capability in the CTO Operating System.",
+    "problem": "Design a structured interview for one real or realistic Cretek leadership role, test interviewer agreement, and produce a succession plan with bench strength, a vacancy cost model and an emergency cover plan.",
+    "requirements": [
+      "Define the role and choose 4 to 6 criteria with weights recorded before any interview",
+      "Select at least 8 questions (from the page's 20 or your own), mapped to criteria. For each, write strong, adequate and weak answer anchors, two follow-up probes and a note on what evidence to record",
+      "Design a case exercise and its scoring anchors",
+      "Run a calibration: score at least 20 mock or recorded answers independently by two people. Report exact agreement, agreement within one point and Cohen's kappa. Say what you changed in the anchors afterwards. Label data REAL or SIMULATED",
+      "Produce a decision record for three candidates (real or simulated) showing weighted and equal-weight totals, which gaps are within noise, and the additional evidence you would gather",
+      "Map at least 8 pivotal roles with the best successor and readiness level for each, and compute bench strength ready now and within two years",
+      "Build a vacancy cost model with stated assumptions for daily cost, search time, ramp time and productivity loss for external and internal routes, with a sensitivity over two assumptions",
+      "Write the contingency plan: emergency cover list, knowledge map, access and credential holders, and a tabletop exercise with its results",
+      "Write the retention, selection-criteria and governance rules (owner, confidentiality, review cadence), and list the HR and legal questions with owners and dates. Do not state conclusions",
+      "A scoring tool that takes criteria weights and scores per candidate and returns weighted and equal-weight totals; an agreement function that returns exact agreement, within-one agreement and kappa; and a bench-strength function. Automated tests required, including the lesson's values (weighted totals 3.35, 3.45, 3.35; kappa about 0.25 for exact agreement 0.47 and chance agreement 0.29), weights that do not sum to 1 (reject), a score outside the scale (reject), different-length score lists (reject), perfect agreement (kappa 1) and an empty candidate list (reject)",
+      "A one-page summary for the CEO led by what the evidence can and cannot separate",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No real candidate or employee names in shared materials",
+      "Weights are fixed before interviews and not changed afterwards",
+      "Do not decide on score differences within the measured noise without further evidence",
+      "No legal or HR conclusions. Mark them as questions for advisers",
+      "Must run locally with a single command for the tool and its tests"
+    ],
+    "design": "Write a one-page design covering the role, criteria, question mapping, calibration plan, succession scope and one approach you rejected, such as unstructured conversations.",
+    "tasks": [
+      "Define the role, criteria and weights",
+      "Write questions, anchors and the case exercise",
+      "Run the calibration and compute agreement",
+      "Build the scoring tool with tests and compare candidates",
+      "Map pivotal roles and compute bench strength",
+      "Build the vacancy cost model and sensitivity",
+      "Write the contingency, retention and governance plan",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "Criteria and weights were fixed in advance",
+      "Every question has anchors and probes",
+      "Agreement is reported with kappa and used to improve the anchors",
+      "The candidate comparison names what is within noise",
+      "Bench strength and the vacancy cost model use labelled assumptions with a sensitivity",
+      "The contingency plan includes a tabletop exercise result",
+      "Tool tests pass including the rejection cases",
+      "No legal or HR conclusion is stated as fact"
+    ],
+    "deliverable": "The role definition, question set and anchors, calibration data and analysis, candidate record, succession map, cost model, contingency plan, scoring tool with tests and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Chief executive",
+    "scenario": "The chief executive is about to approve a hire on the strength of an interview score and is asking whether Cretek could cope if a key leader left tomorrow.",
+    "prompts": [
+      "How much do your interviewers disagree, and what does that mean for this decision?",
+      "Why these weights, and when did you set them?",
+      "What does a 0.1 difference between candidates tell us?",
+      "If our head of platform left tomorrow, what happens?",
+      "What would it cost us to hire externally versus promote, and how sure are you?",
+      "How will you keep named successors from leaving, and keep the process fair?"
+    ],
+    "rubric": [
+      {
+        "criterion": "A structured process with anchored scoring, pre-set weights and measured agreement",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Honest reading of scores and noise, with additional evidence identified",
+        "weight": 0.25
+      },
+      {
+        "criterion": "A succession plan covering bench strength, cost, sudden departure, retention, fairness and governance",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Clear communication to a chief executive, with legal and HR points left to advisers",
+        "weight": 0.15
+      }
+    ]
+  }
+}

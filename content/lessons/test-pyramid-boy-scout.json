@@ -1,0 +1,210 @@
+{
+  "id": "test-pyramid-boy-scout",
+  "moduleId": "tech-engineering",
+  "pillar": "Tech",
+  "title": "The test pyramid and the Boy Scout rule",
+  "estimatedMinutes": { "learn": 40, "build": 260, "defend": 30 },
+  "objectives": [
+    "Describe the three layers of the test pyramid and what each costs and buys",
+    "Explain the inverted pyramid and show with numbers why it slows feedback and erodes trust",
+    "State the Boy Scout rule and the examples of small improvements on the framework page",
+    "Set guardrails that keep opportunistic cleanup safe: scope, separate commits, tests, review",
+    "Defend a testing and cleanup policy to an engineering team and to a budget holder"
+  ],
+  "prerequisites": ["big-o-complexity"],
+  "unlock": { "prerequisites": [{ "lessonId": "big-o-complexity", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "The Test Pyramid",
+      "url": "https://www.ctoframework.com/tech/quality-assurance/test-pyramid",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Boy Scout Rule",
+      "url": "https://www.ctoframework.com/tech/engineering-practices/boy-scout-rule",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Test Pyramid page gives no percentages, ratios or numeric targets, no concrete examples of tests, scenarios, code or tools, and no discussion of other test types (contract, performance, security, exploratory, manual), alternative models such as the testing trophy, flaky-test handling beyond noting E2E tests cause it, team ownership, CI/CD integration, or metrics beyond a link to a QA Metrics page. The suite timings and flake arithmetic in this lesson are Original Academy material with assumed inputs.",
+    "The page's only named anti-pattern is the inverted pyramid. It does not use the term 'ice-cream cone'. Its claimed benefits (speed, reliability, cost-effectiveness, release confidence) are asserted without evidence.",
+    "The Boy Scout Rule page is written for developers and has no explicit recommendations for CTOs. The leadership implications and guardrails in this lesson are Academy material, not framework advice.",
+    "The Boy Scout page gives no guidance on governance and prioritisation (balancing cleanup with delivery, budgeting time), scope control, review and testing of cleanup changes, a definition of 'better', metrics or evidence for the claimed benefits, limitations or criticisms, or team process and incentives. It links a slide deck whose contents were not read.",
+    "The page's attributions (Boy Scouts of America; Robert C. Martin's Clean Code, 2008; Fowler on refactoring, 1999; Kaizen; Broken Windows Theory, Wilson and Kelling, 1982) were taken from the retrieved summary and not independently checked. Verify before citing.",
+    "The QA Metrics page linked from the Test Pyramid page was not read for this lesson."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The three layers",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The Test Pyramid is a conceptual model for structuring automated tests to balance efficiency and confidence.\n\nUnit tests (base): test small isolated pieces such as functions or classes. Fast, cheap to maintain and the most numerous. They catch defects early and give immediate feedback.\n\nIntegration tests (middle): test how components or services interact. Slower, fewer, moderately costly to maintain. They confirm that integrated parts work together.\n\nEnd-to-end tests (top): cover the whole application flow from user interface through backend and databases. Slowest, most expensive, fewest. They check critical paths from a user's perspective.\n\nThe shape matters: a wide base gives broad coverage cheaply, a narrow top needs only a few E2E tests for high-level behaviour, and effort falls as you move up."
+      },
+      {
+        "heading": "The anti-pattern and the claimed benefits",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page's only named anti-pattern is the inverted pyramid: heavy reliance on E2E tests with too few unit or integration tests, which it says leads to slow feedback, brittle tests and higher costs.\n\nClaimed benefits of a balanced suite: speed (fast tests shorten feedback loops), reliability (fewer heavy E2E tests means less flakiness), cost-effectiveness (lower maintenance and fewer complex test environments) and release confidence.\n\nThe page gives no ratios or numeric targets and no examples."
+      },
+      {
+        "heading": "Putting numbers on the shape",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page asserts the costs; arithmetic shows them. All inputs below are assumptions chosen to illustrate, not measurements.\n\nTake a pyramid-shaped suite: 1,000 unit tests at 0.05 seconds, 100 integration tests at 2 seconds, 20 E2E tests at 30 seconds. Total: 50 + 200 + 600 = 850 seconds, about 14 minutes. An inverted suite: 50 unit tests, 50 integration tests, 200 E2E tests. Total: 2.5 + 100 + 6,000 = 6,102.5 seconds, about 102 minutes. A developer waiting 14 minutes for a signal will still run it; one waiting nearly two hours will not.\n\nTrust degrades too. Suppose each E2E test has a 1% chance of failing for reasons unrelated to the code (a timeout, a shared environment, test data). The chance that a run of 20 E2E tests passes cleanly is 0.99 to the power 20, about 81.8%. For 200 tests it is 0.99 to the power 200, about 13.4%. The inverted suite would fail spuriously almost nine runs in ten, and teams learn to re-run until green and ignore red, which destroys the signal.\n\nThe lesson is not 'never write E2E tests'. It is that each layer should test what only that layer can, and that the cost per test rises steeply as you go up."
+      },
+      {
+        "heading": "The Boy Scout rule",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page states the rule as 'Leave the code better than you found it': make small, incremental improvements whenever you work in the code. It says this steadily reduces technical debt and improves maintainability.\n\nThe page's account of origin: the name comes from the Boy Scouts of America's campsite guidance; Robert C. Martin popularised it in software through Clean Code (2008). It links the rule to Agile's iterative approach (avoiding large disruptive rewrites), to refactoring, to Kaizen and Lean continuous improvement, and to Broken Windows Theory (unaddressed disorder invites more).\n\nExamples of small actions: renaming unclear variables or functions, splitting complex methods, adding missing tests, fixing minor bugs before they grow, and updating outdated comments and documentation.\n\nThe page is written for developers and has no explicit CTO recommendations."
+      },
+      {
+        "heading": "Guardrails the page does not give",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page gives the habit but not the controls. Without them 'leave it better' can become unreviewable drive-by change.\n\nScope. Improve only code you are already changing for a reason, and only within a size you can review. If the cleanup is bigger than the task, make it its own ticket.\n\nSeparation. Put cleanup in a separate commit from the behaviour change, so a reviewer can check that one changes nothing and the other changes what it should. If something breaks, the cause is easy to find.\n\nSafety. A rename or extraction is only 'better' if behaviour is unchanged. Without tests around the code, add the missing tests first (which is itself one of the page's examples), or leave the code alone.\n\nDefinition of better. The page gives none. Agree a short list the team recognises: clearer names, smaller functions, no dead code, a test where there was none.\n\nLeadership. The rule works only if cleanup time is expected and not penalised. A CTO who measures only feature throughput will quietly end it. It also does not replace planned debt reduction: it prevents small decay, not large accumulated debt (see the Technical Debt lesson)."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A cleanup policy with a price tag (illustrative assumptions, not Cretek data)",
+      "body": "A team of 6 developers delivers about 2 tickets each per week. The proposed policy: each ticket may include up to 15 minutes of cleanup in the code it touches, in a separate commit, with tests passing.\n\nCost: 6 developers x 2 tickets x 0.25 hours = 3 hours a week. The team has 6 x 40 = 240 hours a week, so the policy uses 3 / 240 = 1.25% of capacity, or 156 hours over 52 weeks. That is small and easy to defend to a budget holder.\n\nWhat it will not do: it cannot clear large debt. The Technical Debt lesson suggests reserving 20% of sprint capacity for planned debt work, which for this team is 48 hours a week, sixteen times the opportunistic budget. The two are complementary: the 1.25% stops new small decay; the 20% pays down the big items on a visible list.\n\nGuardrails written into the policy: cleanup only in files already being changed; a cleanup that needs more than 15 minutes becomes a ticket; separate commits; no cleanup in code without tests unless tests are added first. Measure it so it is not a belief: track cleanup commits per week, any defects traced to cleanup commits, and review time. If cleanup commits cause defects, tighten the guardrails; if nobody makes any, ask why (deadline pressure, no tests, no permission)."
+    },
+    "misconceptions": [
+      "Reading the pyramid as a mandate for exact ratios. The page gives no numbers.",
+      "Treating E2E tests as bad. They check critical paths that lower layers cannot; the problem is relying on them for everything.",
+      "Re-running a flaky suite until it passes. That hides real failures.",
+      "Believing the Boy Scout rule replaces planned debt reduction. It prevents small decay only.",
+      "Mixing cleanup and behaviour changes in one commit, which makes both hard to review.",
+      "Cleaning code that has no tests and calling it safe.",
+      "Assuming the page's benefits are measured. They are asserted."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a budget holder why you are spending a small fixed share of capacity on cleanup, and how you will know it is working."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "tp-1",
+      "question": "On the test pyramid, which layer is the base, and how does the page describe it?",
+      "options": [
+        "End-to-end tests: slowest and fewest",
+        "Integration tests: moderately costly",
+        "Unit tests: fast, cheap to maintain and the most numerous",
+        "Manual tests: broadest coverage"
+      ],
+      "answer": 2,
+      "why": "Unit tests form the base: small isolated pieces, fast, cheap and most numerous. E2E tests are the narrow top."
+    },
+    {
+      "id": "tp-2",
+      "question": "What is the only anti-pattern the page names?",
+      "options": [
+        "The ice-cream cone",
+        "The inverted pyramid: too many E2E tests and too few unit or integration tests",
+        "Testing in production",
+        "Skipping integration tests"
+      ],
+      "answer": 1,
+      "why": "The page names the inverted pyramid. It does not use the term 'ice-cream cone'."
+    },
+    {
+      "id": "tp-3",
+      "question": "Each of 20 E2E tests independently has a 1% chance of a spurious failure. About what is the chance a run passes cleanly?",
+      "options": ["99%", "82%", "50%", "13%"],
+      "answer": 1,
+      "why": "0.99 to the power 20 is about 0.818, so about 82%. For 200 such tests it falls to about 13%. The 1% rate is an assumption."
+    },
+    {
+      "id": "tp-4",
+      "question": "Which is a small improvement the Boy Scout Rule page lists?",
+      "options": [
+        "Rewriting the application in a new language",
+        "Renaming unclear variables or functions",
+        "Replacing the database",
+        "Reorganising the team"
+      ],
+      "answer": 1,
+      "why": "The page lists small actions: renaming unclear names, splitting complex methods, adding missing tests, fixing minor bugs and updating outdated comments and documentation. Large rewrites are what it aims to avoid."
+    },
+    {
+      "id": "tp-5",
+      "question": "Which statement matches the Boy Scout Rule page?",
+      "options": [
+        "It gives explicit recommendations for CTOs on budgeting cleanup time",
+        "It is written for developers and gives no governance, scope or measurement guidance",
+        "It defines exactly what counts as better code",
+        "It provides metrics proving the benefits"
+      ],
+      "answer": 1,
+      "why": "The page is aimed at developers. It does not cover governance, scope control, review, a definition of better, or evidence for its benefits."
+    },
+    {
+      "id": "tp-6",
+      "question": "A policy allows 15 minutes of cleanup per ticket for 6 developers closing 2 tickets each a week. How many hours a week is that?",
+      "options": ["1.5", "3", "6", "12"],
+      "answer": 1,
+      "why": "6 x 2 x 0.25 hours = 3 hours a week, which is 1.25% of a 240-hour team week."
+    }
+  ],
+  "build": {
+    "business": "Cretek's releases are only as trustworthy as its tests, and its code stays cheap to change only if small decay is stopped early. This is the quality-engineering capability in the CTO Operating System.",
+    "problem": "Assess and reshape the test suite of one real Cretek codebase against the pyramid, and set up a tested, measured cleanup policy.",
+    "requirements": [
+      "Choose one real codebase (for example the school management application). Count its tests by layer (unit, integration, E2E, other) with the method you used to classify them",
+      "Measure the real run time of each layer and the whole suite, repeated at least five times, reporting median and spread. Record where the suite runs (local, CI)",
+      "Measure flakiness: run the suite repeatedly (at least twenty runs where practical) and record any test that fails without a code change. Report the real rate or say it could not be measured",
+      "Compare the real shape with the pyramid and state which anti-pattern, if any, is present, with evidence. State clearly that the page gives no target ratios and justify the shape you aim for",
+      "Fix at least one real gap: add missing unit tests at the base for the riskiest logic, or replace a slow brittle E2E test with a lower-layer test that checks the same thing. Show the before and after run time and coverage of the behaviour",
+      "A cleanup policy: scope, maximum time per ticket (labelled ASSUMPTION or justified), separate commits, tests-first rule, review rule and a short definition of 'better'",
+      "Apply the policy to at least three real tickets or changes and record the cleanup done, the time spent, and any problems",
+      "A measurement plan: cleanup commits per week, defects traced to cleanup, review time. Say how the numbers are collected and who reads them",
+      "A suite report tool that reads a list of test results (name, layer, duration, pass or fail across runs) and outputs counts and times per layer, the flaky-test list (failed in some runs, passed in others) and the probability a full run passes cleanly given the observed per-test failure rates. Automated tests required, including an empty input (reject), a test that always fails (not flaky), a test that always passes, a mixed test, a negative duration (reject) and a missing layer label (reject)",
+      "A one-page summary for the engineering lead, led by the numbers",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not delete tests to improve the numbers. Replace or add, and say why",
+      "Do not run tests against production systems or customer data",
+      "Cleanup changes must not alter behaviour. Behaviour changes go in separate commits",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering how tests are classified into layers, how flakiness is detected, the cleanup policy and its guardrails, and one alternative you rejected, for example setting a fixed percentage target for each layer.",
+    "tasks": [
+      "Inventory and classify the tests by layer",
+      "Measure run time and flakiness",
+      "Compare with the pyramid and name any anti-pattern",
+      "Close at least one real gap and measure the effect",
+      "Write the cleanup policy and apply it to three real changes",
+      "Build the suite report tool with tests",
+      "Write the measurement plan and the one-page summary"
+    ],
+    "acceptance": [
+      "Tests are counted by layer with the classification method stated",
+      "Run times and flakiness are measured with repeats, or the limit is explained",
+      "The comparison with the pyramid names any anti-pattern with evidence and does not invent target ratios",
+      "At least one gap is closed with before-and-after numbers",
+      "The cleanup policy has guardrails and was applied to three real changes",
+      "The report tool tests pass including the rejection cases",
+      "No tests were deleted merely to improve the numbers",
+      "All figures labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The test inventory, measurements, the report tool with tests, the cleanup policy with its three applications and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Engineering manager",
+    "scenario": "An engineering manager is deciding whether to back your testing and cleanup policy. They worry about slowing delivery and about people spending time on things nobody asked for.",
+    "prompts": [
+      "What shape is our test suite, and what is the evidence for that?",
+      "How flaky is the suite, and what do people do when it fails?",
+      "Why spend time on cleanup when we have deadlines?",
+      "How do you stop cleanup turning into unreviewable rewrites?",
+      "What do you measure, and what would make you change the policy?",
+      "Which tests did you replace, and how do you know the behaviour is still covered?"
+    ],
+    "rubric": [
+      { "criterion": "Measured evidence of suite shape, speed and flakiness, honestly reported", "weight": 0.3 },
+      { "criterion": "Sound test strategy: right layer for each risk, no invented target ratios", "weight": 0.25 },
+      { "criterion": "Cleanup guardrails and a measured, defensible policy", "weight": 0.25 },
+      { "criterion": "Clear communication to a manager and budget holder", "weight": 0.2 }
+    ]
+  }
+}

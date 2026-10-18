@@ -1,0 +1,193 @@
+{
+  "id": "tco-cloud-costs",
+  "moduleId": "economics-costs",
+  "pillar": "Economics",
+  "title": "Total cost of ownership and cloud unit economics",
+  "estimatedMinutes": { "learn": 45, "build": 260, "defend": 30 },
+  "objectives": [
+    "Build a lifecycle TCO for two options over the same time horizon and explain why the cheaper purchase can be the dearer choice",
+    "Name the four cloud cost drivers and the three stages of the FinOps loop",
+    "Express cloud spend as cost per unit of business activity, not as a raw bill",
+    "Defend a cost model to a CFO, including which assumptions would change the answer"
+  ],
+  "prerequisites": [],
+  "unlock": { "prerequisites": [] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Total Cost of Ownership (TCO)",
+      "url": "https://www.ctoframework.com/economics/costs/total-cost-ownership",
+      "reviewed": "2026-10-12",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Cloud Costs",
+      "url": "https://www.ctoframework.com/economics/costs/cloud-costs",
+      "reviewed": "2026-10-12",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The TCO page gives no explicit formula, no discounting or net present value method, and no treatment of inflation, depreciation, tax, risk, opportunity cost or productivity. It states that operational costs often make up 70-80% of true TCO but gives no source for that figure. Its 'iceberg model' section has a heading and no body text. Its only worked example uses a five-year horizon, and it gives no guidance on choosing one.",
+    "The page organises costs by lifecycle phase (acquisition and implementation, operations and support, decommissioning), not as direct, indirect and hidden costs. If your finance team uses the latter vocabulary, map between them yourself.",
+    "The Cloud Costs page gives no prices, instance sizes or per-unit rates, no worked example beyond two unit-cost formulas, no tagging schema, no break-even point between serverless and containers and no detail on reserved-instance mechanics. It says enterprise or committed-use discount programmes can save roughly 30% to 50% off retail pricing, with no source named. Treat that range as a claim to check against vendor quotes, not a planning number.",
+    "The external references on these pages (Wikipedia, the FinOps Foundation Framework, the AWS, Google Cloud, Azure and Oracle cost estimators) were not consulted for this lesson. Use the vendors' own calculators and current price lists in the Build step."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What TCO is and why a CTO uses it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework describes Total Cost of Ownership as a financial framework for estimating and analysing all direct and indirect costs of a technology system, product or service across its lifecycle, from acquisition through operation to retirement. It moves a purchasing decision away from the upfront price and toward full lifecycle cost.\n\nThe page's argument for CTOs is that rigorous TCO analysis separates a high-leverage architectural investment from a long-term operational liability, and helps avoid architectural blind spots."
+      },
+      {
+        "heading": "The three lifecycle phases",
+        "sourceCategory": "Official CTO Framework",
+        "body": "1. Acquisition and implementation (upfront): licences or hardware, professional services and customisation, and migration and integration work such as data porting and building APIs.\n2. Operational and support (ongoing): maintenance and subscriptions, internal engineering labour, infrastructure (the page links this to its Cloud Costs guide) and training. The page says these often make up 70-80% of true TCO.\n3. Decommissioning (exit): data extraction and archiving, and contract exit penalties.\n\nThe page also names two pitfalls. Acquisition bias is focusing only on the visible upfront cost. False cheapness is a low upfront price that masks large maintenance and support costs."
+      },
+      {
+        "heading": "The page's worked example",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Solution A, a premium SaaS: 50,000 upfront, 10,000 a year maintenance and 5,000 a year training and support. Five-year TCO: 125,000.\nSolution B, a custom build or open source: 20,000 upfront, 20,000 a year maintenance and 10,000 a year engineering training, support and patching. Five-year TCO: 170,000.\n\nB is 60% cheaper to acquire and 36% more expensive over five years. The method is to compare lifecycle totals over the same time horizon, not sticker prices. The page applies this to comparisons such as outsourcing a service to a partner versus building and running it internally on cloud resources."
+      },
+      {
+        "heading": "Cloud cost as a design input",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The Cloud Costs guide argues that cost estimation is an engineering design input, not just a way to avoid end-of-month billing surprises. Architecture choices directly shape unit economics and margins, so cost should be modelled early. It frames this as a move from reacting to bill shock to proactive, value-driven FinOps.\n\nFour cost drivers:\n- Compute (CPU and RAM): rightsizing, sensible auto-scaling thresholds, savings plans or spot instances.\n- Storage: cost depends on access tier as much as on volume. Keep frequently used data on fast tiers and move old logs and backup snapshots to cold archive tiers.\n- Network and data transfer: the page calls this a classic silent killer. Inbound traffic is usually free, but outbound traffic, including cross-region and cross-zone movement, adds up quickly.\n- Managed services: databases, serverless platforms and SaaS APIs carry a premium for operational convenience. Weigh the premium against the cost of running the same thing yourself at scale."
+      },
+      {
+        "heading": "The FinOps loop, trade-offs and unit economics",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A continuous cycle, not a one-off estimate:\n1. Inform: use tags and labels to attribute every cost to a service, team or feature. Unmeasured spend cannot be managed.\n2. Optimise: find idle resources, downsize oversized databases and buy commitment discounts for predictable baseline load.\n3. Operate: set alerts and scaling policies so engineering decisions stay within budget automatically.\n\nTrade-offs the page names: serverless scales to zero, so it is cheap when idle but can become expensive under sustained high traffic, while container platforms have a higher baseline but a lower unit cost at scale. High availability across regions has a cost, and cross-region data transfer can be very expensive, so model data flows before committing to a multi-region design.\n\nUnit economics: report cost per unit of business activity rather than raw spend. Cost per active user = total cloud spend divided by monthly active users. Cost per transaction = payment system spend divided by completed transactions. If these stay flat or fall as usage grows, the conversation with finance shifts from questioning the bill to showing efficient scaling.\n\nThe page also says a data-backed model of long-term usage supports negotiating enterprise discount or committed-use programmes, which it says can save roughly 30% to 50% off retail pricing if you can supply the numbers."
+      },
+      {
+        "heading": "What the pages leave to you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Neither page tells you how to do the model. You have to decide the time horizon (the page uses five years once and does not say why), how to price internal engineering labour (use a stated loaded hourly cost, and state it), whether to discount future costs, how to include the exit cost you may never pay, and what the answer is sensitive to. The pages also give no cloud prices, so every figure in your Build must come from a current vendor calculator or a real bill, with the date.\n\nTwo habits make a TCO defensible. First, run the same model over a second horizon and see whether the ranking changes. Second, find the single assumption that would flip the decision and say it out loud. A model that cannot be flipped by any assumption is probably hiding one."
+      },
+      {
+        "heading": "Linking TCO to unit economics",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "TCO answers 'what does this system cost over its life'. Cost per active user or per transaction answers 'is that cost scaling sensibly with the business'. Use both: TCO to choose between options, unit cost to see whether the option you chose is behaving. Tagging (the Inform step) is the prerequisite for both, because without attribution you cannot compute a unit cost for a feature or a team."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Why the horizon matters, and one unit cost (illustrative numbers, not Cretek data, not vendor prices)",
+      "body": "Maintenance share depends on the horizon. Suppose a system costs 100 to build and 25 a year to maintain (25% of the build cost). Over 5 years maintenance is 125 of a total 225, or 55.6%. Over 10 years it is 250 of 350, or 71.4%. Over 12 years it is 300 of 400, or 75%. So the page's claim that operations often make up 70-80% of true TCO is plausible only for long lifetimes; over a short horizon the upfront cost matters more. State your horizon whenever you quote a share.\n\nUnit cost: a product spends 6,000 in a month with 2,000 monthly active users, a cost per active user of 3.00. Next month it spends 7,200 with 3,000 users, 2.40. Spend rose 20% and cost per user fell 20%, which is the efficient-scaling story the page says to bring to finance. The same rise with flat users would be the opposite story."
+    },
+    "misconceptions": [
+      "Comparing sticker prices. The page calls this acquisition bias and shows a 60% cheaper purchase that costs 36% more over five years.",
+      "Comparing options over different time horizons. The method is the same horizon for every option.",
+      "Treating the 70-80% operations figure as a universal constant. The page gives no source for it, and the share depends on the horizon (Academy arithmetic above).",
+      "Leaving out internal engineering labour and exit costs because no invoice arrives for them.",
+      "Reporting only the monthly bill. The page recommends cost per active user or per transaction so growth is read against the business.",
+      "Assuming serverless is always cheaper or containers always cheaper. The page says it depends on sustained load, and gives no break-even."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CFO why the cheaper quote is not necessarily the cheaper system, using a number from your own model."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "tco-1",
+      "question": "How does the TCO page organise costs?",
+      "options": [
+        "As direct, indirect and hidden costs",
+        "By department that pays for them",
+        "By lifecycle phase: acquisition and implementation, operations and support, decommissioning",
+        "By vendor"
+      ],
+      "answer": 2,
+      "why": "The page groups costs by lifecycle phase. It does not define direct, indirect and hidden costs as categories."
+    },
+    {
+      "id": "tco-2",
+      "question": "Solution A costs 50,000 upfront plus 10,000 a year maintenance and 5,000 a year training and support. What is its five-year TCO?",
+      "options": ["125,000", "65,000", "75,000", "175,000"],
+      "answer": 0,
+      "why": "50,000 + 5 x (10,000 + 5,000) = 125,000. The page contrasts this with Solution B at 170,000."
+    },
+    {
+      "id": "tco-3",
+      "question": "Which cloud cost driver does the page call a 'classic silent killer'?",
+      "options": ["Compute", "Storage", "Managed services", "Network and data transfer"],
+      "answer": 3,
+      "why": "Outbound traffic, including cross-region and cross-zone movement, adds up quickly even though inbound traffic is usually free."
+    },
+    {
+      "id": "tco-4",
+      "question": "What is the first stage of the FinOps loop on the page?",
+      "options": [
+        "Inform: use tags and labels to attribute every cost to a service, team or feature",
+        "Optimise: buy commitment discounts",
+        "Operate: set alerts and scaling policies",
+        "Negotiate an enterprise discount"
+      ],
+      "answer": 0,
+      "why": "Inform comes first because unmeasured spend cannot be managed. Optimise and Operate follow."
+    },
+    {
+      "id": "tco-5",
+      "question": "A product's total cloud spend this month is 7,200 and it has 3,000 monthly active users. Using the page's formula, what is the cost per active user?",
+      "options": ["0.42", "2.40", "4.20", "21,600,000"],
+      "answer": 1,
+      "why": "Cost per active user is total cloud spend divided by monthly active users: 7,200 / 3,000 = 2.40."
+    }
+  ],
+  "build": {
+    "business": "Cretek needs to know what its systems really cost over their lives and whether cloud spend is scaling sensibly with the business. This is the cost reporting capability in the CTO Operating System.",
+    "problem": "Build a lifecycle TCO model comparing two real options for one Cretek system, and a cloud unit-cost report with a tagging scheme, both backed by a tested script.",
+    "requirements": [
+      "Choose one real Cretek decision with two or more genuine options (for example staying on current hosting versus moving, or a paid service versus a self-built component) and state the decision date",
+      "A TCO per option over the same five-year horizon using the page's three lifecycle phases: acquisition and implementation, operations and support, decommissioning. Every cost line has a source: an invoice, a vendor calculator with the date it was run, or a labelled assumption",
+      "Internal engineering labour priced at a stated loaded hourly cost, with how you derived it",
+      "The same model run over a second horizon, and a sensitivity analysis naming the single assumption that would flip the ranking",
+      "A cloud cost view covering the four drivers (compute, storage, network and data transfer, managed services) from at least two months of real billing data, or clearly labelled simulated data",
+      "A tagging or labelling scheme that attributes spend to a service, team or feature, and a statement of how much spend is currently untagged",
+      "Cost per active user or cost per transaction, using the page's formulas, with the denominator's source stated",
+      "A script that computes the TCO and unit costs from an input file, with automated tests",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED, and the currency stated"
+    ],
+    "constraints": [
+      "No invented Cretek costs or vendor prices. Use real bills and current vendor calculators with the run date, or label the figure an assumption",
+      "Do not use the 70-80% operations figure or the 30-50% discount range as inputs unless you can support them from your own data or a vendor quote",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the input format, how each cost line is sourced, how the horizon and discounting choice (even if you choose not to discount) are stated, and one alternative you rejected, for example a single total per option.",
+    "tasks": [
+      "Define the decision, the options and the horizon",
+      "Gather real costs and note the source and date of each",
+      "Build the TCO script and the unit-cost calculation, with tests for: a zero-user month, a missing cost line, a different horizon, an option with an exit penalty",
+      "Run the sensitivity analysis and identify the flip assumption",
+      "Define the tagging scheme and measure the untagged share",
+      "Write the one-page summary a CFO could read in five minutes",
+      "Document operational and security considerations: who can see billing data, where the inputs live, how often it is refreshed"
+    ],
+    "acceptance": [
+      "Both options are modelled over the same horizon with all three lifecycle phases, and each figure has a source or a labelled assumption",
+      "A second horizon and a flip assumption are reported",
+      "Unit cost is computed with the page's formula and the denominator is sourced",
+      "Tests pass and cover the cases listed",
+      "Output and report are labelled REAL, ASSUMPTION or SIMULATED, with the currency",
+      "A README explains how to run it and lists known limitations"
+    ],
+    "deliverable": "A repository link or path with the TCO script, tests, tagging scheme, the one-page summary and sample output."
+  },
+  "defend": {
+    "assessor": "CFO",
+    "scenario": "The CFO is deciding between two options for a Cretek system and has your model in front of them. They are sceptical of technology cost estimates.",
+    "prompts": [
+      "Which cost line in your model are you least sure of, and what happens to the answer if it is double?",
+      "Why this horizon? What changes if I look at three years or ten?",
+      "You priced your own team's time. Where did that rate come from, and why should I count labour that does not show up on an invoice?",
+      "What would it cost us to leave this option in five years, and did you include it?",
+      "Your unit cost fell this quarter. How do I know that is efficiency and not just a quiet month?"
+    ],
+    "rubric": [
+      { "criterion": "Complete lifecycle costing over a consistent horizon, including exit", "weight": 0.3 },
+      { "criterion": "Honest sourcing and labelling of every figure; sensitivity identified", "weight": 0.3 },
+      { "criterion": "Unit economics linked to business activity, with the denominator defended", "weight": 0.2 },
+      { "criterion": "Clear, brief communication to a non-technical finance reader", "weight": 0.2 }
+    ]
+  }
+}

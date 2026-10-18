@@ -1,0 +1,205 @@
+{
+  "id": "cloud-providers-lockin",
+  "moduleId": "tech-cloud-sre",
+  "pillar": "Tech",
+  "title": "Choosing a cloud provider and managing lock-in",
+  "estimatedMinutes": { "learn": 45, "build": 280, "defend": 35 },
+  "objectives": [
+    "Name the eight providers on the page, their stated strengths and their stated drawbacks",
+    "Separate hard constraints (compliance, data residency) from weighted preferences in a provider decision",
+    "Build a weighted decision matrix and test how sensitive the winner is to the weights",
+    "Challenge the page's unsourced market-share and rating claims, and its arithmetic",
+    "Defend a provider choice, the exit plan and the portability boundary to a chief executive"
+  ],
+  "prerequisites": ["error-budgets-chaos", "tco-cloud-costs"],
+  "unlock": { "prerequisites": [{ "lessonId": "error-budgets-chaos", "type": "knowledge_check" }, { "lessonId": "tco-cloud-costs", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Cloud Providers Comparison",
+      "url": "https://www.ctoframework.com/tech/strategy-trends/cloud-providers",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page's market shares are attributed to Synergy Research Group with no report date, so their currency is unknown. They are reported as the page states them. Check Synergy's current figures before quoting any share.",
+    "The page says the three largest providers hold 'nearly two-thirds'. Its own figures (about 31%, 20% and 11%) total about 62%, which is closer to three-fifths (60%) than two-thirds (66.7%). This was flagged in the retrieved summary and checked by arithmetic.",
+    "The page's comparison matrix scores providers on five criteria (developer experience, pricing and cost control, AI/ML tooling, hybrid integration, talent pool) with qualitative labels and no methodology. Its pricing statements ('competitive pricing', 'complex billing') carry no figures, and claims such as Huawei's restrictions 'due to political sanctions' are uncited. Treat the matrix as one opinion, not a measurement.",
+    "The retrieved summary flagged that the page describes Microsoft Entra ID as 'formerly Active Directory'; Entra ID was formerly Azure Active Directory, which is not the same product as on-premises Active Directory Domain Services. Re-read the live page and the vendor's own documentation before relying on product naming.",
+    "The page does not cover concrete pricing, egress rates or total-cost examples, reliability, SLA or uptime comparisons, compliance certifications or data residency by region, region and availability zone counts, security comparisons beyond IAM, migration effort, cost or timelines, support plans, sustainability, cross-provider service equivalents, or serverless and edge offerings in detail. It links external Service Matcher tools for AWS and Azure, which were not read.",
+    "The decision matrix, weights and scores in this lesson, the exit cost method and the egress arithmetic (which uses an assumed price per gigabyte, not a quoted price) are Original Academy material. The providers in the worked example are anonymised as A, B and C and are not claims about real providers."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What the page argues",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page says choosing a cloud provider is a major leadership decision because it shapes infrastructure, hiring and operating costs. It frames the evaluation as more than comparing CPU and RAM prices, and names developer ecosystem maturity, vendor lock-in, regional regulatory compliance and architectural stability as key factors."
+      },
+      {
+        "heading": "The eight providers",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page lists market shares attributed to Synergy Research Group, with no report date: AWS about 31%, Azure about 20%, GCP about 11%, Alibaba Cloud about 4%, OCI about 3%, IBM Cloud about 2%, Tencent Cloud about 1.5%, Huawei Cloud about 1.5%.\n\nAWS: best for rapid startup growth and broad tooling; pros of service breadth, hiring pool, mature IAM and Terraform and SDK support; cons of complex billing, IAM misconfiguration risk and high egress fees.\nAzure: best for Microsoft-centric enterprises and hybrid setups; pros of Windows, SQL Server and Entra ID integration, licensing discounts and Azure Arc; cons of slower portal and CLI consistency and high list prices outside enterprise agreements.\nGCP: best for data, ML and Kubernetes-first workloads; pros of GKE, BigQuery and a flat global network; cons of a smaller niche enterprise portfolio, perceived deprecation risk and a narrower enterprise vendor ecosystem.\nOCI: best for HPC, GPU training and Oracle database migration; pros of predictable pricing, minimal egress fees, bare metal and Exadata; cons of a small ecosystem, fewer PaaS services and scarce talent.\nIBM Cloud: best for regulated industries and OpenShift hybrid; pros of compliance-focused clouds, mainframe integration and Red Hat support; cons of slow feature adoption, expense and limited appeal for startups.\nAlibaba Cloud: best for operating in China or APAC; pros of mainland data centres, regulatory navigation and PolarDB; cons of limited global presence, English documentation gaps and geopolitical reporting complexity for Western firms.\nTencent Cloud: best for gaming, live streaming and WeChat integration; pros in media, CDN and real-time SDKs; cons of a weak presence in North America and Europe and APAC-skewed documentation.\nHuawei Cloud: best for public-sector and private cloud in emerging markets; pros of local support in Africa, Latin America and the Middle East and Huawei Cloud Stack; cons of restrictions in Western markets and a smaller Western tooling marketplace."
+      },
+      {
+        "heading": "Lock-in, multi-cloud and scenarios",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page's guidance: 'Consolidate on one primary cloud, but keep your applications portable.' Multi-cloud is described as often an expensive trap, adding security surface, splitting developer focus and duplicating monitoring costs. To keep an exit option, enforce architectural boundaries such as containerisation and database abstraction.\n\nScenarios on the page: startups and SaaS, AWS by default, or GCP if Kubernetes and analytics are central from the start; Microsoft-centric enterprises, Azure; AI/ML and database-heavy work, dedicated GPU nodes on OCI with web endpoints on AWS or GCP; China or APAC expansion, a separate Alibaba Cloud region for compliance and latency.\n\nThe page scores providers in a matrix on developer experience, pricing and cost control, AI/ML tooling, hybrid integration and talent pool, with qualitative labels and no stated method."
+      },
+      {
+        "heading": "Reading the page critically",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Check the arithmetic and the sources before using a page in a decision.\n\nThe three largest providers are described as holding 'nearly two-thirds'. 31 + 20 + 11 is 62%. Two-thirds is 66.7% and three-fifths is 60%, so 62% is nearer three-fifths. The point is not pedantry: a figure you cannot reproduce from its own inputs should lower your trust in the rest.\n\nThe shares have no date. Market share moves, and a figure of unknown age cannot support a decision.\n\nThe matrix ratings have no method. 'Excellent' and 'Complex' are opinions. Use them to generate questions, then answer the questions with your own tests, quotes and references.\n\nThe page has no prices. 'Complex billing' and 'high egress fees' are meaningful only as numbers. Get a current price list and model your own workload (see the TCO and cloud costs lesson).\n\nWhat the page leaves out is often what decides the choice for a particular company: where your data must legally live, which compliance certifications your customers require, which regions are close to your users, what support you can buy locally, and whether you can hire people who know the platform. None of these is on the page."
+      },
+      {
+        "heading": "Hard constraints first, then weighted preferences",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A weighted score is the wrong tool for a requirement you cannot waive. Split the decision in two.\n\nHard constraints are pass or fail: a data residency rule, a compliance certification a customer contract demands, a region within a latency limit, a service you must have. A provider that fails one is out, whatever its score.\n\nWeighted preferences apply to the survivors: developer experience, cost control, AI/ML tooling, hybrid integration, talent pool, support, whatever matters to you. Agree the weights before scoring, so they are not reverse-engineered to favour a favourite. They must sum to 1.\n\nThen test the result. A winner that flips when one weight moves a little is not a clear winner. Change the weights to reflect plausible disagreements and see what happens; if the answer is stable, say so; if not, say which weight decides it and why you chose it.\n\nFinally cost the exit. Lock-in is not a yes or no; it is a price. Estimate what it would cost, in money and time, to move: data transfer (egress), rewriting provider-specific services, retraining, parallel running. The page's advice (containers, database abstraction) lowers that price at some cost in convenience. Write down the price you accept."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A weighted matrix and its sensitivity (illustrative; providers anonymised)",
+      "body": "Three providers, A, B and C, have passed the hard constraints. Scores are 1 to 5 against five criteria. Agreed weights: developer experience 0.25, cost control 0.25, AI/ML tooling 0.10, hybrid integration 0.15, talent pool 0.25 (sum 1.0).\n\nA scores 4, 3, 3, 3, 5. B scores 3, 3, 3, 5, 4. C scores 4, 4, 5, 2, 3.\n\nWeighted totals: A = 4 x 0.25 + 3 x 0.25 + 3 x 0.10 + 3 x 0.15 + 5 x 0.25 = 3.75. B = 3.55. C = 3.55. A wins, with B and C tied.\n\nSensitivity. Suppose a stakeholder argues hybrid integration matters far more because the company has on-premises systems, and talent matters not at all: developer experience 0.15, cost control 0.25, AI/ML 0.20, hybrid 0.40, talent 0.0 (sum 1.0). Now A = 3.15, B = 3.80, C = 3.40. B wins and A is last.\n\nConclusion: A wins only if talent availability carries real weight; B wins if hybrid integration dominates. The decision is really about those two weights. Settle them with evidence (can we hire for this platform locally; how much on-premises integration is required) before choosing, and record the answer.\n\nExit cost. Suppose the company will hold 5 TB of data at the chosen provider, and the assumed egress price is 0.09 per gigabyte (an assumption; check the current price list). Moving the data out costs 5 x 1,000 x 0.09 = 450 in transfer alone, small. The larger exit costs are rewriting provider-specific services and retraining, which the data transfer figure hides. That is why the portability boundary (containers, database abstraction) matters more than the egress line."
+    },
+    "misconceptions": [
+      "Treating the page's matrix as measurement. It has no method and no sources.",
+      "Quoting market share as a reason to choose. Share says little about fit.",
+      "Scoring a requirement you cannot waive. Hard constraints are pass or fail.",
+      "Setting weights after seeing the scores.",
+      "Reading lock-in as binary. It is a cost you can estimate and reduce.",
+      "Assuming multi-cloud removes lock-in. The page calls it often an expensive trap.",
+      "Ignoring where your data must legally reside and what certifications customers require. The page does not cover them."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a chief executive why the provider decision depends mostly on two judgement calls, and what evidence would settle them."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "cp-1",
+      "question": "Which pair of providers does the page recommend for a startup or SaaS company by default and for Kubernetes- and analytics-centred work?",
+      "options": [
+        "Azure by default; OCI for Kubernetes",
+        "AWS by default; GCP if Kubernetes and analytics are central",
+        "IBM Cloud by default; Alibaba Cloud for analytics",
+        "OCI by default; Huawei Cloud for analytics"
+      ],
+      "answer": 1,
+      "why": "The page recommends AWS for startups and SaaS by default, or GCP if Kubernetes and analytics are central from the start."
+    },
+    {
+      "id": "cp-2",
+      "question": "The page gives the three largest providers about 31%, 20% and 11% and calls the total 'nearly two-thirds'. What is the actual total?",
+      "options": ["About 51%", "About 62%, closer to three-fifths than two-thirds", "About 66.7%", "About 75%"],
+      "answer": 1,
+      "why": "31 + 20 + 11 = 62%. Two-thirds is 66.7% and three-fifths is 60%, so the page's description overstates the total."
+    },
+    {
+      "id": "cp-3",
+      "question": "What is the page's guidance on multi-cloud?",
+      "options": [
+        "Always use at least three clouds",
+        "Consolidate on one primary cloud but keep applications portable; multi-cloud is often an expensive trap",
+        "Multi-cloud removes lock-in at no cost",
+        "Never use containers"
+      ],
+      "answer": 1,
+      "why": "The page says to consolidate on one primary cloud with portable applications, and describes multi-cloud as often an expensive trap adding security surface, splitting focus and duplicating monitoring costs."
+    },
+    {
+      "id": "cp-4",
+      "question": "Weights 0.25, 0.25, 0.10, 0.15, 0.25 are applied to scores 4, 3, 3, 3, 5. What is the weighted total?",
+      "options": ["3.55", "3.75", "4.00", "3.15"],
+      "answer": 1,
+      "why": "4 x 0.25 + 3 x 0.25 + 3 x 0.10 + 3 x 0.15 + 5 x 0.25 = 1.00 + 0.75 + 0.30 + 0.45 + 1.25 = 3.75."
+    },
+    {
+      "id": "cp-5",
+      "question": "In the worked example, the winner changes when hybrid integration is weighted 0.40 and talent 0.0. What does that tell you?",
+      "options": [
+        "The matrix is broken",
+        "The decision depends mainly on those weights, so settle them with evidence before choosing",
+        "Provider A is always best",
+        "Weights do not matter"
+      ],
+      "answer": 1,
+      "why": "A scores 3.15 under the changed weights while B scores 3.80. A winner that flips when a weight moves is not clear, so the weights (hybrid integration and talent) decide the choice and need evidence."
+    },
+    {
+      "id": "cp-6",
+      "question": "Which of these is NOT covered by the Cloud Providers page?",
+      "options": [
+        "Each provider's stated strengths and drawbacks",
+        "Market shares attributed to Synergy Research Group",
+        "Data residency and compliance certifications by region, and concrete pricing",
+        "The advice to consolidate on one primary cloud"
+      ],
+      "answer": 2,
+      "why": "The page gives no concrete pricing or egress rates and does not cover compliance certifications or data residency by region, region counts, SLAs or migration effort."
+    }
+  ],
+  "build": {
+    "business": "Cretek's hosting choice shapes cost, hiring, compliance and how hard it is to leave. A CTO needs to make that choice from evidence and know the price of changing it. This is the cloud strategy capability in the CTO Operating System.",
+    "problem": "Make and defend a documented cloud provider decision for Cretek's real workloads, with hard constraints, a weighted and sensitivity-tested matrix, an exit cost estimate and a portability boundary.",
+    "requirements": [
+      "List Cretek's real workloads and where each runs today (REAL), with data volumes, users and expected growth (REAL or ASSUMPTION)",
+      "List the hard constraints with their source: data residency requirements, certifications that customers or contracts demand, latency limits, mandatory services. Record each provider as pass or fail on each, with a reference to the provider's own documentation, not to the Academy page",
+      "Agree the criteria and weights, in writing, before scoring. Weights sum to 1. Include at least cost control, developer experience, talent availability where Cretek hires, support, and any criterion your constraints imply",
+      "Score the survivors from evidence you gathered (price lists modelled on your workload using the TCO method, a proof-of-concept deployment, reference calls, region lists checked on the provider's own site). Say where each score comes from. Mark any score that is an opinion",
+      "Test sensitivity: vary each weight over a plausible range and show whether the winner changes, and which weights decide it",
+      "Estimate the exit cost: egress for your data at the provider's current price (cite it), provider-specific services to rewrite, retraining and parallel running time. State the total and what dominates it",
+      "Define the portability boundary: what you will keep portable (for example containers, database engine, infrastructure code) and what you will accept as provider-specific, with the reason for each",
+      "A decision matrix tool that takes criteria, weights, hard-constraint results and scores, and outputs the eliminated providers with the failed constraint, the weighted totals, and a sensitivity table (the winner for each weight perturbation). Automated tests required, including weights that do not sum to 1 (reject), a provider failing a hard constraint (eliminated regardless of score), a score outside 1 to 5 (reject), a tie (reported, not hidden), a single remaining provider, no remaining providers (report), and a perturbation that flips the winner",
+      "A decision record in ADR form, with the triggers that would reopen the decision",
+      "A one-page summary for the chief executive, led by the decision, the exit cost and the two judgement calls that matter most",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED, with currency and date of each price"
+    ],
+    "constraints": [
+      "Do not use the framework page's market share or ratings as evidence of fit. Use them, if at all, to generate questions",
+      "Do not treat a hard constraint as a weighted criterion",
+      "Do not claim a provider meets a certification or residency requirement without the provider's own documentation, cited with its date",
+      "Do not commit credentials or customer data to the repository",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the workloads, the hard constraints, the criteria and weights, the evidence for scores, the portability boundary and one alternative you rejected, for example a multi-cloud setup.",
+    "tasks": [
+      "Inventory the workloads, volumes and users",
+      "Record and test the hard constraints against provider documentation",
+      "Agree the criteria and weights, then gather evidence and score",
+      "Model the costs with the TCO method and estimate the exit cost",
+      "Build the decision matrix tool with tests and run the sensitivity analysis",
+      "Define the portability boundary",
+      "Write the ADR and the one-page summary"
+    ],
+    "acceptance": [
+      "Workloads and constraints are listed with sources",
+      "Hard constraints eliminate providers independently of scores",
+      "Weights were agreed before scoring and sum to 1, with every score's evidence stated",
+      "Sensitivity analysis shows which weights decide the outcome",
+      "Exit cost is estimated with cited prices and the dominant cost named",
+      "Portability boundary is defined with reasons",
+      "The tool tests pass including the rejection and flip cases",
+      "No credentials or customer data in the repository",
+      "All figures labelled with dates and currency"
+    ],
+    "deliverable": "The constraint register, weighted matrix with sensitivity analysis, exit cost estimate, tool with tests, ADR and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Chief executive",
+    "scenario": "The chief executive has heard that the biggest provider is always the safe choice, and that you should avoid lock-in entirely. They want to know what you recommend and what it would cost to change your mind later.",
+    "prompts": [
+      "Why this provider and not the biggest one?",
+      "Which requirements are non-negotiable, and where did they come from?",
+      "If we reweighted your criteria, would the answer change, and which weight matters most?",
+      "What would it cost, in money and time, to leave in three years?",
+      "Why not use two clouds to avoid lock-in?",
+      "Which of your scores is an opinion, and how would you test it?"
+    ],
+    "rubric": [
+      { "criterion": "Hard constraints handled separately from weighted preferences, sourced from provider documentation", "weight": 0.3 },
+      { "criterion": "Weights agreed first, scores evidenced, and sensitivity honestly reported", "weight": 0.3 },
+      { "criterion": "A costed exit and a justified portability boundary", "weight": 0.25 },
+      { "criterion": "Clear communication to a chief executive", "weight": 0.15 }
+    ]
+  }
+}

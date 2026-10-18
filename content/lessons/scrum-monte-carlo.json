@@ -1,0 +1,213 @@
+{
+  "id": "scrum-monte-carlo",
+  "moduleId": "delivery-execution",
+  "pillar": "Delivery",
+  "title": "Scrum and probabilistic delivery forecasting",
+  "estimatedMinutes": { "learn": 50, "build": 280, "defend": 35 },
+  "objectives": [
+    "Name the Scrum roles, events and artifacts the framework page lists, and state what the page does and does not explain",
+    "Explain why a single-point estimate hides risk and what a distribution of completion dates shows",
+    "Run a Monte Carlo delivery forecast from historical throughput and read it at percentiles",
+    "Show how the sampling method changes the forecast, and choose and state one",
+    "Defend a forecast to a sponsor, including what it assumes and how you will check it against actuals"
+  ],
+  "prerequisites": ["dora-metrics"],
+  "unlock": { "prerequisites": [{ "lessonId": "dora-metrics", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Scrum",
+      "url": "https://www.ctoframework.com/delivery/agile-methodologies/scrum",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Monte Carlo simulations",
+      "url": "https://www.ctoframework.com/delivery/estimations/montecarlo-simulations",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Scrum page is a short overview. It names three roles (Product Owner, Scrum Master, Development Team), four events (Sprint Planning, Daily Scrum, Sprint Review, Sprint Retrospective) and three artifacts (Product Backlog, Sprint Backlog, Increment) without describing any of them. Its only number is that sprints are typically 2 to 4 weeks. It gives no event durations, team sizes, worked example, pitfalls or metrics. Read the Scrum Guide (not read for this lesson) before teaching or enforcing any Scrum rule beyond what the page states.",
+    "The Monte Carlo page's worked example (throughput 5 to 15 tasks a week, average 10; 200 tasks; 10,000 iterations; 10% finish in 13 weeks, 50% in 17, 90% in 22) conflicts with its own inputs on a read of the retrieved summary: if no week exceeds 15 tasks, 200 tasks need at least 14 weeks, and an average of 10 a week implies about 20 weeks, not 17. The page does not say how a rate was sampled (once per run or once per week), and calls the 90% outcome both 'worst-case' and 'likely'. These are observations from the Academy review, not statements on the page. Check the live page.",
+    "The Monte Carlo page gives no tooling, choice of distribution, iteration count, handling of scope growth or team change, correlation between tasks, validation against actuals, or answers to its own two questions (the likelihood of finishing within 18 weeks and how much buffer to plan).",
+    "The simulation results in the worked example are from the Academy's own illustrative run (uniform whole numbers from 5 to 15, fixed seed, 10,000 runs). They will differ with another seed or another assumption and are not the page's figures."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Scrum, as far as the page goes",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page describes Scrum as a 'lightweight Agile framework' that helps small teams work together iteratively and incrementally. It says Scrum suits small, cross-functional teams working on complex projects that need frequent feedback and adaptation.\n\nIt lists, without describing them: three roles (Product Owner, Scrum Master, Development Team); four events (Sprint Planning, Daily Scrum, Sprint Review, Sprint Retrospective); and three artifacts (Product Backlog, Sprint Backlog, Increment). Sprints are time-boxed iterations 'typically 2-4 weeks'. That is the only number on the page.\n\nThe page does not explain responsibilities, what happens in each event, what each artifact contains, Definition of Done or Ready, scaling, adoption or metrics. The site has separate pages for several of these; this lesson does not cover them."
+      },
+      {
+        "heading": "What you may and may not claim about Scrum",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Because the page only names the parts, a CTO who wants to run or audit Scrum needs a deeper source. The Scrum Guide is the authoritative description, but it was not read for this lesson, so the Academy makes no claim about event lengths, accountabilities or rules beyond the page. Do not tell a team they are 'doing Scrum wrong' on the strength of this page.\n\nWhat the page does give you is enough to connect Scrum to forecasting. A sprint is a fixed time-box, so a team produces a count of finished items per sprint or per week. That series of finished-item counts is the input to the forecast in the rest of this lesson."
+      },
+      {
+        "heading": "Why single-point estimates mislead",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The Monte Carlo page describes Monte Carlo methods as a way to decide under uncertainty: they use random sampling to model possible outcomes and estimate probabilities, helping assess risk, optimise processes and forecast performance. Its main contrast is with single-point estimates. A simulation yields a distribution of outcomes instead of one number. In software delivery, it says, this gives 'a probability distribution of completion dates', which shows realistic potential delays."
+      },
+      {
+        "heading": "The page's worked example",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Inputs: historical throughput of 5 to 15 tasks per week, average 10; 200 tasks remaining; 10,000 iterations. The sequence the example follows: gather historical throughput; define the remaining work; sample a completion rate for each iteration; repeat many times; read the distribution at chosen percentiles.\n\nResults on the page: a 10% chance of finishing in 13 weeks (best case), a 50% chance (median) in 17 weeks, and a 90% chance in 22 weeks (the 'worst-case but likely' scenario). The page proposes using the range, not one date, for planning and risk management, and raises two questions the distribution can answer: the likelihood of finishing within 18 weeks, and how much schedule buffer to plan. It does not answer either."
+      },
+      {
+        "heading": "Checking the example against its own inputs",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Test every forecast against its inputs before you believe it. If no week ever exceeds 15 tasks, the fastest possible finish is 200 / 15 = 13.3, so 14 weeks; a 13-week best case is not possible. An average of 10 a week gives 200 / 10 = 20 weeks as a central figure, not 17. These two checks take a minute and catch most broken forecasts.\n\nThe page also leaves the method open. Drawing one throughput value for a whole run (a single 'speed' held for every week) gives a very different spread from drawing a fresh value each week, because good and bad weeks average out in the second case. State which you used. A third option, resampling actual past weeks instead of assuming a range, uses the real shape of your history and is usually the better choice when you have enough weeks.\n\nAnd read the percentile language carefully. 'The 90th percentile is 22 weeks' means 90% of simulated runs finished in 22 weeks or fewer. It is a planning point with a 10% chance of being missed, not a worst case."
+      },
+      {
+        "heading": "What the model assumes",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A throughput forecast assumes that the past predicts the future: the same team, similar work, stable scope. It treats each item as roughly equal, which is false when items vary widely in size; split work to a consistent size or forecast by size band. It ignores dependencies, holidays, scope growth and people joining or leaving unless you model them. The page lists none of these limits.\n\nPractical controls: state the history window; exclude weeks that are not representative, with a reason; add a scope-growth allowance if backlog size has been rising; and compare every forecast with what happened, then record the miss. A forecast you never check against actuals is an opinion with a chart."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "One input, three methods (Academy simulation; illustrative, not Cretek data)",
+      "body": "Take the page's inputs: 200 tasks, whole-number weekly throughput from 5 to 15, 10,000 runs, fixed seed 42. The Academy ran two sampling methods. Results are the number of weeks within which 10%, 50% and 90% of runs finished.\n\nDrawing a fresh weekly throughput each week: 19, 20 and 22 weeks. The fastest run took 16 weeks. The chance of finishing within 18 weeks was about 7%.\n\nDrawing one throughput for the whole run: 15, 20 and 34 weeks. The fastest run took 14 weeks (the 200 / 15 floor, rounded up), and the slowest 40. The chance of finishing within 18 weeks was about 38%.\n\nThe page reported 13, 17 and 22 weeks. Neither method reproduces its 13 or 17, and 13 is impossible with these inputs. The 90% point matches the per-week method (22).\n\nThird method: resample from real history. Suppose eight past weeks of 6, 9, 12, 8, 14, 10, 7 and 11 tasks (mean 9.625). Resampling those with replacement until 200 tasks are done gave 20, 21 and 23 weeks at 10%, 50% and 90%.\n\nWhat to tell a sponsor: the median is about 20 to 21 weeks in every credible method; plan to the 90% point (about 22 to 23 weeks with weekly sampling) if a miss is costly; and the exact spread depends on a modelling choice, which you state. Results will change with another random seed by a small amount; run it with a fixed seed so the result can be reproduced."
+    },
+    "misconceptions": [
+      "Believing a single date is a forecast. It is one point in a distribution.",
+      "Treating the 90th percentile as a worst case.",
+      "Quoting the Monte Carlo page's 13 and 17 weeks as reproducible results. They conflict with its own inputs.",
+      "Assuming the sampling method does not matter. It changes the spread a great deal.",
+      "Forecasting without checking history is representative, or without allowing for scope growth.",
+      "Telling a team they are not 'doing Scrum' based only on the framework page, which names the parts and does not describe them."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a sponsor why you give a range of completion dates rather than one date, and which point in the range you recommend planning to."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sm-1",
+      "question": "According to the Scrum page, what is the only numeric guideline it gives?",
+      "options": [
+        "Teams of 7 plus or minus 2",
+        "Sprints are typically 2 to 4 weeks",
+        "A Daily Scrum lasts 15 minutes",
+        "Sprint Planning lasts 8 hours"
+      ],
+      "answer": 1,
+      "why": "The page's only number is that sprints are time-boxed iterations typically 2 to 4 weeks. It gives no event durations or team sizes."
+    },
+    {
+      "id": "sm-2",
+      "question": "Which of these is a Scrum artifact as listed on the page?",
+      "options": ["Daily Scrum", "Scrum Master", "Increment", "Sprint Review"],
+      "answer": 2,
+      "why": "The artifacts listed are Product Backlog, Sprint Backlog and Increment. Daily Scrum and Sprint Review are events, and Scrum Master is a role."
+    },
+    {
+      "id": "sm-3",
+      "question": "What does a Monte Carlo delivery forecast produce, according to the page?",
+      "options": [
+        "One exact completion date",
+        "A probability distribution of completion dates",
+        "A list of risks",
+        "A velocity target"
+      ],
+      "answer": 1,
+      "why": "The page contrasts Monte Carlo with single-point estimates: a simulation yields a distribution of outcomes, giving a probability distribution of completion dates."
+    },
+    {
+      "id": "sm-4",
+      "question": "If throughput never exceeds 15 tasks a week, what is the fastest a 200-task project can finish?",
+      "options": ["13 weeks", "14 weeks", "10 weeks", "20 weeks"],
+      "answer": 1,
+      "why": "200 / 15 = 13.3, so 14 whole weeks. The page's 13-week best case cannot happen with its own inputs."
+    },
+    {
+      "id": "sm-5",
+      "question": "A forecast says the 90th percentile is 22 weeks. What does that mean?",
+      "options": [
+        "22 weeks is the worst possible outcome",
+        "90% of simulated runs finished in 22 weeks or fewer",
+        "The project will take exactly 22 weeks",
+        "10% of tasks take 22 weeks"
+      ],
+      "answer": 1,
+      "why": "A percentile is a completion time that a given share of runs met or beat. The 90th percentile is a conservative planning point, with a 10% chance of being missed, not a worst case."
+    },
+    {
+      "id": "sm-6",
+      "question": "Why does it matter whether you draw one throughput for a whole simulation run or a new one each week?",
+      "options": [
+        "It does not matter",
+        "Per-run sampling holds one good or bad speed for the whole run and gives a wider spread than weekly sampling, where good and bad weeks average out",
+        "Weekly sampling is illegal",
+        "It only changes the chart colours"
+      ],
+      "answer": 1,
+      "why": "In the Academy's run the same inputs gave 15, 20 and 34 weeks with per-run sampling and 19, 20 and 22 with weekly sampling. The page does not say which method it used."
+    }
+  ],
+  "build": {
+    "business": "Cretek makes delivery commitments to clients. A CTO who can give a range with a stated confidence, and track how it performed, is more credible than one who gives a date. This is the forecasting capability in the CTO Operating System.",
+    "problem": "Build a Monte Carlo delivery forecaster driven by real Cretek throughput, with a tested simulator and a one-page forecast for a sponsor.",
+    "requirements": [
+      "Real throughput history for one Cretek project: items finished per week (or per sprint), at least eight periods, from the tracker or commit and release records. Say how an item is defined and counted. If real data cannot be had, use a clearly labelled SIMULATED series",
+      "The remaining scope, in the same units, with how it was counted and whether it has been growing",
+      "A simulator that takes history, remaining items and a run count, and returns the weeks to finish for each run. It must support three sampling methods: a fresh uniform draw each week between the history minimum and maximum, one rate per run, and resampling real past weeks. The seed is a parameter, so results are reproducible",
+      "Percentile output at 10, 50, 85 and 90 with the exact meaning of each stated, plus the probability of finishing by a date the sponsor chooses",
+      "A comparison of the three methods on your data, and a written choice of method with the reason",
+      "Sanity checks on every forecast: the physical minimum (remaining items divided by the best period, rounded up) and the mean-based figure, with a warning if any percentile falls below the minimum",
+      "A scope-growth allowance with its basis, shown as a separate scenario",
+      "A back-test: take an earlier date, forecast from the history available then, and compare with what actually happened. Report the miss",
+      "Automated tests: fixed seed gives identical results twice; zero remaining items; a single period of history; a zero-throughput period in the history (define behaviour so a run cannot loop forever); negative inputs rejected; the physical-minimum check; percentile calculation on a known list",
+      "A one-page forecast for a sponsor, led by the recommended planning date, its confidence and the main assumption",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED, with the unit and period"
+    ],
+    "constraints": [
+      "No invented Cretek data. Real records or a labelled simulation",
+      "A run must be guaranteed to terminate even when the history contains zero weeks",
+      "Do not claim Scrum rules beyond what the framework page states. Cite the source you used for any other claim",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the input format, the three sampling methods, how zero-throughput history is handled, how percentiles are defined, and one alternative you rejected, for example a single average-velocity division.",
+    "tasks": [
+      "Collect and clean the throughput history and the remaining scope",
+      "Build the simulator with the three methods and a seed",
+      "Write the tests, including the termination and physical-minimum checks",
+      "Run the comparison and choose a method",
+      "Run the back-test and record the miss",
+      "Add the scope-growth scenario",
+      "Write the one-page forecast",
+      "Document how forecasts are tracked against actuals over time"
+    ],
+    "acceptance": [
+      "Throughput and scope are real or labelled simulated, with counting rules",
+      "The simulator supports three methods and is reproducible with a seed",
+      "Percentiles and a by-date probability are output with their meaning stated",
+      "Sanity checks flag impossible results",
+      "A back-test exists and the miss is reported",
+      "All listed tests pass and a zero-throughput history cannot hang the program",
+      "The one-page forecast states its assumptions and the planning point",
+      "All figures labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The simulator with tests, the method comparison, the back-test and the one-page forecast, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Project sponsor",
+    "scenario": "A sponsor has asked when the project will finish and what you are willing to commit to. They have been burned by confident dates before.",
+    "prompts": [
+      "Which date are you committing to and what is the chance you miss it?",
+      "Your median and your planning point are two weeks apart. Why not give me the median?",
+      "How did you choose how to sample, and how much would the answer change if you chose differently?",
+      "Your history has a bad week in it. Did you remove it, and who decided?",
+      "The backlog grew last month. Where is that in your forecast?",
+      "How did your earlier forecast actually do?"
+    ],
+    "rubric": [
+      { "criterion": "Correct use and interpretation of percentiles and by-date probability, with a clear recommendation", "weight": 0.3 },
+      { "criterion": "Honest handling of assumptions: sampling method, history window, scope growth", "weight": 0.3 },
+      { "criterion": "Evidence from back-testing and sanity checks", "weight": 0.2 },
+      { "criterion": "Clear, brief communication to a sponsor", "weight": 0.2 }
+    ]
+  }
+}

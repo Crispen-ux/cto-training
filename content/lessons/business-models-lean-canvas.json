@@ -1,0 +1,220 @@
+{
+  "id": "business-models-lean-canvas",
+  "moduleId": "product-strategy",
+  "pillar": "Product",
+  "title": "Business models and the Lean Canvas",
+  "estimatedMinutes": { "learn": 45, "build": 270, "defend": 30 },
+  "objectives": [
+    "Classify a company's revenue relationships using the eight models on the page, and say why one company can be several at once",
+    "Fill in a Lean Canvas as a set of falsifiable hypotheses and name the riskiest block",
+    "Turn a canvas into a unit economics check (annual contract value, CAC, LTV, payback) and show how sensitive it is to churn",
+    "Plan the cheapest experiment that could kill the riskiest assumption, with a threshold set in advance",
+    "Defend a product bet to an investor or board without overclaiming"
+  ],
+  "prerequisites": ["roi-business-cases"],
+  "unlock": { "prerequisites": [{ "lessonId": "roi-business-cases", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Business Model Overview",
+      "url": "https://www.ctoframework.com/product/strategy/business-models",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Lean Canvas",
+      "url": "https://www.ctoframework.com/product/strategy/lean-canvas",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Business Model Overview page is one introduction, one table of eight models with examples, and two generic sentences. It has no figures, cites no sources and gives no author. It does not explain how each model affects technology architecture, although it says it does. It omits common models (subscription, marketplace as a distinct model, freemium, advertising-supported, licensing, hybrids), concrete monetisation methods and unit economics.",
+    "The retrieved summary flagged these points on the Business Model page: examples carry one label although the companies run several models (Amazon is listed as B2C while its cloud business is listed as B2B); the C2B example 'influencer marketing' is debatable; B2C and D2C overlap and the page does not explain the difference beyond intermediaries; Shopify as B2B2C is debatable because it mainly sells software to merchants; and Dollar Shave Club is listed as a D2C example without noting it was acquired by Unilever in 2016 (my recollection, not verified here).",
+    "The Lean Canvas page cites no evidence for the canvas's effectiveness, says it is not a forecast yet writes its worked example in declarative language, and gives no guidance on customer discovery, experiment design and thresholds, market sizing, pricing method, unit economics, facilitation or regulated and multi-sided markets. The two downloadable templates were not reviewed. Its references are the LEANSTACK template and Ash Maurya's book 'Running Lean', which I did not read.",
+    "The unit economics, the conversion interval and the experiment design in this lesson are Original Academy material. All inputs are ASSUMPTIONS (invented) and the arithmetic was run in Python.",
+    "A well-known weakness of lifetime value formulas applies: LTV = margin per year divided by churn assumes constant churn and no discounting. It is a screening number, not a forecast."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Eight models, and why labels are not enough",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page lists eight models: B2C (Amazon, Netflix, Apple Store); B2B (Salesforce, AWS, Oracle); B2B2C (Shopify, white-label SaaS, retail supply chains); D2C (Tesla, Warby Parker, Dollar Shave Club); C2C (eBay, Airbnb, Etsy); C2B (Upwork, influencer marketing, freelance platforms); G2C (online tax filing, passport applications); and G2B (business licensing, compliance portals).\n\nIt says each model has implications for customer engagement, technology infrastructure and revenue generation, and that the right choice depends on target audience, scalability and distribution channels. It gives no detail beyond those two sentences."
+      },
+      {
+        "heading": "Using the labels well",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A label is a prompt for questions, not an answer. For a model, ask four things: who pays, who uses, who else is in the chain, and who owns the customer relationship. B2B2C means someone else owns the relationship and your data access, branding and support depend on their contract. D2C means you carry distribution, support and returns yourself.\n\nThe page's examples show the trap: one company can be several models. Check the live page for how it handles this, but expect a real product to be a mix, for example a business-to-business subscription sold to merchants whose customers are consumers. List each revenue relationship separately and classify each.\n\nThe technology consequences are what the page asserts but never shows. Examples of the kind of consequence to look for, as Academy reasoning to test rather than facts from the page: a model with a separate buyer and user needs an admin and permissions layer; a marketplace needs trust, identity and payments between two sides; a government-facing model needs compliance, accessibility and procurement evidence; a model whose revenue depends on volume needs cheap marginal cost per user. For any claim of that sort, find the evidence in your own business before relying on it."
+      },
+      {
+        "heading": "The Lean Canvas: nine hypotheses on a page",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page presents the canvas as a one-page way to surface a product's riskiest assumptions so they can be tested and changed cheaply, before committing to a roadmap, architecture or significant budget. It says the canvas is not a business plan or a forecast and each entry is a hypothesis needing evidence.\n\nNine blocks with the page's guiding questions: Problem (what important problems are customers trying to solve); Customer segments (who has the problem and who pays); Unique value proposition (why choose this now); Solution (the smallest credible way to address each problem); Channels (how it reaches customers); Revenue streams (how it creates and captures revenue); Cost structure (fixed and variable costs); Key metrics (numbers that show value is created); Unfair advantage (what is hard to copy or buy).\n\nThe page's seven filling steps: pick a narrow segment and separate user from economic buyer; list one to three problems as outcomes, ranked by urgency and frequency, with current workarounds; write a value proposition as 'Help [customer] achieve [outcome] without [trade-off]'; describe the smallest solution; treat channels as assumptions; define the value event and behavioural early metrics (activation, repeat use, time to first value, conversion, retention, paid commitment) and avoid vanity metrics such as sign-ups; and name a real unfair advantage or leave it blank for a young product. Common mistakes listed: false certainty, starting with the solution, too many segments, ignoring alternatives including doing nothing, choosing metrics after launch, and a static canvas."
+      },
+      {
+        "heading": "From hypotheses to numbers",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page names cost categories but not how to estimate unit economics. Add that check, with invented inputs.\n\nSuppose pricing is 900 a year per engineering team, with 15 teams per customer on average: annual contract value 13,500. Gross margin 80%. Customer acquisition cost 9,000. Annual churn 15%. Gross profit per customer-year is 10,800. Payback is 9,000 / (10,800 / 12) = 10 months. Lifetime value, as margin divided by churn, is 10,800 / 0.15 = 72,000, so LTV to CAC is 8.0. Change one assumption: at 30% churn LTV halves to 36,000 and the ratio is 4.0. Churn, not price, is the assumption the answer leans on, and it is the one a new product knows least about.\n\nTreat the result as a screening number. Constant churn and no discounting are strong assumptions, and early customers are not typical. Its job is to tell you which assumption to test first.\n\nOn evidence, the page says to keep a short evidence note per risky block. Make each hypothesis falsifiable by writing the threshold before the test: 'at least 6 of 20 pilots convert to paid' is testable; 'customers like it' is not. Mind sample size. Six of 20 is 30%, but its 95% interval (Wilson) runs from about 15% to 52%. With 100 pilots and the same 30% the interval is about 22% to 40%. A small pilot can reject a hopeless idea but cannot confirm a good one, so decide what each outcome would make you do."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A dependency-ownership service for engineering leaders (the page's example, extended with invented numbers)",
+      "body": "The page's example is a service that helps engineering organisations understand software ownership and dependency risk. Its hypotheses: leaders cannot reliably find unowned services; the segment is CTOs and VPs of Engineering at growing companies with several teams; the solution connects source control and service metadata and surfaces ownership gaps; channels are CTO communities, security partners, content and founder-led sales; revenue is an annual subscription priced by team size; metrics are time to first useful map, weekly active teams, resolved gaps, retention and pilot-to-paid conversion; the claimed advantage is a permissioned dataset of dependency patterns. The page itself says this does not prove the product should be built and names three things to investigate: whether the pain is strong enough, whether data can be connected safely, and whether customers will pay.\n\nAcademy extension. Business model: B2B, with a buyer (the CTO) different from users (engineers), which implies roles and permissions and a security review in sales. Unit economics from the lesson: ACV 13,500, payback 10 months, LTV to CAC 8.0 at 15% churn and 4.0 at 30%.\n\nRank the risks. Desirability: do leaders feel the pain enough to pay? Feasibility: can the data be connected safely, at an acceptable permission level? Viability: is churn low enough? The riskiest is the first, because nothing else matters without it, and it is the cheapest to test.\n\nCheapest experiment: interview 20 target leaders, then offer a manual ownership report built from read-only exports for a fee of 1,500. Decision rule written first: at least 6 of 20 pay (30%). Outcomes: 3 or fewer (15% or below) means stop or change the problem; 4 to 5 means refine and test another 20; 6 or more means proceed to a pilot with the connection built, while stating that an interval of roughly 15% to 52% still leaves the conversion uncertain.\n\nWhat stays unverified: the price, CAC, churn and conversion are assumptions. The 'unfair advantage' dataset does not exist yet, so the canvas leaves it blank, as the page allows, and records what would make it real."
+    },
+    "misconceptions": [
+      "Treating a business-model label as an analysis. It only starts the questions.",
+      "Assuming one company is one model. Most are mixes.",
+      "Believing the canvas is a plan or a forecast. The page says it is neither.",
+      "Starting with the solution instead of the problem and the narrow segment.",
+      "Using sign-ups as the key metric.",
+      "Trusting LTV to CAC as a forecast. It is a screening number that depends heavily on churn.",
+      "Reading a small pilot as proof. A 30% conversion from 20 leads has a very wide interval."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a founder which block of their canvas is riskiest, how you would test it cheaply, and what result would make you stop."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "bm-1",
+      "question": "Which description matches the page's definition of B2B2C?",
+      "options": [
+        "A business sells to a business, which sells to consumers",
+        "Consumers sell to consumers",
+        "Government provides services to individuals",
+        "A company sells directly to consumers with no intermediary"
+      ],
+      "answer": 0,
+      "why": "The page defines B2B2C as a business selling to a business that sells to consumers. Selling directly is D2C, and consumers selling to consumers is C2C."
+    },
+    {
+      "id": "bm-2",
+      "question": "Why is labelling Amazon only as 'B2C' too simple?",
+      "options": [
+        "Amazon sells nothing to consumers",
+        "A company can run several models at once; Amazon also sells cloud services to businesses",
+        "Business models cannot be classified",
+        "The label B2C is wrong for all retailers"
+      ],
+      "answer": 1,
+      "why": "The page lists AWS as a B2B example and Amazon as B2C, and the retrieved summary flagged that one company can be several models."
+    },
+    {
+      "id": "bm-3",
+      "question": "What does the Lean Canvas page say each entry should be treated as?",
+      "options": [
+        "A fixed forecast",
+        "A hypothesis that needs evidence",
+        "A binding commitment",
+        "A marketing claim"
+      ],
+      "answer": 1,
+      "why": "The page says the canvas is not a business plan or forecast and every entry is a hypothesis to test."
+    },
+    {
+      "id": "bm-4",
+      "question": "Which is the page's guidance on the 'unfair advantage' block for a young product?",
+      "options": [
+        "Fill it with 'a strong team' and 'hard work'",
+        "Claim first-mover status",
+        "Generic claims do not count; it is acceptable to leave it blank",
+        "Copy a competitor's advantage"
+      ],
+      "answer": 2,
+      "why": "The page says a strong team, first-mover status or hard work are not advantages, and that leaving it blank for a young product is acceptable."
+    },
+    {
+      "id": "bm-5",
+      "question": "ACV 13,500, gross margin 80%, CAC 9,000. What is the payback period in months?",
+      "options": ["5", "10", "15", "20"],
+      "answer": 1,
+      "why": "Gross profit per year is 10,800, so 900 per month. 9,000 / 900 = 10 months."
+    },
+    {
+      "id": "bm-6",
+      "question": "With the same inputs, LTV is margin per year divided by churn. What happens when churn doubles from 15% to 30%?",
+      "options": [
+        "LTV doubles to 144,000",
+        "LTV is unchanged",
+        "LTV halves from 72,000 to 36,000, and LTV to CAC falls from 8.0 to 4.0",
+        "LTV falls by a quarter"
+      ],
+      "answer": 2,
+      "why": "10,800 / 0.15 = 72,000 and 10,800 / 0.30 = 36,000. The ratio against CAC 9,000 goes from 8.0 to 4.0."
+    },
+    {
+      "id": "bm-7",
+      "question": "6 of 20 pilots convert (30%). What does the 95% Wilson interval of about 15% to 52% tell you?",
+      "options": [
+        "The true rate is exactly 30%",
+        "The pilot is too small to pin the rate down; it can reject a hopeless idea but not confirm a good one",
+        "The pilot proves the product will succeed",
+        "The rate is certainly above 50%"
+      ],
+      "answer": 1,
+      "why": "The interval is wide. With 100 pilots at the same 30% it narrows to roughly 22% to 40%."
+    }
+  ],
+  "build": {
+    "business": "Cretek must decide where to put scarce engineering effort. A CTO needs to turn a product idea into hypotheses, a unit economics check and one cheap test before building. This is the product bet capability in the CTO Operating System.",
+    "problem": "Classify the business model of one real Cretek product or proposed product, write its Lean Canvas, check its unit economics and run or design the cheapest test of its riskiest hypothesis.",
+    "requirements": [
+      "Describe the product and list every revenue relationship, classifying each with the page's eight models. Where the page's definitions overlap or fail, say so",
+      "Identify who pays, who uses, who else is in the chain and who owns the customer relationship, and the technology consequence of each, labelled as reasoning to be tested",
+      "Write the nine-block Lean Canvas for a narrow segment. Every entry must be a hypothesis with a stated evidence status (REAL, ASSUMPTION or unknown). Name at least one real current alternative, including doing nothing",
+      "Rank the risks as desirability, feasibility and viability, name the riskiest block and say why",
+      "Build a unit economics calculator that takes price, units, gross margin, CAC and churn, and returns ACV, payback in months, LTV and LTV to CAC. Automated tests required, including the worked example values, zero churn (reject or handle explicitly), churn above 1 (reject), negative price (reject) and zero CAC",
+      "Run a sensitivity of the result to churn and CAC and say which assumption the decision depends on most",
+      "Design the cheapest experiment for the riskiest block with the sample size, the success threshold and the decision for each outcome written before the test. Report the interval for the observed rate and say what the sample can and cannot show",
+      "If you can run the experiment with real people, run it and report results. If not, state that it has not been run",
+      "Write a short evidence note per high-risk block: what was assumed, what was observed, what changed",
+      "A one-page summary for an investor or board, led by the riskiest assumption and what you did about it",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No invented customer quotes or interview results. Anything not observed is an assumption",
+      "No personal data about named individuals without consent",
+      "Do not present LTV to CAC as a forecast",
+      "Do not use the framework page's examples as evidence for your product",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the model classification, the canvas, the ranking of risks, the unit economics and one alternative strategy you rejected, for example serving several segments at once.",
+    "tasks": [
+      "Classify the models and the customer chain",
+      "Write the canvas with evidence statuses",
+      "Rank the risks and pick the riskiest",
+      "Build the unit economics tool with tests and run the sensitivity",
+      "Design and, if possible, run the cheapest test",
+      "Write the evidence notes and the one-page summary"
+    ],
+    "acceptance": [
+      "Every revenue relationship is classified and overlaps are noted",
+      "The canvas has nine blocks, each a hypothesis with an evidence status and a named alternative",
+      "The riskiest block is named with reasoning",
+      "The calculator tests pass including the rejection cases",
+      "The sensitivity names the assumption the result depends on most",
+      "The experiment has a threshold and decisions written before the test, with an interval for any result",
+      "No fabricated evidence"
+    ],
+    "deliverable": "The classification, canvas, risk ranking, unit economics tool with tests and sensitivity, experiment plan or results, evidence notes and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Investor",
+    "scenario": "An investor is looking at your product idea. They do not want a pitch; they want to know what you believe, what you have tested and what would make you stop.",
+    "prompts": [
+      "What is the riskiest thing about this idea, and how do you know?",
+      "Who pays, and who else has to say yes?",
+      "What does your payback depend on most?",
+      "What did your test show, and how sure are you from that sample?",
+      "What is the real alternative a customer uses today?",
+      "What result would make you stop?"
+    ],
+    "rubric": [
+      { "criterion": "Correct classification and treatment of canvas blocks as falsifiable hypotheses", "weight": 0.3 },
+      { "criterion": "Sound unit economics with sensitivity and honest limits of LTV", "weight": 0.25 },
+      { "criterion": "A cheap test with a pre-set threshold and honest reading of small samples", "weight": 0.3 },
+      { "criterion": "Clear communication to an investor", "weight": 0.15 }
+    ]
+  }
+}

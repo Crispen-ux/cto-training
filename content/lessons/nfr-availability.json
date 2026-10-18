@@ -1,0 +1,251 @@
+{
+  "id": "nfr-availability",
+  "moduleId": "product-requirements",
+  "pillar": "Product",
+  "title": "Non-functional requirements and the nines",
+  "estimatedMinutes": {
+    "learn": 45,
+    "build": 260,
+    "defend": 30
+  },
+  "objectives": [
+    "List the eight NFR categories on the page and rewrite each example as a testable requirement",
+    "Verify the page's downtime table by recomputation, and state the assumptions it leaves out",
+    "Compute availability for serial and parallel components and see why one shared dependency caps the whole",
+    "Translate a requirement such as 99.9% into an error budget, and decide how planned maintenance is counted",
+    "Defend an availability target and its cost to a business owner"
+  ],
+  "prerequisites": [
+    "sla-slo-sli",
+    "rto-rpo"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "sla-slo-sli",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "rto-rpo",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Non-Functional Requirements",
+      "url": "https://www.ctoframework.com/product/requirements/non-functional-requirements",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Five nines",
+      "url": "https://www.ctoframework.com/product/requirements/five-nines",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The NFR page gives eight categories with one example each. Its thresholds (1,000 transactions per second, 10,000 concurrent users, 99.99% uptime, registration in under 2 minutes, 80% test coverage) are illustrative, unsourced and unexplained. It gives no guidance on writing testable requirements, measurement, trade-offs, prioritisation, elicitation or ownership, cost, baselines, or templates, and does not explain how NFRs connect to the ISO pages linked from the site.",
+    "The retrieved summary flagged these points on the NFR page: test coverage is offered as a measure of maintainability though it is only an indirect indicator; 'all user data must be encrypted' does not say at rest or in transit or both; 'less than 2 minutes' has no measurement definition; 'compatible with' is not the same as 'runs on'; reliability and availability are merged and compliance is a constraint rather than a quality attribute of the same kind; accessibility, observability, sustainability and disaster recovery are absent; and the claims about user satisfaction, business success and rework cost have no evidence.",
+    "The Five nines page gives a downtime table for 99% to 99.9999% over a year, month, week and day, five qualitative level descriptions with unsourced industry examples (small websites and internal tools at two nines, SaaS at three, large e-commerce and banking at four, trading and emergency response at five, military and air traffic control and life support at six), and five generic ways to improve availability. It states no formula, does not say what month length it used, and cites only a Wikipedia article.",
+    "One retrieved summary of the Five nines page claimed that two cells were wrong by a factor of ten (six nines per year and five nines per day). Recomputation in this lesson, using a 365-day year and a month of one twelfth of a year, found every cell in the table correct, including 31.5 seconds a year at six nines and 864 milliseconds a day at five nines. The summary's claimed errors are therefore not repeated here. Automated summaries can be wrong, which is why this lesson recomputes the table and asks you to do the same.",
+    "The page does not cover how availability is measured, whether planned maintenance counts, SLAs and error budgets, how availability combines across components, MTBF or MTTR, the cost of each extra nine, or partial and regional outages. Those sections, and every composition and error-budget calculation, are Original Academy material run in Python. The component availabilities used are invented ASSUMPTIONS, and independence of failures is assumed in the parallel cases."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "NFRs as the page defines them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines non-functional requirements as the quality attributes, system constraints and operational characteristics of a system: functional requirements say what the system does, NFRs say how well.\n\nEight categories with the page's examples: performance (process 1,000 transactions per second); scalability (support 10,000 concurrent users); reliability and availability (99.99% uptime); security (all user data must be encrypted); usability (registration completed in under 2 minutes); maintainability (at least 80% test coverage); portability (compatible with Windows, Linux and macOS); compliance (must comply with GDPR).\n\nIt says NFRs support stability, security and performance, affect user satisfaction and business success, shape architecture and technology choices, and should be defined early to avoid costly rework."
+      },
+      {
+        "heading": "Making an NFR testable",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page's examples are starting points, not requirements. A requirement you cannot test is a wish. Each needs a measure, a condition, a threshold and a way to check it.\n\nRewrite the page's examples:\n- 'Process 1,000 transactions per second' becomes: the checkout service sustains 1,000 successful transactions per second for 30 minutes on the production-sized test environment, with p95 latency under 300 ms and error rate under 0.1%, measured by the load test in the pipeline.\n- 'Support 10,000 concurrent users' becomes: 10,000 concurrent sessions, each following the agreed mix of actions, with the same latency and error limits; define 'concurrent' (active in the last 60 seconds).\n- '99.99% uptime' becomes: the availability SLI is the share of valid requests answered successfully within 1 second, measured at the load balancer, at least 99.99% over a rolling 30 days, excluding nothing unless stated.\n- 'All user data must be encrypted' becomes: personal data is encrypted at rest with an approved algorithm and in transit with TLS 1.2 or higher; keys are held in a managed key service with rotation; verified by configuration scan.\n- 'Registration in under 2 minutes' becomes: 90% of first-time users complete registration in under 2 minutes, measured from page load to confirmation in moderated tests with at least 20 participants.\n- 'At least 80% test coverage' is a proxy, not maintainability itself. Keep it as a guardrail if you like, but add a measure that reflects the attribute, such as time for a new engineer to ship a small change, or change failure rate and lead time from earlier lessons.\n- 'Compatible with Windows, Linux and macOS' becomes: the client installs and passes the smoke suite on named versions of each.\n- 'Must comply with GDPR' is a legal obligation, not a measurable quality. Turn it into specific requirements with counsel (not legal advice): data subject request handling within a stated time, retention rules, a processing record.\n\nThen add what the page omits. Conflicts: strong encryption and audit logging cost latency and money; high availability costs engineering and infrastructure. Priorities: rank NFRs per system and say which wins when they clash. Owners: someone accountable for each, and a named stakeholder who agreed the target. Missing categories to consider: accessibility, observability, and recovery (RTO and RPO)."
+      },
+      {
+        "heading": "The nines as the page presents them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page expresses availability as 'nines' and gives downtime for each level. Selected values from its table: 99% allows 3.65 days a year, 7.3 hours a month and 14.4 minutes a day; 99.9% allows 8.76 hours a year and 43.8 minutes a month; 99.99% allows 52.6 minutes a year and 4.38 minutes a month; 99.999% allows 5.26 minutes a year; 99.9999% allows 31.5 seconds a year.\n\nIts level descriptions (unsourced): 99% acceptable for small business sites and internal tools; 99.9% standard for many SaaS applications; 99.99% for large e-commerce, banking and telecom, needing redundant infrastructure and automated failover; 99.999% for trading platforms, emergency response and core cloud infrastructure; 99.9999% for military communications, air traffic control and life support. Ways to improve: redundancy, load balancing, automated recovery, disaster recovery planning and monitoring and alerting. It says not every system needs five nines and that cost, complexity and business need must be balanced."
+      },
+      {
+        "heading": "Recompute the table yourself",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The formula the page leaves out: allowed downtime = (1 - availability) x period. With a 365-day year (31,536,000 seconds) and a month of one twelfth of that (2,628,000 seconds):\n\n99.9% allows 0.001 x 31,536,000 = 31,536 seconds a year, which is 8.76 hours; and 2,628 seconds a month, which is 43.8 minutes.\n99.99% allows 3,153.6 seconds a year (52.56 minutes) and 262.8 seconds a month (4.38 minutes).\n99.999% allows 315.36 seconds a year (5.26 minutes) and 0.864 seconds a day (864 milliseconds).\n99.9999% allows 31.536 seconds a year and 0.0864 seconds a day (86.4 milliseconds).\n\nEvery cell in the page's table matches. This matters because an automated summary used while preparing this lesson claimed that two cells were ten times out. Recomputing showed the table was right and the summary was wrong. The rule: check a reported error before repeating it, as you would check a reported figure.\n\nWhat the table hides: the month length (an average month; a 30-day month at 99.9% allows 43.2 minutes, not 43.8), whether planned maintenance counts (four hours of planned work in 30 days alone costs 0.56 points, taking you to 99.44%), and what counts as 'up'. A service that answers but slowly, or answers for 95% of regions, is not clearly up or down. Define availability as a ratio of successful valid requests to total valid requests, as in the SLI lesson, and a 99.975% result means 250 failures in a million requests."
+      },
+      {
+        "heading": "Why the nines are expensive: composition",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page lists redundancy but not how components combine. With independent failures:\n\nIn series (all must work), availabilities multiply. Three components of 99.9% give 0.999^3 = 99.70%, about 26 hours a year of downtime, not 8.76. Five give 99.50%. A long chain of dependencies drags the whole below each part.\n\nIn parallel (any one works), unavailabilities multiply. Two independent 99.9% instances give 1 - 0.001^2 = 99.9999%. Three give 99.9999999%.\n\nBut put a single load balancer of 99.99% in front of the two instances and the system is (1 - 0.001^2) x 0.9999 = 99.99%: the shared dependency becomes the ceiling. Real failures are rarely independent: a bad deployment, an expired certificate, a shared database, a regional outage or a mistaken configuration can take down every replica at once. The parallel arithmetic is an upper bound on what redundancy can deliver, not a promise.\n\nPractical consequences: list the dependencies on the critical path and their availabilities; remove or isolate shared dependencies; and recognise that your achievable availability cannot exceed that of the components you rely on, including cloud services whose SLAs you can look up. Cost rises steeply with each nine, because each demands more redundancy, testing and operations, and the page gives no figures for it. Price your own: ask what the extra nine costs in infrastructure and people each year, and what an hour of downtime costs the business. Choose the target where the two meet.\n\nFinally, turn the target into an error budget. A 99.9% target over 30 days allows about 43.2 minutes of failure; a 99.95% target allows 21.6. Teams spend that budget on risky changes and need to know when it is gone, as in the error budget lesson."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Setting an availability requirement for a quotation service (invented numbers, not Cretek data)",
+      "body": "The sales team says: 'It must be up all the time.' The CTO turns that into a requirement.\n\nStep 1, impact. A quotation outage during business hours blocks sales. Assumption: an hour of outage in business hours costs about 2,000 in delayed quotes; out of hours, about 200. Business hours are 40 of 168 hours a week.\n\nStep 2, candidate targets. Outages are assumed to fall at random across the week, so about 24% of outage hours (40 of 168) are in business hours. The expected cost of an outage hour is 0.238 x 2,000 + 0.762 x 200, about 629. At 99.9% the allowed downtime is 8.76 hours a year, an expected cost of about 5,500. At 99.99% it is 0.876 hours, about 550. The difference in expected cost is about 4,950 a year.\n\nStep 3, price the nines. Reaching 99.99% for this service needs a second region, automated failover, a tested runbook and a rota. Estimated at 60,000 a year (assumption). The saving of about 4,950 does not justify 60,000. Reaching 99.9% costs about 8,000 a year (assumption) for redundancy within one region. Decision: 99.9%.\n\nStep 4, check the dependencies. The service depends on a database (99.95% SLA), an identity provider (99.9%) and a payment gateway (99.9%, needed only for checkout). In series the first two give 0.9995 x 0.999 = 99.85%, already below the target. The team must either remove the identity dependency from the read path by caching sessions, add a fallback, or lower the target to 99.8%. They choose to cache sessions and test it.\n\nStep 5, write it testably. SLI: share of valid quotation requests answered successfully within 2 seconds, measured at the load balancer. Objective: 99.9% over a rolling 30 days, giving an error budget of about 43.2 minutes. Planned maintenance: scheduled outside 08:00 to 18:00 and counted against the budget unless announced 7 days ahead (the policy is a decision, written down). Owner: the head of sales operations agreed the target; the engineering manager owns the SLI.\n\nStep 6, keep the other NFRs honest. p95 latency under 800 ms at 300 concurrent sessions; personal data encrypted at rest and in transit; recovery time 2 hours and recovery point 15 minutes (from the recovery lesson).\n\nWhat is unverified: all costs and SLAs here are invented. Independence of failures is assumed in the composition."
+    },
+    "misconceptions": [
+      "Treating the page's example thresholds as standards. They are unsourced illustrations.",
+      "Writing a requirement with no measure, condition or test.",
+      "Treating test coverage as maintainability.",
+      "Treating compliance as a measurable quality instead of translating it into specific requirements.",
+      "Assuming redundancy multiplies away failure. Shared dependencies and correlated failures cap it.",
+      "Ignoring planned maintenance and partial outages when quoting availability.",
+      "Repeating a reported error without recomputing it."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a sales director why 'up all the time' is not a requirement and what you need from them to set one."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "nf-1",
+      "question": "Which is a testable rewrite of 'registration completed in under 2 minutes'?",
+      "options": [
+        "Registration is fast",
+        "90% of first-time users complete registration in under 2 minutes, measured from page load to confirmation in moderated tests with at least 20 participants",
+        "Registration has two steps",
+        "Registration should feel quick"
+      ],
+      "answer": 1,
+      "why": "A testable requirement states the measure, the population, the threshold and the method of checking."
+    },
+    {
+      "id": "nf-2",
+      "question": "How much downtime per year does 99.9% allow, and how does that compare with the page's table?",
+      "options": [
+        "About 8.76 hours; it matches the page",
+        "About 87.6 hours; the page is wrong",
+        "About 52.6 minutes; the page is wrong",
+        "About 5.26 minutes; it matches the page"
+      ],
+      "answer": 0,
+      "why": "0.001 x 31,536,000 seconds is 31,536 seconds, which is 8.76 hours. Recomputation found every cell of the page's table correct."
+    },
+    {
+      "id": "nf-3",
+      "question": "Three independent components in series each have 99.9% availability. What is the system availability?",
+      "options": [
+        "99.9%",
+        "About 99.70%",
+        "99.97%",
+        "About 99.99%"
+      ],
+      "answer": 1,
+      "why": "Series availabilities multiply: 0.999^3 is about 0.997, so about 26 hours a year of downtime."
+    },
+    {
+      "id": "nf-4",
+      "question": "Two independent 99.9% instances sit behind one 99.99% load balancer. What limits the system?",
+      "options": [
+        "Nothing; two instances give 99.9999%",
+        "The shared load balancer: the result is about 99.99%",
+        "The slowest instance",
+        "The network cable"
+      ],
+      "answer": 1,
+      "why": "(1 - 0.001^2) x 0.9999 is about 0.9999. A shared dependency caps what redundancy behind it can deliver, and real failures are rarely independent."
+    },
+    {
+      "id": "nf-5",
+      "question": "A 99.9% target over 30 days allows roughly how much failure?",
+      "options": [
+        "4.3 minutes",
+        "43.2 minutes",
+        "7.2 hours",
+        "86.4 minutes"
+      ],
+      "answer": 1,
+      "why": "0.001 x 30 x 1,440 minutes is 43.2 minutes. That is the error budget."
+    },
+    {
+      "id": "nf-6",
+      "question": "Why is 'all user data must be encrypted' not yet a good requirement?",
+      "options": [
+        "Encryption is unnecessary",
+        "It does not say at rest or in transit, with what, who holds the keys or how it is verified",
+        "It is too long",
+        "It is a functional requirement"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged the ambiguity. A usable version names states, algorithms, key management and the verification method."
+    }
+  ],
+  "build": {
+    "business": "Cretek's customers and staff will ask for 'reliable' and 'secure' systems. A CTO must convert those words into testable, priced requirements, and say honestly what each extra nine costs. This is the requirements capability in the CTO Operating System.",
+    "problem": "Write a testable NFR set and an availability requirement with a cost case for one real Cretek system, verify the targets against measurement, and compute the achievable availability of its dependency chain.",
+    "requirements": [
+      "Choose one real system. List its NFRs across the eight categories plus accessibility, observability and recovery. Rewrite each as a testable requirement with measure, condition, threshold and verification method",
+      "Record conflicts between NFRs (for example security against latency, availability against cost), say which wins and who agreed",
+      "Name an owner and an agreeing stakeholder for each NFR",
+      "Define the availability SLI precisely (what counts as valid, successful and within time, and where it is measured) and state how planned maintenance and partial outages are counted",
+      "List the dependencies on the critical path with their documented availabilities (cited with date) and compute the serial and parallel availability, noting the shared dependencies and the independence assumption",
+      "Estimate the cost of downtime per hour for the business (labelled REAL or ASSUMPTION) and the annual cost of at least two candidate availability targets. Recommend a target with the reasoning",
+      "Convert the chosen target to an error budget per 30 days and a policy for what happens when it is spent",
+      "Measure the system's actual availability over at least 14 days of real or SIMULATED data and compare with the target",
+      "Recompute the downtime table for the nines from 99% to 99.9999% and compare with the framework page cell by cell, recording any difference. Do not accept a claimed discrepancy without recomputing it",
+      "An availability calculator that takes component availabilities and a topology (serial and parallel groups) and returns system availability and annual downtime. Automated tests required, including known values from the lesson (three in series 99.70%, two in parallel 99.9999%, the load balancer case 99.99%), an availability outside 0 to 1 (reject), an empty group (reject) and a single component (identity)",
+      "A decision record in ADR form for the target, and a one-page summary for the business owner led by cost and what they get for it",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No unsourced availability benchmarks",
+      "Do not assume independent failures without stating it",
+      "Do not count only uptime of servers; measure the user-facing SLI",
+      "Do not set a target without its cost and its owner",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the system, the NFRs, the SLI definition, the dependency chain, the cost model and one alternative target you rejected.",
+    "tasks": [
+      "List and rewrite the NFRs and record conflicts and owners",
+      "Define the SLI and policy for maintenance",
+      "Map the dependency chain and compute availability",
+      "Cost the candidate targets and choose one",
+      "Measure actual availability and compare",
+      "Recompute the nines table",
+      "Build the calculator with tests",
+      "Write the decision record and one-page summary"
+    ],
+    "acceptance": [
+      "Every NFR is testable with an owner and a verification method",
+      "The SLI is precisely defined with maintenance treatment",
+      "The dependency calculation shows the shared dependencies and the independence assumption",
+      "Two or more targets are costed and the choice is reasoned",
+      "The nines table was recomputed with differences recorded",
+      "Calculator tests pass including the rejection cases",
+      "Figures are labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The NFR set, SLI definition, dependency analysis, cost case, measurements, nines recomputation, calculator with tests, decision record and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Business owner",
+    "scenario": "The business owner for the system wants 99.99% because a competitor advertises it. They need to hear what it costs, what it buys and what you recommend.",
+    "prompts": [
+      "What does 99.99% mean in minutes per month, and what counts as downtime?",
+      "What would the extra nine cost, and what does it save us?",
+      "Which parts of the system cap the availability we can achieve?",
+      "Does planned maintenance count against the target?",
+      "How do you know your measured availability is right?",
+      "Which of the NFRs conflict, and who decided which wins?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Testable NFRs with measures, owners and recorded conflicts",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Correct availability arithmetic including composition, shared dependencies and error budget",
+        "weight": 0.3
+      },
+      {
+        "criterion": "A costed, reasoned target and a measured comparison",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Clear communication to a business owner",
+        "weight": 0.15
+      }
+    ]
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "id": "pre-mortems-pareto",
+  "moduleId": "delivery-incidents",
+  "pillar": "Delivery",
+  "title": "Pre-mortems and Pareto analysis",
+  "estimatedMinutes": {
+    "learn": 40,
+    "build": 240,
+    "defend": 30
+  },
+  "objectives": [
+    "Run a pre-mortem: assume failure, decompose it, map it to systems, then prioritise and mitigate",
+    "Explain how a pre-mortem relates to RCA and to a post-mortem",
+    "Build a Pareto table with ranked causes and cumulative percentages, and find the vital few",
+    "Use Pareto honestly: know when 80/20 does not hold and what the chart cannot tell you",
+    "Combine both to decide where reliability effort should go and defend the choice to a sponsor"
+  ],
+  "prerequisites": [
+    "rca-post-mortems"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "rca-post-mortems",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Technical pre-mortems",
+      "url": "https://www.ctoframework.com/delivery/incident-management/technical-pre-mortems",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Pareto Analysis",
+      "url": "https://www.ctoframework.com/delivery/incident-management/pareto-analysis",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Pre-mortem page has no worked example, no pitfalls section and no explicit exclusions. It offers no quantitative method for estimating likelihood or blast radius, no guidance on session length, facilitation or group size, and no tooling. Its only numbers are the six-month scenario horizon and a one-line illustration of a service with four upstream integrations, none with formal SLAs. It does not contrast itself with a post-mortem directly; the comparison here is implied by its description as RCA in reverse.",
+    "The likelihood-times-blast-radius scoring in this lesson is Original Academy material, not from the page. Scales and weights are choices to be agreed with your organisation.",
+    "The Pareto page has no worked example with figures: only a qualitative statement that a handful of root causes may account for most incidents. It has no pitfalls section, no limitations, and does not say how to measure impact when causes are hard to count or how to handle causes that interact. The incident table and the caveats about 80/20 here are Original Academy material.",
+    "The page presents 80/20 as a rough guide and not an exact split. Do not state it as a law.",
+    "In a second read of the Pre-mortem page for the Academy review (2026-10-13), 'race conditions' as a named cause category and the illustration of a service with four upstream integrations and no formal SLAs did not appear in the retrieved summary, which lists code defects, misestimated load, weak rollout strategy, infrastructure not matching feature delivery, and poor incident response or observability. Check both against the live page before relying on them. The race condition in the worked example is an Academy illustration regardless."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The pre-mortem",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A pre-mortem is a structured technical exercise in which you assume the project has already failed, 'completely and irreversibly', and explore what caused the failure before code ships or infrastructure is provisioned. The page describes it as running root cause analysis in reverse: the rigour normally applied after an outage, applied to pre-delivery planning.\n\nIt links to the technical post-mortems guide as further reading but does not contrast the two directly. The implied difference: a post-mortem explains a failure that has happened; a pre-mortem imagines one that has not."
+      },
+      {
+        "heading": "The five steps",
+        "sourceCategory": "Official CTO Framework",
+        "body": "1. Set the failure scenario: frame it as a future failure, for example a rollout that has missed its objectives six months out.\n2. Gather cross-disciplinary input: architects, senior engineers, SREs, and product and programme leads, covering build-time and run-time views.\n3. Decompose the failure: each participant independently lists possible contributing causes, such as race conditions, load misestimates, rollout strategy gaps, infrastructure versus feature misalignment, and weak observability or incident response.\n4. Map risks to systems: group causes by component, service boundary or stack layer, using architecture maps to find systemic weak points.\n5. Prioritise and mitigate: rank failure modes by likelihood and blast radius, then design mitigations (automated rollback, feature flags, chaos testing, performance baselines, better monitoring) and feed them into the backlog, architecture reviews or deployment checklists.\n\nThe page's illustration of a weak point: a service with four upstream integrations, none with formal SLAs."
+      },
+      {
+        "heading": "Making a pre-mortem usable",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page does not say how to estimate likelihood or blast radius, how long to run it, or who facilitates. A practical version: give each participant a few minutes to write causes alone before anyone speaks, so the senior person does not anchor the group (the page's step 3 asks for independent lists). Merge duplicates, then score each failure mode on likelihood and blast radius, each on a simple 1 to 5 scale agreed in advance, and rank by the product.\n\nA product ranking is a prompt for discussion, not an answer. Ties and near-ties are common, and a 5-by-1 and a 1-by-5 score the same but are very different risks. When scores tie, prefer the one with the larger blast radius, or the cheaper mitigation, and write down which rule you used.\n\nEnd with a decision for each ranked item: mitigate, accept, or investigate. 'Accept' needs a named owner who accepts it, because accepted risks are decisions, and decisions have owners. Put the mitigations where work is actually tracked (backlog, deployment checklist), as the page says, or they will not happen."
+      },
+      {
+        "heading": "Pareto analysis",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A technique for finding the factors that contribute most to a problem. The page's rule of thumb: roughly 80% of effects come from 20% of causes. It is a rough guide, not an exact split, and its purpose is to focus effort on the 'vital few' that give the greatest impact when resolved.\n\nFive steps: identify the problems or causes (defects, delays, support tickets); measure frequency or impact; rank in descending order; calculate the cumulative percentage; identify the vital few that account for most of the effect.\n\nFor incidents: count incidents by root cause, rank them, and use the cumulative chart to target the few causes that drive most of them. The usual picture is a Pareto chart: bars for individual causes and a line for cumulative percentage. The page says it helps communicate findings and build consensus on where to allocate effort."
+      },
+      {
+        "heading": "What Pareto cannot tell you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page gives no limits, so know them yourself.\n\nThe ranking depends on what you count. Counting incidents treats a one-minute blip and a four-hour outage alike. Count by impact (minutes of downtime, customers affected, cost) as well as by frequency, and see whether the order changes.\n\nIt depends on how you label causes. If categories are vague ('other', 'configuration'), the chart reflects your labels, not reality. The page does not say how to handle causes that interact; a failure with two contributing causes needs a rule for which category it goes in, or it can be counted in both.\n\nIt shows where effort could go, not what is cheap. The biggest bar may be the hardest to fix. Combine with the cost and risk judgement from the earlier Economics lessons.\n\nAnd 80/20 is not a law. Your data may give 60/40 or 90/10. Report the actual cumulative percentages and let them say what the vital few are."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A Pareto table and a pre-mortem ranking (illustrative, not Cretek data)",
+      "body": "Pareto. A fictional quarter has 40 incidents. By root cause: configuration error 14, dependency timeout 10, capacity 6, bad deploy 5, expired certificate 3, other 2. Total 40. Cumulative: 14 (35.0%), 24 (60.0%), 30 (75.0%), 35 (87.5%), 38 (95.0%), 40 (100%).\n\nReading it: the top two causes, a third of the six categories, account for 60% of incidents, and the top three for 75%. 80% is not reached until the fourth category (87.5%), so the picture is 'a few causes dominate', not an exact 80/20. The target would be configuration errors first. Before committing, check the order again by minutes of downtime; if capacity incidents last far longer, the priority may change. And 'other' at 2 incidents is small enough to ignore here, but the label hides what it contains.\n\nPre-mortem. A fictional new release, scenario: six months from now the rollout has failed. Four failure modes scored likelihood by blast radius on 1 to 5 scales: no rollback path (3 x 5 = 15), load misestimate (4 x 3 = 12), weak observability (3 x 4 = 12), race condition (2 x 4 = 8). Ranked: 15, 12, 12, 8. The two 12s tie. The agreed tie rule is larger blast radius first, so weak observability (blast radius 4) ranks above the load misestimate (3). Decisions: mitigate the first three (automated rollback, a load test against a performance baseline, alerting on key signals), accept the race condition with a named owner and a review date.\n\nTogether: the Pareto shows which failures have been happening; the pre-mortem asks which failures have not yet happened but could. Use both."
+    },
+    "misconceptions": [
+      "Treating 80/20 as an exact law. The page calls it a rough guide.",
+      "Counting incidents only by frequency and ignoring duration or impact.",
+      "Letting vague categories such as 'other' hide the real causes.",
+      "Assuming the biggest Pareto bar is the cheapest to fix.",
+      "Running a pre-mortem with one voice, so the senior person's view anchors everyone. The page asks participants to list causes independently.",
+      "Ending a pre-mortem with a list of worries and no decisions, owners or backlog items.",
+      "Confusing a pre-mortem with a post-mortem. One imagines a future failure; the other explains a past one."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a project sponsor what a pre-mortem is, why you want to run one before launch, and what they will get from it."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "pm-1",
+      "question": "How does the page describe a pre-mortem?",
+      "options": [
+        "A review held after an outage",
+        "Root cause analysis in reverse: assume the project has failed and explore why, before delivery",
+        "A budget forecast",
+        "A load test"
+      ],
+      "answer": 1,
+      "why": "The page describes it as running RCA in reverse, assuming failure before code ships and exploring what caused it."
+    },
+    {
+      "id": "pm-2",
+      "question": "In step 3 of the pre-mortem (decompose the failure), how do participants list causes?",
+      "options": [
+        "Together, led by the most senior person",
+        "Independently",
+        "Only the SRE lists causes",
+        "By voting on a pre-written list"
+      ],
+      "answer": 1,
+      "why": "Each participant independently lists possible contributing causes, which reduces anchoring on one view."
+    },
+    {
+      "id": "pm-3",
+      "question": "What does the page say to rank failure modes by in the prioritise and mitigate step?",
+      "options": [
+        "Cost and team size",
+        "Likelihood and blast radius",
+        "Age and owner",
+        "Revenue and brand"
+      ],
+      "answer": 1,
+      "why": "Failure modes are ranked by likelihood and blast radius. The page gives no scoring method, so the scales are your choice."
+    },
+    {
+      "id": "pm-4",
+      "question": "How does the Pareto page present the 80/20 rule?",
+      "options": [
+        "As an exact mathematical law",
+        "As a rough guide: roughly 80% of effects from 20% of causes",
+        "As applying only to finance",
+        "As applying only to code defects"
+      ],
+      "answer": 1,
+      "why": "It says roughly 80% of effects come from 20% of causes and treats it as a rough guide, not an exact split."
+    },
+    {
+      "id": "pm-5",
+      "question": "40 incidents by cause: 14, 10, 6, 5, 3, 2. What is the cumulative percentage after the top two causes?",
+      "options": [
+        "35%",
+        "50%",
+        "60%",
+        "75%"
+      ],
+      "answer": 2,
+      "why": "14 + 10 = 24, and 24 / 40 = 60%. The top three reach 75%."
+    },
+    {
+      "id": "pm-6",
+      "question": "Two pre-mortem risks both score 12 using likelihood x blast radius. What should you do?",
+      "options": [
+        "Pick one at random",
+        "Apply a tie rule agreed in advance, such as larger blast radius first, and record it",
+        "Ignore both",
+        "Always choose the cheaper one with no record"
+      ],
+      "answer": 1,
+      "why": "Equal scores can hide different risks. Use a tie rule agreed in advance and write it down so the ranking can be explained. This scoring method is Academy material, not from the page."
+    }
+  ],
+  "build": {
+    "business": "Reliability effort is limited. A CTO needs to know which failures dominate now and which could hurt at the next launch, and to put the effort there. This is the reliability prioritisation capability in the CTO Operating System.",
+    "problem": "Run a pre-mortem on a real upcoming Cretek change and a Pareto analysis of real Cretek incident history, and build a tested Pareto tool.",
+    "requirements": [
+      "An incident or issue log for Cretek covering at least the last six months, with each entry's date, cause category, duration or impact, and the source. If the history is thin, say so and combine with support requests or bug reports, labelled. Do not pad it with invented entries",
+      "A defined list of cause categories and a rule for assigning an incident that has two contributing causes",
+      "A Pareto table by frequency and a second by impact (for example minutes of downtime), with cumulative percentages, and a comparison of whether the order changed",
+      "A statement of the vital few and what you will do about each, including expected effort",
+      "A pre-mortem for a real upcoming Cretek change (for example the next release of the school management application, a new quotation workflow or a hosting move). Define the failure scenario, list the participants and roles, and record each person's independent causes",
+      "The risk register from the pre-mortem: failure modes mapped to systems, scored on likelihood and blast radius with the scales stated, the tie rule, and a decision for each (mitigate, accept or investigate), with an owner for each accepted risk",
+      "Mitigations placed in the real backlog or deployment checklist, with a link or path",
+      "A Pareto tool that takes categories with counts or impacts and outputs ranked causes, cumulative percentages and the smallest set reaching a chosen threshold. Automated tests required, including the worked example, ties, an empty input, a total of zero (report, no divide by zero), negative values (reject), a single category, and a threshold of 100%",
+      "A one-page summary for a project sponsor",
+      "Every figure labelled REAL, ASSUMPTION, SIMULATED or RECONSTRUCTED"
+    ],
+    "constraints": [
+      "No invented Cretek incidents or figures",
+      "Do not name individuals as causes. Refer to roles and systems",
+      "Do not include customer personal data, credentials or secrets",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the tool's inputs and outputs, tie-handling in the ranking, how a zero total is reported, and one alternative you rejected, for example drawing the chart by hand in a spreadsheet with no tested calculation.",
+    "tasks": [
+      "Collect and categorise the incident history and define the category rules",
+      "Build the Pareto tool with tests",
+      "Produce the frequency and impact Pareto tables and compare them",
+      "Choose the change and run the pre-mortem with independent input",
+      "Score, rank and decide on the failure modes and record owners",
+      "Place the mitigations in the real backlog or checklist",
+      "Write the one-page summary and note how you will check results next quarter"
+    ],
+    "acceptance": [
+      "Incident history is real or labelled, with sources and category rules",
+      "Pareto tables by frequency and by impact exist and are compared",
+      "The vital few are named with a plan",
+      "The pre-mortem recorded independent input and a ranked register with the scales and tie rule stated",
+      "Every accepted risk has a named owner",
+      "Mitigations are in the real tracked backlog or checklist",
+      "Tool tests pass including edge cases",
+      "All figures labelled with their data type"
+    ],
+    "deliverable": "The incident Pareto analysis, the pre-mortem register, the tool with tests and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Project sponsor",
+    "scenario": "A project sponsor is deciding whether to give reliability work a place in next quarter's plan. They are not convinced it beats new features.",
+    "prompts": [
+      "Why these causes and not others? How do I know the chart is not just your category choices?",
+      "The top cause by count is not the top by downtime. Which do you fix first and why?",
+      "Which pre-mortem risk are you accepting, and who signs for it?",
+      "How would your ranking change if the scales were different?",
+      "What will I see in three months if this works?",
+      "If I give you only half the effort, what do you drop?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Honest use of Pareto: frequency and impact, caveats and actual percentages",
+        "weight": 0.3
+      },
+      {
+        "criterion": "A pre-mortem that produced ranked, owned and tracked decisions",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Trade-offs and prioritisation under limited effort",
+        "weight": 0.2
+      },
+      {
+        "criterion": "Clear, brief communication to a non-technical sponsor",
+        "weight": 0.2
+      }
+    ]
+  }
+}

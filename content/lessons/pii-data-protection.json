@@ -1,0 +1,244 @@
+{
+  "id": "pii-data-protection",
+  "moduleId": "product-requirements",
+  "pillar": "Product",
+  "title": "Protecting PII: classification, pseudonymisation and lifecycle",
+  "estimatedMinutes": {
+    "learn": 50,
+    "build": 280,
+    "defend": 35
+  },
+  "objectives": [
+    "Distinguish direct and indirect identifiers, and explain why combinations of harmless-looking fields can identify a person",
+    "Separate encryption, tokenisation, pseudonymisation and anonymisation, and say which still leave personal data",
+    "Measure re-identification risk with k-anonymity on a dataset and generalise until it is acceptable",
+    "Show why an unsalted hash of a small identifier space is not protection, and what a keyed hash changes",
+    "Build a data inventory and retention plan, and defend it to counsel without giving legal conclusions"
+  ],
+  "prerequisites": [
+    "least-privilege-access-control",
+    "nfr-availability"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "least-privilege-access-control",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "nfr-availability",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Personally Identifiable Information (PII)",
+      "url": "https://www.ctoframework.com/product/requirements/pii",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "NOT LEGAL ADVICE. The page is a short secondary overview with no citations to regulation articles, standards or authoritative guidance. Anything that affects a real decision must be checked against primary sources (the regulation text, the regulator's guidance) and with qualified counsel.",
+    "The retrieved summary flagged these points on the page: tokenisation, anonymisation and pseudonymisation are presented as interchangeable 'masking' methods though they differ, and pseudonymised data is generally still personal data under GDPR while properly anonymised data may fall outside it; the claim that GDPR and CCPA impose strict retention periods is overstated, since GDPR's storage limitation principle requires data not to be kept longer than necessary and does not set fixed periods, and the page gives no basis for the CCPA claim; encryption keys are listed as a 'Restricted' PII example although keys are security credentials, not personal data, and medical records are listed without distinguishing them from HIPAA-defined protected health information; HIPAA applies to covered entities and business associates, not to 'medical PII' generally; PCI-DSS is an industry standard, not a law, and covers cardholder data; consent is one of several lawful bases for processing under GDPR, so describing GDPR as a focus on consent oversimplifies it; and 'should be automatically purged' and 'must be trained' are stated as requirements without citation.",
+    "The page does not cover: the distinctions between PII, personal data, protected health information and sensitive personal information; data minimisation and purpose limitation; privacy by design and impact assessments; data discovery and mapping; consent and data subject requests; controller and processor roles; cross-border transfers; breach notification timelines; key management beyond naming AES-256; PII in non-production environments, backups, logs, analytics and AI training data; synthetic data; children's data; cookies and tracking; or jurisdictions beyond the EU, California and US sectors. The 72-hour breach notification window mentioned in this lesson comes from my general knowledge of GDPR and was not on the page and not verified here; confirm it and any exceptions against the regulation.",
+    "The k-anonymity measurements and the hash experiment in this lesson are Original Academy material run in Python on a SIMULATED dataset of 1,000 invented records. They illustrate mechanisms and are not evidence about any real dataset."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The page's treatment of PII",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines PII as any data that can identify a person directly (full name, passport number, Social Security number) or indirectly (IP address, device identifiers, behavioural data), and frames protecting it as a security, privacy and compliance concern with technical implications.\n\nIts themes: four classification tiers (public, internal, confidential, restricted) that drive security policy, access control and encryption, though it gives no method for assigning tiers; encryption at rest (AES-256 as an example) and in transit (TLS 1.2 or later); masking through tokenisation and anonymisation; identity and access management (role-based access, multi-factor authentication, least privilege); governance (retention with automatic purging, logging and monitoring of access, secure disposal by cryptographic erasure or physical destruction); regulations named (GDPR, CCPA, HIPAA, PCI-DSS); breach prevention and response (threat detection, incident response plans, awareness training); and third-party risk (vendor assessments, data processing agreements, audits)."
+      },
+      {
+        "heading": "Corrections and distinctions the page needs",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "This is not legal advice. Use these points to ask better questions of counsel.\n\nThe page treats several different techniques as interchangeable. They are not.\n- Encryption transforms data so only a key holder can read it. Encrypted personal data is still personal data; encryption protects it from people without the key.\n- Tokenisation replaces a value with a token and keeps the mapping elsewhere. Whoever holds the mapping can reverse it.\n- Pseudonymisation replaces direct identifiers with a pseudonym while the data can still be linked back with additional information held separately. As a general position, pseudonymised data is still personal data under GDPR, because re-identification remains possible.\n- Anonymisation aims to make re-identification not reasonably possible by anyone. Truly anonymised data may fall outside data protection law, but the bar is high and it is easy to fail, as the experiment below shows.\n\nOther points. Encryption keys are credentials, not PII; protect them as secrets under access control, in a key management service. Regulations differ in kind: GDPR and CCPA are laws, HIPAA is a US law that applies to defined covered entities and their business associates, and PCI-DSS is an industry standard for cardholder data. GDPR allows several lawful bases for processing, of which consent is one, so 'get consent' is not a general answer. And retention: GDPR's principle is that data should be kept no longer than necessary for its purpose, which means you must set and justify your own periods; it does not give one fixed number. Check each of these in the primary text.\n\nWhat the page omits is where most real programmes live: knowing where personal data is (an inventory), collecting less of it (minimisation and purpose limitation), handling requests to access or delete it, who is controller and who processor, and moving it across borders. Start with the inventory, because you cannot protect, minimise or delete data you cannot find."
+      },
+      {
+        "heading": "Combinations identify people: k-anonymity",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Removing names does not remove identity. Postcode, birth year and gender are each harmless, but together they can single a person out. A dataset is k-anonymous for chosen quasi-identifiers if every combination of their values is shared by at least k records. The smallest group size is k; a group of 1 is a unique person.\n\nSIMULATED test: 1,000 invented records with a 5-digit postcode (40 distinct values), birth year (1950 to 2004) and gender (three values).\n- Raw values: 937 distinct combinations; 875 of them belong to exactly one record. k = 1. Nearly everyone is unique.\n- Postcode cut to 3 digits, birth year to decade: 463 groups, 184 unique. Still k = 1.\n- Postcode to 3 digits, 20-year bands: 332 groups, 84 unique.\n- Postcode to 2 digits, 20-year bands: 119 groups, 5 unique.\n- Postcode generalised to 1 digit (all in one region here), 20-year bands, with gender: 12 groups, smallest 24. k = 24.\n- Postcode to 2 digits, decade, gender dropped: 60 groups, smallest 5. k = 5.\n\nThe lesson: the useful column set and its granularity trade directly against privacy. Reaching even k = 5 on three attributes required coarse generalisation or removing a field, and the data became less useful. Suppression of outlier rows is another lever. k-anonymity has well-known limits: it protects against linking on the chosen attributes only, not against someone who knows other facts, and a group of 24 people who all share a sensitive value reveals that value. It is a measurable screening test, not a proof of anonymity. Real assessments also consider what other data an attacker could combine with yours."
+      },
+      {
+        "heading": "A hash is not automatically a pseudonym",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A common shortcut is to replace an identifier with its SHA-256 hash. If the set of possible identifiers is small, anyone can hash every candidate and look for a match.\n\nSIMULATED experiment: the identifier is a 6-digit number (one million possibilities). Given the unsalted SHA-256 of '483920', a loop over all 6-digit numbers found the original in about 0.35 seconds on this machine. Real identifiers (phone numbers, national IDs, email addresses) have structure that shrinks the search space the same way, and attackers use large precomputed lists.\n\nA keyed hash (HMAC with a secret key) changes this: without the key, the same loop did not find a match (it ran through the whole million in about 2 seconds and found nothing, because every guess was computed under the wrong key). The security then rests on the key, which must be generated randomly, stored in a key management service, rotated and kept away from the data. A salt alone prevents precomputed lookup tables but does not stop an attacker who knows the salt from guessing a small space, so for small identifier spaces a secret key is the better design.\n\nEven then, the output is a pseudonym, and the data remain personal data in most legal analyses, because the key holder can re-link. Document who holds the key and why."
+      },
+      {
+        "heading": "Lifecycle, third parties and incidents",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Treat personal data as having a lifecycle: collection, use, sharing, storage, deletion. For each category in your inventory record the purpose, the legal basis your counsel has confirmed, where it lives (databases, backups, logs, analytics, tickets, spreadsheets, test environments, AI training sets), who can access it, how long you keep it and why, and how deletion happens, including in backups.\n\nCommon leaks the page does not mention: production data copied into test environments, personal data written into application logs and error traces, analytics events carrying email addresses, and personal data used to train or prompt AI systems (see the AI governance lesson). Control them by design: synthetic or masked data in test, log scrubbing, field-level allow lists in analytics, and data handling rules in AI use.\n\nThird parties: a vendor holding your personal data needs an assessment, a data processing agreement defining roles, a record of where data is processed, and an audit or evidence process. Note that the supplier relationship decides who is controller and who processor, a question for counsel.\n\nIncidents: have a plan before one happens. Many regimes set a deadline for notifying the regulator after becoming aware of a breach; under GDPR this is commonly cited as 72 hours, but the page does not state it and I have not verified it here, so confirm the rule and exceptions with counsel and make the plan work to the shortest deadline that applies. Practise it, as in the incident lessons."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A personal data review of a customer feedback pipeline (invented, not Cretek data)",
+      "body": "A product team wants to analyse customer feedback and share a dataset with a research partner. Fields: customer ID, email, postcode, birth year, gender, free-text comment, plan type, and an AI-generated sentiment score. The request: 'remove the names and send it'.\n\nStep 1, inventory and classification. Direct identifiers: email, customer ID. Indirect: postcode, birth year, gender, and the free-text comment (which may contain names, addresses or account numbers). Classification (an Academy scheme, to be confirmed): confidential for the whole set, restricted for the free text until scanned. Keys and secrets are not in this dataset and are classified separately as secrets.\n\nStep 2, purpose and minimisation. What does the partner need? Sentiment by plan type and broad region and age band. Postcode, exact birth year, email and customer ID are not needed. Collect and share less.\n\nStep 3, test the 'remove the names' idea. The raw field set has k = 1: in the earlier simulation 875 of 937 combinations were unique. Releasing postcode, birth year and gender would let someone with another dataset re-identify most people.\n\nStep 4, generalise and measure. Region at 1-digit level, age band of 20 years, gender kept: k = 24. Plan type added: the team re-measures (an invented result for this example: k = 6), so it keeps plan type and accepts k = 6 only because counsel and the data owner agree that is acceptable for this partner and purpose (a decision, not a rule).\n\nStep 5, handle the free text. Run a scan for emails, phone numbers and account numbers; remove matches; sample 100 comments by hand and find 3 with names. Because the scan missed names, the team withholds the raw text and shares theme tags instead. The limits of the scan are recorded.\n\nStep 6, link key. The partner needs to merge a follow-up survey, so the team supplies a keyed pseudonym (HMAC with a secret key held only by Cretek) instead of the customer ID. An unsalted hash would be reversible in seconds for a short ID format. The key is stored in the key service and rotated yearly.\n\nStep 7, third party and lifecycle. A data processing agreement is requested from counsel; the dataset is shared through a controlled location with expiry in 90 days (an assumption to be confirmed against the purpose); the partner must confirm deletion; the sharing is recorded in the processing inventory.\n\nStep 8, status. The legal basis, the role of the partner, any cross-border transfer and the notification plan are open questions for counsel; this is not a legal conclusion. Nothing here says the data is anonymous: with a link key and k = 6 it is pseudonymised at best."
+    },
+    "misconceptions": [
+      "Believing that removing names makes data anonymous. Combinations of fields identify people.",
+      "Treating encryption, tokenisation, pseudonymisation and anonymisation as the same thing.",
+      "Assuming pseudonymised data is outside data protection law.",
+      "Using an unsalted hash of a short identifier as protection.",
+      "Believing a law sets one fixed retention period for everything.",
+      "Calling encryption keys PII. They are secrets to be protected, not personal data.",
+      "Forgetting logs, test environments, backups and AI training data when inventorying personal data."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a product manager why 'we removed the names' does not make a dataset safe to share, using one number from the k-anonymity test."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "pi-1",
+      "question": "In the simulated dataset, raw postcode, birth year and gender gave how many unique people?",
+      "options": [
+        "None",
+        "875 of the 937 combinations belonged to exactly one record (k = 1)",
+        "A handful",
+        "All of them were shared by at least 24 people"
+      ],
+      "answer": 1,
+      "why": "Raw quasi-identifiers singled out nearly every record, which is why removing names alone does not anonymise data."
+    },
+    {
+      "id": "pi-2",
+      "question": "Which statement about pseudonymised data is the safe general position?",
+      "options": [
+        "It is anonymous and outside data protection law",
+        "It can still be linked back with additional information, so it is generally still personal data; confirm with counsel",
+        "It is the same as encrypted data",
+        "It is always public"
+      ],
+      "answer": 1,
+      "why": "The page conflates the techniques. Pseudonymisation keeps the possibility of re-linking, so it is generally still personal data."
+    },
+    {
+      "id": "pi-3",
+      "question": "Why did the unsalted SHA-256 of a 6-digit number fail as protection?",
+      "options": [
+        "SHA-256 is broken",
+        "There are only a million candidates, so hashing all of them found the match in about 0.35 seconds",
+        "The number was too long",
+        "Hashes are reversible by definition"
+      ],
+      "answer": 1,
+      "why": "Hashing is one-way, but a small input space can be searched exhaustively. A secret-keyed hash stops the search for anyone without the key."
+    },
+    {
+      "id": "pi-4",
+      "question": "Which is a correct reading of GDPR retention as discussed in the lesson?",
+      "options": [
+        "It sets a fixed seven-year period for all data",
+        "It requires keeping data no longer than necessary for its purpose, so you must set and justify your own periods",
+        "It forbids deletion",
+        "It does not apply to logs"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged the page's 'strict retention periods' as overstated. The principle is storage limitation, not a fixed number. Confirm in the primary text."
+    },
+    {
+      "id": "pi-5",
+      "question": "Which statement about the page's regulations is accurate?",
+      "options": [
+        "PCI-DSS is a law and HIPAA covers all medical data everywhere",
+        "PCI-DSS is an industry standard for cardholder data, and HIPAA applies to US covered entities and business associates",
+        "GDPR is only about consent",
+        "CCPA is the same as GDPR"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary noted these simplifications: PCI-DSS is not a law, HIPAA has a defined scope, and consent is only one GDPR lawful basis."
+    },
+    {
+      "id": "pi-6",
+      "question": "Where do real programmes often leak personal data that the page does not mention?",
+      "options": [
+        "Only in the main database",
+        "Logs, test environments, analytics pipelines, backups and AI prompts or training data",
+        "Only on paper",
+        "Nowhere; encryption covers it all"
+      ],
+      "answer": 1,
+      "why": "The page does not cover non-production environments, logs, backups, analytics or AI use. An inventory is how you find them."
+    }
+  ],
+  "build": {
+    "business": "Cretek holds data about people. A CTO must know where it is, collect less of it, share it safely and be able to respond to requests and incidents without improvising. This is the data protection capability in the CTO Operating System.",
+    "problem": "Produce a personal data inventory and a safe-sharing design for one real Cretek dataset, with measured re-identification risk, a keyed pseudonym, a retention plan and a set of questions for counsel.",
+    "requirements": [
+      "Inventory one real system or dataset: each field, whether direct or indirect identifier, classification tier with reasoning, purpose, location (including logs, backups, test, analytics and AI use), access, retention and deletion method",
+      "Apply minimisation: for a named sharing or analysis purpose, list the fields actually needed and remove the rest",
+      "Measure k-anonymity on the quasi-identifiers (real data with approval, or a SIMULATED dataset with the generation method) for the raw set and at least three generalisation levels. Report group counts, the number of unique records and the smallest group. State what k you would accept and who decides",
+      "Show the unsalted-hash weakness for one real identifier format (using invented values), and implement a keyed pseudonym. State where the key lives, who can access it and how it is rotated",
+      "Describe how free text is scanned for personal data, test the scan on a sample, report what it missed and decide what to do about it",
+      "Write the lifecycle plan: retention periods with the reasoning, deletion including backups, and how a data subject request would be found and answered",
+      "Write the third-party checklist: assessment, data processing agreement, processing location and audit evidence",
+      "Write an incident response outline with a notification decision tree and the deadline that applies, marked 'requires verification with counsel'",
+      "A privacy toolkit with functions that compute k-anonymity for given columns and a keyed pseudonymisation function. Automated tests required, including a known small dataset with known k, generalisation raising k, an empty dataset (reject), a missing column (reject), determinism of the pseudonym under one key, different outputs under different keys, and an empty key (reject)",
+      "A list of questions for qualified counsel with owners and dates. Do not state any legal conclusion",
+      "A one-page summary led by what data you hold, what was reduced and what remains open",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No real personal data in shared materials or tests. Use invented values",
+      "Do not call pseudonymised data anonymous",
+      "Do not state legal conclusions. Present them as questions for counsel",
+      "Keys and secrets never in the repository",
+      "Must run locally with a single command for the toolkit and its tests"
+    ],
+    "design": "Write a one-page design covering the dataset, the purpose, the minimisation, the risk measure, the pseudonym design and one alternative you rejected, for example removing names only.",
+    "tasks": [
+      "Inventory and classify",
+      "Minimise for the purpose",
+      "Measure k-anonymity and generalise",
+      "Demonstrate the hash weakness and build the keyed pseudonym",
+      "Scan free text and record the misses",
+      "Write the lifecycle, third-party and incident plans",
+      "Build the toolkit with tests",
+      "Write the counsel questions and the one-page summary"
+    ],
+    "acceptance": [
+      "Every field is classified with reasoning and a retention rule",
+      "Raw and generalised k are measured and a threshold and decision owner are stated",
+      "The keyed pseudonym is tested and the key management is described",
+      "The text scan was tested and its misses recorded",
+      "The incident plan marks the deadline as requiring verification",
+      "Toolkit tests pass including the rejection cases",
+      "No real personal data or keys are in the repository",
+      "No legal conclusion is stated as fact"
+    ],
+    "deliverable": "The inventory, minimisation record, risk measurements, pseudonym design, scan results, lifecycle and incident plans, toolkit with tests, counsel questions and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Legal counsel",
+    "scenario": "Counsel is asked to approve sharing a dataset with a research partner. They want to understand what it contains, how identifiable people are and what you will do if something goes wrong.",
+    "prompts": [
+      "Is this data anonymous? What exactly did you do, and how did you measure it?",
+      "What could someone combine this with to identify a person?",
+      "Who holds the key to your pseudonyms, and what happens if it leaks?",
+      "Where else does this personal data live: logs, backups, tests, AI?",
+      "How long do you keep it, and how do you know when to delete it?",
+      "Which of these points are legal questions you are asking me, not answering?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Accurate distinctions between encryption, tokenisation, pseudonymisation and anonymisation, with no overclaiming",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Measured re-identification risk and sound generalisation and key design",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Complete inventory and lifecycle including hidden locations, with legal points framed as questions",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Clear communication to counsel",
+        "weight": 0.15
+      }
+    ]
+  }
+}

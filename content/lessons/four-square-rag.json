@@ -1,0 +1,173 @@
+{
+  "id": "four-square-rag",
+  "moduleId": "delivery-reporting-risk",
+  "pillar": "Delivery",
+  "title": "Executive reporting: Four Square and RAG",
+  "estimatedMinutes": { "learn": 35, "build": 240, "defend": 30 },
+  "objectives": [
+    "Lay out a Four Square report and say what belongs in each quadrant",
+    "Define Red, Amber and Green as the framework does, and explain why a colour needs written criteria",
+    "Produce an honest portfolio status report from project data",
+    "Defend a status report to a CEO who suspects it is too optimistic"
+  ],
+  "prerequisites": ["dora-metrics"],
+  "unlock": { "prerequisites": [{ "lessonId": "dora-metrics", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Four Square Reports",
+      "url": "https://www.ctoframework.com/delivery/reporting/four-square-reports",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "RAG Reports",
+      "url": "https://www.ctoframework.com/delivery/reporting/rag-reports",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    }
+  ],
+  "verificationNotes": [
+    "Both guides are short. Neither gives examples, templates, thresholds or a reporting cadence, and neither lists pitfalls. Everything beyond the definitions in this lesson is labelled Original Academy.",
+    "The term 'watermelon reporting' is not on the RAG page. It is an Academy addition to describe a known failure; verify against supplementary sources before citing it as established terminology.",
+    "The Scrum Reports sibling guide was not read for this lesson."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The Four Square Report",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework describes the Four Square Report as a strategic tool for evaluating and communicating key insights about technology initiatives, projects or products: a structured, high-level summary in four quadrants that supports decision-making and stakeholder communication.\n\nThe four quadrants:\n1. Status Update: the current state, including progress, milestones reached and critical developments.\n2. Key Risks and Issues: potential risks, blockers or technical challenges that could affect delivery, along with mitigation strategies.\n3. Next Steps: immediate priorities, upcoming tasks and the key decisions needed to keep momentum.\n4. Needs and Support: the specific asks, such as budget, resources or leadership alignment, needed for successful execution."
+      },
+      {
+        "heading": "The RAG report",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework describes RAG as a visual management tool used to quickly assess the status of projects, initiatives or key performance areas.\n\nRed: critical issues needing immediate attention. A project may be well off track, resources insufficient or major risks have occurred.\nAmber: progress is being made, but concerns could escalate without intervention. Corrective action may be needed.\nGreen: smooth progress, no major risks or blockers, everything on plan.\n\nThe page says RAG reports help decision-makers set priorities, allocate resources and communicate status across teams and stakeholders, and that regular review lets organisations address risks early and stay aligned with strategic goals."
+      },
+      {
+        "heading": "What the pages do not tell you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Neither page gives an objective rule for choosing a colour, an example report, a template, how often to report or who the audience is. Those are your design decisions, and they are where reports go wrong. A colour with no written criteria is an opinion, and opinions drift optimistic as reports move up the chain. The Build step makes you write the criteria down."
+      },
+      {
+        "heading": "Using the two together",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The framework presents these as separate sibling reports and does not say how to combine them. A sensible Academy design: use RAG as the one-glance status in the Status Update quadrant, and require every Amber or Red to appear in Key Risks and Issues with a mitigation and, where it needs a decision or resource, in Needs and Support. That keeps the colour honest, because it cannot be raised without explaining it."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Turning a colour into a rule (illustrative thresholds, not from the framework, not real data)",
+      "body": "Suppose a team writes: Green = forecast within 10% of budget and 1 week of the committed date, with no open Red risk; Amber = outside that but within 20% and 3 weeks, or any open Red risk with a mitigation under way; Red = beyond that, or a Red risk with no mitigation. A project forecast 15% over budget is Amber under this rule whatever the project lead feels. The numbers are examples; what matters is that anyone can recompute the colour from the data, so a status cannot be argued up to Green."
+    },
+    "misconceptions": [
+      "Treating the colour as a judgement of how the team is doing rather than a statement about delivery against plan.",
+      "Reporting Green because no one has formally escalated a problem. The page's Green means smooth progress with no major risks or blockers and everything on plan.",
+      "Using the four quadrants as a place for good news. The page puts risks, issues and needs in two of the four.",
+      "Leaving Needs and Support empty. A report with no ask is either perfect or hiding something."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CEO why 'Amber' on your report is a call for action and not a polite way of saying 'fine'."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "fsr-1",
+      "question": "In a Four Square Report, which quadrant holds specific asks such as budget, resources or leadership alignment?",
+      "options": ["Status Update", "Key Risks and Issues", "Next Steps", "Needs and Support"],
+      "answer": 3,
+      "why": "The page defines Needs and Support as the specific asks needed for successful execution."
+    },
+    {
+      "id": "fsr-2",
+      "question": "According to the RAG page, what does Amber mean?",
+      "options": [
+        "Critical issues needing immediate attention",
+        "Progress is being made but concerns could escalate without intervention",
+        "Smooth progress with no major risks or blockers",
+        "The initiative has been cancelled"
+      ],
+      "answer": 1,
+      "why": "Amber is progress with concerns that could escalate; corrective action may be needed."
+    },
+    {
+      "id": "fsr-3",
+      "question": "Which of these does the RAG page NOT provide?",
+      "options": [
+        "A description of each status",
+        "Numeric thresholds for choosing a colour",
+        "A statement of what RAG is used for",
+        "A link between RAG and prioritising resources"
+      ],
+      "answer": 1,
+      "why": "The page gives no numeric or objective criteria for choosing a colour. That gap is why the Build step asks you to write your own."
+    },
+    {
+      "id": "fsr-4",
+      "question": "In the Four Square Report, where do mitigation strategies for risks belong?",
+      "options": ["Status Update", "Key Risks and Issues", "Next Steps", "Needs and Support"],
+      "answer": 1,
+      "why": "The page puts risks, blockers and challenges, along with mitigation strategies, in the Key Risks and Issues quadrant."
+    },
+    {
+      "id": "fsr-5",
+      "question": "A project is reported Green while the team privately expects to miss its date. What is the core failure?",
+      "options": [
+        "None, Green stays until someone formally escalates",
+        "The status does not match the page's Green: smooth progress, no major risks or blockers, on plan",
+        "RAG should never be used for dates",
+        "The report should use four colours"
+      ],
+      "answer": 1,
+      "why": "Green means everything is on plan. A known expected miss is, at least, Amber. This is the failure the written criteria in the Build step prevent."
+    }
+  ],
+  "build": {
+    "business": "This is milestone 1 of the Cretek CTO Operating System: a reporting capability that gives the CEO an honest, repeatable view of technology projects.",
+    "problem": "Build a generator that reads a project portfolio and produces a Four Square Report for each project plus a portfolio RAG summary, with written, testable RAG criteria.",
+    "requirements": [
+      "Input: a file listing Cretek projects with at least name, owner, planned and forecast dates, budget and forecast spend, open risks and issues, next steps and asks",
+      "Output: one Four Square Report per project (all four quadrants) and a one-page portfolio summary with a RAG per project",
+      "RAG is computed from written criteria you define, not typed in by hand, and the output shows which rule produced each colour",
+      "Every Amber or Red project must show a mitigation in Key Risks and Issues, and any decision or resource it needs in Needs and Support",
+      "Every report is labelled REAL or SIMULATED data",
+      "A criteria page: the thresholds, who agreed them and the review date"
+    ],
+    "constraints": [
+      "No invented Cretek project figures. Use real data or label the data simulated, visibly, on every output",
+      "Must run locally with one command"
+    ],
+    "design": "Write a one-page design covering the input format, where each quadrant's content comes from, how RAG rules are expressed, and one alternative you rejected (for example hand-set colours) and why.",
+    "tasks": [
+      "Write the RAG criteria page and the design",
+      "Implement the parser, the RAG rule engine and the report renderer",
+      "Write tests: each rule boundary, a project with no risks, a project with missing data, an Amber with no mitigation (must be flagged)",
+      "Run on real Cretek project data if it exists, otherwise a clearly labelled simulated set",
+      "Document security and operational considerations: who can see reports, where input data lives, how often it is refreshed"
+    ],
+    "acceptance": [
+      "RAG colour is derived from the written criteria and traceable to a rule",
+      "Tests cover every rule boundary and pass",
+      "Amber and Red items without a mitigation are flagged rather than silently accepted",
+      "Output shows REAL or SIMULATED",
+      "A README explains how to run it, its input format and its limitations"
+    ],
+    "deliverable": "A repository link or path with the generator, tests, criteria page and a sample report."
+  },
+  "defend": {
+    "assessor": "CEO",
+    "scenario": "You present the portfolio report. The CEO has seen reports from the technology team go Green to Red in a single week before and wants to know whether this one can be trusted.",
+    "prompts": [
+      "Show me how a project becomes Green. Who could change that, and what would I see if they did?",
+      "Why is this project Amber and not Red? Convince me you are not softening it.",
+      "Your Needs and Support quadrant is short. What are you not asking me for?",
+      "How do I know the underlying numbers are real and current?",
+      "What would make you change a colour mid-month, and how will I be told?"
+    ],
+    "rubric": [
+      { "criterion": "Colours traceable to written, objective criteria", "weight": 0.3 },
+      { "criterion": "Honesty about data quality and what the report cannot show", "weight": 0.25 },
+      { "criterion": "Clear asks and decisions for the executive", "weight": 0.25 },
+      { "criterion": "Concise, plain-English communication to a non-technical reader", "weight": 0.2 }
+    ]
+  }
+}

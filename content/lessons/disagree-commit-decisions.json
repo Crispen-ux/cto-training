@@ -1,0 +1,198 @@
+{
+  "id": "disagree-commit-decisions",
+  "moduleId": "people-leadership",
+  "pillar": "People",
+  "title": "Disagree and commit: making decisions stick",
+  "estimatedMinutes": { "learn": 40, "build": 250, "defend": 30 },
+  "objectives": [
+    "State the page's three steps and the two phases it says the principle depends on",
+    "Name what the page omits: who decides, when it applies, its limits, preconditions, failure modes and how decisions are reopened",
+    "Use expected cost of being wrong against cost of delay to decide how much more debate a decision deserves",
+    "Write a decision record that names the decider, the dissent, the review trigger and the commitment",
+    "Defend a decision you made over a respected objection, including when you would reopen it"
+  ],
+  "prerequisites": ["leadership-styles-situational", "adr-c4"],
+  "unlock": { "prerequisites": [{ "lessonId": "leadership-styles-situational", "type": "knowledge_check" }, { "lessonId": "adr-c4", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Disagree and commit",
+      "url": "https://www.ctoframework.com/people/leadership-collaboration/disagree-commit",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page is very short. It gives a three-step process (encourage debate, make a decision, commit fully), three claimed benefits (avoids paralysis, builds trust, speeds execution) and a closing idea about open dissent then unified execution. It has no worked examples, case studies, data or figures, and its only reference is a Wikipedia article.",
+    "The retrieved summary flagged these points: the benefits are asserted without evidence; the statement that decisions 'fail in practice' without commitment is presented as fact; 'often' needing a final call is not qualified. It also listed what the page does not cover: when the principle should and should not apply (for example reversible against irreversible decisions), who makes the final call, what to do when dissent concerns ethics, safety, legal risk or a fundamentally flawed decision, the cultural preconditions such as psychological safety, time limits on debate, failure modes such as silent compliance or using 'commit' to end discussion, how and when a decision can be reopened and where accountability lies, facilitation, documentation and asynchronous adaptation, and the origin of the principle.",
+    "The distinction between easily reversible and hard-to-reverse decisions, the expected-cost calculation, the decision record template and the example in this lesson are Original Academy material. The idea of classifying decisions by reversibility is widely used in industry; I did not verify its attribution or source for this lesson. All numbers are invented ASSUMPTIONS and the arithmetic was run in Python."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The page's principle",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page presents disagree and commit as a decision-making principle for keeping an organisation moving when there is no unanimous agreement. Three steps:\n\n1. Encourage healthy debate. People raise concerns, share data and challenge proposals, which the page says uncovers risks, surfaces alternatives and brings diverse perspectives.\n2. Make a decision. After views are heard and weighed, a decision is made, possibly by consensus, though the page notes that time or resource constraints often require a final call.\n3. Commit fully. People whose view did not prevail set aside their preference and support the decision, backing it publicly and operationally without passive resistance or second-guessing.\n\nClaimed benefits: avoiding decision paralysis, building trust because input is valued even when not adopted, and faster execution. The principle depends on two phases: open dissent while deliberating and unified execution afterwards. Without the first, the page says decisions are shallow; without the second, they fail in practice."
+      },
+      {
+        "heading": "What the page leaves out",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A slogan is not a procedure. A team that adopts the phrase without these answers will argue about what it means.\n\nWho decides. The page says 'a decision is made' without saying by whom. Name a decider before the debate starts. In the earlier RACI lesson this is the accountable person. Without one, 'disagree and commit' degrades into consensus-seeking or into the loudest voice winning.\n\nWhen it applies. Not all decisions deserve the same debate. A decision that is cheap to reverse (a library for an internal tool, a team meeting format) should be made fast and revisited if wrong. A decision that is expensive or impossible to reverse (a data store that will hold years of customer data, a multi-year vendor contract, a public API) deserves more evidence and a longer debate. The page does not draw this line. The expected-cost calculation below makes it concrete.\n\nTime limits. Set the end of debate in advance: a date, or a number of meetings. Debate with no end date is paralysis with a better name.\n\nLimits of commitment. Committing means supporting execution and not undermining it. It does not mean taking part in something unsafe, illegal or unethical, and it does not mean pretending to believe. The page does not say what to do when dissent concerns safety, law or ethics, or a flaw so fundamental that carrying on would harm the company. In those cases the dissent goes to a higher authority or a control function, and 'commit' does not apply. Make this explicit.\n\nPreconditions. Open dissent needs psychological safety: people must be able to disagree without penalty. If people have been punished for objecting, the debate phase is theatre and the commit phase only hides doubt. The page assumes this and does not say it.\n\nFailure modes. Silent compliance (people nod and then do not do it), malicious compliance (doing exactly what was asked, knowing it will fail), disengagement, and leaders saying 'commit' to end a discussion they have not allowed to happen. Also the reverse: using dissent as a licence to relitigate after the decision.\n\nReopening. A decision can turn out to be wrong. Say in advance what evidence reopens it, who decides, and when. Otherwise either nobody may raise new evidence, which is dangerous, or everyone raises it constantly."
+      },
+      {
+        "heading": "How much debate is the decision worth?",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A rough expected-value test helps set the depth of debate.\n\nExpected cost of being wrong = probability the decision is wrong x cost of reversing or living with it. Value of further analysis = (reduction in that probability) x the same cost. Cost of further debate = people's time plus the cost of delay.\n\nReversible case. Suppose reversing the choice costs 20,000 (rework and migration), and you think there is a 30% chance it is wrong: expected cost 6,000. Another week of analysis might lower the chance to 20%, saving an expected 2,000. Three more meetings of 8 people for 1.5 hours at a loaded cost of 80 an hour cost 8 x 1.5 x 3 x 80 = 2,880 in time alone, before counting delay to the work. The analysis costs more than it saves. Decide now, record the dissent, and set a review point.\n\nHard-to-reverse case. Suppose reversal costs 400,000 with the same 30% chance of being wrong: expected cost 120,000. The same extra analysis lowering the chance to 20% saves 40,000, far more than 2,880 plus a delay cost that you should also estimate. Invest in evidence: a prototype, a benchmark, a reference call, a pre-mortem.\n\nThe numbers are guesses, and the point is the comparison, not the precision. Two cautions: people are poor at estimating the chance of being wrong (overconfidence is common), so ask the dissenter for their estimate; and the cost of reversing includes the cost of not being able to attract or keep people who felt unheard."
+      },
+      {
+        "heading": "Making commitment real",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Write it down. Use a decision record like the architecture decision records you already know, with extra fields for this purpose: the decision; the decider; the options considered; the main dissent, in the dissenter's own words and approved by them; the reasons the decision went the other way; what commitment means in practice (who does what, by when, which public statements); the review trigger (specific measures and thresholds, or a date); and the date debate ended.\n\nRecording the dissent has two effects. The dissenters see they were heard, which is the page's trust argument, and the team can later check whether the dissent turned out to be right, which improves the next decision.\n\nMake the commitment testable: after the decision, do the people who disagreed work on it, speak about it consistently, and raise problems early rather than say I told you so? Look at behaviour in the following weeks, not at what was said in the meeting.\n\nSet triggers before the work starts. For example: 'We will reopen the broker choice if p99 end-to-end latency exceeds 400 ms for two consecutive weeks, or if the operations cost per month exceeds 8,000, or in six months, whichever comes first.' A trigger converts 'I think we were wrong' into a conversation about evidence, and protects the team from endless relitigation."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Choosing a message broker over a respected objection (invented numbers)",
+      "body": "Two principal engineers disagree. Priya favours a managed cloud queue (low operational load, vendor-specific). Tomas favours a self-hosted open broker (portable, more operations work). The decision affects six teams.\n\nStep 1, set the frame. The CTO is the decider; the head of platform is consulted; the engineers are invited to dissent in writing. Debate ends on Friday, in five working days. Both options are acceptable on security and cost to a first approximation.\n\nStep 2, classify. Reversal cost: moving between the two later would need rewriting producers and consumers across six teams, estimated 150,000. Probability that the chosen option is wrong for the company within two years: 30% (the CTO's estimate, with Priya and Tomas each giving 25% and 40%). Expected cost of being wrong: 45,000 at 30%. This is a hard-to-reverse decision, so the team spends two weeks, not two meetings, on evidence.\n\nStep 3, gather evidence. A one-week spike: both options load-tested at twice the expected peak. Measured (SIMULATED for this example): p99 latency 180 ms for the managed queue and 140 ms for the self-hosted broker, both under the 400 ms requirement; estimated operations effort 0.1 engineer-years for the managed option and 0.6 for the self-hosted one, at 130,000 per engineer-year (assumption): about 13,000 against 78,000 a year. A portability design: a thin internal interface so producers do not call the vendor SDK directly, costing about 20 engineer-days (assumption), which cuts the reversal cost from 150,000 to about 60,000.\n\nStep 4, decide. The CTO chooses the managed queue behind the thin interface. Reasons: operations cost difference of about 65,000 a year, the latency difference is irrelevant to the requirement, and the interface lowers the lock-in risk Tomas raised.\n\nStep 5, record the dissent. Tomas's objection, in his words and approved by him: 'Vendor pricing and limits could change, and we may regret not owning the broker.' Priya's concern: 'We should not add an abstraction we may never use.' Both are recorded.\n\nStep 6, commitment and triggers. Everyone works on the interface and migration plan; Tomas leads the portability design because it addresses his risk. Review triggers: reopen if the monthly bill exceeds 9,000, if the vendor's rate limits block a documented need, or in six months. The CTO asks the team to raise problems in the weekly review, not after release.\n\nStep 7, follow-up. At six months the data is checked. If the bill is 4,200 and there were no limit problems, the decision stands, and the record notes that the dissent did not materialise. If it was 11,000, the trigger fires and the team revisits with the portability interface making a move cheaper than it would have been.\n\nWhat is unverified: all numbers are invented, and the probabilities are judgements. Nothing here shows the managed queue is the better engineering choice in general."
+    },
+    "misconceptions": [
+      "Treating the slogan as a method. It needs a named decider, a deadline and a record.",
+      "Applying the same debate to every decision regardless of reversibility.",
+      "Using 'commit' to end a discussion that has not happened.",
+      "Believing commitment means taking part in something unsafe, illegal or unethical.",
+      "Assuming debate is open without psychological safety.",
+      "Accepting silent or malicious compliance as commitment.",
+      "Letting any new opinion reopen a decision, or letting none."
+    ],
+    "explainTask": "In 150 words or fewer, explain to your engineering leads when you will make a call with limited debate and when you will insist on more evidence, using the cost of reversal."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "dc-1",
+      "question": "Which is NOT one of the page's three steps?",
+      "options": [
+        "Encourage healthy debate",
+        "Make a decision",
+        "Commit fully",
+        "Take a vote of all employees"
+      ],
+      "answer": 3,
+      "why": "The steps are debate, decide and commit. The page does not mention voting, nor who decides."
+    },
+    {
+      "id": "dc-2",
+      "question": "Which is a gap in the page that matters most in practice?",
+      "options": [
+        "It does not say who makes the final call or when the principle should not apply",
+        "It names too many decision makers",
+        "It has too many examples",
+        "It requires unanimous agreement"
+      ],
+      "answer": 0,
+      "why": "The retrieved summary flagged that final authority, limits (ethics, safety, legal), reversibility, time limits and reopening are not covered."
+    },
+    {
+      "id": "dc-3",
+      "question": "Reversal costs 20,000 and the chance of being wrong is 30%. What is the expected cost of being wrong?",
+      "options": ["2,000", "6,000", "20,000", "60,000"],
+      "answer": 1,
+      "why": "0.3 x 20,000 = 6,000. Compare this with the cost of more debate to see how much analysis it justifies."
+    },
+    {
+      "id": "dc-4",
+      "question": "Extra analysis would lower the chance of being wrong from 30% to 20% and costs 2,880 in meeting time. When is it worth it?",
+      "options": [
+        "Always",
+        "When reversal costs 400,000 (value 40,000), not when it costs 20,000 (value 2,000)",
+        "Never",
+        "Only when reversal costs 20,000"
+      ],
+      "answer": 1,
+      "why": "The value of analysis is the reduction in probability times the reversal cost: 0.1 x 400,000 = 40,000 against 0.1 x 20,000 = 2,000."
+    },
+    {
+      "id": "dc-5",
+      "question": "A colleague says 'commit' but you believe the decision would break the law. What does the principle imply?",
+      "options": [
+        "Commit anyway",
+        "Commitment does not cover unlawful or unsafe actions; escalate to the right authority or control function",
+        "Stay silent",
+        "Quietly sabotage"
+      ],
+      "answer": 1,
+      "why": "The page does not address limits. Dissent about safety, law or ethics is escalated, and 'commit' does not apply."
+    },
+    {
+      "id": "dc-6",
+      "question": "Why set review triggers before the work starts?",
+      "options": [
+        "To forbid change",
+        "To turn 'I think we were wrong' into a conversation about agreed evidence, and prevent endless relitigation",
+        "To avoid recording the decision",
+        "Because the page requires them"
+      ],
+      "answer": 1,
+      "why": "Pre-agreed triggers define what evidence reopens a decision, protecting both against ignored evidence and against constant reopening."
+    }
+  ],
+  "build": {
+    "business": "A CTO must make decisions with incomplete agreement and still keep the team aligned and honest. A decision record that names the decider, captures dissent and sets review triggers is a core leadership artefact in the CTO Operating System.",
+    "problem": "Run one real decision with a respected disagreement through the full process: frame, evidence, decide, record dissent, commit, and review against pre-set triggers.",
+    "requirements": [
+      "Choose a real decision with at least two credible positions. State the decider, consulted people and the debate end date before debating",
+      "Classify the decision by reversal cost and estimate the probability it is wrong, asking each dissenter for their own estimate. Compute the expected cost of being wrong and the value and cost of more analysis. Decide how much evidence the decision deserves",
+      "Gather evidence proportionate to the stakes (a spike, benchmark, reference call or pre-mortem). Label each result REAL or SIMULATED",
+      "Write the decision record: decision, decider, options, dissent in the dissenter's approved words, reasons, commitment actions, review triggers and date",
+      "State explicitly what commitment does and does not mean for this decision, including the escalation route if dissent concerns safety, law or ethics",
+      "Observe commitment for at least four weeks: record whether dissenters contributed, raised problems early and spoke consistently, using specific behaviours, not impressions",
+      "Review the decision against the triggers at the date set and record whether the dissent proved right, partly right or wrong",
+      "A decision value calculator that takes reversal cost, current and revised probability of being wrong, number of people, hours and loaded rate, and returns expected cost, value of analysis, cost of debate and a recommendation to decide now or gather more evidence. Automated tests required, including the lesson's two cases (6,000 against 2,880 decide now; 120,000 and 40,000 gather evidence), a probability outside 0 to 1 (reject), revised probability above current (reject), negative cost (reject), zero people (reject) and ties",
+      "A one-page summary for your own manager led by the decision, the dissent and the triggers",
+      "Every number labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No names of dissenters in shared materials without their agreement to the wording",
+      "Do not use 'commit' to end debate before the deadline you announced",
+      "Do not ask anyone to act unlawfully or unsafely in the name of commitment",
+      "Do not reopen a decision without the pre-set trigger or an explicit new-evidence request",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the decision, the decider, the classification, the evidence plan, the triggers and one alternative you rejected, for example deciding by team vote.",
+    "tasks": [
+      "Frame the decision and set the decider and deadline",
+      "Classify and compute the value of analysis",
+      "Gather evidence",
+      "Write the decision record with the dissent",
+      "Observe commitment and review against the triggers",
+      "Build the calculator with tests",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "A decider, deadline and classification were set before debate",
+      "The expected-value comparison justifies the depth of evidence",
+      "The record contains approved dissent, triggers and a statement of the limits of commitment",
+      "Commitment was observed through behaviours for four weeks",
+      "The review compares outcome with triggers and with the dissent",
+      "Calculator tests pass including the rejection cases"
+    ],
+    "deliverable": "The decision record, evidence, observation notes, review, calculator with tests and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Head of engineering",
+    "scenario": "A senior engineer says the team was told to 'disagree and commit' but no one listened. The head of engineering asks you to explain how you made your last significant decision.",
+    "prompts": [
+      "Who decided, and when was that clear?",
+      "How did you decide how much debate the decision deserved?",
+      "What was the strongest objection and how is it recorded?",
+      "What does commitment mean here, and what does it not mean?",
+      "What would make you reopen this decision?",
+      "How do you know the people who disagreed actually committed?"
+    ],
+    "rubric": [
+      { "criterion": "A clear decider, deadline and a proportionate depth of evidence using expected cost", "weight": 0.3 },
+      { "criterion": "Honest record of dissent, with limits of commitment and escalation named", "weight": 0.3 },
+      { "criterion": "Pre-set triggers and observed, behaviour-based follow-up", "weight": 0.25 },
+      { "criterion": "Clear communication to a head of engineering", "weight": 0.15 }
+    ]
+  }
+}

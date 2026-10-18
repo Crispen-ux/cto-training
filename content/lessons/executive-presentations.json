@@ -1,0 +1,151 @@
+{
+  "id": "executive-presentations",
+  "moduleId": "executive-presentation-speech",
+  "pillar": "People",
+  "title": "Executive presentations for CTOs",
+  "estimatedMinutes": { "learn": 40, "build": 240, "defend": 35 },
+  "objectives": [
+    "Structure an executive presentation around a decision",
+    "Design slides that support rather than replace the message",
+    "Handle executive questions and challenges",
+    "Deliver a concise recommendation with evidence"
+  ],
+  "prerequisites": ["storytelling-star-method"],
+  "unlock": { "prerequisites": [{ "lessonId": "storytelling-star-method", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Executive presentation and slide design guidance",
+      "url": "https://www.duarte.com",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "General presentation guidance reviewed."
+    }
+  ],
+  "verificationNotes": [
+    "Presentation advice is general; adapt it to your organisation and audience.",
+    "Examples are Original Academy material."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Start with the decision",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "An executive presentation is not a status report. It should state the decision needed, the recommendation, the evidence and the risks in the first minute. Everything else supports that. If the audience only hears the first two minutes, they should still know what you want and why."
+      },
+      {
+        "heading": "Structure",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Use a simple arc: context, problem, options, recommendation, cost and risk, decision needed. Keep each section short. Put detail in an appendix. Executives can ask for depth; they cannot recover time lost to unnecessary detail."
+      },
+      {
+        "heading": "Slides as support",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "One idea per slide. Use charts for comparisons, not decoration. Avoid dense tables. The slide should answer a question, not repeat your words. If a slide can be skipped without losing the message, remove it."
+      },
+      {
+        "heading": "Questions and pushback",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Anticipate the three hardest questions and prepare answers. When challenged, acknowledge, answer directly and offer evidence. Do not defend a weak point; state the assumption and the test that would change it. End with a clear ask."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "CTO budget presentation (illustrative)",
+      "body": "Decision: approve 300,000 for platform engineering over two quarters. Recommendation: hire two engineers and replace legacy reporting. Evidence: current incident rate, cost per school, delivery lead time. Risk: hiring delay. Ask: approve budget and hiring now."
+    },
+    "misconceptions": [
+      "More slides mean more credibility.",
+      "Reading slides aloud is acceptable.",
+      "Detail should come before the recommendation.",
+      "Questions are attacks rather than information."
+    ],
+    "explainTask": "In 120 words or fewer, outline an executive presentation for a major technology decision."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ep-1",
+      "question": "The first minute of an executive presentation should state:",
+      "options": ["The full history", "The decision, recommendation and why", "The team structure", "The appendix"],
+      "answer": 1,
+      "why": "Executives need the decision and recommendation early."
+    },
+    {
+      "id": "ep-2",
+      "question": "A good slide should:",
+      "options": ["Repeat the speaker", " Support one idea", " Contain dense tables", " Avoid charts"],
+      "answer": 1,
+      "why": "One idea per slide keeps focus."
+    },
+    {
+      "id": "ep-3",
+      "question": "Detail belongs in:",
+      "options": ["The opening", " The appendix", " Every slide", " The title"],
+      "answer": 1,
+      "why": "Keep the main flow short and put detail in the appendix."
+    },
+    {
+      "id": "ep-4",
+      "question": "When challenged, a CTO should:",
+      "options": ["Defend everything", " Answer directly and offer evidence", " Ignore the question", " Blame the team"],
+      "answer": 1,
+      "why": "Direct answers with evidence build trust."
+    },
+    {
+      "id": "ep-5",
+      "question": "An executive presentation ends with:",
+      "options": ["A joke", " A clear ask", " An apology", " Silence"],
+      "answer": 1,
+      "why": "End with the decision needed."
+    }
+  ],
+  "build": {
+    "business": "Cretek leaders present technology decisions to executives and customers. Clear presentations improve decisions and trust.",
+    "problem": "Build and deliver an executive presentation for a real technology decision, with slides, appendix and a Q&A plan.",
+    "requirements": [
+      "State the decision and recommendation in the first minute",
+      "Provide evidence and cost",
+      "Include risks and mitigations",
+      "Prepare answers to three hard questions",
+      "Deliver a dry run and collect feedback",
+      "Produce slides with one idea per slide"
+    ],
+    "constraints": [
+      "No dense slides",
+      "Must be reproducible from the repository",
+      "No confidential customer data"
+    ],
+    "design": "Write a one-page presentation outline and slide list.",
+    "tasks": [
+      "Choose the decision",
+      "Draft the outline",
+      "Build slides",
+      "Prepare Q&A",
+      "Deliver a dry run"
+    ],
+    "acceptance": [
+      "Decision stated early",
+      "Evidence and cost included",
+      "Risks named",
+      "Q&A prepared",
+      "Dry run completed"
+    ],
+    "deliverable": "Presentation slides, outline, Q&A plan and dry-run notes, referenced by path."
+  },
+  "defend": {
+    "assessor": "Executive",
+    "scenario": "The executive asks you to present a major technology decision in ten minutes.",
+    "prompts": [
+      "What is the decision and recommendation?",
+      "What evidence supports it?",
+      "What are the main risks?",
+      "What would change your recommendation?",
+      "What do you need from us today?"
+    ],
+    "rubric": [
+      { "criterion": "Decision and recommendation are clear early", "weight": 0.3 },
+      { "criterion": "Evidence and cost are credible", "weight": 0.3 },
+      { "criterion": "Risks and reversal triggers are named", "weight": 0.2 },
+      { "criterion": "Executive-level clarity", "weight": 0.2 }
+    ]
+  }
+}

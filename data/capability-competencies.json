@@ -1,0 +1,1419 @@
+{
+  "competencies": [
+    {
+      "id": "req-discovery",
+      "title": "Requirements discovery and stakeholder management",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Elicit, analyse and manage requirements and stakeholder expectations.",
+      "objectives": [
+        "Identify stakeholders",
+        "Capture functional and non-functional requirements",
+        "Validate assumptions"
+      ],
+      "evidenceRequirements": [
+        "Requirements document",
+        "Stakeholder map",
+        "Interview notes"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "systems-thinking",
+      "title": "Systems thinking and problem decomposition",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Decompose complex problems into manageable components and relationships.",
+      "objectives": [
+        "Model system boundaries",
+        "Identify dependencies",
+        "Analyse feedback loops"
+      ],
+      "evidenceRequirements": [
+        "System context diagram",
+        "Decomposition notes"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sw-fundamentals",
+      "title": "Software engineering fundamentals and design principles",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Apply core design principles to produce maintainable software.",
+      "objectives": [
+        "Explain SOLID",
+        "Identify code smells",
+        "Refactor safely"
+      ],
+      "evidenceRequirements": [
+        "Code review notes",
+        "Refactored example"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 3
+    },
+    {
+      "id": "arch-docs",
+      "title": "Architecture documentation, C4 diagrams and ADRs",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Document architecture decisions and views clearly.",
+      "objectives": [
+        "Produce C4 views",
+        "Write ADRs",
+        "Explain trade-offs"
+      ],
+      "evidenceRequirements": [
+        "C4 diagrams",
+        "ADR set"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "apis-networking",
+      "title": "APIs, networking, distributed systems and integration patterns",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Design and reason about distributed systems and integrations.",
+      "objectives": [
+        "Explain consistency models",
+        "Design APIs",
+        "Identify failure modes"
+      ],
+      "evidenceRequirements": [
+        "Integration diagram",
+        "API contract"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "cloud-security",
+      "title": "Cloud platforms, identity, security and infrastructure as code",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Design secure cloud infrastructure using automation.",
+      "objectives": [
+        "Configure identity",
+        "Apply IaC",
+        "Secure networks"
+      ],
+      "evidenceRequirements": [
+        "IaC template",
+        "Security review"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "data-arch",
+      "title": "Data architecture, databases and governance",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Design data stores and govern data quality and lifecycle.",
+      "objectives": [
+        "Model data",
+        "Choose stores",
+        "Govern data"
+      ],
+      "evidenceRequirements": [
+        "Data model",
+        "Governance notes"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "reliability",
+      "title": "Reliability engineering, observability, DR and incident response",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Build and operate reliable systems.",
+      "objectives": [
+        "Define SLOs",
+        "Design DR",
+        "Run incident reviews"
+      ],
+      "evidenceRequirements": [
+        "Runbook",
+        "SLO document"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "cicd",
+      "title": "CI/CD, testing, deployment and operational readiness",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Deliver software safely and repeatably.",
+      "objectives": [
+        "Build pipelines",
+        "Test strategies",
+        "Deployment plans"
+      ],
+      "evidenceRequirements": [
+        "Pipeline config",
+        "Test report"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "tech-debt",
+      "title": "Technical debt, maintainability and modernisation",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Manage and reduce technical debt.",
+      "objectives": [
+        "Classify debt",
+        "Fund repayment",
+        "Modernise safely"
+      ],
+      "evidenceRequirements": [
+        "Debt register",
+        "Modernisation plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 3
+    },
+    {
+      "id": "arch-tradeoffs",
+      "title": "Architecture trade-offs, risk and decision-making",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Make and defend architecture decisions under uncertainty.",
+      "objectives": [
+        "Compare options",
+        "Quantify risk",
+        "Decide"
+      ],
+      "evidenceRequirements": [
+        "Decision matrix",
+        "ADR"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "tech-comm",
+      "title": "Technical communication and written design rationale",
+      "tracks": [
+        "SA",
+        "AISA",
+        "CTO"
+      ],
+      "foundation": true,
+      "definition": "Communicate technical decisions to varied audiences.",
+      "objectives": [
+        "Write clearly",
+        "Present trade-offs",
+        "Defend decisions"
+      ],
+      "evidenceRequirements": [
+        "Design doc",
+        "Presentation"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-requirements",
+      "title": "Business requirements, constraints and quality attributes",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Translate business needs into quality attributes.",
+      "objectives": [
+        "Identify constraints",
+        "Define quality attributes",
+        "Prioritise"
+      ],
+      "evidenceRequirements": [
+        "Requirements doc"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-nfr",
+      "title": "Functional and non-functional requirements",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Specify functional and non-functional requirements.",
+      "objectives": [
+        "Define NFRs",
+        "Measure nines",
+        "Validate"
+      ],
+      "evidenceRequirements": [
+        "NFR catalogue"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-options",
+      "title": "Architecture options and trade-off analysis",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Generate and compare architecture options.",
+      "objectives": [
+        "Brainstorm options",
+        "Score trade-offs",
+        "Recommend"
+      ],
+      "evidenceRequirements": [
+        "Options paper"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "sa-c4",
+      "title": "Context, container, component, code and deployment diagrams",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Produce complete C4 views.",
+      "objectives": [
+        "Draw all levels",
+        "Keep current",
+        "Review"
+      ],
+      "evidenceRequirements": [
+        "C4 set"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-adr",
+      "title": "ADR quality and architecture review",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Write and review high-quality ADRs.",
+      "objectives": [
+        "Complete ADR sections",
+        "Review peers",
+        "Track decisions"
+      ],
+      "evidenceRequirements": [
+        "ADR"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-azure",
+      "title": "Azure solution design",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Design solutions on Azure.",
+      "objectives": [
+        "Choose services",
+        "Design identity/network",
+        "Estimate cost"
+      ],
+      "evidenceRequirements": [
+        "Azure design"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-aws",
+      "title": "AWS solution design",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Design solutions on AWS.",
+      "objectives": [
+        "Choose services",
+        "Design security",
+        "Estimate cost"
+      ],
+      "evidenceRequirements": [
+        "AWS design"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-oci",
+      "title": "OCI solution design",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Design solutions on OCI.",
+      "objectives": [
+        "Choose services",
+        "Design network",
+        "Estimate cost"
+      ],
+      "evidenceRequirements": [
+        "OCI design"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 3
+    },
+    {
+      "id": "sa-identity",
+      "title": "Identity, networking, connectivity and security boundaries",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Design identity and network boundaries.",
+      "objectives": [
+        "Define trust zones",
+        "Configure identity",
+        "Secure connectivity"
+      ],
+      "evidenceRequirements": [
+        "Network diagram"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "sa-integration",
+      "title": "Integration, messaging, APIs and data flows",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Design integration and messaging.",
+      "objectives": [
+        "Choose patterns",
+        "Design APIs",
+        "Handle failures"
+      ],
+      "evidenceRequirements": [
+        "Integration design"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-scalability",
+      "title": "Availability, scalability, performance and resilience",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Design for availability and scale.",
+      "objectives": [
+        "Define targets",
+        "Design HA",
+        "Test resilience"
+      ],
+      "evidenceRequirements": [
+        "Resilience plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "sa-dr",
+      "title": "Backup, disaster recovery, RTO and RPO",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Design backup and recovery.",
+      "objectives": [
+        "Define RTO/RPO",
+        "Design backup",
+        "Test restore"
+      ],
+      "evidenceRequirements": [
+        "DR plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "sa-migration",
+      "title": "Migration planning and legacy modernisation",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Plan migrations and modernisation.",
+      "objectives": [
+        "Assess legacy",
+        "Wave plan",
+        "Rollback"
+      ],
+      "evidenceRequirements": [
+        "Migration plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-governance",
+      "title": "Governance, compliance and operational readiness",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Ensure governance and compliance.",
+      "objectives": [
+        "Define controls",
+        "Audit readiness",
+        "Operate"
+      ],
+      "evidenceRequirements": [
+        "Governance plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-cost",
+      "title": "Cost modelling, TCO and solution optimisation",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Model and optimise costs.",
+      "objectives": [
+        "Estimate TCO",
+        "Optimise",
+        "Track"
+      ],
+      "evidenceRequirements": [
+        "Cost model"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "sa-presentation",
+      "title": "Architecture presentations, workshops and stakeholder defence",
+      "tracks": [
+        "SA"
+      ],
+      "foundation": false,
+      "definition": "Present and defend architecture.",
+      "objectives": [
+        "Facilitate workshops",
+        "Present",
+        "Defend"
+      ],
+      "evidenceRequirements": [
+        "Presentation"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "ai-fundamentals",
+      "title": "AI/ML fundamentals and model selection",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Understand and select AI models.",
+      "objectives": [
+        "Explain model types",
+        "Compare models",
+        "Select"
+      ],
+      "evidenceRequirements": [
+        "Model selection doc"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "ai-rag",
+      "title": "RAG, retrieval quality, embeddings and knowledge sources",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Design retrieval-augmented systems.",
+      "objectives": [
+        "Design retrieval",
+        "Evaluate quality",
+        "Manage sources"
+      ],
+      "evidenceRequirements": [
+        "RAG design"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "ai-agents",
+      "title": "Agent design, tool calling and workflow orchestration",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Design AI agents and workflows.",
+      "objectives": [
+        "Design agents",
+        "Tool contracts",
+        "Orchestrate"
+      ],
+      "evidenceRequirements": [
+        "Agent design"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "ai-permissions",
+      "title": "Permissions, least privilege and human approval gates",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Control AI permissions and approvals.",
+      "objectives": [
+        "Define scopes",
+        "Approval gates",
+        "Audit"
+      ],
+      "evidenceRequirements": [
+        "Permission design"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "ai-injection",
+      "title": "Prompt injection, data leakage and adversarial testing",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Mitigate AI security risks.",
+      "objectives": [
+        "Threat model",
+        "Test injection",
+        "Prevent leakage"
+      ],
+      "evidenceRequirements": [
+        "Threat model"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "ai-evaluation",
+      "title": "Evaluation datasets, quality metrics and regression tests",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Evaluate AI quality.",
+      "objectives": [
+        "Build eval sets",
+        "Define metrics",
+        "Regression test"
+      ],
+      "evidenceRequirements": [
+        "Eval report"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "ai-performance",
+      "title": "Model latency, cost, throughput and fallback strategies",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Optimise AI performance and cost.",
+      "objectives": [
+        "Measure latency",
+        "Manage cost",
+        "Fallbacks"
+      ],
+      "evidenceRequirements": [
+        "Performance report"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "ai-governance",
+      "title": "Data governance, privacy and model lifecycle",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Govern AI data and lifecycle.",
+      "objectives": [
+        "Data rights",
+        "Privacy",
+        "Lifecycle"
+      ],
+      "evidenceRequirements": [
+        "Governance plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "ai-observability",
+      "title": "Observability, tracing, monitoring and production support",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Observe and support AI systems.",
+      "objectives": [
+        "Trace requests",
+        "Monitor quality",
+        "Support"
+      ],
+      "evidenceRequirements": [
+        "Observability plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "ai-responsible",
+      "title": "Responsible AI, risk controls and auditability",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Apply responsible AI practices.",
+      "objectives": [
+        "Risk controls",
+        "Audit",
+        "Transparency"
+      ],
+      "evidenceRequirements": [
+        "Risk register"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "ai-business",
+      "title": "Business-case validation and measurable AI outcomes",
+      "tracks": [
+        "AISA"
+      ],
+      "foundation": false,
+      "definition": "Validate AI business value.",
+      "objectives": [
+        "Define outcomes",
+        "Measure",
+        "Iterate"
+      ],
+      "evidenceRequirements": [
+        "Business case"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "cto-enterprise",
+      "title": "Enterprise architecture and business capability mapping",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Map technology to business capabilities.",
+      "objectives": [
+        "Capability map",
+        "Target state",
+        "Roadmap"
+      ],
+      "evidenceRequirements": [
+        "Capability map"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "cto-strategy",
+      "title": "Technology strategy, target-state architecture and roadmaps",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Set technology strategy and roadmaps.",
+      "objectives": [
+        "Define vision",
+        "Target state",
+        "Roadmap"
+      ],
+      "evidenceRequirements": [
+        "Strategy doc"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "cto-portfolio",
+      "title": "Portfolio prioritisation and investment decisions",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Prioritise technology investments.",
+      "objectives": [
+        "Score initiatives",
+        "Allocate",
+        "Review"
+      ],
+      "evidenceRequirements": [
+        "Portfolio plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "cto-governance",
+      "title": "Technology governance and enterprise risk",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Govern technology and risk.",
+      "objectives": [
+        "Governance model",
+        "Risk register",
+        "Audit"
+      ],
+      "evidenceRequirements": [
+        "Governance plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "cto-security",
+      "title": "Security leadership and accountability",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Lead security accountability.",
+      "objectives": [
+        "Accountability",
+        "Risk appetite",
+        "Oversight"
+      ],
+      "evidenceRequirements": [
+        "Security charter"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "cto-finops",
+      "title": "FinOps, unit economics, budgets and TCO",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Manage technology economics.",
+      "objectives": [
+        "Budgets",
+        "Unit economics",
+        "TCO"
+      ],
+      "evidenceRequirements": [
+        "Financial model"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "cto-buildbuy",
+      "title": "Build-versus-buy decisions and vendor management",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Make build/buy and vendor decisions.",
+      "objectives": [
+        "Evaluate options",
+        "Manage vendors",
+        "Exit"
+      ],
+      "evidenceRequirements": [
+        "Decision record"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "cto-product",
+      "title": "Product strategy, customer discovery and SaaS economics",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Align technology with product.",
+      "objectives": [
+        "Customer discovery",
+        "SaaS metrics",
+        "Roadmap"
+      ],
+      "evidenceRequirements": [
+        "Product tech plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "cto-teams",
+      "title": "Team design, engineering effectiveness and organisational structure",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Design engineering organisations.",
+      "objectives": [
+        "Team topologies",
+        "Effectiveness",
+        "Structure"
+      ],
+      "evidenceRequirements": [
+        "Org design"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "cto-delivery",
+      "title": "Delivery performance, DORA metrics and SLOs",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Measure and improve delivery.",
+      "objectives": [
+        "DORA metrics",
+        "SLOs",
+        "Improve"
+      ],
+      "evidenceRequirements": [
+        "Metrics dashboard"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "cto-incidents",
+      "title": "Incident leadership, resilience and business continuity",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Lead incidents and resilience.",
+      "objectives": [
+        "Incident command",
+        "BCP",
+        "Resilience"
+      ],
+      "evidenceRequirements": [
+        "BCP plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "cto-exec",
+      "title": "Executive communication, board reporting and investment cases",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Communicate to executives and board.",
+      "objectives": [
+        "Board report",
+        "Investment case",
+        "Narrative"
+      ],
+      "evidenceRequirements": [
+        "Board pack"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    },
+    {
+      "id": "cto-talent",
+      "title": "Talent development, succession planning and operating models",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Develop talent and succession.",
+      "objectives": [
+        "Career ladders",
+        "Succession",
+        "Operating model"
+      ],
+      "evidenceRequirements": [
+        "Talent plan"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 4
+    },
+    {
+      "id": "cto-ai",
+      "title": "AI governance and enterprise AI strategy",
+      "tracks": [
+        "CTO"
+      ],
+      "foundation": false,
+      "definition": "Govern enterprise AI.",
+      "objectives": [
+        "AI policy",
+        "Risk",
+        "Strategy"
+      ],
+      "evidenceRequirements": [
+        "AI strategy"
+      ],
+      "rubric": [
+        "Recognises the concept and terminology.",
+        "Explains principles and completes guided exercises.",
+        "Independently produces a sound, usable solution.",
+        "Handles ambiguity, complex constraints, failure scenarios and trade-offs.",
+        "Establishes standards, reviews others and defends decisions under rigorous challenge."
+      ],
+      "prerequisites": [],
+      "importance": 5
+    }
+  ]
+}

@@ -1,0 +1,163 @@
+{
+  "id": "well-architected-framework",
+  "moduleId": "tech-architecture",
+  "pillar": "Tech",
+  "title": "Well-architected framework and architecture review",
+  "estimatedMinutes": { "learn": 45, "build": 260, "defend": 35 },
+  "objectives": [
+    "Explain the well-architected pillars and trade-offs",
+    "Run an architecture review for a workload",
+    "Identify high-risk architecture decisions",
+    "Defend architecture improvements to stakeholders"
+  ],
+  "prerequisites": ["adr-c4"],
+  "unlock": { "prerequisites": [{ "lessonId": "adr-c4", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Cloud well-architected framework guidance",
+      "url": "https://learn.microsoft.com/azure/well-architected/",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "General well-architected guidance reviewed."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Well-architected",
+      "url": "https://www.ctoframework.com/tech/architecture-design/well-architected",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "links-only-body-not-retrievable"
+    }
+  ],
+  "verificationNotes": [
+    "The official well-architected page body could not be retrieved, so this lesson uses general well-architected principles and vendor guidance.",
+    "Verify any framework details against the vendor or framework you use."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Why well-architected",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A well-architected review asks whether a workload is fit for its purpose across reliability, security, cost, performance and operations. It is a checklist and a conversation, not a certification. The value is in finding high-risk decisions early and making trade-offs explicit."
+      },
+      {
+        "heading": "Common pillars",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Most frameworks include operational excellence, security, reliability, performance efficiency and cost optimisation, with sustainability increasingly added. Each pillar has principles and best practices. No workload scores perfectly; the goal is to know the risks and decide consciously."
+      },
+      {
+        "heading": "Running a review",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Review one workload at a time. Gather the architecture, data flows and operational practices. Ask pillar questions, record risks as high, medium or low, and assign owners and dates. Focus on a few high-impact improvements rather than a long list."
+      },
+      {
+        "heading": "Trade-offs",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Pillars conflict. Higher reliability costs more. Stronger security adds friction. Better performance may reduce cost efficiency. A good review names the trade-off and the business reason, then sets a target rather than maximising everything."
+      },
+      {
+        "heading": "From review to action",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Convert findings into a backlog with owners and dates. Re-review after major changes. Track a small set of measures such as recovery time, cost per transaction and deployment frequency. The review is only useful if it changes decisions."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Well-architected review for a reporting pipeline (illustrative)",
+      "body": "Findings: no tested recovery, logs in one account, no cost tags, manual deployments. Actions: add backup and restore test, centralise logs, tag resources, automate deployment. Risk: migration delay. Owner: platform lead. Review in 90 days."
+    },
+    "misconceptions": [
+      "Treating a framework score as a grade.",
+      "Trying to maximise every pillar.",
+      "Reviewing without owners or dates.",
+      "Confusing a checklist with architecture."
+    ],
+    "explainTask": "In 120 words or fewer, explain how you would run a well-architected review for one workload."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "wa-1",
+      "question": "A well-architected review is best used to:",
+      "options": ["Certify the team", " Find high-risk decisions and trade-offs", " Replace architecture design", " Maximise every pillar"],
+      "answer": 1,
+      "why": "Reviews surface risks and trade-offs."
+    },
+    {
+      "id": "wa-2",
+      "question": "When pillars conflict, you should:",
+      "options": [" Ignore the conflict", " Maximise both", " Name the trade-off and the business reason", " Choose the cheapest always"],
+      "answer": 2,
+      "why": "Trade-offs should be explicit and justified."
+    },
+    {
+      "id": "wa-3",
+      "question": "A useful review finding includes:",
+      "options": [" A vague concern", " Risk, owner and date", " A tool name", " A vendor preference"],
+      "answer": 1,
+      "why": "Findings need owners and dates."
+    },
+    {
+      "id": "wa-4",
+      "question": "How many workloads should a review focus on at once?",
+      "options": [" All of them", " One", " None", " As many as possible"],
+      "answer": 1,
+      "why": "Review one workload at a time for depth."
+    },
+    {
+      "id": "wa-5",
+      "question": "A review is only useful if it:",
+      "options": [" Is documented", " Changes decisions", " Uses a score", " Lists tools"],
+      "answer": 1,
+      "why": "Reviews must drive action."
+    }
+  ],
+  "build": {
+    "business": "Cretek needs a repeatable way to assess architecture risk before incidents or cost overruns.",
+    "problem": "Run a well-architected review for one real workload and produce an improvement backlog with owners and dates.",
+    "requirements": [
+      "Select one workload and gather its architecture",
+      "Ask pillar questions and record risks",
+      "Assign owners and dates to high and medium risks",
+      "Produce a short improvement backlog",
+      "Define review cadence",
+      "Document trade-offs and targets"
+    ],
+    "constraints": [
+      "No confidential data in the repository",
+      "Must be reproducible",
+      "Keep the review to a few high-impact items"
+    ],
+    "design": "Write a one-page review template and improvement plan.",
+    "tasks": [
+      "Gather architecture",
+      "Run the review",
+      "Record risks",
+      "Assign owners",
+      "Write the backlog"
+    ],
+    "acceptance": [
+      "One workload reviewed",
+      "Risks recorded with owners and dates",
+      "Improvement backlog produced",
+      "Cadence defined",
+      "Trade-offs documented"
+    ],
+    "deliverable": "Well-architected review notes, risk register and improvement backlog, referenced by path."
+  },
+  "defend": {
+    "assessor": "Architecture review board",
+    "scenario": "The architecture review board asks why this workload needs investment and what risk it reduces.",
+    "prompts": [
+      "What are the top risks?",
+      "Which trade-offs did you make?",
+      "What will change after the improvements?",
+      "How will you measure success?",
+      "What happens if we do nothing?"
+    ],
+    "rubric": [
+      { "criterion": "Risks are specific and prioritised", "weight": 0.3 },
+      { "criterion": "Trade-offs are explicit", "weight": 0.25 },
+      { "criterion": "Improvements have owners and dates", "weight": 0.25 },
+      { "criterion": "Clear communication to reviewers", "weight": 0.2 }
+    ]
+  }
+}

@@ -1,0 +1,181 @@
+{
+  "id": "raid-roam",
+  "moduleId": "delivery-reporting-risk",
+  "pillar": "Delivery",
+  "title": "Risk and issue management: RAID and ROAM",
+  "estimatedMinutes": { "learn": 40, "build": 200, "defend": 30 },
+  "objectives": [
+    "Distinguish a risk, an assumption, an issue and a dependency",
+    "Apply ROAM so that every risk has an explicit status and a named owner",
+    "Run a RAID log that is a working tool and not a graveyard",
+    "Defend which risks you accepted and who signed for them"
+  ],
+  "prerequisites": ["four-square-rag"],
+  "unlock": { "prerequisites": [{ "lessonId": "four-square-rag", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "RAID (risk, assumptions, issues, dependencies)",
+      "url": "https://www.ctoframework.com/delivery/project-management/raid",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "ROAM Risk Management",
+      "url": "https://www.ctoframework.com/delivery/risk-management/roam",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    }
+  ],
+  "verificationNotes": [
+    "The RAID page gives no log structure, scoring scales, review cadence, escalation triggers or example entries. The scales and fields in this lesson are Original Academy.",
+    "Neither page explains how RAID and ROAM combine; the combined design here is an Academy proposal, not framework content.",
+    "The ROAM page links Wikipedia's Risk management article and the Subject Matter Expert, Swiss Cheese Model and Technical Pre-Mortems guides. None were read for this lesson."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "RAID: four things to track",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework describes RAID as a structured method for managing four critical elements of project and programme delivery, bringing clarity, accountability and better-informed decisions.\n\nRisks: potential events that could cause harm if they happen, such as security vulnerabilities, delays to a key deliverable or new regulatory requirements. Identify each, assess probability and impact, assign an owner and track mitigation plans.\nAssumptions: conditions treated as true without immediate proof, which could change outcomes if wrong, such as vendor APIs staying stable or team capacity staying constant. Document clearly, validate over time and review when circumstances change.\nIssues: problems that are already happening and need action, such as a failed integration, weak stakeholder alignment or missed deadlines. Prioritise, assign ownership and track to resolution.\nDependencies: internal or external factors the work relies on, such as another team's delivery, infrastructure readiness or third-party service availability. Map them early, identify owners and monitor continuously.\n\nTeams typically keep a RAID log, a spreadsheet or a project tool, as a single source of truth for project health and stakeholder alignment."
+      },
+      {
+        "heading": "ROAM: a decision for every risk",
+        "sourceCategory": "Official CTO Framework",
+        "body": "ROAM stands for Resolved, Owned, Accepted, Mitigated. The framework presents it as a collaborative model used in planning cycles such as quarterly planning or SAFe Program Increment planning, with the aim of stopping risks from sitting passively in a spreadsheet by giving each a clear status and an owner who can act.\n\nResolved: addressed or eliminated, or no longer a threat. No action; close it.\nOwned: cannot be resolved in planning, so a specific person takes responsibility for tracking it to resolution. The page says the owner should be a real name, not a team or department, and reports updates.\nAccepted: understood but cannot be resolved or mitigated because of cost, complexity or factors outside the team's control. Requires explicit executive or stakeholder sign-off and a contingency plan if it materialises.\nMitigated: a concrete plan is under way to reduce likelihood or impact, with defined steps, an owner and tracked execution.\n\nWhy it matters, per the page: it counters the risk register graveyard by requiring an active decision for each item, named owners guard against the bystander effect, explicitly accepting some risks frees capacity for those that can be acted on, and its simplicity lets product and business stakeholders take part. Practical tips on the page: name individuals, review Owned and Mitigated lists regularly (it suggests bi-weekly or monthly), and define escalation paths."
+      },
+      {
+        "heading": "What the pages leave to you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "RAID gives you the four buckets but no fields, no scales and no cadence. ROAM gives you statuses but no rating method and no rule for borderline cases. You must decide: how probability and impact are scored (and who calibrates them), what fields every entry needs, how often the log is reviewed, and what triggers escalation. A log without those decisions is the 'graveyard' the ROAM page warns about."
+      },
+      {
+        "heading": "One log, two lenses",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The framework does not say how RAID and ROAM relate. A workable Academy design: keep one RAID log. Risks carry a ROAM status. Issues carry an owner and a due date. Assumptions carry a validation date and a 'what changes if wrong'. Dependencies carry an owner on the other side and a needed-by date. A risk that happens becomes an Issue; an assumption found false becomes a Risk or an Issue. The log should show those transitions, because they are how you learn which of your assumptions were bad."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Four entries, one project (illustrative, not Cretek data; the scale is an Academy example)",
+      "body": "Score probability and impact 1 to 5; exposure = probability x impact.\nRisk R1: the quotation automation vendor changes its API terms (probability 3, impact 4, exposure 12). ROAM: Mitigated, owner a named engineer, plan: wrap the vendor in an adapter and keep a fallback.\nAssumption A1: the vendor API stays stable through Q4. Validate by reading the vendor's change notices monthly. If false, becomes R1.\nIssue I1: the staging environment is down and blocks testing today. Owner named, due tomorrow.\nDependency D1: finance must approve the budget by month end for the next phase. Owner on the finance side, needed-by date set.\nIf the risk R1 were instead judged too costly to mitigate and leadership agreed to live with it, its status would be Accepted, which on the framework's definition needs a named executive sign-off and a written contingency plan, not just a shrug."
+    },
+    "misconceptions": [
+      "Calling something a risk when it is already happening. That is an issue.",
+      "Treating assumptions as facts and never revisiting them.",
+      "Owning a risk with 'the platform team'. The page says a real name, not a team.",
+      "Marking a risk Accepted without sign-off or a contingency plan.",
+      "Believing a complete log is a control. A log nobody reviews is not one."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a project sponsor the difference between a risk and an issue, and why you are asking them to sign for an 'Accepted' risk."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "rr-1",
+      "question": "A failed system integration is blocking work right now. Which RAID element is it?",
+      "options": ["Risk", "Assumption", "Issue", "Dependency"],
+      "answer": 2,
+      "why": "Issues are problems already happening that need action; a failed integration is the page's own example."
+    },
+    {
+      "id": "rr-2",
+      "question": "What does ROAM stand for?",
+      "options": [
+        "Reviewed, Owned, Assigned, Monitored",
+        "Risk, Opportunity, Action, Mitigation",
+        "Raised, Owned, Approved, Managed",
+        "Resolved, Owned, Accepted, Mitigated"
+      ],
+      "answer": 3,
+      "why": "ROAM is Resolved, Owned, Accepted, Mitigated."
+    },
+    {
+      "id": "rr-3",
+      "question": "Who should own a risk according to the ROAM page?",
+      "options": [
+        "The whole team, so everyone is responsible",
+        "A real name, not a team or department",
+        "The project manager for every risk",
+        "Whoever raised it, for one week"
+      ],
+      "answer": 1,
+      "why": "The page says the owner should be a real name, not a team or department, as a guard against the bystander effect."
+    },
+    {
+      "id": "rr-4",
+      "question": "What does ROAM require before a risk can be marked Accepted?",
+      "options": [
+        "Nothing, the team can decide",
+        "A probability score below 3",
+        "Explicit executive or stakeholder sign-off and a contingency plan",
+        "Approval from the third-party vendor"
+      ],
+      "answer": 2,
+      "why": "Accepted means the organisation agrees to tolerate the impact, with explicit sign-off and a contingency plan if it materialises."
+    },
+    {
+      "id": "rr-5",
+      "question": "'The vendor's API will stay stable' is a RAID element. Which one, and what does the page advise?",
+      "options": [
+        "Assumption: document it clearly, validate over time and review when circumstances change",
+        "Risk: assign an owner and close it",
+        "Dependency: ignore it until it fails",
+        "Issue: track it to resolution today"
+      ],
+      "answer": 0,
+      "why": "It is a condition treated as true without immediate proof. The page's example is vendor API stability, and it advises documenting, validating over time and reviewing it."
+    }
+  ],
+  "build": {
+    "business": "The Cretek CTO Operating System needs a risk and dependency register that the CEO can rely on and that engineers will actually use.",
+    "problem": "Build a RAID log for the Cretek CTO Operating System project, with ROAM status on every risk, and a validator that enforces the rules.",
+    "requirements": [
+      "At least 12 entries covering all four types, at least 5 of them risks",
+      "Every risk has: probability and impact on a scale you define and justify, a named individual owner, a ROAM status, and a next review date",
+      "Every Accepted risk records who signed it, the date and a contingency plan",
+      "Every assumption has a validation date; every dependency has an owner on the other side and a needed-by date",
+      "A defined review cadence and an escalation rule (what triggers leadership involvement)",
+      "A validator script that rejects entries that break these rules, and a view that sorts by exposure",
+      "Data labelled REAL or SIMULATED"
+    ],
+    "constraints": [
+      "No invented Cretek risks presented as real; real entries come from the actual project, otherwise label simulated",
+      "Owners must be individuals, not teams"
+    ],
+    "design": "Describe the log's fields, the scoring scale and why it is calibrated that way, and one alternative you rejected (for example a free-form spreadsheet) with reasons.",
+    "tasks": [
+      "Write the scoring scale, field list, cadence and escalation rule",
+      "Populate the log from the real project; mark simulated entries clearly",
+      "Implement the validator and the exposure-sorted view",
+      "Write tests: owner is a team, Accepted without sign-off, assumption with no validation date, risk with no review date, overdue review",
+      "Hold one real review of the log and record what changed",
+      "Document operational and security considerations of the log (who edits, audit trail)"
+    ],
+    "acceptance": [
+      "Validator rejects every rule violation listed above and tests pass",
+      "No risk lacks a named owner or ROAM status",
+      "Every Accepted risk has sign-off and a contingency plan",
+      "Review cadence and escalation rule are written down and were used at least once",
+      "Data is labelled REAL or SIMULATED"
+    ],
+    "deliverable": "The log, validator, tests and a short record of the review, referenced by path or link."
+  },
+  "defend": {
+    "assessor": "Board member",
+    "scenario": "A board member asks to see your risk register and probes whether it is live or decorative.",
+    "prompts": [
+      "Pick your highest-exposure risk. Who owns it, what is happening about it, and when did it last change?",
+      "You accepted this one. Who signed, what did you tell them, and what happens if it occurs?",
+      "How do I know your scores are not all guesses? Who calibrated them?",
+      "Which of your assumptions worries you most, and how are you testing it?",
+      "What would make this register fail silently?"
+    ],
+    "rubric": [
+      { "criterion": "Correct classification and ownership, with named individuals", "weight": 0.3 },
+      { "criterion": "Evidence the log is used: reviews held, changes recorded", "weight": 0.3 },
+      { "criterion": "Honest treatment of scoring limits and accepted risk", "weight": 0.25 },
+      { "criterion": "Escalation and decision-making clarity", "weight": 0.15 }
+    ]
+  }
+}

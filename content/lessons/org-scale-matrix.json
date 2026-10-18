@@ -1,0 +1,203 @@
+{
+  "id": "org-scale-matrix",
+  "moduleId": "people-organisation",
+  "pillar": "People",
+  "title": "Scaling the organisation: Dunbar's number, spans of control and matrix structures",
+  "estimatedMinutes": { "learn": 45, "build": 260, "defend": 30 },
+  "objectives": [
+    "Report Dunbar's layers as the page gives them and separate the research claim from the page's engineering thresholds",
+    "Compute communication paths, management spans and layers for an organisation of a given size",
+    "Describe a matrix organisation, its dual reporting and what the page does not say about decision rights, performance management and cost",
+    "Quantify what overcommitment across projects does to an engineer's capacity under stated assumptions",
+    "Design decision rights and a performance process for a matrix, or argue against using one"
+  ],
+  "prerequisites": ["team-topologies-conway", "raci-brooks-law"],
+  "unlock": { "prerequisites": [{ "lessonId": "team-topologies-conway", "type": "knowledge_check" }, { "lessonId": "raci-brooks-law", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Dunbar's Number",
+      "url": "https://www.ctoframework.com/people/culture-organisation/dunbars-number",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Matrix Organisations",
+      "url": "https://www.ctoframework.com/people/culture-organisation/matrix-organisations",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Dunbar's Number page gives four relationship layers (5, 15, 50 and 150), engineering thresholds (under 50, 50 to 150, over 150 engineers), team-size examples (two-pizza teams of 8 to 10; Spotify squads of 6 to 12 in tribes 'capped around 100 to 150'), and span-of-control guidance (CTO 5 to 8 reports, engineering manager 7 to 10, add VPs and directors around 150 engineers). It cites only a Wikipedia article.",
+    "The retrieved summary flagged these points, mostly from general knowledge and not from the page: the 150 figure is presented too firmly, since Dunbar's estimate comes from studies of social network size and brain size ratios in primates, is an approximate average with variation, and is debated; Dunbar's work concerns social relationships, not work teams or organisation charts, so applying it to engineering headcount is an extrapolation the page does not flag; the page omits further layers that Dunbar also describes (around 500 and 1,500) and the roughly threefold scaling between layers; the claim that beyond 150 relationships become transactional and need bureaucracy is unsourced; the engineering thresholds are plausible heuristics presented as research; the spans of control are management heuristics, not results from Dunbar's work; the claim that small teams 'ensure' high trust is causal and unsupported; calling the Spotify structure a 'direct application' of Dunbar's limits is something the summary could not confirm, and the authors of Spotify's descriptions later said it was not a template to copy; and the link to Conway's Law is asserted without a mechanism. I have not read Dunbar's work for this lesson. The 500 and 1,500 layers are from my general knowledge and are unverified.",
+    "The Dunbar page does not cover how the numbers were derived, counter-evidence, the coordination costs of splitting teams, how to measure relationship strength, remote and asynchronous work, trust-building practices, alternative organisation models or the criteria for when to restructure.",
+    "The Matrix Organisations page defines a matrix as combining functional hierarchies with project-based ones, with staff answering to more than one leader, and lists dual reporting, cross-functional collaboration, resource efficiency, scalability and the challenge of competing priorities (mitigated, it says, by clear communication and defined roles). It has no variants, case studies, figures or sources. The retrieved summary flagged: 'widely used' and 'particularly relevant' to technology are asserted; dual reporting does not 'ensure' deep expertise; reduced redundancy and better scalability are asserted though matrices often add coordination overhead; the link to agility is not explained; functional and project managers are treated as co-equal with no word on who decides when they disagree; and 'clear communication and well-defined roles' is generic. It does not cover decision rights and escalation, performance and career management under dual reporting, weak, balanced or strong variants, failure modes and costs, implementation, team size or remote work.",
+    "The path counts, span and layer calculations and the capacity model in this lesson are Original Academy material run in Python. The 20% capacity penalty per additional concurrent project is an invented ASSUMPTION used to show the mechanism; it is not a finding from the page or from research I have verified."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Dunbar's number as the page presents it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page says humans can maintain stable social relationships with about 150 people, citing the anthropologist Robin Dunbar, and applies this to engineering organisation design.\n\nLayers as given: 5 people (deep trust, such as a CTO's core leadership team or co-founders); 15 (high sympathy, such as direct reports or a tight leadership circle); 50 (close relationships, such as a division); 150 (the limit for stable relationships, beyond which it says interactions become transactional and need formal rules, processes and bureaucracy).\n\nEngineering thresholds: under 50 engineers, communication stays fluid and informal; 50 to 150, split into sub-organisations with clear reporting lines and cadences; over 150, sub-groups become silos unless countered by guilds, shared platforms and strong documentation. Team examples: Amazon's two-pizza teams of 8 to 10, and the Spotify model of squads of 6 to 12 in tribes capped around 100 to 150. Guidance: CTO span of 5 to 8 direct reports, engineering manager span of 7 to 10, and VPs and directors added around 150 engineers."
+      },
+      {
+        "heading": "What is research and what is a rule of thumb",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Separate three kinds of statement on the page.\n\nResearch claim: Dunbar proposed that the size of social groups people can maintain relates to brain size, with about 150 as a typical figure and further layers outside and inside it. It is an approximate average with variation, and it is debated. Treat the number as a rough indicator, not a constant, and read the source before quoting precision.\n\nExtrapolation: the claim concerns social relationships, not working teams. Whether engineering effectiveness drops at 150 has to be shown for engineers, and the page gives no evidence. The statement that interactions turn transactional past 150 is an inference.\n\nManagement heuristics: spans of 5 to 8 and 7 to 10, thresholds of 50 and 150, and squads of 6 to 12 are conventions. They may be sensible, but they come from practice and not from Dunbar. The Spotify structure was described by its own authors as a snapshot and not a template, and I could not confirm that it was derived from Dunbar's limits.\n\nWhy this matters: if you tell your board 'research says we must split at 150', you have overclaimed. A fair statement is: 'as the group grows, informal communication stops reaching everyone, so we should plan a structure change, using a trigger we define from our own signals'."
+      },
+      {
+        "heading": "The arithmetic of size",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Communication paths among n people number n(n-1)/2. A team of 8 has 28; a team of 10 has 45; 15 people have 105; 50 have 1,225; 150 have 11,175. Not every path is used, but the growth explains why coordination cost rises faster than headcount, the point behind Brooks's law from the earlier lesson.\n\nSpans and layers. With 150 engineers and a manager span of 8, you need 19 engineering managers; with directors each managing 6 managers, you need 4 directors; the CTO then has 4 directors plus other reports, which lies within the page's 5 to 8. With a span of 10 you need 15 managers and 3 directors. The number of management layers for N people with span s is the smallest L with s^L at least N: for 150 or 500 people at a span of 8 or 10 that is 3 layers; for 1,500 people at a span of 8 it is 4.\n\nThe trade-off. Wider spans mean fewer managers and flatter structure but less attention per person, which hurts when people need coaching or a team is in difficulty. Narrower spans give more attention at the cost of more managers and layers, which slows communication up and down. There is no single right span; it depends on how experienced the team is, how standardised the work is and how much of the manager's time goes to individual coaching versus other work. The one-on-one load from the earlier lesson is a practical limit: a span of 10 with weekly 30-minute meetings is 5 hours of a 40-hour week.\n\nChoose triggers from your signals instead of a magic number: engineers cannot name who owns a component; decisions wait weeks for a meeting; new joiners take months to find the right person; the leadership team's agenda is full of cross-group conflicts. When several fire, restructure."
+      },
+      {
+        "heading": "Matrix organisations as the page describes them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page describes a matrix organisation as combining functional hierarchies (departments grouped by discipline) with project-based hierarchies (teams grouped around work), so staff can answer to more than one leader. It presents the structure as suited to technology companies that depend on cross-functional work.\n\nCharacteristics it lists: dual reporting lines, to a functional manager (its example is a head of software engineering) and to a project or product manager, said to keep expertise deep while linking work to business goals; cross-functional collaboration among specialists such as developers, designers and security experts, said to foster innovation and agility; resource efficiency, with people allocated where needed to reduce redundancy; scalability and adaptability, as resources follow priority projects; and the challenge of competing priorities, mitigated by clear communication and well-defined roles. It says the structure fits agile practices because teams can form and disband as projects change. It gives no variants and no case studies."
+      },
+      {
+        "heading": "The costs the page leaves out",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Three questions a matrix must answer before it works.\n\nDecision rights. When the functional manager and the project manager disagree, who decides what? Write it down. A common split: the project or product lead decides what the person works on and priorities; the functional manager decides how the craft is done (standards, tooling, quality bars), hiring, development and compensation. Name the escalation path and the time limit. Without this, the page's 'clear communication' degrades into meetings.\n\nPerformance and careers. Who writes the review, sets goals and decides promotion? Usually the functional manager does, with structured input from each project lead. If the person who sees the work has no say, people optimise for the boss who writes the review. State the process and test it with a survey.\n\nCapacity. A person on several projects does not give each a proportional share. Illustrative model, with an invented ASSUMPTION that each additional concurrent project costs 20% of total capacity in switching and extra meetings: one project gives 100% effective capacity; two give 80%; three give 60%; four give 40%. A person allocated 50%, 30% and 20% to three projects would have 60% effective capacity, delivering 30%, 18% and 12% of a full-time person to each. The penalty is a guess, but the shape matters: splitting people thinly costs more than the arithmetic of the allocation suggests. Check allocations add to no more than 100%, and cap concurrent projects per person.\n\nAlso count the coordination load. If an engineer on three projects spends 2 hours a week syncing with each project and 1 hour with the functional manager, that is 7 hours a week of meetings before any work.\n\nThe claims the page asserts, such as reduced redundancy and better scalability, need measurement: the share of people on three or more projects, decision latency on conflicts, and the engineer's own report of clarity. Alternatives exist, such as the stable cross-functional teams in the previous lesson. A matrix is a trade of clarity for flexibility and is not free; use it where the flexibility is worth the cost, and say why."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Growing from 60 to 150 engineers: structure, spans and a matrix decision (invented numbers)",
+      "body": "Cretek's engineering group has 60 engineers, 5 managers (spans of 12 each) and a CTO who also manages two principal engineers. It plans to reach 150 within two years. The CTO is told: 'Dunbar says we must split at 150'.\n\nStep 1, correct the claim. The number is a rough indicator from research on social relationships; the CTO states that the plan is a heuristic and chooses triggers from signals instead: engineers unable to name an owner, decision latency, and cross-group conflicts. Current signals: 9 of 30 surveyed engineers cannot name the owner of at least one system they depend on (30%, a small sample, noted); average wait for a cross-group decision is 11 days (invented).\n\nStep 2, spans. Spans of 12 make weekly one-on-ones cost 6 hours a week; managers are cancelling. Target span 8. At 150 engineers: 19 managers; directors at a span of 6: 4 directors. The CTO's direct reports would be 4 directors plus a head of platform and a head of people partner: 6, within a 5 to 8 range chosen by judgement, not research.\n\nStep 3, the matrix question. The AI drafting capability needs a specialist (a machine learning engineer) shared by three product teams. Options: (a) a standing matrix with dual reporting; (b) a small AI team that provides capability to the product teams; (c) embedding one person per team. The CTO computes capacity: with the engineer split 50/30/20 across three teams and the assumed 20% penalty per extra project, effective capacity is 60%, i.e. 0.3, 0.18 and 0.12 of a person. Option (b) gives a team of three with no penalty and a clear owner. The CTO chooses (b), and keeps a light matrix only for the two security engineers who advise all teams, with written decision rights: product leads decide priorities; the security lead decides on security standards and hiring; escalation to the CTO within 2 working days.\n\nStep 4, performance. For the security engineers, the security lead writes reviews with structured input from the two product leads they support most. A pulse survey asks engineers whether they know who decides what (target at least 80% agree, an assumption).\n\nStep 5, measures and review. Share of engineers on three or more projects (target 0), cross-group decision latency (target under 5 days), one-on-one cancellation rate (target under 10%), and the owner-awareness survey. Review after two quarters.\n\nWhat is unverified: all numbers are invented. The 20% penalty is an assumption, and the choices rest on judgement about this organisation, not on research."
+    },
+    "misconceptions": [
+      "Citing Dunbar's number as a law of engineering teams. It is a rough research figure about social relationships.",
+      "Treating spans of 5 to 8 or 7 to 10 as derived from Dunbar. They are management conventions.",
+      "Believing a matrix gives flexibility for free. It trades clarity for flexibility and adds coordination cost.",
+      "Running a matrix with no written decision rights or escalation path.",
+      "Letting people split across many projects without counting the switching cost.",
+      "Splitting at a headcount number instead of on observed signals.",
+      "Treating the Spotify model as a template. Its authors said it was a snapshot."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CEO why we should not split engineering simply because we hit 150 people, and what we should look at instead."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "os-1",
+      "question": "How many communication paths exist among 10 people?",
+      "options": ["10", "20", "45", "100"],
+      "answer": 2,
+      "why": "n(n-1)/2 = 10 x 9 / 2 = 45. For 150 people it is 11,175."
+    },
+    {
+      "id": "os-2",
+      "question": "How many engineering managers are needed for 150 engineers at a span of 8, and how many directors at a span of 6?",
+      "options": ["15 managers, 2 directors", "19 managers, 4 directors", "8 managers, 1 director", "30 managers, 10 directors"],
+      "answer": 1,
+      "why": "150 / 8 rounds up to 19 managers; 19 / 6 rounds up to 4 directors."
+    },
+    {
+      "id": "os-3",
+      "question": "Which is a management heuristic, not a finding from Dunbar's research?",
+      "options": [
+        "That humans keep stable relationships with a limited number of people",
+        "That an engineering manager should have 7 to 10 direct reports",
+        "That there are layers of closeness",
+        "That group size relates to brain size"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary noted that the spans of control are management heuristics that Dunbar's work does not set."
+    },
+    {
+      "id": "os-4",
+      "question": "Under the lesson's assumption of a 20% penalty per extra concurrent project, what is the effective capacity of a person on three projects?",
+      "options": ["100%", "80%", "60%", "40%"],
+      "answer": 2,
+      "why": "1 - 0.2 x (3 - 1) = 60%. The 20% is an invented assumption used to show the shape of the cost."
+    },
+    {
+      "id": "os-5",
+      "question": "What does the matrix page leave unsaid about dual reporting?",
+      "options": [
+        "That there are two managers",
+        "Who decides when the functional and project managers disagree, and who owns performance and career decisions",
+        "That the structure exists",
+        "That projects exist"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged that the page treats both managers as co-equal and gives no decision rights, escalation or performance process."
+    },
+    {
+      "id": "os-6",
+      "question": "What is a fair way to describe the Spotify model in the lesson?",
+      "options": [
+        "A proven direct application of Dunbar's limits",
+        "A structure described by its authors as a snapshot and not a template; the claim that it applies Dunbar's limits could not be confirmed",
+        "A legal requirement",
+        "An Amazon practice"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary could not confirm the page's 'direct application' claim and noted that the authors later said the model was not a template to copy."
+    }
+  ],
+  "build": {
+    "business": "As Cretek grows, the structure that worked at 20 people will strain. A CTO must plan spans, layers and cross-cutting roles from signals, not slogans, and must know what a matrix costs. This is the scaling capability in the CTO Operating System.",
+    "problem": "Produce a scaling plan for a real or realistically simulated Cretek engineering organisation: spans and layers at two headcounts, signals and triggers, and a matrix decision with written decision rights and a capacity analysis.",
+    "requirements": [
+      "Describe the current structure and headcount, with spans, layers and one-on-one load per manager",
+      "Compute communication paths, managers, directors and layers for at least two target headcounts and two span choices, and state the trade-off of each",
+      "Define at least four observable signals of strain, collect them (a short survey with sample size, or data from tools) and set triggers for restructuring, stating that they are your choices and not research findings",
+      "Identify at least one cross-cutting role or specialty and evaluate three options (matrix, dedicated team, embedding) for it",
+      "Compute the capacity under stated assumptions for the matrix option, with the penalty parameter clearly labelled as an ASSUMPTION and a sensitivity at two other values",
+      "If a matrix is chosen, write decision rights (who decides what), the escalation path with a time limit, and the performance review process with how project input is gathered. If it is not chosen, say why",
+      "Define measures and review dates: share of people on three or more projects, decision latency, manager one-on-one cancellation rate and a clarity survey",
+      "A scaling calculator that takes headcount, manager span and director span and returns paths for a given team size, managers, directors and layers; and a capacity function for allocations and a penalty. Automated tests required, including the lesson's values (45 paths for 10, 19 managers and 4 directors for 150 at spans 8 and 6, 60% capacity for three projects), allocations above 100% (reject), zero or negative span (reject), zero headcount (reject) and a single project (no penalty)",
+      "A one-page summary for the CEO led by the signals and the recommendation, stating what is a heuristic and what is evidence",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not present Dunbar's number or the page's thresholds as research findings about engineering teams",
+      "Do not state the capacity penalty as a fact",
+      "No named individuals in the analysis of load or performance",
+      "Do not recommend a matrix without decision rights and a performance process",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the signals, the span choice, the cross-cutting role options, the decision rights and one alternative you rejected.",
+    "tasks": [
+      "Describe the current structure and load",
+      "Compute spans, layers and paths for target sizes",
+      "Collect signals and set triggers",
+      "Evaluate the cross-cutting role options with capacity",
+      "Write decision rights and the performance process, or reject the matrix",
+      "Build the calculator with tests",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "At least two headcounts and two spans are computed with trade-offs",
+      "Signals and triggers are stated as choices, with data",
+      "Three options are compared for the cross-cutting role",
+      "The capacity penalty is labelled as an assumption with a sensitivity",
+      "Decision rights, escalation and performance process exist if a matrix is used",
+      "Calculator tests pass including the rejection cases",
+      "No heuristic is presented as research"
+    ],
+    "deliverable": "The structure description, calculations, signals and triggers, role options and capacity analysis, decision rights and performance process, calculator with tests and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Chief people officer",
+    "scenario": "The chief people officer is reviewing your proposal to introduce dual reporting for a shared specialist group and to plan a split at a headcount target.",
+    "prompts": [
+      "Where does the 150 come from, and how firmly is it established?",
+      "What signals will tell us to restructure, and what are they now?",
+      "Who decides what in the matrix, and who writes the performance review?",
+      "How much capacity do we lose by splitting people across projects, and how sure are you?",
+      "Why not a dedicated team instead of a matrix?",
+      "What would make you abandon the matrix?"
+    ],
+    "rubric": [
+      { "criterion": "Honest treatment of Dunbar and the heuristics, with signals and triggers from data", "weight": 0.3 },
+      { "criterion": "Correct spans, layers and capacity calculations with assumptions labelled", "weight": 0.3 },
+      { "criterion": "Clear decision rights, escalation and performance process, or a reasoned rejection of the matrix", "weight": 0.25 },
+      { "criterion": "Clear communication to a chief people officer", "weight": 0.15 }
+    ]
+  }
+}

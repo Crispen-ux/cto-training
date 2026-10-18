@@ -1,0 +1,194 @@
+{
+  "id": "rest-apis",
+  "moduleId": "tech-data",
+  "pillar": "Tech",
+  "title": "REST APIs: constraints, methods and safe retries",
+  "estimatedMinutes": { "learn": 45, "build": 280, "defend": 30 },
+  "objectives": [
+    "State the six REST constraints and what each buys a system",
+    "Use the five HTTP methods correctly, and explain safe versus idempotent",
+    "Explain why a retried request can duplicate work and how an idempotency key prevents it",
+    "Name what the framework page leaves out (errors, auth, pagination, versioning) and decide each for a real API",
+    "Defend an API design to a partner developer who has to integrate with it"
+  ],
+  "prerequisites": ["test-pyramid-boy-scout"],
+  "unlock": { "prerequisites": [{ "lessonId": "test-pyramid-boy-scout", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "REST APIs",
+      "url": "https://www.ctoframework.com/tech/architecture-design/apis/restful-apis",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The REST page lists no status codes, gives one URL example (/api/v1/users/123) and one header example (Content-Type: application/json), has no code blocks, no versioning strategy, no pitfalls section, and an empty heading titled 'REST Stateless Communication Flow'. Authentication and authorisation, error formats, pagination, filtering, sorting, rate limiting, idempotency keys, content negotiation, OpenAPI, detailed HATEOAS design (deferred to a linked page), migration and testing are not covered. Everything on those topics here is Original Academy material.",
+    "In the page's method table PATCH is marked not idempotent. That is a simplification: whether a PATCH is idempotent depends on the patch. 'Set quantity to 5' is idempotent; 'add 1 to quantity' is not. The page's table is reported as written; the refinement is the Academy's and was demonstrated by running code.",
+    "The retrieved summary flagged three further claims to check against the live page before relying on them: the statement that REST needs no client SDK generators (OpenAPI-generated clients are common), the characterisation of Slack's Web API as resource-oriented with standard endpoints (it is largely method-style, which is closer to RPC, but this was not checked here), and the description of Hyrum's Law as covering 'API scaling and client dependency behaviours'.",
+    "The page credits Roy Fielding for the six constraints. This was taken from the retrieved summary and not independently checked against Fielding's dissertation.",
+    "The Python simulation of retries, PUT, PATCH and idempotency keys in this lesson is Academy material and was run; it models an in-memory store, not a network."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What the page defines",
+        "sourceCategory": "Official CTO Framework",
+        "body": "REST is an architectural style for networked applications. It uses standard HTTP methods to transfer representations of resource state between client and server, which decouples the two sides.\n\nThe six constraints (credited to Roy Fielding):\n1. Statelessness: each request carries all the context needed to process it; the server stores no session state about the client.\n2. Client-server: frontend and backend are separate and evolve independently.\n3. Uniform interface, with four sub-elements: resource identification through stable URIs; manipulation through representations such as JSON or XML; self-descriptive messages such as a Content-Type header; and HATEOAS, where hyperlinks guide the client's next actions.\n4. Cacheability: responses must declare whether they are cacheable.\n5. Layered system: the client cannot tell whether it reaches the end server or an intermediary such as a load balancer, CDN or security gateway.\n6. Code on demand (optional): the server can temporarily extend client behaviour by sending executable code."
+      },
+      {
+        "heading": "The five methods",
+        "sourceCategory": "Official CTO Framework",
+        "body": "GET: read, idempotent, safe; retrieves a representation.\nPOST: create, not idempotent, not safe; creates a resource or triggers controller-like side effects.\nPUT: update or replace, idempotent, not safe; replaces the resource, or creates it if absent.\nPATCH: update or modify, listed as not idempotent, not safe; applies partial modifications.\nDELETE: delete, idempotent, not safe.\n\nThe page's only URL example is /api/v1/users/123. It lists no status codes."
+      },
+      {
+        "heading": "Why a CTO cares, per the page",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Developer experience: standard HTTP semantics make onboarding and third-party integration simpler. Scalability: statelessness allows horizontal scaling without sticky sessions or shared session memory. Decoupling: backends can be rewritten or databases migrated without breaking clients, provided URIs and payloads stay stable, which the page links to Hyrum's Law. Hybrid strategy: REST for public or third-party APIs, and possibly gRPC or GraphQL internally.\n\nThe page's only caution is implied: backend changes are safe only if URIs and payloads remain stable."
+      },
+      {
+        "heading": "Safe, idempotent and the retry problem",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Safe means the request does not change server state. Idempotent means making the same request several times leaves the server in the same state as making it once. The distinction matters because networks fail: a client that times out does not know whether the server processed the request, so it retries.\n\nThe code below models an in-memory store and was run.\n\nPOST twice with the same body created 2 orders: a retried POST duplicates the work. PUT twice to the same address left 1 order: the retry is harmless. PATCH needs care: 'add 1 to quantity' applied twice moved the quantity from 1 to 3, while 'set quantity to 5' applied twice left it at 5. So the page's blanket 'PATCH: not idempotent' is a simplification; design patches as 'set' operations where you can.\n\nFor operations that must use POST (payments, order creation), the usual remedy is an idempotency key: the client sends a unique key with the request and the server remembers the result for that key.\n\ndef post_idem(key, body):\n    if key in seen: return seen[key]\n    i = post(body); seen[key] = i; return i\n\nCalling it twice with key k1 returned the same order id both times and created one order; a different key created a second. The page does not cover idempotency keys; this is Academy material. Real systems also need to expire keys, scope them per client and handle a retry that arrives while the first request is still running."
+      },
+      {
+        "heading": "Decisions the page leaves to you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A public API needs answers to questions the page does not address. Each is a decision to make and write down.\n\nErrors: which status codes you return and a single error body format, so clients can handle failures without guessing. Authentication and authorisation: how clients prove who they are and what they may do. Pagination, filtering and sorting: a list endpoint without a page limit is an outage waiting for a large account. Rate limiting: how much one client may use. Versioning: the page shows v1 in the path but gives no strategy; decide how breaking changes are introduced and how long old versions live. Retries: which operations are safe to retry and how clients are told.\n\nHyrum's Law, which the page links, is a reminder that clients will come to depend on observable behaviour you never promised: field order, error text, timing. Treat any behaviour you expose as a commitment, and document what you do not promise."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A quotation API that must survive retries (illustrative, not Cretek data)",
+      "body": "A partner's system calls POST /api/v1/quotes to create a quotation. The call sometimes times out after 10 seconds, and their client retries.\n\nProblem: the server did create the quote on the first call, but the response was lost. The retry creates a second quote. As in the run above, two identical POSTs produce two records. The partner sees duplicate quotes and an inflated pipeline.\n\nDecision options. A: make the endpoint PUT /api/v1/quotes/{client-chosen-id}, so the retry replaces the same record. Safe, but it needs clients to generate unique ids. B: keep POST and require an Idempotency-Key header. The server stores the key with the created quote id for, say, 24 hours (an assumption) and returns the same result for a repeat. C: do nothing and tell partners to deduplicate. Cheapest for you, costly for everyone else.\n\nChoice: B for create calls, because the partner already uses POST and the key is one header. Record the rules: keys are scoped per client; a repeat with the same key and a different body is rejected with a clear error; a repeat while the first is in progress waits or returns a documented 'in progress' response; keys expire after the stated period.\n\nAlso written down: the list endpoint is paginated with a maximum page size; errors use one body format; the API is versioned in the path and breaking changes need a new version with a stated support period. None of that is on the framework page; all of it is what a partner developer will ask."
+    },
+    "misconceptions": [
+      "Believing REST is only 'JSON over HTTP'. The six constraints, including statelessness and a uniform interface, are the point.",
+      "Using GET for actions that change state. GET is meant to be safe.",
+      "Assuming POST is retry-safe. A retried POST can duplicate the work.",
+      "Treating the page's PATCH 'not idempotent' as absolute. It depends on the patch.",
+      "Assuming statelessness means no state anywhere. It means the server keeps no per-client session between requests.",
+      "Shipping a list endpoint with no pagination limit.",
+      "Believing a stable URI is enough. Clients also depend on behaviour you did not mean to promise (Hyrum's Law)."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a partner developer what happens if they retry your create endpoint after a timeout, and what you give them to make it safe."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "ra-1",
+      "question": "Which REST constraint says each request carries all the context needed to process it and the server keeps no session state about the client?",
+      "options": ["Cacheability", "Layered system", "Statelessness", "Client-server"],
+      "answer": 2,
+      "why": "Statelessness: every request is self-contained. The page says it allows horizontal scaling without sticky sessions or shared session memory."
+    },
+    {
+      "id": "ra-2",
+      "question": "Which is the only optional REST constraint on the page?",
+      "options": ["Uniform interface", "Code on demand", "Cacheability", "Statelessness"],
+      "answer": 1,
+      "why": "Code on demand, where the server can temporarily extend client behaviour with executable code, is the optional one."
+    },
+    {
+      "id": "ra-3",
+      "question": "A client times out on POST /orders and retries it. What is the risk?",
+      "options": [
+        "None, because POST is idempotent",
+        "A duplicate order may be created because POST is not idempotent",
+        "The server will reject the retry automatically",
+        "The first order is deleted"
+      ],
+      "answer": 1,
+      "why": "POST is not idempotent, so a retry can repeat the work. In the run, two identical POSTs created two orders. An idempotency key (not covered by the page) is the usual remedy."
+    },
+    {
+      "id": "ra-4",
+      "question": "A PATCH says 'add 1 to quantity'. Applied twice to a quantity of 1, what is the result, and what does it show?",
+      "options": [
+        "2; PATCH is always idempotent",
+        "3; this PATCH is not idempotent, so the page's table is a simplification",
+        "1; PATCH is ignored on repeat",
+        "5; PATCH sets a fixed value"
+      ],
+      "answer": 1,
+      "why": "1 + 1 + 1 = 3. Whether PATCH is idempotent depends on the patch: 'set quantity to 5' applied twice stays 5."
+    },
+    {
+      "id": "ra-5",
+      "question": "Which of these does the REST page NOT cover?",
+      "options": [
+        "The six constraints",
+        "The five HTTP methods",
+        "Status codes, pagination and authentication",
+        "The idea that REST decouples client and server"
+      ],
+      "answer": 2,
+      "why": "The page lists no status codes and does not cover authentication, error formats, pagination, rate limiting or versioning strategy."
+    },
+    {
+      "id": "ra-6",
+      "question": "Which method does the page describe as replacing the resource, or creating it if absent, and mark as idempotent?",
+      "options": ["POST", "PUT", "GET", "PATCH"],
+      "answer": 1,
+      "why": "PUT replaces the resource (or creates it if absent) and is idempotent. In the run, PUT twice to the same address left one order."
+    }
+  ],
+  "build": {
+    "business": "Cretek's applications and partners will talk to each other through APIs. A CTO must be able to design an interface that survives retries, failures and change. This is the API capability in the CTO Operating System.",
+    "problem": "Design and build a small, tested API for one real Cretek capability, with safe retries, a decided error format, pagination, versioning and an API design note.",
+    "requirements": [
+      "Choose one real capability (for example creating and retrieving quotations, or school records) and the real consumer who will call it, or label the consumer SIMULATED",
+      "Define the resources, URIs and which of the five methods each endpoint uses, with a reason for each. Mark each operation safe, idempotent, or neither, and justify any PATCH",
+      "Decide and document, in one page: authentication and authorisation approach, error status codes and a single error body, pagination limits, filtering and sorting, rate limits, versioning and support period for old versions",
+      "Implement create operations with idempotency keys: same key and same body returns the same result; same key and a different body is rejected; keys are scoped per client; a documented expiry",
+      "Test the retry paths: a duplicate request after a simulated lost response, two concurrent requests with the same key, an expired key, a missing key where one is required, and a malformed body",
+      "Write the design as an OpenAPI description (or equivalent) kept in the repository and check that the implementation matches it with at least one automated test",
+      "Add a Hyrum's Law review: list three observable behaviours (field order, error text, timing or similar) that a client might depend on and state which you promise and which you explicitly do not",
+      "A short design note a partner developer could read in five minutes, with an example request and response for each endpoint",
+      "Every statement about real Cretek systems labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No real customer data or credentials in code, tests, examples or the OpenAPI file",
+      "Authentication must not be 'to be added later'. State the approach even if it is simple",
+      "Do not claim an operation is idempotent without a test that repeats it",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the resources and methods, the idempotency key rules, the error format, and one alternative you rejected, for example making create operations PUT with client-chosen ids.",
+    "tasks": [
+      "Pick the capability and the consumer",
+      "Define resources, methods and safety properties",
+      "Decide errors, authentication, pagination, rate limits and versioning",
+      "Implement the endpoints and the idempotency key behaviour",
+      "Write the retry and failure tests",
+      "Write the OpenAPI description and the conformance test",
+      "Do the Hyrum's Law review and write the design note"
+    ],
+    "acceptance": [
+      "Each endpoint's method, safety and idempotency are stated and tested",
+      "Errors, authentication, pagination, rate limits and versioning are decided and documented",
+      "Idempotency key behaviour passes tests for repeat, mismatch, concurrency, expiry and missing key",
+      "The OpenAPI description exists and one test checks the implementation against it",
+      "A Hyrum's Law review lists three behaviours with a promise or non-promise for each",
+      "No secrets or customer data in the repository",
+      "All real-system statements labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The API, its tests, the OpenAPI description and the design note, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Partner developer",
+    "scenario": "A developer at a partner company is about to integrate with your API. They have been burned by APIs that duplicated records and changed without warning.",
+    "prompts": [
+      "My request timed out. Is it safe to retry, and how do I know?",
+      "What happens if I send the same idempotency key with a different body?",
+      "How will you tell me about a breaking change, and how long do I have?",
+      "What do I get back when something goes wrong, and can I rely on its format?",
+      "Which of your behaviours am I allowed to depend on, and which are you free to change?",
+      "Why this method for this operation, and why not the other?"
+    ],
+    "rubric": [
+      { "criterion": "Correct use of methods, safety and idempotency, shown by tests", "weight": 0.3 },
+      { "criterion": "Decisions on errors, auth, pagination, rate limits and versioning documented and defensible", "weight": 0.3 },
+      { "criterion": "Robust retry and failure handling", "weight": 0.25 },
+      { "criterion": "Clear communication to an external developer", "weight": 0.15 }
+    ]
+  }
+}

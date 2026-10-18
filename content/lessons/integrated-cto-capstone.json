@@ -1,0 +1,148 @@
+{
+  "id": "integrated-cto-capstone",
+  "moduleId": "integrated-cto-capstone",
+  "pillar": "Tech",
+  "title": "Integrated CTO capstone",
+  "estimatedMinutes": { "learn": 60, "build": 600, "defend": 60 },
+  "objectives": [
+    "Synthesise delivery, tech, economics, product and people decisions into one CTO narrative",
+    "Defend a multi-quarter technology strategy with evidence and trade-offs",
+    "Produce an integrated decision record and review plan",
+    "Communicate the strategy to board and executive stakeholders"
+  ],
+  "prerequisites": ["cloud-providers-lockin"],
+  "unlock": { "prerequisites": [{ "lessonId": "cloud-providers-lockin", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "CTO Framework overview",
+      "url": "https://www.ctoframework.com",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "Overview reviewed."
+    }
+  ],
+  "verificationNotes": [
+    "The capstone is Original Academy material and is not tied to a single official page.",
+    "All figures and decisions must be labelled REAL, ASSUMPTION or SIMULATED."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What a capstone integrates",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A CTO capstone combines the threads from every pillar: delivery metrics and risk, architecture and security, cost and investment, product strategy and metrics, people and organisation. The point is not to repeat lessons but to make trade-offs across them. A decision that improves cost may slow delivery; a people change may enable architecture; a product bet changes the risk profile."
+      },
+      {
+        "heading": "Building the narrative",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Start with the business outcome and the constraint. Then show the current state with evidence, the options considered, the decision and its cost, the risks and mitigations, the people and delivery plan, and the measures that would change the decision. Keep one page for executives and a deeper record for reviewers."
+      },
+      {
+        "heading": "Defending across pillars",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A credible defence handles cross-pillar questions: why this architecture for this product, at this cost, with this team, on this timeline, with these risks. Weak answers optimise one pillar and ignore the others. Strong answers name the trade-off and the evidence."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Capstone outline for Cretek (illustrative)",
+      "body": "Outcome: reduce incident recovery time and cost per school while launching a new analytics product. Constraints: data residency, two engineers available, 200,000 budget. Decisions: consolidate on one cloud, introduce an event-driven reporting pipeline, hire one platform engineer, defer a second product. Risks: migration slippage, skill gaps. Measures: RTO, cost per school, delivery lead time, NPS."
+    },
+    "misconceptions": [
+      "Treating the capstone as a single-pillar exercise.",
+      "Presenting a plan with no trade-offs.",
+      "Hiding risks to look decisive.",
+      "Using slides without a decision record."
+    ],
+    "explainTask": "In 200 words or fewer, explain your integrated CTO strategy for the next two quarters to a board."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "cap-1",
+      "question": "A strong capstone decision record must include:",
+      "options": ["Only the chosen option", "Options considered, decision, cost, risks and reversal triggers", "A slide deck only", "A budget with no assumptions"],
+      "answer": 1,
+      "why": "A decision record needs alternatives, rationale, cost, risks and triggers."
+    },
+    {
+      "id": "cap-2",
+      "question": "When a cost decision slows delivery, a CTO should:",
+      "options": ["Hide the trade-off", "Name the trade-off and the evidence", "Ignore cost", "Ignore delivery"],
+      "answer": 1,
+      "why": "Cross-pillar trade-offs must be explicit."
+    },
+    {
+      "id": "cap-3",
+      "question": "The primary audience for a one-page strategy is:",
+      "options": ["Only engineers", "Executives and board", "Vendors", "No one"],
+      "answer": 1,
+      "why": "The one-page summary serves executives and board."
+    },
+    {
+      "id": "cap-4",
+      "question": "A capstone measure should be:",
+      "options": ["Vanity metrics", "Linked to the stated outcome", " Unrelated to cost", " Chosen after delivery"],
+      "answer": 1,
+      "why": "Measures must tie to outcomes."
+    },
+    {
+      "id": "cap-5",
+      "question": "Risks in a capstone should be:",
+      "options": [" Omitted", " Listed with mitigations and owners", " Left to vendors", " Ignored until failure"],
+      "answer": 1,
+      "why": "Risks need mitigations and owners."
+    }
+  ],
+  "build": {
+    "business": "Cretek needs an integrated technology strategy across delivery, architecture, cost, product and people.",
+    "problem": "Produce an integrated CTO capstone: a two-quarter strategy with decision records, cost and risk models, delivery plan and communication artefacts.",
+    "requirements": [
+      "State the business outcome and constraints",
+      "Integrate at least three pillars in the decision",
+      "Produce decision records with alternatives and reversal triggers",
+      "Model cost and risk with labelled assumptions",
+      "Define delivery milestones and owners",
+      "Produce a one-page executive summary and a deeper record",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No unlabelled figures",
+      "Must be reproducible from the repository",
+      "Must include a review step"
+    ],
+    "design": "Write a one-page strategy and a supporting decision log.",
+    "tasks": [
+      "Gather constraints and evidence",
+      "Draft options and trade-offs",
+      "Model cost and risk",
+      "Define milestones and owners",
+      "Write the executive summary"
+    ],
+    "acceptance": [
+      "Outcome and constraints stated",
+      "At least three pillars integrated",
+      "Decision records complete",
+      "Cost and risk modelled",
+      "Milestones and owners defined",
+      "Executive summary written"
+    ],
+    "deliverable": "Integrated capstone strategy, decision log, cost and risk model, and executive summary, referenced by path."
+  },
+  "defend": {
+    "assessor": "Board",
+    "scenario": "The board asks for a single, credible technology strategy for the next two quarters.",
+    "prompts": [
+      "What outcome are you targeting and how will you measure it?",
+      "Which trade-offs did you make across cost, delivery and people?",
+      "What would make you reverse the decision?",
+      "What are the top three risks and who owns them?",
+      "How does this fit the company strategy?"
+    ],
+    "rubric": [
+      { "criterion": "Outcome and measures are clear", "weight": 0.25 },
+      { "criterion": "Trade-offs across pillars are explicit", "weight": 0.3 },
+      { "criterion": "Risks and reversal triggers are credible", "weight": 0.25 },
+      { "criterion": "Board-level communication", "weight": 0.2 }
+    ]
+  }
+}

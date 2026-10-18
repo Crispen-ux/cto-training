@@ -1,0 +1,247 @@
+{
+  "id": "nps-north-star",
+  "moduleId": "product-metrics",
+  "pillar": "Product",
+  "title": "NPS and the North Star Metric",
+  "estimatedMinutes": {
+    "learn": 45,
+    "build": 260,
+    "defend": 30
+  },
+  "objectives": [
+    "Compute NPS from raw scores and state the uncertainty that a sample leaves around it",
+    "Explain what NPS can and cannot tell an engineering leader, and why the page's causal claims need testing",
+    "Apply the page's four criteria for a North Star Metric and spot where its own examples fail them",
+    "Pair a North Star with input metrics and guardrails to resist gaming",
+    "Defend a North Star choice to a product and finance leadership team"
+  ],
+  "prerequisites": [
+    "saas-metrics-unit-economics",
+    "sla-slo-sli"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "saas-metrics-unit-economics",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "sla-slo-sli",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Net Promoter Score (NPS)",
+      "url": "https://www.ctoframework.com/product/analytics/nps",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "The North Star Metric",
+      "url": "https://www.ctoframework.com/delivery/metrics/north-star-metric",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The NPS page has one worked rule (NPS = % promoters minus % detractors, with 9 to 10 promoters, 7 to 8 passives and 0 to 6 detractors) and three unsourced benchmark thresholds (above 0 good, above 30 strong, above 50 industry-leading). It gives no worked example, no survey design (timing, frequency, sampling, response rate, the follow-up question), no statistical caveats, no segmentation and no limitations.",
+    "The retrieved summary flagged the NPS page's claims that promoters 'exhibit low churn', that high-NPS organisations spend less on reactive support, and that NPS is a leading indicator of retention and expansion revenue as unsupported by data, and its causal link from reliability problems to detractor scores as plausible but not demonstrated. It also did not state the denominator of the formula (all respondents is the standard reading). The page does not say what population the benchmarks describe.",
+    "The North Star page has no formulas, statistics, benchmarks, case studies or citations. The retrieved summary flagged: the claim that the metric should correlate with retention and revenue comes with no method for testing it; the fintech 'more transactions means more value' and streaming 'minutes watched' proxies are asserted and can be inflated by fees, fraud or autoplay; 'meaningful interactions' is undefined; the page criticises daily active users and revenue as isolated measures yet its own examples use active users and transaction volume; it calls the metric 'single' while the SaaS example bundles several actions; and it links to Goodhart's Law without discussing gaming. It does not cover how to choose or validate a metric, input metrics, guardrails, targets, review cadence, ownership or failure modes. Company examples were not checked.",
+    "The NPS interval calculations and the gaming example in this lesson are Original Academy material. The interval uses the standard large-sample variance of a difference of proportions from one multinomial sample and was computed in Python. All survey data are invented ASSUMPTIONS."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "NPS as the page defines it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "NPS is a relational measure of loyalty and advocacy over time, distinct from CSAT, which measures a specific interaction. The question is: on a scale of 0 to 10, how likely are you to recommend our product or service to a friend or colleague?\n\nPromoters score 9 to 10, passives 7 to 8, detractors 0 to 6. NPS = % promoters minus % detractors, so it runs from -100 to +100. The page gives software benchmarks, unsourced: above 0 good, above 30 strong, above 50 industry-leading.\n\nFor engineering leaders the page argues that downtime, slow pages and recurring bugs move customers into the detractor group, that survey comments can justify platform investment, and that NPS leads retention and expansion revenue. It recommends tracking NPS beside SLAs and SLOs, and using NPS periodically across the user base and CSAT right after specific interactions."
+      },
+      {
+        "heading": "How much can you trust a score?",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A score from a sample is an estimate. Suppose 200 customers respond: 90 promoters, 70 passives, 40 detractors. Promoters 45%, detractors 20%, NPS +25.\n\nThe standard error of the difference between two proportions drawn from the same sample is sqrt((p + d - (p - d)^2) / n), here about 5.4 points, so a 95% interval is roughly +14 to +36. A change from +25 to +30 next quarter is well inside that range: not a signal.\n\nSample size matters sharply. With 50 responses (22 promoters, 18 passives, 10 detractors; NPS +24) the interval is about +3 to +45. With 1,000 responses at the same +25 it narrows to about +20 to +30. Compare segments only when each has enough responses.\n\nThe boundaries are sharp. Moving 10 of the 70 passives up to a 9 changes the score from +25 to +30, although nothing about the product changed. Cut-offs convert small shifts in wording or mood into jumps.\n\nSelection matters too: response rate, who is asked and when. A survey sent after a support fix reads differently from one sent at renewal. State the population, the response rate and the date every time you quote a score.\n\nAlso keep the follow-up question, 'what is the main reason for your score?'. The number says how people feel; the reasons are where an engineering team learns what to change."
+      },
+      {
+        "heading": "Linking NPS to engineering, carefully",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page's reliability story is plausible and untested. To use it, test it in your own data.\n\nMethod: pair each respondent's score with their service experience in the preceding period (incidents affecting them, error rate, page latency, support tickets). Compare detractor share between customers who had a bad period and those who did not. If detractors are twice as common among affected customers, you have evidence for your system; if not, reliability may not be your driver.\n\nBe careful with causation. Unhappy customers may also be heavy users who see more failures, and customers on older plans may have both worse experience and lower scores. Use a comparison that holds plan and size fixed where you can.\n\nThe page's claims that promoters churn less and that high NPS lowers support cost should likewise be checked against your retention and ticket data, not assumed. A reasonable use is as a leading signal to investigate, joined to your SLO data, not as a replacement for it."
+      },
+      {
+        "heading": "The North Star Metric as the page defines it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines the North Star Metric (NSM) as one top-level measure of the core value a product gives customers, shared by engineering, product, design, marketing, sales and operations. It sets it against isolated KPIs and vanity metrics, and against lagging indicators that report the past.\n\nFour criteria: tied to customer value; indicative of sustainable growth (correlating with retention and revenue); measurable and actionable by teams; clear and easily understood.\n\nExamples by model: SaaS, weekly active users completing a key workflow; marketplaces, successful purchases per active customer per week; streaming, minutes watched per user per session; social, meaningful interactions; fintech, transaction volume per active user. It says early-stage companies may use acquisition-based metrics and mature ones engagement or retention-based, and that the metric should be refined as the business scales while the principle stays consistent. It suggests using the NSM to evaluate experiments and to direct investment."
+      },
+      {
+        "heading": "Choosing one that cannot be gamed cheaply",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Apply the page's four criteria to its own examples and several fail.\n\nTransaction volume per active user: more transactions can mean more fees paid, or fraud. Minutes watched: autoplay and unattended playback add minutes without value. Meaningful interactions: undefined, so a team can pad the count. These measure activity, which can be raised without delivering value, the very trap the page warns against.\n\nA stronger metric counts the value event and its quality, for example weekly active accounts that complete a successful key workflow, where success has a definition (for the dependency service: accounts that resolved at least one ownership gap this week). That ties to customer value and is hard to inflate without delivering it.\n\nThen build the structure the page omits. Input metrics are the levers teams influence, such as time to first useful map and the share of connected repositories with an owner. Guardrails stop harm while chasing the metric: support tickets per account, p95 latency, opt-out rate. A target without a guardrail rewards the fastest route to the number, and Goodhart's Law, which the page only links, describes what follows: once a measure becomes a target it stops being a good measure.\n\nTest the relationship the page asserts. Compare retention of accounts by their NSM level over the same period. If accounts completing the workflow weekly do not retain better, your NSM is not tied to sustainable growth, whatever the name. Remember this shows association, not cause. Run an experiment where you can.\n\nAlso say when to change it. A metric that suited acquisition will mislead once growth is retention-led. Record the date and reason for each change so trends stay interpretable.\n\nIt is not strictly single. In practice you need one headline, a small set of inputs and a few guardrails. The page's claims that an NSM 'ensures' alignment or maximum return are overstated: it helps focus, it does not guarantee."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Choosing a North Star for the dependency-ownership service, and reading a quarter's NPS (invented numbers)",
+      "body": "Candidates. (a) Sign-ups: easy, but it is acquisition and a vanity measure. (b) Weekly active accounts: better, but an account can log in and do nothing. (c) Weekly active accounts that resolve at least one ownership gap: ties to the value the product promises and cannot be raised by logging in.\n\nApplying the page's criteria to (c). Customer value: resolving a gap means a team knows who owns a service. Sustainable growth: to be tested, below. Measurable and actionable: yes from product events. Clear: one sentence.\n\nValidation. For the 120 accounts with 12 weeks of data, the team compares 12-week retention for accounts at or above the median weekly count of resolved gaps (60 accounts) against those below (60 accounts). Retention is 51 of 60 (85%) against 39 of 60 (65%). A two-proportion comparison gives a difference of 20 points with a standard error of about 7.7 points, interval roughly +5 to +35. That is an association: the heavy users may be better-fit customers, so the team plans a test of an onboarding change that raises early resolution (next lesson) before claiming cause.\n\nInputs and guardrails. Inputs: time to first useful map (target to be set from the data), share of repositories with an owner. Guardrails: support tickets per account, p95 map load time, the share of resolved gaps that are re-opened within 14 days (to catch gap-closing for its own sake).\n\nQuarter's NPS. 200 responses of 640 invited (31% response rate): 90 promoters, 70 passives, 40 detractors, NPS +25 with an interval of about +14 to +36. Last quarter was +20 from 150 responses (63 promoters, 54 passives, 33 detractors), interval about +8 to +32. The team reports 'no detectable change' and does not claim improvement. Comments: 15 of the 40 detractors mention slow map loading. The team joins respondent IDs to latency data: detractor share is 31% among accounts whose maps loaded slowly on at least five days (26 of 84) and 15% among the rest (14 of 92; the other 24 respondents had no latency data and are excluded and noted), a gap suggesting a link worth acting on. Action: a performance work item with a p95 target and a repeat survey in one quarter, reported with its interval.\n\nWhat is unverified: all numbers are invented. The causal link from latency to detractors is not established by this comparison alone."
+    },
+    "misconceptions": [
+      "Treating a small change in NPS as meaningful without an interval.",
+      "Quoting 0, 30 and 50 as standards. The page gives them without a source.",
+      "Assuming reliability causes detractors without testing it in your own data.",
+      "Choosing a metric that counts activity (minutes, transactions) and can be inflated.",
+      "Believing one number is enough. You need inputs and guardrails.",
+      "Treating correlation with retention as proof the metric drives retention.",
+      "Keeping the same metric after the business stage has changed."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a product leader why an NPS move from +20 to +25 may not mean anything, and what you would do to find out."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "nn-1",
+      "question": "90 promoters, 70 passives and 40 detractors respond. What is the NPS?",
+      "options": [
+        "+45",
+        "+25",
+        "+20",
+        "+65"
+      ],
+      "answer": 1,
+      "why": "Promoters are 45% and detractors 20% of 200 respondents, so NPS = +25. Passives count in the denominator but not the numerator."
+    },
+    {
+      "id": "nn-2",
+      "question": "Why is a rise from +20 to +25 on 200 responses not evidence of improvement?",
+      "options": [
+        "NPS cannot change",
+        "The interval around a score from 200 responses is roughly 11 points either way, so the change is within noise",
+        "NPS is always rounded",
+        "Passives must be excluded"
+      ],
+      "answer": 1,
+      "why": "The standard error is about 5.4 points, giving a 95% interval of about +14 to +36 for a score of +25. A 5-point change sits well inside it."
+    },
+    {
+      "id": "nn-3",
+      "question": "Which statement about the NPS page's benchmarks (above 0, 30, 50) is accurate?",
+      "options": [
+        "They are cited from a named study",
+        "They are unsourced and the page does not say what population they describe",
+        "They apply to every industry",
+        "They are the legal definition"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged the thresholds as unsourced and notes the page does not state their sample or scope."
+    },
+    {
+      "id": "nn-4",
+      "question": "Which is the strongest test of the page's claim that reliability problems create detractors?",
+      "options": [
+        "Assume it is true",
+        "Join each respondent's score to their own incident, error or latency data and compare detractor shares for affected and unaffected customers",
+        "Ask engineers",
+        "Compare to another company's NPS"
+      ],
+      "answer": 1,
+      "why": "The page's claim is plausible but not demonstrated. Joining survey scores to service data tests it on your own customers, while taking care over confounders."
+    },
+    {
+      "id": "nn-5",
+      "question": "Which of the page's example North Star Metrics is most easily inflated without delivering customer value?",
+      "options": [
+        "Weekly active accounts completing a defined successful workflow",
+        "Minutes watched, since autoplay or unattended playback adds minutes",
+        "Successful purchases per active customer",
+        "None; all are immune"
+      ],
+      "answer": 1,
+      "why": "Minutes watched and transaction volume measure activity, which can rise through autoplay, fees or fraud. The page does not discuss gaming even though it links to Goodhart's Law."
+    },
+    {
+      "id": "nn-6",
+      "question": "What do input metrics and guardrails add to a North Star Metric?",
+      "options": [
+        "Nothing; one number is sufficient",
+        "Inputs are the levers teams influence; guardrails stop harm while chasing the headline number",
+        "They replace the North Star",
+        "They are only for finance"
+      ],
+      "answer": 1,
+      "why": "The page covers neither. Inputs link team work to the metric, and guardrails (tickets, latency, reopen rate) catch gaming and harmful side effects."
+    }
+  ],
+  "build": {
+    "business": "Cretek's leadership needs one shared measure of customer value and an honest reading of customer sentiment. A CTO should be able to say what the company is optimising, what it is not, and how engineering work connects to it. This is the product measurement capability in the CTO Operating System.",
+    "problem": "Choose and validate a North Star Metric for a real or realistically simulated Cretek product, with input metrics and guardrails, and run an NPS analysis with intervals and an engineering link.",
+    "requirements": [
+      "List at least four North Star candidates, score each against the page's four criteria, and say how each could be inflated without delivering value",
+      "Choose one, define it precisely (event, window, success condition) and instrument it, or specify the instrumentation and the data source",
+      "Validate it: compare retention (or another sustainability measure) across NSM levels over the same period, with sample sizes and an interval, and state that it shows association, not cause",
+      "Define at least three input metrics and three guardrails, each with an owner and a threshold or direction",
+      "Run or simulate an NPS survey with at least 100 responses. Label real or SIMULATED. Report the score, response rate, the interval and the follow-up themes",
+      "Join survey scores to service data (incidents, latency or errors) and test the reliability link the page asserts, saying what confounders you could not control",
+      "An NPS calculator that takes raw scores 0 to 10 and returns counts, percentages, NPS and a 95% interval. Automated tests required, including the worked example (+25, interval about +14 to +36), all promoters (+100), all detractors (-100), an empty list (reject), a score outside 0 to 10 (reject) and a non-integer score (reject)",
+      "A decision memo for leadership stating the North Star, the guardrails, what would make you change it, and the date of the next review",
+      "A one-page summary led by what the data can and cannot say",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No individual respondent identifiable in shared materials",
+      "Do not quote the page's benchmark thresholds as standards",
+      "Do not claim causation from an association",
+      "Do not set a target on the North Star without its guardrails",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the candidates and scoring, the instrumentation, the validation method, the guardrails and one alternative you rejected, for example sign-ups as the headline.",
+    "tasks": [
+      "Score the candidates and choose the North Star",
+      "Define events and instrumentation",
+      "Validate against retention",
+      "Define inputs and guardrails",
+      "Run the NPS analysis and the service data join",
+      "Build the NPS calculator with tests",
+      "Write the memo and the summary"
+    ],
+    "acceptance": [
+      "At least four candidates scored against all four criteria with gaming risks",
+      "The chosen metric is precisely defined and the data source named",
+      "The validation reports sample sizes, an interval and states association only",
+      "Three inputs and three guardrails each have an owner and a threshold or direction",
+      "NPS reported with an interval, a response rate and follow-up themes",
+      "Calculator tests pass including the rejection cases",
+      "The memo states when the metric would be changed"
+    ],
+    "deliverable": "The candidate analysis, metric definition, validation, inputs and guardrails, NPS analysis, calculator with tests, memo and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Chief product officer",
+    "scenario": "The chief product officer is considering making your North Star the company's headline target and wants to know whether it can be trusted and gamed or not.",
+    "prompts": [
+      "Why this metric and not sign-ups or active users?",
+      "How could a team hit the target without delivering value?",
+      "What evidence shows this metric is tied to retention, and what does it not show?",
+      "Our NPS moved five points. What would you tell the board?",
+      "How do you know reliability is driving detractors?",
+      "When would you change the North Star?"
+    ],
+    "rubric": [
+      {
+        "criterion": "A defined, hard-to-game North Star scored against the criteria",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Honest validation: intervals, sample sizes and association versus cause",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Inputs and guardrails that resist gaming, with owners",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Clear communication to a product leader",
+        "weight": 0.15
+      }
+    ]
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "id": "sql-for-ctos",
+  "moduleId": "engineering-languages",
+  "pillar": "Tech",
+  "title": "SQL and data modelling for CTOs",
+  "estimatedMinutes": { "learn": 45, "build": 260, "defend": 35 },
+  "objectives": [
+    "Design relational schemas that fit the workload",
+    "Write correct and efficient SQL",
+    "Manage migrations and data quality",
+    "Decide between SQL and NoSQL"
+  ],
+  "prerequisites": ["sql-vs-nosql"],
+  "unlock": { "prerequisites": [{ "lessonId": "sql-vs-nosql", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "PostgreSQL documentation",
+      "url": "https://www.postgresql.org/docs/",
+      "reviewed": "2026-10-16",
+      "reviewDepth": "Official documentation reviewed at overview level."
+    }
+  ],
+  "verificationNotes": [
+    "SQL dialects differ; verify syntax and features against your database.",
+    "Examples are Original Academy material."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Relational modelling",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Model entities and relationships with normalised tables, clear primary keys and foreign keys. Normalise to reduce anomalies, then denormalise deliberately for read performance. Name columns consistently and avoid encoding multiple facts in one field."
+      },
+      {
+        "heading": "Writing SQL",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Use explicit joins, filter early, and aggregate with care. Understand NULL semantics, transaction isolation and locking. Prefer set-based operations over row-by-row processing. Explain query plans before optimising."
+      },
+      {
+        "heading": "Performance",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Index the columns used in filters and joins, but not everything. Watch for full table scans, N+1 queries and missing pagination. Measure with EXPLAIN and real data volumes. Cache hot reads where appropriate."
+      },
+      {
+        "heading": "Migrations and data quality",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Use versioned migrations that are reversible where possible. Back up before risky changes. Add constraints, checks and not-null rules to protect data quality. Test migrations against production-like data. Keep destructive changes separate from additive ones."
+      },
+      {
+        "heading": "SQL versus NoSQL",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "SQL suits relational data, complex queries and strong consistency. NoSQL suits flexible schemas, massive scale and simple access patterns. The choice should follow access patterns and consistency needs, not fashion."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "School data model (illustrative)",
+      "body": "Tables: schools, students, enrolments, attendance. Foreign keys link enrolments to students and schools. An index on attendance(student_id, date) supports reporting. A migration adds a not-null constraint after backfilling data."
+    },
+    "misconceptions": [
+      "Normalisation is always best.",
+      "Indexes make every query fast.",
+      "Migrations are safe without backups.",
+      "NoSQL replaces SQL."
+    ],
+    "explainTask": "In 120 words or fewer, explain how you would design and evolve a relational schema for a growing product."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sq-1",
+      "question": "Foreign keys are useful because they:",
+      "options": [" Speed up all queries", " Enforce relationships", " Remove indexes", " Encrypt data"],
+      "answer": 1,
+      "why": "Foreign keys enforce referential integrity."
+    },
+    {
+      "id": "sq-2",
+      "question": "A full table scan is often caused by:",
+      "options": [" Too many indexes", " Missing or unusable indexes", " Small tables only", " Primary keys"],
+      "answer": 1,
+      "why": "Missing or unusable indexes lead to scans."
+    },
+    {
+      "id": "sq-3",
+      "question": "Before a risky migration, you should:",
+      "options": [" Skip backups", " Back up and test on production-like data", " Run it at peak time", " Disable constraints"],
+      "answer": 1,
+      "why": "Backups and testing reduce risk."
+    },
+    {
+      "id": "sq-4",
+      "question": "NULL in SQL means:",
+      "options": [" Zero", " Empty string", " Unknown or missing value", " False"],
+      "answer": 2,
+      "why": "NULL represents unknown or missing data."
+    },
+    {
+      "id": "sq-5",
+      "question": "SQL is usually preferred when you need:",
+      "options": [" Flexible schema only", " Complex queries and strong consistency", " Single-key lookups at massive scale", " Binary blob storage"],
+      "answer": 1,
+      "why": "SQL suits complex queries and strong consistency."
+    }
+  ],
+  "build": {
+    "business": "Cretek stores school and student data. Correct SQL and migrations protect data quality and reporting.",
+    "problem": "Design a relational schema, write reporting queries, and build a migration plan for a real data set.",
+    "requirements": [
+      "Design tables, keys and constraints",
+      "Write queries for core reports",
+      "Add appropriate indexes",
+      "Explain query plans",
+      "Create versioned migrations",
+      "Test migrations on sample data",
+      "Document rollback steps"
+    ],
+    "constraints": [
+      "No production data in the repository",
+      "Migrations must be reversible where possible",
+      "Queries must be tested"
+    ],
+    "design": "Write a one-page data model and query plan.",
+    "tasks": [
+      "Design the schema",
+      "Write queries",
+      "Add indexes",
+      "Create migrations",
+      "Test and document"
+    ],
+    "acceptance": [
+      "Schema documented",
+      "Queries tested",
+      "Indexes justified",
+      "Migrations versioned",
+      "Rollback documented"
+    ],
+    "deliverable": "Data model, SQL queries, migration files and test results, referenced by path."
+  },
+  "defend": {
+    "assessor": "Engineering lead",
+    "scenario": "The engineering lead asks how you would keep the database reliable and performant as usage grows.",
+    "prompts": [
+      "How did you design the schema?",
+      "Which queries are most expensive?",
+      "How will migrations be applied safely?",
+      "When would you choose NoSQL?",
+      "How do you protect data quality?"
+    ],
+    "rubric": [
+      { "criterion": "Schema and keys are sound", "weight": 0.3 },
+      { "criterion": "Performance and indexing are justified", "weight": 0.25 },
+      { "criterion": "Migrations are safe and reversible", "weight": 0.25 },
+      { "criterion": "Clear communication to engineering", "weight": 0.2 }
+    ]
+  }
+}

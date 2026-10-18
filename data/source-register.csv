@@ -1,0 +1,282 @@
+pillar,section,title,path,role_tag,source_category,date_reviewed,review_depth
+Delivery,Agile Methodologies,"Agile Methodologies",/delivery/agile-methodologies,,Official CTO Framework,2026-10-11,index-only
+Delivery,Agile Methodologies,"Definition of Done (DoD)",/delivery/agile-methodologies/definition-of-done,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+Delivery,Agile Methodologies,"Definition of Ready (DoR)",/delivery/agile-methodologies/definition-of-ready,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+Delivery,Agile Methodologies,"Extreme Programming (XP)",/delivery/agile-methodologies/extreme-programming,,Official CTO Framework,2026-10-11,index-only
+Delivery,Agile Methodologies,"Retrospectives",/delivery/agile-methodologies/retrospectives,,Official CTO Framework,2026-10-11,index-only
+Delivery,Agile Methodologies,"SAFe (Scaled Agile Framework)",/delivery/agile-methodologies/safe,,Official CTO Framework,2026-10-11,index-only
+Delivery,Agile Methodologies,"Scrum",/delivery/agile-methodologies/scrum,,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Agile Methodologies,"Sprint Best Practices & Anti-Patterns",/delivery/agile-methodologies/sprint-best-practices-and-anti-patterns,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+Delivery,Agile Methodologies,"Sprint Zero",/delivery/agile-methodologies/sprint-zero,,Official CTO Framework,2026-10-11,index-only
+Delivery,Agile Methodologies,"Swarming and mobbing",/delivery/agile-methodologies/swarming-mobbing,,Official CTO Framework,2026-10-11,index-only
+Delivery,Estimations,"Common estimation methods",/delivery/estimations/estimation-methods,,Official CTO Framework,2026-10-11,index-only
+Delivery,Estimations,"Monte Carlo simulations",/delivery/estimations/montecarlo-simulations,,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Estimations,"Single-Point Estimates",/delivery/estimations/single-point-estimates,,Official CTO Framework,2026-10-11,index-only
+Delivery,Estimations,"Wideband Delphi: An Overview",/delivery/estimations/wideband-delphi,,Official CTO Framework,2026-10-11,index-only
+Delivery,Incident Management,"Occam's Razor",/delivery/incident-management/occams-razor,,Official CTO Framework,2026-10-11,index-only
+Delivery,Incident Management,"Pareto Analysis",/delivery/incident-management/pareto-analysis,,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Incident Management,"Root Cause Analysis (RCA)",/delivery/incident-management/root-cause-analysis,,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Incident Management,"Technical Post-Mortems",/delivery/incident-management/technical-post-mortems,Engineering Manager,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Incident Management,"Technical pre-mortems",/delivery/incident-management/technical-pre-mortems,,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Literature,"Delivery Quotes",/delivery/literature/quotes,,Official CTO Framework,2026-10-11,index-only
+Delivery,Metrics,"Capability Maturity Model Integration (CMMI)",/delivery/metrics/cmmi,,Official CTO Framework,2026-10-11,index-only
+Delivery,Metrics,"DORA metrics",/delivery/metrics/dora-metrics,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Metrics,"Flow Metrics",/delivery/metrics/flow-metrics,,Official CTO Framework,2026-10-11,index-only
+Delivery,Metrics,"Goodhart's Law",/delivery/metrics/goodharts-law,,Official CTO Framework,2026-10-11,index-only
+Delivery,Metrics,"RTO and RPO",/delivery/metrics/rto-rpo,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Metrics,"Say-Do Ratio",/delivery/metrics/say-do-ratio,,Official CTO Framework,2026-10-11,index-only
+Delivery,Metrics,"SLA, SLO and SLI compared",/delivery/metrics/sla-slo-sli,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Metrics,"SPACE metrics",/delivery/metrics/space-metrics,,Official CTO Framework,2026-10-11,index-only
+Delivery,Metrics,"The North Star Metric (NSM)",/delivery/metrics/north-star-metric,,Official CTO Framework,2026-10-15,summarised-automated
+Delivery,Metrics,"Understanding KPIs",/delivery/metrics/kpi,,Official CTO Framework,2026-10-11,index-only
+Delivery,Metrics,"Vanity Metrics",/delivery/metrics/vanity-metrics,,Official CTO Framework,2026-10-11,index-only
+Delivery,Prioritisation,"Prioritisation",/delivery/prioritisation,VP of Engineering,Official CTO Framework,2026-10-11,index-only
+Delivery,Prioritisation,"MoSCoW Method",/delivery/prioritisation/moscow,VP of Engineering,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Prioritisation,"Weighted Shortest Job First (WSJF)",/delivery/prioritisation/wsjf,VP of Engineering,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Project Management,"Analysis Paralysis",/delivery/project-management/analysis-paralysis,,Official CTO Framework,2026-10-11,index-only
+Delivery,Project Management,"Brooks' Law",/delivery/project-management/brooks-law,,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Project Management,"ITIL Explained",/delivery/project-management/itil,,Official CTO Framework,2026-10-11,index-only
+Delivery,Project Management,"Project Triangle",/delivery/project-management/project-triangle,,Official CTO Framework,2026-10-11,index-only
+Delivery,Project Management,"RACI Matrix",/delivery/project-management/raci-matrix,,Official CTO Framework,2026-10-13,summarised-automated
+Delivery,Project Management,"RAID (risk, assumptions, issues, dependencies)",/delivery/project-management/raid,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Project Management,"Standard Operating Procedures (SOPs)",/delivery/project-management/standard-operating-procedures,VP of Engineering,Official CTO Framework,2026-10-11,index-only
+Delivery,Reporting,"Four Square Reports",/delivery/reporting/four-square-reports,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Reporting,"RAG Reports",/delivery/reporting/rag-reports,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Reporting,"Scrum Reports",/delivery/reporting/scrum-reports,,Official CTO Framework,2026-10-11,index-only
+Delivery,Risk Management,"ROAM Risk Management",/delivery/risk-management/roam,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Risk Management,"The Swiss Cheese Model",/delivery/risk-management/swiss-cheese-model,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Risk Management,"Three Lines of Defence",/delivery/risk-management/three-lines-of-defence,,Official CTO Framework,2026-10-11,summarised-automated
+Delivery,Systems Thinking,"Endemic, Systemic, and Pandemic Issues",/delivery/systems-thinking/endemic-systemic-pandemic,,Official CTO Framework,2026-10-11,index-only
+Delivery,Systems Thinking,"Hegelian Dialectic",/delivery/systems-thinking/hegelian-dialectic,,Official CTO Framework,2026-10-11,index-only
+Delivery,Systems Thinking,"Iceberg model",/delivery/systems-thinking/iceberg-model,,Official CTO Framework,2026-10-11,index-only
+Delivery,Systems Thinking,"OODA Loop",/delivery/systems-thinking/ooda-loop,,Official CTO Framework,2026-10-11,index-only
+Delivery,Work Decomposition,"Work Decomposition",/delivery/work-decomposition,,Official CTO Framework,2026-10-11,index-only
+Delivery,Work Decomposition,"Backlog Refinement",/delivery/work-decomposition/backlog-refinement,,Official CTO Framework,2026-10-11,index-only
+Delivery,Work Decomposition,"Story Splitting",/delivery/work-decomposition/story-splitting,,Official CTO Framework,2026-10-11,index-only
+Delivery,Culture,"Humour",/delivery/humour,,Official CTO Framework,2026-10-11,index-only
+Economics,Costs,"Cost Management",/economics/costs,,Official CTO Framework,2026-10-11,index-only
+Economics,Costs,"Cloud Costs",/economics/costs/cloud-costs,VP of Engineering,Official CTO Framework,2026-10-12,summarised-automated
+Economics,Costs,"Outsourcing Pricing Models",/economics/costs/outsourcing-pricing-models,VP of Engineering,Official CTO Framework,2026-10-12,summarised-automated
+Economics,Costs,"Total Cost of Ownership (TCO)",/economics/costs/total-cost-ownership,VP of Engineering,Official CTO Framework,2026-10-12,summarised-automated
+Economics,Investment,"Investment Rounds",/economics/investment/investment-rounds,,Official CTO Framework,2026-10-13,summarised-automated
+Economics,Investment,"Return on Investment (ROI)",/economics/investment/return-of-investment,,Official CTO Framework,2026-10-13,summarised-automated
+Economics,Investment,"Shares & Stocks",/economics/investment/shares-stock,,Official CTO Framework,2026-10-11,index-only
+Economics,Investment,"Technology Due Diligence",/economics/investment/tech-due-diligence,CTO,Official CTO Framework,2026-10-13,summarised-automated
+Economics,Literature,"Economics Quotes",/economics/literature/quotes,,Official CTO Framework,2026-10-11,index-only
+Economics,Literature,"Jevons paradox",/economics/literature/jevons-paradox,,Official CTO Framework,2026-10-13,summarised-automated
+Economics,Terms,"Strategic Economics Hub for Tech Leaders",/economics/terms,,Official CTO Framework,2026-10-11,index-only
+Economics,Terms,"Asset & Capitalization Mechanics for Tech Leaders",/economics/terms/asset-and-capitalization-mechanics,,Official CTO Framework,2026-10-11,index-only
+Economics,Terms,"Investment & Value Metrics",/economics/terms/investment-and-value-metrics,,Official CTO Framework,2026-10-13,summarised-automated
+Economics,Terms,"Planning & Governance",/economics/terms/planning-and-governance,,Official CTO Framework,2026-10-11,index-only
+Economics,Terms,"Profitability & Margin Management",/economics/terms/profitability-and-margin-management,,Official CTO Framework,2026-10-13,summarised-automated
+Economics,Strategy,"Build vs. Buy Decision Framework",/economics/build-vs-buy,,Official CTO Framework,2026-10-12,summarised-automated
+Economics,Budgeting,"CTO Budget Breakdown",/economics/budget-breakdown,VP of Engineering,Official CTO Framework,2026-10-13,summarised-automated
+Economics,Budgeting,"Salaries & Compensation Benchmarking",/economics/salaries,VP of Engineering,Official CTO Framework,2026-10-11,index-only
+Economics,Budgeting,"Top-Down Budgeting vs Bottom-Up Budgeting",/economics/top-down-vs-bottom-up-budgeting,VP of Engineering,Official CTO Framework,2026-10-13,summarised-automated
+People,Communication,"Communication",/people/communication,,Official CTO Framework,2026-10-11,index-only
+People,Communication,"Asking Questions",/people/communication/asking-questions,,Official CTO Framework,2026-10-11,index-only
+People,Communication,"Assertive Communication",/people/communication/assertive-communication,,Official CTO Framework,2026-10-15,summarised-automated
+People,Communication,"Asynchronous Communication",/people/communication/async-communication,,Official CTO Framework,2026-10-11,index-only
+People,Communication,"Communication Complexity",/people/communication/communication-complexity,,Official CTO Framework,2026-10-11,index-only
+People,Communication,"Storytelling",/people/communication/story-telling,,Official CTO Framework,2026-10-15,summarised-automated
+People,Communication,"The S.T.A.R. method",/people/communication/star-method,,Official CTO Framework,2026-10-15,summarised-automated
+People,Communication,"Verbal vs Non-Verbal Communication in Management",/people/communication/verbal-vs-non-verbal,,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"Blameless Culture",/people/culture-organisation/blameless-culture,Director of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Culture & Organisation,"Company Values",/people/culture-organisation/company-values,Director of Engineering,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"Conway's Law",/people/culture-organisation/conways-law,Director of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Culture & Organisation,"Corporate Nicknames and Demonyms",/people/culture-organisation/corporate-nicknames-demonyms,Director of Engineering,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"DevEx",/people/culture-organisation/devex,Director of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Culture & Organisation,"Distributed vs Collocated Teams",/people/culture-organisation/distributed-vs-collocated,,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"Dunbar's Number",/people/culture-organisation/dunbars-number,Director of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Culture & Organisation,"Engineering Culture",/people/culture-organisation/culture,CTO,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"High-Performing Teams",/people/culture-organisation/high-performing-teams,Director of Engineering,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"Matrix Organisations",/people/culture-organisation/matrix-organisations,VP of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Culture & Organisation,"Skills matrix",/people/culture-organisation/skills-matrix,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"Stages of group development",/people/culture-organisation/stages-group-development,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"Subject Matter Expert (SME)",/people/culture-organisation/subject-matter-expert,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"Team charters",/people/culture-organisation/team-charters,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+People,Culture & Organisation,"Team Topologies",/people/culture-organisation/team-topologies,Director of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Culture & Organisation,"Understanding Communities of Practice",/people/culture-organisation/community-of-practice,,Official CTO Framework,2026-10-11,index-only
+People,Leadership & Collaboration,"360 feedback",/people/leadership-collaboration/360-feedback,Engineering Manager,Official CTO Framework,2026-10-15,summarised-automated
+People,Leadership & Collaboration,"Disagree and commit",/people/leadership-collaboration/disagree-commit,,Official CTO Framework,2026-10-15,summarised-automated
+People,Leadership & Collaboration,"Effective meetings",/people/leadership-collaboration/effective-meetings,,Official CTO Framework,2026-10-11,index-only
+People,Leadership & Collaboration,"Eisenhower Matrix",/people/leadership-collaboration/eisenhower-matrix,,Official CTO Framework,2026-10-11,index-only
+People,Leadership & Collaboration,"Leadership Styles for Technology Leaders",/people/leadership-collaboration/leadership-styles,,Official CTO Framework,2026-10-15,summarised-automated
+People,Leadership & Collaboration,"One-on-ones (1:1s)",/people/leadership-collaboration/one-on-ones,Engineering Manager,Official CTO Framework,2026-10-15,summarised-automated
+People,Leadership & Collaboration,"Pre-attentive Attributes",/people/leadership-collaboration/preattentive-attributes,,Official CTO Framework,2026-10-11,index-only
+People,Leadership & Collaboration,"Pulse Surveys",/people/leadership-collaboration/pulse-surveys,,Official CTO Framework,2026-10-11,index-only
+People,Leadership & Collaboration,"Skip Levels",/people/leadership-collaboration/skip-levels,Director of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Leadership & Collaboration,"Student's Syndrome",/people/leadership-collaboration/students-syndrome,,Official CTO Framework,2026-10-11,index-only
+People,Leadership & Collaboration,"The Blob Tree",/people/leadership-collaboration/blob-tree,,Official CTO Framework,2026-10-11,index-only
+People,Leadership & Collaboration,"The Pomodoro Technique",/people/leadership-collaboration/pomodoro-technique,,Official CTO Framework,2026-10-11,index-only
+People,Leadership & Collaboration,"Trust, but verify",/people/leadership-collaboration/trust-but-verify,,Official CTO Framework,2026-10-11,index-only
+People,Literature,"People & Culture Quotes",/people/literature/quotes,,Official CTO Framework,2026-10-11,index-only
+People,Performance & Growth,"9-boxes",/people/performance-growth/9-boxes,Director of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Performance & Growth,"Career ladders",/people/performance-growth/career-ladders,Director of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Performance & Growth,"Career Plans",/people/performance-growth/career-plans,Director of Engineering,Official CTO Framework,2026-10-11,index-only
+People,Performance & Growth,"First 90 Days as a CTO",/people/performance-growth/first-90-days-cto,CTO,Official CTO Framework,2026-10-15,summarised-automated
+People,Performance & Growth,"Goal setting",/people/performance-growth/goal-setting,,Official CTO Framework,2026-10-11,index-only
+People,Performance & Growth,"Personal improvement plan (PIP)",/people/performance-growth/personal-improvement-plan,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+People,Performance & Growth,"Peter Principle",/people/performance-growth/peter-principle,,Official CTO Framework,2026-10-11,index-only
+People,Performance & Growth,"Price's law",/people/performance-growth/prices-law,,Official CTO Framework,2026-10-11,index-only
+People,Performance & Growth,"T-Shaped people",/people/performance-growth/t-shaped-people,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Cognitive Biases",/people/psychology-behaviour/cognitive-bias,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Colour psychology",/people/psychology-behaviour/colour-psychology,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Dunning-Kruger effect",/people/psychology-behaviour/dunning-kruger,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Emotional Intelligence",/people/psychology-behaviour/emotional-intelligence,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Fixed vs Growth Mindset",/people/psychology-behaviour/fixed-growth-mindsets,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Generational cohorts",/people/psychology-behaviour/generational-cohorts,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Imposter Syndrome",/people/psychology-behaviour/imposter-syndrome,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Maslow's Hierarchy of Needs",/people/psychology-behaviour/maslow-hierarchy-needs,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Polyvagal Ladder",/people/psychology-behaviour/polyvagal-ladder,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Social Loafing",/people/psychology-behaviour/social-loafing,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"The Fight, Flight, Freeze Response",/people/psychology-behaviour/fight-flight-freeze,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Theory of Multiple Intelligences",/people/psychology-behaviour/theory-multiple-intelligence,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Understanding MBTI",/people/psychology-behaviour/myers-briggs-type-indicator,,Official CTO Framework,2026-10-11,index-only
+People,Psychology & Behaviour,"Yerkes-Dodson Law",/people/psychology-behaviour/yerkes-dodson-law,,Official CTO Framework,2026-10-11,index-only
+People,Talent Acquisition,"CTO Interview Questions with Sample Answer Pointers",/people/talent-acquisition/cto-interview-questions,VP of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Talent Acquisition,"CTO Practice Interview Session",/people/talent-acquisition/cto-interview-questions/practice,,Official CTO Framework,2026-10-11,index-only
+People,Talent Acquisition,"Employee Churn Rate",/people/talent-acquisition/employee-churn-rate,VP of Engineering,Official CTO Framework,2026-10-11,index-only
+People,Talent Acquisition,"Engineering Hiring Models Comparison",/people/talent-acquisition/hiring-options-comparison,CTO / VP of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Talent Acquisition,"Exit interview",/people/talent-acquisition/exit-interview,Director of Engineering,Official CTO Framework,2026-10-11,index-only
+People,Talent Acquisition,"Hire Slow, Fire Fast",/people/talent-acquisition/hire-slow-fire-fast,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+People,Talent Acquisition,"Induction plans",/people/talent-acquisition/induction-plans,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+People,Talent Acquisition,"Succession planning",/people/talent-acquisition/succession-planning,VP of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+People,Talent Acquisition,"The Secretary Problem",/people/talent-acquisition/secretary-problem,,Official CTO Framework,2026-10-11,index-only
+People,Leadership,"Most influential CTOs",/people/most-influential-ctos,,Official CTO Framework,2026-10-11,index-only
+People,Leadership,"The C-Suite",/people/c-suite,CTO,Official CTO Framework,2026-10-15,summarised-automated
+Product,Analytics,"Customer Satisfaction Score (CSAT)",/product/analytics/csat,,Official CTO Framework,2026-10-11,index-only
+Product,Analytics,"Descriptive, Predictive, and Prescriptive Analytics",/product/analytics/descriptive-predictive-prescriptive,,Official CTO Framework,2026-10-11,index-only
+Product,Analytics,"Empirical vs Anecdotal data",/product/analytics/empirical-vs-anecdotal,,Official CTO Framework,2026-10-11,index-only
+Product,Analytics,"Heuristics and alternative techniques",/product/analytics/heuristics,,Official CTO Framework,2026-10-11,index-only
+Product,Analytics,"Net Promoter Score (NPS)",/product/analytics/nps,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Analytics,"SaaS Metrics",/product/analytics/saas-metrics,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Experimentation,"A/B/N Testing",/product/experimentation/abn-testing,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Experimentation,"Minimum Viable Product (MVP)",/product/experimentation/minimum-viable-product,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Experimentation,"Product lifecycle",/product/experimentation/product-lifecycle,,Official CTO Framework,2026-10-11,index-only
+Product,Experimentation,"Skunk Works",/product/experimentation/skunk-works,,Official CTO Framework,2026-10-11,index-only
+Product,Licensing,"Open Source Licenses",/product/licensing/open-source-licenses,CTO,Official CTO Framework,2026-10-11,index-only
+Product,Literature,"Product Quotes",/product/literature/quotes,,Official CTO Framework,2026-10-11,index-only
+Product,Releases,"Changelogs vs Release Notes",/product/releases/change-logs,,Official CTO Framework,2026-10-11,index-only
+Product,Releases,"Versioning",/product/releases/versioning,,Official CTO Framework,2026-10-11,index-only
+Product,Requirements,"ISO 14001 - Environmental Management Systems",/product/requirements/standards/ISO14001,,Official CTO Framework,2026-10-11,index-only
+Product,Requirements,"ISO 22301 - Business Continuity Management Systems",/product/requirements/standards/ISO22301,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Requirements,"ISO/IEC 42001 - AI Management Systems",/product/requirements/standards/ISO42001,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Requirements,"Five nines",/product/requirements/five-nines,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Requirements,"Non-Functional Requirements (NFRs)",/product/requirements/non-functional-requirements,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Requirements,"Personally Identifiable Information (PII)",/product/requirements/pii,VP of Engineering,Official CTO Framework,2026-10-15,summarised-automated
+Product,Strategy,"Business Model Overview",/product/strategy/business-models,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Strategy,"Economic Moats",/product/strategy/economic-moats,CTO,Official CTO Framework,2026-10-15,summarised-automated
+Product,Strategy,"Lean Canvas",/product/strategy/lean-canvas,,Official CTO Framework,2026-10-15,summarised-automated
+Product,Strategy,"No plan survives first contact with the enemy",/product/strategy/plan-contact-enemy,,Official CTO Framework,2026-10-11,index-only
+Product,Strategy,"PESTLE Analysis",/product/strategy/pestle-analysis,CTO,Official CTO Framework,2026-10-15,summarised-automated
+Product,Strategy,"Planning horizon",/product/strategy/planning-horizon,VP of Engineering,Official CTO Framework,2026-10-11,index-only
+Product,Strategy,"Porter's Five Forces",/product/strategy/porter-five-forces,CTO,Official CTO Framework,2026-10-15,summarised-automated
+Product,Strategy,"SWOT Analysis",/product/strategy/swot-analysis,CTO,Official CTO Framework,2026-10-15,summarised-automated
+Product,Strategy,"Unique Selling Proposition (USP)",/product/strategy/unique-selling-proposition,,Official CTO Framework,2026-10-11,index-only
+Product,UI/UX,"UI/UX",/product/ui-ux,,Official CTO Framework,2026-10-11,index-only
+Product,UI/UX,"Design systems",/product/ui-ux/design-systems,,Official CTO Framework,2026-10-11,index-only
+Product,UI/UX,"Principle of Least Astonishment",/product/ui-ux/principle-of-least-astonishment,,Official CTO Framework,2026-10-11,index-only
+Product,UI/UX,"User Personas",/product/ui-ux/user-personas,,Official CTO Framework,2026-10-11,index-only
+Tech,AI,"Artificial Intelligence (AI)",/tech/ai,,Official CTO Framework,2026-10-11,index-only
+Tech,AI,"Agents.MD",/tech/ai/agentsmd,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,AI,"AI Model Comparison Guide",/tech/ai/model-comparison,CTO,Official CTO Framework,2026-10-14,summarised-automated
+Tech,AI,"AI-SDLC",/tech/ai/ai-sdlc,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,AI,"EU AI Act",/tech/ai/eu-ai-act,CTO,Official CTO Framework,2026-10-14,summarised-automated
+Tech,AI,"MIT AI Risk Repository",/tech/ai/mit-ai-risk-repository,CTO,Official CTO Framework,2026-10-14,summarised-automated
+Tech,AI,"Model Collapse",/tech/ai/model-collapse,CTO,Official CTO Framework,2026-10-14,summarised-automated
+Tech,AI,"ONNX",/tech/ai/onnx,,Official CTO Framework,2026-10-11,index-only
+Tech,AI,"UK AI Principles",/tech/ai/uk-ai-principles,CTO,Official CTO Framework,2026-10-11,index-only
+Tech,Cloud DevOps & SRE,"Cloud, DevOps & SRE",/tech/devops-operations,,Official CTO Framework,2026-10-11,index-only
+Tech,Cloud DevOps & SRE,"Chaos Engineering",/tech/devops-operations/chaos-engineering,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Cloud DevOps & SRE,"DevOps as a Culture",/tech/devops-operations/devops-culture,,Official CTO Framework,2026-10-11,index-only
+Tech,Cloud DevOps & SRE,"DKIM",/tech/devops-operations/dkmi,,Official CTO Framework,2026-10-11,index-only
+Tech,Cloud DevOps & SRE,"Error Budgets",/tech/devops-operations/error-budgets,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Cloud DevOps & SRE,"Golden Path",/tech/devops-operations/golden-path,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Cloud DevOps & SRE,"Infrastructure as Code",/tech/devops-operations/infrastructure-as-code,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Cloud DevOps & SRE,"Key Kubernetes Concepts",/tech/devops-operations/kubernetes-concepts,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,Cloud DevOps & SRE,"Pets vs Cattle Analogy in Infrastructure Management",/tech/devops-operations/pets-vs-cattle,,Official CTO Framework,2026-10-11,index-only
+Tech,Engineering Practices,"Engineering Practices",/tech/engineering-practices,,Official CTO Framework,2026-10-11,index-only
+Tech,Engineering Practices,"Big-O notation",/tech/engineering-practices/big-o-notation,Principal Engineer,Official CTO Framework,2026-10-13,summarised-automated
+Tech,Engineering Practices,"Design Patterns",/tech/engineering-practices/design-patterns,Principal Engineer,Official CTO Framework,2026-10-13,summarised-automated
+Tech,Engineering Practices,"Engineer's must know",/tech/engineering-practices/engineer-must-know,,Official CTO Framework,2026-10-11,index-only
+Tech,Engineering Practices,"Katas in Software Development",/tech/engineering-practices/katas,Engineering Manager,Official CTO Framework,2026-10-11,index-only
+Tech,Engineering Practices,"Key Software Development Principles",/tech/engineering-practices/key-development-principles,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,Engineering Practices,"Request For Comments",/tech/engineering-practices/request-for-comments,,Official CTO Framework,2026-10-11,index-only
+Tech,Engineering Practices,"SOLID Principles",/tech/engineering-practices/solid-principles,Principal Engineer,Official CTO Framework,2026-10-13,summarised-automated
+Tech,Engineering Practices,"The Boy Scout rule",/tech/engineering-practices/boy-scout-rule,Principal Engineer,Official CTO Framework,2026-10-13,summarised-automated
+Tech,Literature & Laws,"Literature & Laws",/tech/literature,,Official CTO Framework,2026-10-11,index-only
+Tech,Literature & Laws,"Humour",/tech/literature/humour,,Official CTO Framework,2026-10-11,index-only
+Tech,Literature & Laws,"Laws of Software & Systems",/tech/literature/laws,,Official CTO Framework,2026-10-11,index-only
+Tech,Quality Assurance,"Quality Assurance",/tech/quality-assurance,,Official CTO Framework,2026-10-11,index-only
+Tech,Quality Assurance,"Quality Assurance Metrics",/tech/quality-assurance/metrics,Director of Engineering,Official CTO Framework,2026-10-11,index-only
+Tech,Quality Assurance,"The Test Pyramid",/tech/quality-assurance/test-pyramid,Principal Engineer,Official CTO Framework,2026-10-13,summarised-automated
+Tech,Security Risk & Compliance,"Security, Risk & Compliance",/tech/security-compliance,,Official CTO Framework,2026-10-11,index-only
+Tech,Security Risk & Compliance,"Access Control Models (RBAC, ABAC, PBAC)",/tech/security-compliance/access-control-models,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Security Risk & Compliance,"Compliance Frameworks for Regulated Environments",/tech/security-compliance/regulated-environments,Director of Engineering,Official CTO Framework,2026-10-11,index-only
+Tech,Security Risk & Compliance,"Further reading on Security for CTOs",/tech/security-compliance/further-reading,,Official CTO Framework,2026-10-11,index-only
+Tech,Security Risk & Compliance,"Penetration Testing",/tech/security-compliance/penetration-testing,,Official CTO Framework,2026-10-11,index-only
+Tech,Security Risk & Compliance,"Principle of Least Privilege",/tech/security-compliance/least-privilege,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Security Risk & Compliance,"Shift-Left on Security",/tech/security-compliance/shift-left-security,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Security Risk & Compliance,"Software Bill of Materials (SBOM): A Strategic Perspective",/tech/security-compliance/sbom,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Security Risk & Compliance,"Threat modelling",/tech/security-compliance/threat-modelling,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Strategy Trends & Innovation,"Strategy, Trends & Innovation",/tech/strategy-trends,,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"Cloud Providers Comparison",/tech/strategy-trends/cloud-providers,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,Strategy Trends & Innovation,"Environmental, Social, and Governance (ESG)",/tech/strategy-trends/esg,,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"Important Research Papers",/tech/strategy-trends/research-papers,,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"Martec's Law",/tech/strategy-trends/martecs-law,,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"Must-read RFCs",/tech/strategy-trends/must-read-rfc,,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"MySQL vs PostgreSQL",/tech/strategy-trends/mysql-vs-postgresql,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"React vs Angular",/tech/strategy-trends/react-vs-angular,,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"Rust vs Golang",/tech/strategy-trends/rust-vs-golang,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"Technology Adoption Lifecycle",/tech/strategy-trends/technology-adoption-curve,,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"Technology Radar",/tech/strategy-trends/tech-radar,,Official CTO Framework,2026-10-11,index-only
+Tech,Strategy Trends & Innovation,"Technology Radar Builder",/tech/strategy-trends/technology-radar-builder,,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"System Architecture & Design",/tech/architecture-design,,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"HATEOAS",/tech/architecture-design/apis/hateoas,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"REST APIs",/tech/architecture-design/apis/restful-apis,Principal Engineer,Official CTO Framework,2026-10-14,summarised-automated
+Tech,System Architecture & Design,"Data File Formats",/tech/architecture-design/data/file-formats,Principal Engineer,Official CTO Framework,2026-10-14,summarised-automated
+Tech,System Architecture & Design,"Error Metrics in Predictive Models",/tech/architecture-design/data/error-metrics,,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Garbage in, garbage out",/tech/architecture-design/data/garbage-in-garbage-out,,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Medallion Architecture",/tech/architecture-design/data/medallion-architecture,,Official CTO Framework,2026-10-14,summarised-automated
+Tech,System Architecture & Design,"Exponential Backoff",/tech/architecture-design/networking/exponential-backoff,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Internet of Things (IoT) Architecture",/tech/architecture-design/networking/internet-of-things,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Architectural Decision Record (ADR)",/tech/architecture-design/architectural-decision-record,,Official CTO Framework,2026-10-11,summarised-automated
+Tech,System Architecture & Design,"Architecture Patterns",/tech/architecture-design/patterns,,Official CTO Framework,2026-10-11,summarised-automated
+Tech,System Architecture & Design,"CAP Theorem",/tech/architecture-design/cap-theorem,Principal Engineer,Official CTO Framework,2026-10-11,summarised-automated
+Tech,System Architecture & Design,"CQRS Architecture",/tech/architecture-design/cqrs,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Event-Driven Architecture",/tech/architecture-design/event-driven-architecture,Principal Engineer,Official CTO Framework,2026-10-11,summarised-automated
+Tech,System Architecture & Design,"Gall's Law Explained",/tech/architecture-design/galls-law,CTO,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Horizontal vs. Vertical Scaling",/tech/architecture-design/horizontal-vertical-scaling,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Hyrum's Law",/tech/architecture-design/hyrums-law,,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Infrastructure models",/tech/architecture-design/infrastructure-models,,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Moore's Law",/tech/architecture-design/moores-law,CTO,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"New Technology Introduction (NTI) Process",/tech/architecture-design/new-tech-introduction,CTO,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"OSI Model",/tech/architecture-design/osi-model,Principal Engineer,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"SQL vs NoSQL Databases: Pros & Cons",/tech/architecture-design/sql-vs-nosql,Principal Engineer,Official CTO Framework,2026-10-14,summarised-automated
+Tech,System Architecture & Design,"Technical Debt & Risk Management",/tech/architecture-design/technical-debt,CTO,Official CTO Framework,2026-10-11,summarised-automated
+Tech,System Architecture & Design,"The C4 Model: Visualising Software Architecture",/tech/architecture-design/c4-diagrams,Principal Engineer,Official CTO Framework,2026-10-11,summarised-automated
+Tech,System Architecture & Design,"TOGAF",/tech/architecture-design/togaf,CTO,Official CTO Framework,2026-10-11,index-only
+Tech,System Architecture & Design,"Well-architected",/tech/architecture-design/well-architected,,Official CTO Framework,2026-10-11,links-only-body-not-retrievable
+Resources,Mini-Games,"Mini-Games",/resources/games,,Official CTO Framework,2026-10-11,index-only
+Resources,Mini-Games,"AWS Service Matcher",/resources/games/aws-service-matcher,,Official CTO Framework,2026-10-11,index-only
+Resources,Mini-Games,"Azure Service Matcher",/resources/games/azure-service-matcher,,Official CTO Framework,2026-10-11,index-only
+Resources,Mini-Games,"Guess the Bias",/resources/games/guess-the-bias,,Official CTO Framework,2026-10-11,index-only
+Resources,Mini-Games,"Guess the RFC",/resources/games/guess-the-rfc,,Official CTO Framework,2026-10-11,index-only
+Resources,Mini-Games,"Whose Quote is This?",/resources/games/whose-quote,,Official CTO Framework,2026-10-11,index-only
+Resources,Our Apps,"Our Apps",/resources/our-apps,,Official CTO Framework,2026-10-11,index-only
+Resources,Our Apps,"Feedbrief",/resources/our-apps/feedbrief,,Official CTO Framework,2026-10-11,index-only
+Resources,Our Apps,"Speakflow",/resources/our-apps/speakflow,,Official CTO Framework,2026-10-11,index-only
+Resources,Tools & Templates,"Tools & Templates",/resources/tools,,Official CTO Framework,2026-10-11,index-only
+Resources,Tools & Templates,"Interactive Assessments",/resources/tools/assessments,,Official CTO Framework,2026-10-11,index-only
+Resources,Tools & Templates,"Mind maps",/resources/tools/mind-maps,,Official CTO Framework,2026-10-11,index-only
+Resources,Reading,"Blogs & Newsletters",/resources/blogs,,Official CTO Framework,2026-10-11,index-only
+Resources,Reading,"Bookmarks",/resources/bookmarks,,Official CTO Framework,2026-10-11,index-only
+Resources,Reading,"Books",/resources/books,,Official CTO Framework,2026-10-11,index-only
+Resources,Reading,"Handbooks",/resources/handbooks,,Official CTO Framework,2026-10-11,index-only
+Resources,Reading,"Podcasts",/resources/podcasts,,Official CTO Framework,2026-10-11,index-only
+Framework,Levels,"Engineering Leadership Levels",/levels,,Official CTO Framework,2026-10-11,page-read-partial
+Framework,Other,"Fractional CTO Services",/fractional-cto,,Official CTO Framework,2026-10-11,index-only
+Framework,Other,"Platform Changelog",/changelog,,Official CTO Framework,2026-10-11,index-only
+Framework,Other,"Weekly Strategic Newsletter",/newsletter,,Official CTO Framework,2026-10-11,index-only
+Framework,Other,"News Digest",/news-digest,,Official CTO Framework,2026-10-11,footer-link-only

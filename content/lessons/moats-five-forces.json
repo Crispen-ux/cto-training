@@ -1,0 +1,202 @@
+{
+  "id": "moats-five-forces",
+  "moduleId": "product-strategy",
+  "pillar": "Product",
+  "title": "Economic moats and Porter's Five Forces",
+  "estimatedMinutes": { "learn": 45, "build": 270, "defend": 30 },
+  "objectives": [
+    "Describe the five moat types on the page and test each against evidence rather than assertion",
+    "Apply the five forces to a technology business and name which force most limits its margin",
+    "Quantify switching cost and supplier power with simple arithmetic",
+    "Separate a durable advantage from a transient one or from table stakes",
+    "Defend a strategic position, including how the moat could erode"
+  ],
+  "prerequisites": ["business-models-lean-canvas", "cloud-providers-lockin"],
+  "unlock": { "prerequisites": [{ "lessonId": "business-models-lean-canvas", "type": "knowledge_check" }, { "lessonId": "cloud-providers-lockin", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Economic Moats",
+      "url": "https://www.ctoframework.com/product/strategy/economic-moats",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Porter's Five Forces",
+      "url": "https://www.ctoframework.com/product/strategy/porter-five-forces",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Economic Moats page has no figures and cites only two Wikipedia articles ('Economic Moat' and 'Network Effect'). Its company examples (Salesforce, Jira, Figma, Stripe, Twilio, Google Search, Cloudflare, AWS Graviton) are asserted with no evidence of their margins, switching costs or market position, and none was checked for this lesson.",
+    "The retrieved summary flagged these points on the moats page: attributing the term's coinage to Warren Buffett is stated as fact without citation (he popularised it; the precise origin was not verified here); compliance certifications (SOC 2, ISO 27001, HIPAA, FedRAMP) are often table stakes for enterprise sales, so calling them moats overstates their defensibility; 'competitors will match it within weeks' is an unsupported timeline; 'data gravity' and 'trust gravity' are loosely defined; the assumption that data network effects always give a durable advantage ignores data quality and diminishing returns; and security sits under intangible assets, blurring a defensive practice with a competitive advantage.",
+    "The moats page does not cover how to measure moat strength, how moats erode (open source, new platforms, commoditisation by AI), the cost of building them, antitrust and customer resistance to lock-in, data ethics and consent, brand or regulatory-licence moats, or case studies.",
+    "The Five Forces page has no figures and cites only a Wikipedia article, not Porter's original work. The retrieved summary flagged: directional claims (cloud lowers entry barriers; high rivalry pressures prices) given without evidence; the substitutes category is blurred (open source displacing commercial software is listed as a substitute although it can be direct competition); the goal of 'reshaping' industry structure overstates what one firm controls; 'ethically' building switching costs is undefined; the model is presented without how forces change over time; and specialist talent is treated as a supplier force without discussion.",
+    "The Five Forces page does not cover scoring, a step-by-step method, worked company examples, complementors (the common extension for platforms), interactions between forces, criticisms of the framework, or links to decisions such as build versus buy beyond a few examples.",
+    "The switching cost and supplier arithmetic in this lesson are Original Academy material built on invented ASSUMPTIONS and run as Python. They are not data about any real company."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Five moats as the page lists them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page defines an economic moat as an organisation's ability to keep a sustainable competitive advantage, protecting long-term market share and margins, and attributes the term to Warren Buffett.\n\n1. High switching costs and data gravity: friction that makes customers reluctant to leave. Workflow embedding (the page names Salesforce, Jira and Figma), deep API and integration ties, and accumulated data (audit logs, telemetry, history) that makes leaving costly.\n2. Network effects: direct (value rises with users), indirect (two-sided markets such as app stores and marketplaces) and data (more users produce more data, which improves models, which attracts users).\n3. Cost and scale advantages: a unit cost competitors cannot match (custom silicon, edge networks, automated operations that let small teams serve very many users).\n4. Intangible assets: proprietary technology, legal rights or trust, including compliance certifications.\n5. Ecosystem lock-in and developer gravity: for platforms, the developer ecosystem becomes the moat once an API or tool is the default (the page names Stripe and Twilio).\n\nCTO recommendations on the page: architect for data gravity, prioritise integration (API-first, developer portals, SDKs), and avoid the commodity trap of mistaking a transient advantage, such as using a newly released public model, for a structural moat."
+      },
+      {
+        "heading": "Testing a moat instead of naming one",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Naming a moat is easy; the page does this with examples and no evidence. Test each claim with three questions: what would it cost a customer or competitor to overcome it, how fast could they, and what would make it fade?\n\nSwitching costs are measurable. Suppose a customer pays 13,500 a year and moving to a competitor would take two engineers six weeks at an assumed loaded cost of 2,500 per engineer-week: 30,000, or about 2.2 times a year's spend. That is a real barrier, but it only holds while the migration estimate holds. If your product exports its data in a standard format, you have lowered your own moat; if you cannot find the cost, you do not know your moat.\n\nCompliance certifications deserve care. The page lists them as trust gravity, but they are commonly required by enterprise buyers to be considered at all, so competitors acquire them too. Treat them as table stakes: absence loses deals, presence does not win them.\n\nNetwork effects can fail. More users do not always improve the product: data quality, diminishing returns and congestion all matter, and the page assumes the loop always works. Ask for evidence that the product measurably improves with scale, for example accuracy against data volume.\n\nA transient advantage is one a competitor can buy in the time it takes to integrate a public service. 'We use model X' is not a moat. Proprietary data, hard operational capability and distribution you control are candidates, and the page's guidance to invest in hard system-level problems fits that test.\n\nFinally, moats erode: open source, platform shifts and falling costs of AI work all reduce differentiation. The page does not say how. Write down the three most likely erosion paths for your moat and an early signal for each."
+      },
+      {
+        "heading": "Five forces as the page presents them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page frames Porter's model as a way for technology leaders to see where advantage can be built or lost beyond product execution, for diagnosing structural profit constraints rather than forecasting disruption.\n\nCompetitive rivalry: number and size of competitors, pace of innovation and feature parity, switching costs, capital intensity, market growth. The page says rapid release cycles, open source and cheap cloud can erode differentiation.\nThreat of new entrants: barriers such as capital, network effects, regulation, brand trust, proprietary data and scale. APIs and cloud tooling lower entry costs.\nBargaining power of suppliers: cloud providers, data providers, key vendors, specialist talent; lock-in, few alternatives, high switching costs. The page's example is heavy reliance on AWS or Azure shifting margin upstream if the architecture is not portable.\nBargaining power of buyers: customer concentration, alternatives, switching costs, price sensitivity and procurement sophistication; subscriptions make pricing easier to compare.\nThreat of substitutes: alternatives meeting the same need, for example spreadsheets replacing specialised SaaS, in-house work replacing a platform, or open source replacing commercial software.\n\nUse on the page: find the force that most limits margin, shape architecture and product to change it, build switching costs 'ethically' (integration, data gravity, workflow embedding), and invest in network effects, ecosystem or proprietary data."
+      },
+      {
+        "heading": "Making the forces measurable",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page gives no scoring method. A simple discipline: rate each force from 1 (weak) to 5 (strong) in one sentence of evidence, and rank. A rating with no evidence is an opinion.\n\nSupplier power can be put in numbers. Suppose cost of goods is 20% of revenue (gross margin 80%) and cloud is 35% of that, so 7 per 100 revenue. A 20% cloud price rise adds 1.4, lowering gross margin from 80.0% to 78.6%. Material, but survivable. If cloud were 70% of cost of goods, the same rise costs 2.8 points. Supplier power is the share of your cost it controls multiplied by how far it can move price and how hard you can leave. A portable architecture lowers the last term, which is the page's point.\n\nBuyer power: concentration is the easy test. If one customer is 40% of revenue, they set terms. Ask what share of revenue the top three customers represent.\n\nSubstitutes: ask what a customer does today if your product vanished. For many tools it is a spreadsheet or doing nothing, and the page's own list says as much. That sets a ceiling on price.\n\nThe page's boundary between rivals and substitutes is blurry (open source can be either). Use a practical rule: a competitor offers the same product in the same buying decision; a substitute meets the same need a different way.\n\nTwo gaps to fill yourself. The model is a snapshot, so note which forces are moving: if cheap AI tooling is lowering entry barriers, record the date and the evidence. And for platforms, add complementors (partners whose products make yours more valuable), which the page does not cover."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Strategic position of the dependency-ownership service (invented figures)",
+      "body": "Continue the product from the previous lesson: a B2B subscription connecting to source control to map ownership and dependency risk.\n\nMoat candidates, tested.\nSwitching costs: once teams record owners and review workflows in the product, moving means re-entering the data and changing a review habit. Estimated migration for a typical customer is two engineers for six weeks, 30,000 against 13,500 annual spend, about 2.2 times. But the product exports its data as open formats, which cuts the migration estimate roughly in half (ASSUMPTION). The team keeps the export because customers demand it and records that it lowers the moat.\nCompliance: SOC 2 Type II is required by most buyers. Table stakes, so budget it as cost of entry, not as an advantage.\nNetwork or data effects: unproven. The hypothesis is that anonymised patterns across customers improve risk ranking, but that needs consent, enough customers and a measured improvement. Status: hypothesis, unknown.\nTransient advantage: summarising findings with a public model is a feature any competitor can copy quickly. Not a moat.\n\nFive forces.\nRivalry (3/5): several tools and internal scripts; evidence is the number of alternatives found in interviews.\nNew entrants (4/5): source control APIs are public and the first version is cheap to build. Barrier is trust to read code metadata, so SOC 2 and a narrow permission scope matter.\nSuppliers (2/5): the source control platform could build this feature itself. This is the most dangerous supplier effect: the supplier as a competitor. Cloud hosting is 7 of 100 revenue; a 20% rise costs 1.4 margin points.\nBuyers (3/5): a CTO buys but procurement and security reviews apply; no customer is above 15% of revenue yet.\nSubstitutes (4/5): a spreadsheet and a quarterly review meeting. This caps price, and the default alternative in the interviews was 'do nothing'.\n\nWhich force most limits margin? Substitutes and a supplier that could move into the space. The strategic response: make the data useful across several source control providers so no single supplier owns the whole view, deepen workflow embedding (review queues, ownership approvals), and track the supplier's roadmap quarterly.\n\nErosion paths and signals: a source control vendor ships ownership mapping (watch their release notes); AI tooling lets customers build a good enough in-house version (watch pilot losses citing 'built it ourselves'); data export makes migration cheap (watch churn after export use).\n\nUnverified: all ratings rest on interviews and assumptions; nothing here has been checked against real market data."
+    },
+    "misconceptions": [
+      "Naming a famous company as proof that a moat exists.",
+      "Treating compliance certifications as moats when buyers require them from everyone.",
+      "Assuming network effects always strengthen with scale.",
+      "Mistaking use of a public tool or model for a structural advantage.",
+      "Scoring the forces without evidence.",
+      "Treating the five forces as a forecast. The page says it diagnoses structure.",
+      "Ignoring that a supplier can become a competitor."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CEO which of your claimed advantages would survive a well-funded competitor in six months and which would not."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "mf-1",
+      "question": "Which of these is NOT one of the five moat types on the page?",
+      "options": [
+        "Switching costs and data gravity",
+        "Network effects",
+        "Lowest advertising spend",
+        "Ecosystem lock-in and developer gravity"
+      ],
+      "answer": 2,
+      "why": "The page lists switching costs and data gravity, network effects, cost and scale advantages, intangible assets, and ecosystem lock-in."
+    },
+    {
+      "id": "mf-2",
+      "question": "Why is calling a SOC 2 certification a moat questionable?",
+      "options": [
+        "It is illegal",
+        "It is often required by enterprise buyers of everyone, so it is table stakes rather than a differentiator",
+        "Certifications never help sales",
+        "It is only valid for one year"
+      ],
+      "answer": 1,
+      "why": "The retrieved summary flagged that compliance certifications are commonly table stakes, so competitors acquire them too."
+    },
+    {
+      "id": "mf-3",
+      "question": "A customer pays 13,500 a year and migration would cost 30,000. What is the switching cost as a multiple of annual spend?",
+      "options": ["About 0.45", "About 1.0", "About 2.2", "About 4.5"],
+      "answer": 2,
+      "why": "30,000 / 13,500 is about 2.2. It depends entirely on the migration estimate, which an open export format can reduce."
+    },
+    {
+      "id": "mf-4",
+      "question": "Which is one of the five forces on the page?",
+      "options": [
+        "Brand awareness",
+        "Threat of substitutes",
+        "Employee engagement",
+        "Regulatory approval"
+      ],
+      "answer": 1,
+      "why": "The five forces are competitive rivalry, threat of new entrants, bargaining power of suppliers, bargaining power of buyers and threat of substitutes."
+    },
+    {
+      "id": "mf-5",
+      "question": "Cost of goods is 20 per 100 revenue and cloud is 35% of it. A 20% cloud price rise lowers gross margin from 80.0% to about what?",
+      "options": ["80.0%", "78.6%", "75.0%", "70.0%"],
+      "answer": 1,
+      "why": "Cloud is 7; a 20% rise adds 1.4, so margin falls from 80.0% to 78.6%."
+    },
+    {
+      "id": "mf-6",
+      "question": "What does the page NOT provide for Porter's Five Forces?",
+      "options": [
+        "A definition of each force",
+        "A scoring method, worked company example or discussion of complementors",
+        "Examples of supplier risk",
+        "A reference to Wikipedia"
+      ],
+      "answer": 1,
+      "why": "The summary lists the missing items: scoring, a step-by-step method, worked examples, complementors, interactions between forces and criticisms."
+    }
+  ],
+  "build": {
+    "business": "Cretek's position depends on what competitors cannot easily copy and on who holds leverage over it. A CTO must be able to say which advantages are real, which are table stakes and which supplier or buyer could hurt margin. This is the strategic position capability in the CTO Operating System.",
+    "problem": "Assess the moats and five forces for one real Cretek product, with measured switching cost and supplier exposure, a tested calculator and an honest statement of what would erode the position.",
+    "requirements": [
+      "For each of the page's five moat types, state whether your product has it, with evidence, and mark each REAL, ASSUMPTION or unknown. Classify any advantage that is table stakes or transient",
+      "Estimate the switching cost for a typical customer as engineer-weeks times loaded cost against annual spend, from a real migration you or a customer has observed or from a clearly labelled assumption. State how an export format changes it",
+      "Rate each of the five forces from 1 to 5 with one sentence of evidence each. Identify the force that most limits margin and one supplier that could become a competitor",
+      "Quantify supplier exposure: the share of cost of goods held by each major supplier, the margin effect of a price rise of 10%, 20% and 50%, and the cost of the portability measure you would take",
+      "Compute buyer concentration (top customer and top three as a share of revenue) from real or labelled data",
+      "Write three erosion paths for your moat with an early signal and an owner for each",
+      "A position calculator that takes revenue, cost of goods, supplier cost shares, a price rise, migration cost and annual spend, and returns the margin after the rise and the switching cost multiple. Automated tests required, including the worked example (78.6% margin; 2.2 times), zero revenue (reject), shares summing above 1 (reject), a negative price rise (handle explicitly) and zero annual spend (reject)",
+      "A one-page summary for the CEO, led by the force that most limits margin and the advantages that would not survive a funded competitor",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No claim of a moat without evidence or a labelled assumption",
+      "No competitor or customer data that is confidential or unlawfully obtained",
+      "Do not use the page's company examples as evidence for your own position",
+      "Do not treat the forces as a forecast",
+      "Must run locally with a single command for the calculator and its tests"
+    ],
+    "design": "Write a one-page design covering the moat tests, the force ratings, the supplier exposure and one alternative strategy you rejected, for example relying on a single cloud provider's proprietary services.",
+    "tasks": [
+      "Test each moat type against evidence",
+      "Estimate switching cost",
+      "Rate the forces and identify the limiting one",
+      "Quantify supplier exposure and buyer concentration",
+      "Build the calculator with tests",
+      "Write erosion paths and the one-page summary"
+    ],
+    "acceptance": [
+      "Every moat claim has evidence or an assumption label and table stakes are separated",
+      "Switching cost is estimated with its method stated",
+      "Each force has a rating and evidence and the limiting force is named",
+      "Supplier exposure is quantified at three price rises",
+      "The calculator tests pass including the rejection cases",
+      "Three erosion paths with signals and owners",
+      "No confidential data"
+    ],
+    "deliverable": "The moat tests, switching cost estimate, force ratings, supplier and buyer analysis, calculator with tests, erosion paths and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "CEO",
+    "scenario": "The CEO is told the product has a 'strong moat'. They want to know whether that survives a competitor with money and a year.",
+    "prompts": [
+      "Which of our advantages would a funded competitor copy fastest?",
+      "What does it cost a customer to leave us, and how do you know?",
+      "Who has leverage over our margin, and what would they do with it?",
+      "Which of the page's moats do we actually have, and which are table stakes?",
+      "What would erode our position, and what would we see first?",
+      "What would you invest in, and what would you stop?"
+    ],
+    "rubric": [
+      { "criterion": "Evidence-based moat assessment that separates durable, transient and table stakes", "weight": 0.3 },
+      { "criterion": "Quantified switching cost and supplier exposure with a tested calculation", "weight": 0.3 },
+      { "criterion": "Realistic five forces ratings and identification of the limiting force and erosion paths", "weight": 0.25 },
+      { "criterion": "Clear communication to a CEO", "weight": 0.15 }
+    ]
+  }
+}

@@ -1,0 +1,222 @@
+{
+  "id": "roi-business-cases",
+  "moduleId": "economics-business-cases",
+  "pillar": "Economics",
+  "title": "Business cases: ROI, value metrics and margins",
+  "estimatedMinutes": { "learn": 50, "build": 280, "defend": 35 },
+  "objectives": [
+    "Calculate ROI using the framework's formula and state exactly what the gain and cost figures include",
+    "Explain what ROI leaves out (time, discounting, recurring costs) and add payback and NPV where the decision needs them",
+    "Define COGS, gross margin and EBITDA and trace a technical decision to each",
+    "Frame a technical initiative as a financial case a CFO can rank against other work",
+    "Defend a business case, including its weakest assumption, to a sceptical CFO"
+  ],
+  "prerequisites": ["tech-budgets"],
+  "unlock": { "prerequisites": [{ "lessonId": "tech-budgets", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Return on Investment (ROI)",
+      "url": "https://www.ctoframework.com/economics/investment/return-of-investment",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Investment & Value Metrics",
+      "url": "https://www.ctoframework.com/economics/terms/investment-and-value-metrics",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Profitability & Margin Management",
+      "url": "https://www.ctoframework.com/economics/terms/profitability-and-margin-management",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The ROI page labels the 1,200,000 in its example as 'net gain' yet the formula subtracts cost again. That only works if the figure is the gross return. The page does not clarify. Treat this as an ambiguity to resolve with your finance lead, not a settled definition.",
+    "The ROI page does not cover time horizon, payback, NPV, IRR, limitations, pitfalls or how to measure gain. The Investment & Value Metrics page also states that it does not define NPV, IRR, payback, discounting, risk adjustment or sensitivity analysis. Everything on those topics in this lesson is Original Academy material and is labelled as such.",
+    "Investment & Value Metrics gives a refactoring example (300,000 saved per year against 150,000 upfront, 100% ROI in 12 months). The arithmetic checks, but the page does not say whether 300,000 is gross or net of running costs, or whether '12 months' is a payback period or a time-based ROI.",
+    "Profitability & Margin Management defines COGS and gross margin but gives no EBITDA formula, no contribution margin, and no capitalisation rules, accounting standards or tax treatment. Capitalising engineering labour is an accounting judgement; take advice from your finance function and auditors and do not infer the rules from this lesson.",
+    "In the page's gross margin example (revenue $10M, costs $2M to 80%, then 90% after hosting falls to $1M) the 90% figure implies total COGS of $1M, which the page does not state. In its valuation example, a $100,000 saving adding $1,000,000 of value at a 10x multiple applies a revenue multiple to a cost saving, which the page does not explain. Both are illustrations, not valuation method.",
+    "The 75-85% gross margin range is stated on the page without a source and is described for SaaS. Do not apply it to services or hardware businesses.",
+    "Not read for this lesson: Asset & Capitalization Mechanics, Planning & Governance, Cloud Costs, Strategic Economics Hub, the FinOps Foundation. Read Asset & Capitalization Mechanics before making any capitalisation claim."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Technology spend as a financial commitment",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Investment & Value Metrics argues that technology investments should be judged as financial commitments, not only as engineering work. It uses ROI and TCO to build business cases, align stakeholders and make build-versus-buy decisions.\n\nIts main practical point is about language. Requests for 'technical clean-up' or 'modernising the stack' can sound like engineering preference to a CEO or CFO. Expressed as ROI, they become an objective priority list that non-technical leaders can evaluate. It also says to include opportunity cost: hours on a task scheduler or billing integration are hours not spent on core IP or revenue features."
+      },
+      {
+        "heading": "ROI: the formula and its two examples",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Formula (both pages): ROI = (Net Gain from Investment - Cost of Investment) / Cost of Investment x 100, as a percentage.\n\nROI page example: cost 500,000, 'net gain' 1,200,000. (1,200,000 - 500,000) / 500,000 x 100 = 140%.\n\nInvestment & Value Metrics example: refactoring a database to cut production cloud costs by 20% and shorten developer onboarding, saving 300,000 a year against 150,000 upfront. (300,000 - 150,000) / 150,000 x 100 = 100%, which the page calls a 100% ROI in 12 months.\n\nThe page's pattern for build versus buy applies the same discipline to TCO. A custom build costing 100,000 plus 30,000 a year has a 3-year TCO of 190,000; a SaaS option at 50,000 a year has 150,000, so the build 'may exceed' SaaS. The page says to use a 3 to 5 year view."
+      },
+      {
+        "heading": "Gross, net and the ambiguity you must resolve",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The formula subtracts cost from 'net gain'. If the gain is already net of cost, cost is counted twice. In the formula, the first term must be the total return, gross of the investment cost. Whatever the label, state in every business case what the gain includes: is it revenue, saving, or profit; does it include ongoing run costs; over what period. Two people can read the same ROI figure and mean different things, and a CFO will ask.\n\nThe page's refactoring example is a good test. Is 300,000 the saving before or after the cost of operating the refactored system? Is the 20% cloud saving measured or forecast? Until you know, the 100% is an assertion."
+      },
+      {
+        "heading": "What ROI leaves out: time, recurrence and risk",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The framework pages do not cover these topics, so this section is Academy material and not framework content.\n\nTime. ROI as a single percentage hides the period. 100% over one year and 100% over five years are very different investments. Always attach the horizon.\n\nRecurring benefit and cost. A saving that repeats yearly, with a run cost that also repeats, needs a cash-flow view by year, not one figure.\n\nPayback period: how long until cumulative net benefit covers the upfront cost. Simple and easy to explain; it ignores everything after payback.\n\nNPV (net present value): discount each year's net cash flow at a rate that reflects the cost of capital and risk, sum them, and subtract the upfront cost. A positive NPV means the investment returns more than the discount rate. The discount rate is a judgement; use the rate your finance function uses and show a sensitivity range.\n\nRisk. A forecast saving is not a measured saving. Show a low, expected and high case, and say which assumption moves the answer most."
+      },
+      {
+        "heading": "COGS, gross margin and EBITDA",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Profitability & Margin Management says a CTO's architecture and vendor choices flow into the financial statements.\n\nCOGS: the direct cost of producing and delivering the product to active customers. For SaaS: production cloud hosting, third-party APIs embedded in the product (payment gateways, SMS, LLM APIs), and production site reliability or customer support labour.\n\nGross margin = (Revenue - COGS) / Revenue, as a percentage. The page says SaaS companies at roughly 75 to 85% or more tend to earn premium valuation multiples, because revenue can grow without a matching rise in direct costs.\n\nEBITDA: operating profitability before interest, taxes, depreciation and amortisation. The page says private equity, venture capital and acquirers commonly use it to judge core earnings power. It gives no formula.\n\nWorked example on the page: revenue $10M a year, running costs $2M, gross margin 80%; cutting hosting to $1M raises it to 90%."
+      },
+      {
+        "heading": "How a CTO moves the margin",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Four levers from the page.\n\n1. Cloud optimisation: lower production hosting cost lowers COGS and raises gross margin.\n2. Account segmentation: keep Dev, Test, Staging and QA in separate accounts from production. Production spend is COGS; non-production spend is R&D operating expense. Mixing them understates gross margin.\n3. Software capitalisation: shifting eligible engineering labour to capital expenditure, and optimising third-party infrastructure contracts, can raise EBITDA and, per the page, borrowing capacity and transaction multiples. The page does not explain the accounting rules.\n4. Pricing and packaging: when a feature depends on costly third-party APIs such as AI models, tell Product and Sales the COGS implications. A popular but expensive feature can erode profitability if it is not priced for a healthy margin."
+      },
+      {
+        "heading": "Reading the page's examples critically",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Gross margin example: for the margin to reach 90% on $10M of revenue, total COGS must fall to $1M. The page says hosting falls to $1M while the total started at $2M including licences and support. The numbers only line up if the other costs also drop, or if hosting alone was the whole $2M. Ask what the starting breakdown was before quoting it.\n\nValuation example: the page says a $100,000 saving adds $1,000,000 of enterprise value at a 10x multiple, but calls that multiple a revenue multiple. A cost saving does not change revenue. If a buyer valued profit at 10x, the arithmetic would give $1,000,000, but the page does not say that. Treat the figure as a rough illustration. Never put it in a business case as a promised valuation uplift; it is not valuation method."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "From the page's refactoring example to a case a CFO can test (illustrative numbers, not Cretek data)",
+      "body": "Start from the page: upfront cost 150,000, savings 300,000 a year, ROI 100%. Now add what a CFO will ask. Assume the refactored system costs 60,000 a year to operate (an assumption; the page is silent), so the net annual benefit is 300,000 - 60,000 = 240,000.\n\nYear-one ROI: (240,000 - 150,000) / 150,000 = 0.6, or 60%, not 100%. Payback: 150,000 / 240,000 = 0.625 years, about 7.5 months.\n\nThree-year view, undiscounted: net benefit 3 x 240,000 = 720,000, so ROI = (720,000 - 150,000) / 150,000 = 3.8, or 380%.\n\nNPV at an illustrative 10% discount rate: year 1 218,182; year 2 198,347; year 3 180,316 (each 240,000 divided by 1.10, 1.10 squared, 1.10 cubed). Sum 596,844. Subtract 150,000 to get an NPV of 446,844.\n\nSensitivity: what if the saving is only 70% of forecast? Annual saving 210,000, net 150,000, payback 1.0 year, still positive. What if the run cost is 120,000? Net 180,000 and payback about 10 months. The weakest assumption is the 20% cloud saving, because it is a forecast; say so and show how the case changes if it is half as large.\n\nThe lesson: the same project is 100% on the page, 60% in year one, 380% over three years undiscounted and 446,844 NPV. All are 'right'. The case must say which one it is quoting and why."
+    },
+    "misconceptions": [
+      "Treating ROI as a single, comparable number without its period, or without saying what gain and cost include.",
+      "Calling the figure 'net gain' and subtracting cost again, which counts cost twice.",
+      "Assuming ROI or the page's 12-month example covers recurring costs. The page does not say.",
+      "Presenting the page's $100,000 to $1,000,000 valuation example as a promised uplift.",
+      "Quoting 75 to 85% gross margin as a universal target. The page ties it to SaaS and gives no source.",
+      "Reading capitalisation as a free EBITDA lever without taking accounting advice.",
+      "Putting dev and test spend in production accounts and then wondering why gross margin looks poor."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a CFO what your ROI figure includes and excludes, and the one assumption that would change your recommendation."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "rb-1",
+      "question": "On the ROI page, an initiative costs 500,000 and returns 1,200,000. Using the page's formula, what is the ROI?",
+      "options": ["70%", "140%", "240%", "58%"],
+      "answer": 1,
+      "why": "(1,200,000 - 500,000) / 500,000 = 1.4, so 140%. Note the page calls 1,200,000 'net gain' although the formula subtracts cost, so confirm what the gain figure includes."
+    },
+    {
+      "id": "rb-2",
+      "question": "Which metrics does the Investment & Value Metrics page say it does NOT define or discuss?",
+      "options": [
+        "ROI and TCO",
+        "NPV, IRR and payback period",
+        "Build versus buy",
+        "Opportunity cost"
+      ],
+      "answer": 1,
+      "why": "The page covers ROI and TCO, build versus buy and opportunity cost. It states that it does not cover NPV, IRR, payback, discounting or sensitivity analysis, so those are Academy material in this lesson."
+    },
+    {
+      "id": "rb-3",
+      "question": "A SaaS company has revenue of $10M and COGS of $2M. What is its gross margin?",
+      "options": ["20%", "75%", "80%", "90%"],
+      "answer": 2,
+      "why": "(10 - 2) / 10 = 80%. Gross margin is (Revenue - COGS) / Revenue."
+    },
+    {
+      "id": "rb-4",
+      "question": "Which of these is production COGS rather than R&D operating expense, according to the page?",
+      "options": [
+        "Spend in a Staging cloud account",
+        "Spend in a QA cloud account",
+        "Spend on a third-party payment API embedded in the live product",
+        "Spend in a Dev cloud account"
+      ],
+      "answer": 2,
+      "why": "COGS covers production hosting, embedded third-party APIs such as payment gateways, and production SRE or support labour. Dev, Test, Staging and QA spend is R&D operating expense and should be kept in separate accounts."
+    },
+    {
+      "id": "rb-5",
+      "question": "Upfront cost 150,000, net benefit 240,000 a year. What is the payback period?",
+      "options": ["About 7.5 months", "About 12 months", "About 18 months", "About 7.5 years"],
+      "answer": 0,
+      "why": "150,000 / 240,000 = 0.625 years, about 7.5 months. Payback is Academy material, not on the framework pages."
+    },
+    {
+      "id": "rb-6",
+      "question": "Why should the page's $100,000 saving adding $1,000,000 of enterprise value be treated as illustrative only?",
+      "options": [
+        "Because hosting savings never affect profit",
+        "Because it applies a revenue multiple to a cost saving and gives no valuation method",
+        "Because 10x is always too low",
+        "Because enterprise value cannot be estimated"
+      ],
+      "answer": 1,
+      "why": "The page calls 10x a revenue multiple, but a cost saving does not change revenue. The page offers no valuation method, so the figure is a rough illustration."
+    }
+  ],
+  "build": {
+    "business": "A CTO who cannot express a technology request as a financial case loses it to whoever can. This is the business case capability in the Cretek CTO Operating System.",
+    "problem": "Build a business case for one real Cretek technology investment, with ROI, payback and NPV, sensitivity analysis and a margin view, plus a tested calculator and a one-page case for a CFO.",
+    "requirements": [
+      "Choose one real candidate investment at Cretek (for example automation of quotations, consolidating hosting, or an architecture change). Say who would approve it",
+      "State the cost: upfront and recurring, each traced to a quote, invoice or labelled ASSUMPTION. Include internal labour and say how it was valued",
+      "State the benefit: what it is (revenue, saving or profit), how it is measured, the evidence for it, and whether it is measured or forecast. Define whether the gain is gross or net of running cost, and say so on page one",
+      "Calculate ROI, payback and NPV over a stated horizon, with the discount rate and where it came from. Show low, expected and high cases and which single assumption moves the answer most",
+      "A margin view: the effect of the investment on COGS and gross margin, with production and non-production spend separated. If it does not affect margin, say so. Do not claim a valuation uplift",
+      "Opportunity cost: what the same people or money would otherwise do",
+      "A comparison with at least one alternative, including doing nothing, and the criteria used to rank them",
+      "A calculator that takes an upfront cost, a cash-flow series, a discount rate and a horizon, and outputs ROI, payback and NPV. Automated tests required, including known values from the worked example, a zero upfront cost (reject), a series that never pays back (report, do not divide by zero), a negative rate boundary, and a horizon of one period",
+      "A one-page case for a CFO, led by the decision requested, the weakest assumption and what would change the answer",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED, with the currency and the period stated"
+    ],
+    "constraints": [
+      "No invented Cretek figures. Real records or labelled assumptions only",
+      "Do not quote a valuation uplift from a cost saving",
+      "Do not make capitalisation or tax claims. If relevant, record it as an open question for finance or an accountant",
+      "Do not commit personal pay data to the repository",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the calculator inputs and outputs, the definition of gain (gross or net), how payback is reported when it is never reached, and one alternative you rejected, for example a single ROI figure with no cash-flow series.",
+    "tasks": [
+      "Pick the investment and gather the cost and benefit evidence",
+      "Define gain and cost explicitly and record the definitions",
+      "Build the calculator with tests covering the listed cases",
+      "Run low, expected and high cases and identify the weakest assumption",
+      "Build the margin view and the alternatives comparison",
+      "Write the one-page CFO case",
+      "Record security and handling considerations for the financial inputs"
+    ],
+    "acceptance": [
+      "Gain and cost are defined and sourced, with gross versus net stated",
+      "ROI, payback and NPV are calculated for a stated horizon and discount rate",
+      "Low, expected and high cases exist and the weakest assumption is named",
+      "The calculator tests pass, including the never-pays-back and zero-cost cases",
+      "Margin impact is explained without a valuation claim",
+      "At least one alternative, including doing nothing, is compared",
+      "All figures labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The case, the calculator with tests and the one-page CFO summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "CFO",
+    "scenario": "A CFO has your business case in front of them. They have seen engineering ROI claims before and do not trust them.",
+    "prompts": [
+      "What exactly does your gain figure include, and is it net of running costs?",
+      "Which of these numbers is measured and which is forecast?",
+      "Your ROI is high but the project is not on my approved list. Why should it displace something that is?",
+      "Show me the case where the saving is half what you forecast. Does it still make sense?",
+      "Which of your assumptions would you least like me to test?",
+      "You say this lifts gross margin. Which accounts does that cost sit in, and how would we see it?"
+    ],
+    "rubric": [
+      { "criterion": "Precise definitions of gain and cost, with evidence and measured versus forecast separated", "weight": 0.3 },
+      { "criterion": "Correct and appropriate use of ROI, payback, NPV and margin, without overclaiming", "weight": 0.3 },
+      { "criterion": "Honest treatment of risk, sensitivity and the weakest assumption", "weight": 0.2 },
+      { "criterion": "Clear, brief communication to a finance reader", "weight": 0.2 }
+    ]
+  }
+}

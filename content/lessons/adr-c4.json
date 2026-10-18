@@ -1,0 +1,179 @@
+{
+  "id": "adr-c4",
+  "moduleId": "tech-architecture",
+  "pillar": "Tech",
+  "title": "Documenting architecture: ADRs and the C4 model",
+  "estimatedMinutes": { "learn": 35, "build": 240, "defend": 30 },
+  "objectives": [
+    "Write an Architectural Decision Record with the framework's template sections",
+    "Explain what each C4 level shows and who it is for",
+    "Document a real Cretek system with C4 context and container views",
+    "Defend a recorded decision, including the alternatives rejected and the negative consequences accepted"
+  ],
+  "prerequisites": [],
+  "unlock": { "prerequisites": [] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Architectural Decision Record (ADR)",
+      "url": "https://www.ctoframework.com/tech/architecture-design/architectural-decision-record",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "The C4 Model: Visualising Software Architecture",
+      "url": "https://www.ctoframework.com/tech/architecture-design/c4-diagrams",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    }
+  ],
+  "verificationNotes": [
+    "The ADR page gives no criteria for when to write an ADR, no review or approval process, no storage or versioning guidance and no pitfalls section. Its status list is proposed, approved and deprecated, with no 'superseded'. Everything beyond that in this lesson is labelled Original Academy.",
+    "The C4 page names Simon Brown as the creator but has no worked diagrams, tooling guidance, best practices or pitfalls. The page's only external link is a Wikipedia entry, which was not consulted.",
+    "The ADR page cites the ADR GitHub organisation, a UK government ADR framework and AWS Prescriptive Guidance. None were consulted for this lesson; they are good supplementary reading before the Build step."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What an ADR is and why it matters",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework defines an Architectural Decision Record as a document that captures key design and architectural decisions made while building a software system. It records the reasoning behind a choice, the trade-offs considered and the effect on the architecture, with the stated aim of consistency, clarity and better decisions over time.\n\nReasons it gives: historical context (why a decision was reasonable under past conditions, even after they change); consistency as new people join; transparency across developers, architects and product teams; faster onboarding; and less repeated debate over settled questions. It also lists clarity and alignment, traceability, avoiding regret by making trade-offs explicit and encouraging deliberate reflection as benefits."
+      },
+      {
+        "heading": "The template and statuses",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Template sections on the page: Title; Status; Context (the problem or opportunity and its background); Decision (a clear statement of what was chosen); Consequences (positive and negative effects, and the impact on future work); Date; Related decisions (links to other ADRs).\n\nStatuses the page names: proposed, approved and deprecated.\n\nThe page's three illustrative examples all show approved decisions with their costs stated: PostgreSQL as the primary store with Redis as a cache (the cost is running two systems and possible cache inconsistency); moving a product catalogue from a monolith to microservices (independent scaling and more frequent deployments, against added complexity in communication, infrastructure and data duplication); and React for a new web app (community and ecosystem, against a steeper learning curve and state-management complexity).\n\nWhen a decision no longer fits, the page suggests writing a new ADR that documents the change and the reason, so the history stays visible."
+      },
+      {
+        "heading": "The C4 model",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page presents the C4 model, created by Simon Brown, as a consistent way to describe a system's static structure at several levels of detail so that technical and non-technical stakeholders can follow it.\n\n1. Context: the system in scope and its interactions with users and other systems. What does it do and who does it interact with? Audience: everyone.\n2. Container: the main things that run code or store data (applications, services, databases) and how they interact. Audience: architects and engineers.\n3. Component: the internal building blocks of one container (services, modules, controllers). Audience: engineers.\n4. Code: the most granular level, classes and interfaces, usually auto-generated. Audience: developers.\n\nThe page says C4 supports clear communication, standardised documentation and agile and DevOps work by keeping architecture visible and evolvable."
+      },
+      {
+        "heading": "What the pages leave to you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Neither page says when a decision deserves an ADR, who may approve one, where the records live or how to keep diagrams from rotting. You have to decide. A workable Academy rule: write an ADR when a decision is expensive to reverse, affects more than one team or system, or when you find yourself explaining the same choice twice. Store ADRs in the same repository as the code, numbered, one per file, so they are reviewed like code. Add a 'superseded by' link when a new ADR replaces an old one, even though the page's status list stops at deprecated.\n\nFor C4, draw the context and container levels first and keep them current, because those are the two a CTO and a new engineer both need. Draw component diagrams only for the parts that are hard to understand. Treat the code level as generated, as the page says."
+      },
+      {
+        "heading": "Linking the two",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The framework does not say how ADRs and C4 relate, but they answer different questions: C4 shows what the system is now, an ADR shows why it is that way. An ADR should name the C4 container or component it changes, and a container diagram should reference the ADRs behind its shape. Without the 'why', a diagram invites someone to 'fix' a deliberate trade-off."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A short ADR with its costs stated (illustrative, not a Cretek decision)",
+      "body": "Title: ADR-007 Use a managed message queue for quotation events. Status: proposed. Date: 2026-10-11. Context: quotation requests are processed inline and time out under load; the team has two engineers and no one on call. Decision: use a managed queue service so requests are accepted immediately and processed asynchronously. Consequences: positive, requests stop timing out and retries are built in; negative, users see results later, we must handle duplicate deliveries, and we now depend on a vendor and a monthly bill. Alternatives rejected: scale the web tier (does not fix the slow step), run our own broker (we cannot operate it). Related: none. The negative consequences and rejected alternatives are what make this useful in a year's time."
+    },
+    "misconceptions": [
+      "Writing an ADR after the fact to justify a decision already made, with the costs left out. The template has a Consequences section for the negatives too.",
+      "Rewriting an old ADR when the decision changes. The page suggests writing a new one so the history stays visible.",
+      "Drawing one big diagram with everything on it. C4 exists to give each audience the right level.",
+      "Treating C4 diagrams as a one-off deliverable. A stale diagram is worse than none."
+    ],
+    "explainTask": "In 150 words or fewer, tell a new engineer why you recorded an ADR for a decision that looks obvious, and where they find it."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "adr-1",
+      "question": "In the ADR template on the page, which section describes the problem or opportunity and its background?",
+      "options": ["Status", "Context", "Decision", "Consequences"],
+      "answer": 1,
+      "why": "Context is the problem or opportunity and its background. Decision is what was chosen; Consequences are the positive and negative effects."
+    },
+    {
+      "id": "adr-2",
+      "question": "Which statuses does the ADR page name?",
+      "options": [
+        "Draft, active, retired",
+        "Open, closed",
+        "Proposed, approved, deprecated",
+        "Accepted, rejected, superseded"
+      ],
+      "answer": 2,
+      "why": "The page lists proposed, approved and deprecated. It does not list 'superseded'."
+    },
+    {
+      "id": "adr-3",
+      "question": "What does the C4 Container level show?",
+      "options": [
+        "Classes and interfaces",
+        "Things that run code or store data, such as applications, services and databases",
+        "Only the system and its users",
+        "Modules inside one service"
+      ],
+      "answer": 1,
+      "why": "Containers are the applications, services and databases that run code or store data, and how they interact."
+    },
+    {
+      "id": "adr-4",
+      "question": "Which C4 level does the page say is usually auto-generated?",
+      "options": ["Context", "Container", "Component", "Code"],
+      "answer": 3,
+      "why": "The Code level, with classes and interfaces, is described as usually auto-generated."
+    },
+    {
+      "id": "adr-5",
+      "question": "A past decision no longer fits. What does the page suggest?",
+      "options": [
+        "Edit the old ADR so it reads as if the new choice was always made",
+        "Delete the old ADR",
+        "Write a new ADR documenting the change and the reason, so history stays visible",
+        "Leave it, ADRs are never revisited"
+      ],
+      "answer": 2,
+      "why": "A new ADR records the change and why, keeping the system's history visible."
+    }
+  ],
+  "build": {
+    "business": "Cretek's systems are understood by the people who built them. A CTO needs them written down: what exists, why it is that way, and what decisions were deliberate.",
+    "problem": "Document one real Cretek system (for example the school management application) with C4 context and container views and at least three ADRs, kept in a repository with a validator.",
+    "requirements": [
+      "A C4 context diagram and a container diagram of the chosen system, in a text-based format that can be version controlled",
+      "At least three ADRs using the framework's template: Title, Status, Context, Decision, Consequences, Date, Related decisions",
+      "Each ADR states at least one negative consequence and at least one alternative that was rejected, and names the C4 container it affects",
+      "A status on each ADR from the framework list; if you need 'superseded', explain how you represent it",
+      "ADRs that record past decisions must be marked RECONSTRUCTED, with how you established the facts (who you asked, what you read). Do not present a guess as the original reasoning",
+      "A validator script that checks the template sections, status values, date format and that related-decision links resolve",
+      "Data labelled REAL, RECONSTRUCTED or SIMULATED"
+    ],
+    "constraints": [
+      "Document only what the system actually is. Mark anything you are unsure of as unverified",
+      "No invented decisions, vendors or costs"
+    ],
+    "design": "Describe where ADRs and diagrams live, how a change to the system triggers an update to them, and one alternative you rejected (for example a wiki) and why.",
+    "tasks": [
+      "Choose the system and write its context and container diagrams",
+      "Identify at least three significant decisions and write the ADRs, interviewing whoever made them where possible",
+      "Implement the validator with tests: a missing section, an unknown status, a broken link, a missing consequence",
+      "Review the diagrams with someone who knows the system and record what they corrected",
+      "Document the update process: who owns the diagrams and when they are reviewed"
+    ],
+    "acceptance": [
+      "Diagrams render and match the real system, confirmed by a second person",
+      "Every ADR passes the validator and includes a negative consequence and a rejected alternative",
+      "Reconstructed ADRs say how the facts were established",
+      "Tests cover the validator's failure cases and pass",
+      "Data is labelled REAL, RECONSTRUCTED or SIMULATED"
+    ],
+    "deliverable": "A repository link or path containing the diagrams, ADRs, validator and tests."
+  },
+  "defend": {
+    "assessor": "Principal engineer",
+    "scenario": "A principal engineer joining Cretek reads your ADRs and diagrams and wants to know whether they can be trusted and whether the decisions were sound.",
+    "prompts": [
+      "Pick the ADR you are least sure about. What did you not know when you wrote it?",
+      "You rejected this alternative. What would have to change for you to choose it instead?",
+      "Which negative consequence in your ADRs is the most expensive, and what are you doing about it?",
+      "How do I know the container diagram matches production today?",
+      "Why did you not write an ADR for this other decision?"
+    ],
+    "rubric": [
+      { "criterion": "Honest reasoning: alternatives and costs stated, reconstruction disclosed", "weight": 0.3 },
+      { "criterion": "Accuracy and appropriate level of the diagrams", "weight": 0.25 },
+      { "criterion": "A working process to keep records current", "weight": 0.25 },
+      { "criterion": "Judgement about which decisions deserve an ADR", "weight": 0.2 }
+    ]
+  }
+}

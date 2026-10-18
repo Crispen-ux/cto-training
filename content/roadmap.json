@@ -1,0 +1,506 @@
+{
+  "note": "Timelines are planning estimates. The learner advances when mastery criteria are met, not when a date arrives. 'planned' modules have a verified source list but no lesson content yet; content is written only after the guide itself has been read.",
+  "phases": [
+    {
+      "id": "baseline",
+      "title": "Entry assessment and competency baseline",
+      "monthEstimate": "Month 1",
+      "status": "planned"
+    },
+    {
+      "id": "foundations",
+      "title": "Technical and business foundations",
+      "monthEstimate": "Months 1-3",
+      "status": "in_progress"
+    },
+    {
+      "id": "engineering",
+      "title": "Practical engineering projects",
+      "monthEstimate": "Months 2-5",
+      "status": "in_progress"
+    },
+    {
+      "id": "architecture-ops",
+      "title": "Architecture and operational leadership",
+      "monthEstimate": "Months 4-7",
+      "status": "planned"
+    },
+    {
+      "id": "decisions",
+      "title": "Product, people and economic decision-making",
+      "monthEstimate": "Months 6-9",
+      "status": "planned"
+    },
+    {
+      "id": "cross-functional",
+      "title": "Cross-functional projects",
+      "monthEstimate": "Months 8-11",
+      "status": "planned"
+    },
+    {
+      "id": "board",
+      "title": "Board-level communication",
+      "monthEstimate": "Months 10-12",
+      "status": "planned"
+    },
+    {
+      "id": "capstone",
+      "title": "Integrated CTO capstone",
+      "monthEstimate": "Month 12+",
+      "status": "planned"
+    }
+  ],
+  "modules": [
+    {
+      "id": "delivery-metrics",
+      "pillar": "Delivery",
+      "title": "Delivery metrics",
+      "phase": "foundations",
+      "status": "available",
+      "lessons": [
+        "dora-metrics",
+        "sla-slo-sli",
+        "rto-rpo"
+      ],
+      "registerPaths": [
+        "/delivery/metrics/dora-metrics",
+        "/delivery/metrics/sla-slo-sli",
+        "/delivery/metrics/rto-rpo",
+        "/delivery/metrics/space-metrics",
+        "/delivery/metrics/flow-metrics",
+        "/delivery/metrics/goodharts-law",
+        "/delivery/metrics/say-do-ratio",
+        "/delivery/metrics/vanity-metrics",
+        "/delivery/metrics/kpi"
+      ]
+    },
+    {
+      "id": "delivery-reporting-risk",
+      "pillar": "Delivery",
+      "title": "Reporting and risk (Cretek OS milestone 1)",
+      "phase": "engineering",
+      "status": "available",
+      "lessons": [
+        "four-square-rag",
+        "raid-roam",
+        "three-lines-swiss-cheese"
+      ],
+      "registerPaths": [
+        "/delivery/reporting/four-square-reports",
+        "/delivery/reporting/rag-reports",
+        "/delivery/project-management/raid",
+        "/delivery/risk-management/roam",
+        "/delivery/risk-management/three-lines-of-defence",
+        "/delivery/risk-management/swiss-cheese-model"
+      ]
+    },
+    {
+      "id": "delivery-incidents",
+      "pillar": "Delivery",
+      "title": "Incident management",
+      "phase": "architecture-ops",
+      "status": "available",
+      "lessons": [
+        "rca-post-mortems",
+        "pre-mortems-pareto"
+      ],
+      "registerPaths": [
+        "/delivery/incident-management/root-cause-analysis",
+        "/delivery/incident-management/technical-post-mortems",
+        "/delivery/incident-management/technical-pre-mortems",
+        "/delivery/incident-management/pareto-analysis"
+      ]
+    },
+    {
+      "id": "delivery-execution",
+      "pillar": "Delivery",
+      "title": "Execution and prioritisation",
+      "phase": "decisions",
+      "status": "available",
+      "lessons": [
+        "scrum-monte-carlo",
+        "wsjf-moscow",
+        "raci-brooks-law"
+      ],
+      "registerPaths": [
+        "/delivery/agile-methodologies/scrum",
+        "/delivery/estimations/montecarlo-simulations",
+        "/delivery/prioritisation/wsjf",
+        "/delivery/prioritisation/moscow",
+        "/delivery/project-management/raci-matrix",
+        "/delivery/project-management/brooks-law"
+      ]
+    },
+    {
+      "id": "tech-engineering",
+      "pillar": "Tech",
+      "title": "Engineering fundamentals",
+      "phase": "foundations",
+      "status": "available",
+      "lessons": [
+        "solid-design-patterns",
+        "big-o-complexity",
+        "test-pyramid-boy-scout"
+      ],
+      "registerPaths": [
+        "/tech/engineering-practices/solid-principles",
+        "/tech/engineering-practices/design-patterns",
+        "/tech/engineering-practices/big-o-notation",
+        "/tech/quality-assurance/test-pyramid",
+        "/tech/engineering-practices/boy-scout-rule"
+      ]
+    },
+    {
+      "id": "tech-architecture",
+      "pillar": "Tech",
+      "title": "Architecture and decisions",
+      "phase": "architecture-ops",
+      "status": "available",
+      "lessons": [
+        "adr-c4",
+        "architecture-tradeoffs",
+        "technical-debt",
+        "well-architected-framework"
+      ],
+      "registerPaths": [
+        "/tech/architecture-design/architectural-decision-record",
+        "/tech/architecture-design/patterns",
+        "/tech/architecture-design/c4-diagrams",
+        "/tech/architecture-design/cap-theorem",
+        "/tech/architecture-design/event-driven-architecture",
+        "/tech/architecture-design/well-architected",
+        "/tech/architecture-design/technical-debt"
+      ]
+    },
+    {
+      "id": "tech-data",
+      "pillar": "Tech",
+      "title": "Data and APIs",
+      "phase": "engineering",
+      "status": "available",
+      "lessons": [
+        "rest-apis",
+        "sql-vs-nosql",
+        "medallion-file-formats"
+      ],
+      "registerPaths": [
+        "/tech/architecture-design/apis/restful-apis",
+        "/tech/architecture-design/data/medallion-architecture",
+        "/tech/architecture-design/sql-vs-nosql",
+        "/tech/architecture-design/data/file-formats"
+      ]
+    },
+    {
+      "id": "tech-cloud-sre",
+      "pillar": "Tech",
+      "title": "Cloud, DevOps and SRE",
+      "phase": "engineering",
+      "status": "available",
+      "lessons": [
+        "iac-golden-path",
+        "error-budgets-chaos",
+        "cloud-providers-lockin"
+      ],
+      "registerPaths": [
+        "/tech/devops-operations/infrastructure-as-code",
+        "/tech/devops-operations/error-budgets",
+        "/tech/devops-operations/golden-path",
+        "/tech/devops-operations/chaos-engineering",
+        "/tech/strategy-trends/cloud-providers"
+      ]
+    },
+    {
+      "id": "tech-security",
+      "pillar": "Tech",
+      "title": "Security and compliance",
+      "phase": "architecture-ops",
+      "status": "available",
+      "lessons": [
+        "threat-modelling-shift-left",
+        "least-privilege-access-control",
+        "sbom-supply-chain"
+      ],
+      "registerPaths": [
+        "/tech/security-compliance/threat-modelling",
+        "/tech/security-compliance/least-privilege",
+        "/tech/security-compliance/access-control-models",
+        "/tech/security-compliance/sbom",
+        "/tech/security-compliance/shift-left-security"
+      ]
+    },
+    {
+      "id": "tech-ai",
+      "pillar": "Tech",
+      "title": "AI systems and governance",
+      "phase": "architecture-ops",
+      "status": "available",
+      "lessons": [
+        "ai-sdlc-agents-md",
+        "ai-model-selection",
+        "ai-risk-regulation-collapse"
+      ],
+      "registerPaths": [
+        "/tech/ai/ai-sdlc",
+        "/tech/ai/agentsmd",
+        "/tech/ai/model-comparison",
+        "/tech/ai/eu-ai-act",
+        "/tech/ai/mit-ai-risk-repository",
+        "/tech/ai/model-collapse"
+      ]
+    },
+    {
+      "id": "economics-costs",
+      "pillar": "Economics",
+      "title": "Costs, TCO and FinOps",
+      "phase": "decisions",
+      "status": "available",
+      "lessons": [
+        "tco-cloud-costs",
+        "build-buy-outsourcing"
+      ],
+      "registerPaths": [
+        "/economics/costs/total-cost-ownership",
+        "/economics/costs/cloud-costs",
+        "/economics/costs/outsourcing-pricing-models",
+        "/economics/build-vs-buy"
+      ]
+    },
+    {
+      "id": "economics-business-cases",
+      "pillar": "Economics",
+      "title": "Budgets, ROI and business cases",
+      "phase": "decisions",
+      "status": "available",
+      "lessons": [
+        "tech-budgets",
+        "roi-business-cases"
+      ],
+      "registerPaths": [
+        "/economics/budget-breakdown",
+        "/economics/top-down-vs-bottom-up-budgeting",
+        "/economics/investment/return-of-investment",
+        "/economics/terms/investment-and-value-metrics",
+        "/economics/terms/profitability-and-margin-management"
+      ]
+    },
+    {
+      "id": "economics-investment",
+      "pillar": "Economics",
+      "title": "Investment and due diligence",
+      "phase": "board",
+      "status": "available",
+      "lessons": [
+        "investment-rounds-stages",
+        "tech-due-diligence"
+      ],
+      "registerPaths": [
+        "/economics/investment/tech-due-diligence",
+        "/economics/investment/investment-rounds",
+        "/economics/literature/jevons-paradox"
+      ]
+    },
+    {
+      "id": "product-strategy",
+      "pillar": "Product",
+      "title": "Product and business strategy",
+      "phase": "decisions",
+      "status": "available",
+      "lessons": [
+        "business-models-lean-canvas",
+        "moats-five-forces",
+        "swot-pestle-synthesis"
+      ],
+      "registerPaths": [
+        "/product/strategy/business-models",
+        "/product/strategy/lean-canvas",
+        "/product/strategy/economic-moats",
+        "/product/strategy/porter-five-forces",
+        "/product/strategy/swot-analysis",
+        "/product/strategy/pestle-analysis"
+      ]
+    },
+    {
+      "id": "product-metrics",
+      "pillar": "Product",
+      "title": "Product metrics and experimentation",
+      "phase": "decisions",
+      "status": "available",
+      "lessons": [
+        "saas-metrics-unit-economics",
+        "nps-north-star",
+        "experimentation-mvp"
+      ],
+      "registerPaths": [
+        "/product/analytics/saas-metrics",
+        "/product/analytics/nps",
+        "/delivery/metrics/north-star-metric",
+        "/product/experimentation/abn-testing",
+        "/product/experimentation/minimum-viable-product"
+      ]
+    },
+    {
+      "id": "product-requirements",
+      "pillar": "Product",
+      "title": "Requirements and standards",
+      "phase": "architecture-ops",
+      "status": "available",
+      "lessons": [
+        "nfr-availability",
+        "pii-data-protection",
+        "iso-continuity-ai-management"
+      ],
+      "registerPaths": [
+        "/product/requirements/non-functional-requirements",
+        "/product/requirements/five-nines",
+        "/product/requirements/pii",
+        "/product/requirements/standards/ISO22301",
+        "/product/requirements/standards/ISO42001"
+      ]
+    },
+    {
+      "id": "people-leadership",
+      "pillar": "People",
+      "title": "Leadership and collaboration",
+      "phase": "decisions",
+      "status": "available",
+      "lessons": [
+        "leadership-styles-situational",
+        "disagree-commit-decisions",
+        "feedback-systems-one-on-ones-360"
+      ],
+      "registerPaths": [
+        "/people/leadership-collaboration/leadership-styles",
+        "/people/leadership-collaboration/disagree-commit",
+        "/people/leadership-collaboration/one-on-ones",
+        "/people/leadership-collaboration/skip-levels",
+        "/people/leadership-collaboration/360-feedback"
+      ]
+    },
+    {
+      "id": "people-organisation",
+      "pillar": "People",
+      "title": "Organisation design",
+      "phase": "decisions",
+      "status": "available",
+      "lessons": [
+        "team-topologies-conway",
+        "org-scale-matrix",
+        "devex-blameless-culture"
+      ],
+      "registerPaths": [
+        "/people/culture-organisation/team-topologies",
+        "/people/culture-organisation/conways-law",
+        "/people/culture-organisation/dunbars-number",
+        "/people/culture-organisation/matrix-organisations",
+        "/people/culture-organisation/devex",
+        "/people/culture-organisation/blameless-culture"
+      ]
+    },
+    {
+      "id": "people-talent",
+      "pillar": "People",
+      "title": "Hiring and talent",
+      "phase": "cross-functional",
+      "status": "available",
+      "lessons": [
+        "hiring-models-tco",
+        "interviews-succession",
+        "talent-nine-box-ladders"
+      ],
+      "registerPaths": [
+        "/people/talent-acquisition/hiring-options-comparison",
+        "/people/talent-acquisition/cto-interview-questions",
+        "/people/talent-acquisition/succession-planning",
+        "/people/performance-growth/9-boxes",
+        "/people/performance-growth/career-ladders"
+      ]
+    },
+    {
+      "id": "people-communication",
+      "pillar": "People",
+      "title": "Executive communication",
+      "phase": "board",
+      "status": "available",
+      "lessons": [
+        "storytelling-star-method",
+        "assertive-c-suite-communication",
+        "first-90-days-cto"
+      ],
+      "registerPaths": [
+        "/people/communication/story-telling",
+        "/people/communication/star-method",
+        "/people/communication/assertive-communication",
+        "/people/c-suite",
+        "/people/performance-growth/first-90-days-cto"
+      ]
+    },
+    {
+      "id": "cloud-solutions-architecture",
+      "pillar": "Tech",
+      "title": "Cloud solutions architecture (AZ-305 and AWS)",
+      "phase": "architecture-ops",
+      "status": "available",
+      "lessons": [
+        "azure-az305-solutions-architect",
+        "aws-solutions-architect-material"
+      ],
+      "registerPaths": [
+        "/tech/strategy-trends/cloud-providers"
+      ]
+    },
+    {
+      "id": "integrated-cto-capstone",
+      "pillar": "Tech",
+      "title": "Integrated CTO capstone",
+      "phase": "capstone",
+      "status": "available",
+      "lessons": [
+        "integrated-cto-capstone"
+      ],
+      "registerPaths": [
+        "/tech/strategy-trends/cloud-providers"
+      ]
+    },
+    {
+      "id": "board-room-corporate-jargon",
+      "pillar": "People",
+      "title": "Board room and corporate jargon",
+      "phase": "board",
+      "status": "available",
+      "lessons": [
+        "board-room-corporate-jargon"
+      ],
+      "registerPaths": [
+        "/people/communication/story-telling"
+      ]
+    },
+    {
+      "id": "executive-presentation-speech",
+      "pillar": "People",
+      "title": "Executive presentations and public speaking",
+      "phase": "board",
+      "status": "available",
+      "lessons": [
+        "executive-presentations",
+        "cto-public-speaking"
+      ],
+      "registerPaths": [
+        "/people/communication/story-telling"
+      ]
+    },
+    {
+      "id": "engineering-languages",
+      "pillar": "Tech",
+      "title": "Engineering languages: Python and SQL",
+      "phase": "engineering",
+      "status": "available",
+      "lessons": [
+        "python-for-ctos",
+        "sql-for-ctos"
+      ],
+      "registerPaths": [
+        "/tech/engineering-practices/solid-principles"
+      ]
+    }
+  ]
+}

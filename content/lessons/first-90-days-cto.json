@@ -1,0 +1,251 @@
+{
+  "id": "first-90-days-cto",
+  "moduleId": "people-communication",
+  "pillar": "People",
+  "title": "Your first 90 days as a CTO",
+  "estimatedMinutes": {
+    "learn": 45,
+    "build": 270,
+    "defend": 30
+  },
+  "objectives": [
+    "Describe the page's three phases and eleven steps and what each is meant to produce",
+    "Turn the page's bullet lists into deliverables, owners and completion criteria for days 30, 60 and 90",
+    "Budget the time for a listening tour and design the questions",
+    "Build a baseline scorecard before proposing change, using measures from earlier lessons",
+    "Choose quick wins with a scoring method and show how the ranking depends on the weights"
+  ],
+  "prerequisites": [
+    "tech-due-diligence",
+    "dora-metrics"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "tech-due-diligence",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "dora-metrics",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "First 90 days as a CTO",
+      "url": "https://www.ctoframework.com/people/performance-growth/first-90-days-cto",
+      "reviewed": "2026-10-15",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page was retrieved as an automated summary, not read in full. Re-read it before relying on any detail.",
+    "The page gives three phases (days 1-30, 31-60, 61-90) and eleven steps, each a short bullet list. According to the summary it has no deliverables, owners, completion criteria, examples, templates, targets, trade-off guidance, suggested quick wins, hiring process or author attribution. Everything on those topics here is Academy material.",
+    "The page recommends The First 90 Days by Michael Watkins and links to it. I have not read that book, so nothing here is attributed to it. Do not cite it from this lesson.",
+    "The page asks the CTO to check compliance with 'GDPR, ISO 27001, and SOC 2' in days 31-60. These are different kinds of thing: GDPR is an EU regulation, ISO/IEC 27001 is a standard against which an organisation can be certified, and SOC 2 is an attestation report by an independent auditor. A new CTO can review the current position in 60 days but cannot, in that time, make the organisation compliant or certified. This is general knowledge, not from the page. See the data protection and ISO lessons. This is not legal advice.",
+    "The page lists metrics (uptime, deployment frequency, lead time) without definitions or targets. Use the DORA and SLO lessons for definitions.",
+    "The Cretek plan, the time budget (40 conversations at 45 minutes plus 15 minutes of notes), the quick-win scores and weights are all invented (ASSUMPTION) and are not Cretek data."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What the page teaches",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page offers a three-phase, eleven-step plan.\n\nFirst 30 days, learn and assess. (1) Understand business goals and strategy: meet the CEO, leadership and stakeholders; learn mission, vision and financials. (2) Assess the technology landscape: architecture, infrastructure, stack, scalability, debt, bottlenecks, security risks, projects in flight. (3) Engage the engineering team: relationships, structure, culture, practices. (4) Understand product and customer needs: the roadmap, customer pain points, the gap between product and technology strategy.\n\nDays 31 to 60, plan and strategise. (5) Define the technology vision aligned with business goals. (6) Evaluate the team and processes: skill gaps, hiring needs, whether Agile, DevOps and CI/CD work. (7) Ensure security and compliance: a security audit and a check against standards such as GDPR, ISO 27001 and SOC 2. (8) Communicate with stakeholders and deliver quick wins.\n\nDays 61 to 90, execute and deliver. (9) Build the roadmap and start on key debt and process problems. (10) Strengthen culture and hiring. (11) Measure and iterate: uptime, deployment frequency, lead time; update the CEO regularly."
+      },
+      {
+        "heading": "What the page leaves out",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page is a checklist of topics. According to the summary it has no deliverables, owners, completion criteria, targets, examples or trade-offs, and it does not say what a quick win is.\n\nThree problems to know about. First, the order puts planning at day 31 but metrics at day 61; you cannot judge change without a baseline, so measure early. Second, step 7 asks for compliance with three different things in a 30-day window, which is not achievable for certification or attestation (see the note on sources). A realistic day-60 deliverable is a gap list with owners and an estimate of the effort. Third, the page says nothing on how the plan changes with the size of the company: in a 15-person startup the CTO writes code and is the architect; in a 300-person company the same 90 days is mostly listening and sponsoring other people's decisions.\n\nThe rest of this lesson turns the page into deliverables you can check. The structure is mine, not the page's."
+      },
+      {
+        "heading": "Days 1 to 30: a listening tour, budgeted",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Time is the first constraint. Suppose you hold 40 conversations (CEO and chiefs, product leads, engineering managers, a sample of engineers, support, sales, two customers) at 45 minutes each plus 15 minutes of notes. That is 40 x 60 minutes = 40 hours, 5 working days at 8 hours. In the first 30 calendar days there are roughly 21 working days, so the tour takes about a quarter of your time (computed: 5 / 21 is about 24%). Plan for it, because a first month filled with approvals leaves no time to listen.\n\nQuestions that work in most conversations: What is working well that I should not break? What is the one thing that, if fixed, would change your work most? What did you try that failed? What do you need from technology that you are not getting? Who else should I talk to? What would you do first? Ask the same five questions of everyone so you can compare answers, and record answers by theme, not by person, unless you have agreed to attribute them.\n\nAlso gather documents: architecture diagrams, the last three incident reports, the risk register, the cloud bill, the roadmap, attrition and hiring figures. Treat documents as claims to test, in line with the technical due diligence lesson."
+      },
+      {
+        "heading": "A baseline scorecard before you change anything",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page asks you to measure and iterate in days 61 to 90, but you can only claim improvement against a baseline taken earlier. Gather in the first month: the four DORA measures (deployment frequency, lead time for changes, change failure rate, time to restore); availability against a target (99.9% allows about 43.8 minutes of downtime in a 30.4-day month, computed); incident count and severity; cloud cost per month and per customer; hiring pipeline, time to fill and attrition; onboarding time for a new engineer; and a short list of top technical and security risks.\n\nWrite beside each figure where it came from and how reliable it is. If a figure cannot be found, that is a finding. The page gives no targets, and neither does this lesson: setting a target before you know the starting point and the cost of moving it is how new leaders make promises they later break.\n\nThe aim of the scorecard is to let you say on day 90 'deployment lead time fell from X to Y' or, as honestly, 'I could not measure it until day 70, here is what I know now'."
+      },
+      {
+        "heading": "Quick wins: choosing with a scoring method",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page asks for quick wins to build credibility but suggests none. A quick win should be visible, finish within weeks, and not create debt. Score each candidate from 1 to 5 on impact, visibility and ease, and weight the scores.\n\nExample (invented, ASSUMPTION): four candidates. Fix the flaky CI test suite scores impact 4, visibility 4, ease 4. Rewrite the billing service: 5, 3, 1. Publish an incident status page: 3, 5, 5. Delete unused cloud resources: 3, 2, 5. With weights 0.4 impact, 0.3 visibility, 0.3 ease, the totals are 4.0, 3.2, 4.2 and 3.3 (computed): the status page wins, and the CI fix is a close second. Change the weights to 0.6, 0.2, 0.2 and the totals become 4.0, 3.8, 3.8 and 3.2: now the CI fix is first and billing and the status page tie. The ranking depends on the weights, so state them and say why.\n\nA quick win is also a signal. A visible fix of something people complain about shows you listen; a cost saving shows you respect the budget. But do not take credit for a quick win that needed your predecessor's groundwork, and do not let quick wins crowd out the one hard thing you were hired to address."
+      },
+      {
+        "heading": "Day 90: what you can honestly claim",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "By day 90 a reasonable outcome is not transformation but a clear, evidence-based position: a roadmap with owners and dates and the reasoning behind it, a baseline scorecard and the first movement on it, a risk register with the top risks and your recommendations, two or three quick wins delivered, a hiring plan that is tied to the roadmap, and a rhythm of updates for the CEO and board.\n\nThings to avoid: promising dates before you have a baseline, reorganising before you understand why the structure exists (see the Conway's law lesson), hiring a leadership team in the first month on the strength of a few impressions, and criticising the previous regime in public. People will remember how you behaved while you were learning.\n\nThe page recommends Watkins' The First 90 Days. I have not read it, so treat it as a pointer and read it yourself."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A 30-60-90 plan for a new Cretek CTO (invented, not Cretek data)",
+      "body": "Context (ASSUMPTION): Cretek has 60 engineers, a cloud bill of about 100,000 a month, two incidents a month and no written risk register.\n\nDay 30 deliverables. Forty conversations completed and summarised by theme (5 working days). A baseline scorecard with sources and reliability marked, including a note that change failure rate cannot be measured because deployments are not tagged. A list of ten risks ranked by likelihood and impact. Completion test: the CEO and two engineering managers each read the theme summary and agree it is fair.\n\nDay 60 deliverables. A draft technology vision, one page, tied to three business outcomes the CEO named. A gap list for security and compliance with owners and rough effort (not a claim of compliance). A recommendation on the team structure with the evidence and the alternatives rejected. Two quick wins shipped: the status page and the flaky tests. Completion test: the leadership team has read the one-pager and challenged it, and the changes are in a decision record.\n\nDay 90 deliverables. A roadmap for two quarters with owners, dates and the measures that will show progress. The first movement on the scorecard, or an honest statement that it could not be measured. A hiring plan linked to the roadmap. A first board or CEO update using the story and decision-record formats from earlier lessons. Completion test: someone not in your team can explain the three priorities and why they were chosen.\n\nRisk: the 40-hour listening tour is a quarter of the first month. If incidents spike, drop to 25 conversations and say so rather than skip the baseline."
+    },
+    "misconceptions": [
+      "Treating the page as a complete onboarding guide. It lists topics and does not say what to produce.",
+      "Promising targets before a baseline exists.",
+      "Believing a CTO can make a company compliant with GDPR, ISO 27001 and SOC 2 in 60 days. They are different kinds of thing, and certification or attestation takes longer.",
+      "Judging quick wins on visibility alone.",
+      "Reorganising in the first month before understanding why the structure exists.",
+      "Treating the Watkins book recommendation as content that is covered here.",
+      "Skipping the listening tour because the problems seem obvious."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a new CTO why they should take a baseline before proposing change, and name three things to measure."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "fnd-1",
+      "question": "A listening tour has 40 conversations of 45 minutes each, plus 15 minutes of notes each. How many hours is that?",
+      "options": [
+        "30",
+        "40",
+        "45",
+        "60"
+      ],
+      "answer": 1,
+      "why": "40 x (45 + 15) minutes = 2,400 minutes = 40 hours, or 5 working days of 8 hours."
+    },
+    {
+      "id": "fnd-2",
+      "question": "Roughly how many working days are there in 90 calendar days, ignoring holidays?",
+      "options": [
+        "About 45",
+        "About 55",
+        "About 64",
+        "About 90"
+      ],
+      "answer": 2,
+      "why": "90 days is about 12.9 weeks and 5 working days a week gives about 64."
+    },
+    {
+      "id": "fnd-3",
+      "question": "With weights 0.4 impact, 0.3 visibility, 0.3 ease, which candidate ranks first: CI fix (4,4,4), billing rewrite (5,3,1), status page (3,5,5), delete idle resources (3,2,5)?",
+      "options": [
+        "The CI fix",
+        "The billing rewrite",
+        "The status page",
+        "Deleting idle resources"
+      ],
+      "answer": 2,
+      "why": "Totals are 4.0, 3.2, 4.2 and 3.3. The status page leads."
+    },
+    {
+      "id": "fnd-4",
+      "question": "Change the weights to 0.6, 0.2, 0.2. Which candidate now ranks first?",
+      "options": [
+        "The CI fix",
+        "The billing rewrite",
+        "The status page",
+        "Deleting idle resources"
+      ],
+      "answer": 0,
+      "why": "Totals become 4.0, 3.8, 3.8 and 3.2. The CI fix is first, with billing and the status page tied. Rankings depend on the weights."
+    },
+    {
+      "id": "fnd-5",
+      "question": "How much downtime does 99.9% availability allow in a 30.4-day month?",
+      "options": [
+        "About 4.4 minutes",
+        "About 43.8 minutes",
+        "About 7.3 hours",
+        "About 4.4 hours"
+      ],
+      "answer": 1,
+      "why": "0.001 x 30.4 days x 24 x 60 = about 43.8 minutes."
+    },
+    {
+      "id": "fnd-6",
+      "question": "Which of these is a regulation, not a certifiable standard or an audit report?",
+      "options": [
+        "GDPR",
+        "ISO 27001",
+        "SOC 2",
+        "None of them"
+      ],
+      "answer": 0,
+      "why": "GDPR is an EU regulation. ISO/IEC 27001 is a standard against which an organisation can be certified, and SOC 2 is an attestation report by an independent auditor."
+    }
+  ],
+  "build": {
+    "business": "A new CTO is judged early and has little context. A disciplined plan turns the first 90 days into evidence rather than impressions, and the same method applies to any new leadership role. It is the onboarding capability in the CTO Operating System.",
+    "problem": "Write a 30-60-90 day plan for a real or realistically simulated new CTO role at Cretek, with a time budget, a baseline scorecard design, a scored list of quick wins and clear completion tests.",
+    "requirements": [
+      "State the context: company size, stage, known problems and what you do not know",
+      "Write deliverables, owner and a completion test for each of days 30, 60 and 90",
+      "Budget the listening tour in hours and share of time, in a script you run, and say what you would cut under pressure",
+      "List the conversations and the five common questions, and say how you will record themes",
+      "Design the baseline scorecard with at least eight measures, with source and reliability for each and a plan for any that cannot be measured",
+      "Score at least five quick-win candidates in a script, show two weightings, and say which you would pick and why",
+      "Map the page's eleven steps to your deliverables and mark any you change, with reasons",
+      "Write what you will not do in the first 90 days",
+      "Write the day-90 update for the CEO in the story format from the previous lesson"
+    ],
+    "constraints": [
+      "Do not give targets for measures before you have a baseline",
+      "Do not claim compliance or certification is achievable in 60 days",
+      "Do not attribute content to the Watkins book",
+      "Invented figures must be labelled"
+    ],
+    "design": "Write a one-page design: context, the three phases with deliverables and tests, the time budget, the scorecard, the quick-win scoring and the not-doing list, and one plan you rejected.",
+    "tasks": [
+      "Describe the context and unknowns",
+      "Budget the tour and run the script",
+      "Design the scorecard",
+      "Score quick wins under two weightings",
+      "Map the eleven steps",
+      "Draft the day 30, 60 and 90 tests",
+      "Write the CEO update",
+      "Have someone challenge it and record the changes"
+    ],
+    "acceptance": [
+      "Each phase has deliverables, owners and completion tests",
+      "The time budget runs and shows the share of time",
+      "The scorecard has at least eight measures with sources, reliability and a plan for gaps",
+      "The quick-win script runs under two weightings and the ranking change is explained",
+      "The eleven-step mapping is complete",
+      "No targets are set without a baseline, and no compliance claim is made",
+      "The CEO update follows the story format and labels assumptions",
+      "A reviewer's challenge and the resulting changes are recorded"
+    ],
+    "deliverable": "The one-page design, the plan, the time budget script and output, the scorecard, the quick-win script and output, the eleven-step mapping, the not-doing list, the CEO update and the reviewer notes."
+  },
+  "defend": {
+    "assessor": "Chief executive officer",
+    "scenario": "It is day 45. The CEO says: 'You have not shipped anything yet and the board is asking what you have done. Why should I trust a plan from someone who has been here six weeks?'",
+    "prompts": [
+      "What have you learned from the conversations that you could not have learned from documents?",
+      "What does your baseline show, and what could you not measure?",
+      "Which quick win did you choose, and how did you choose it?",
+      "What have you decided not to do yet, and why?",
+      "What would make you change the plan?",
+      "What can I tell the board on day 90 and what can't I?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Plan has deliverables, owners and completion tests, and the time budget is correct",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Baseline scorecard is sound, honest about gaps and sets no unsupported targets",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Quick wins are scored with stated weights and the sensitivity is understood",
+        "weight": 0.2
+      },
+      {
+        "criterion": "Handles compliance, certification and the page's limits honestly",
+        "weight": 0.15
+      },
+      {
+        "criterion": "Calm, evidence-based answers to challenge from the CEO",
+        "weight": 0.15
+      }
+    ]
+  }
+}

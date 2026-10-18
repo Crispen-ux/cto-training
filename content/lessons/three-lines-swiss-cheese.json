@@ -1,0 +1,184 @@
+{
+  "id": "three-lines-swiss-cheese",
+  "moduleId": "delivery-reporting-risk",
+  "pillar": "Delivery",
+  "title": "Governing risk: Three Lines of Defence and layered controls",
+  "estimatedMinutes": { "learn": 45, "build": 220, "defend": 30 },
+  "objectives": [
+    "Explain who owns, who challenges and who assures a risk under the Three Lines model",
+    "Recognise when lines have collapsed, for example self-review",
+    "Use the Swiss Cheese Model to design and test layers of controls",
+    "Produce an ownership map and a layered-control analysis for a real Cretek risk"
+  ],
+  "prerequisites": ["raid-roam"],
+  "unlock": { "prerequisites": [{ "lessonId": "raid-roam", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Three Lines of Defence",
+      "url": "https://www.ctoframework.com/delivery/risk-management/three-lines-of-defence",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "The Swiss Cheese Model",
+      "url": "https://www.ctoframework.com/delivery/risk-management/swiss-cheese-model",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    }
+  ],
+  "verificationNotes": [
+    "The Three Lines page says the Institute of Internal Auditors renamed the model in 2020 and refreshed it in July 2026, and describes a 2026 position statement. These claims come from the page and were not checked against the IIA's own publications. Read the IIA material before quoting any of it.",
+    "The Swiss Cheese page does not name the model's originator or date and has no step-by-step method or pitfalls section. The common-cause caution in this lesson is an Academy addition.",
+    "Neither page gives metrics or thresholds for judging whether a line or a layer is working."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Three Lines of Defence",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework presents the model as a governance approach that divides risk responsibility into three roles. Its core idea, in the page's words, is that nobody should be marking their own homework. For a CTO it answers: who owns this risk, who can challenge that owner, and who tells the board whether the controls work.\n\nFirst line (management and operations): the people doing the work own the risk day to day, including assessing, mitigating and accepting it. They design and run controls and bear the consequences when controls fail. They are closest to the detail but not independent by design.\nSecond line (risk, compliance and specialist oversight): sets the framework and standards, monitors, and challenges the first line. The page says it should support and challenge, not only say no or collect paperwork.\nThird line (internal audit): independent, reporting functionally to the board or audit committee, giving objective assurance on how well the first two lines work. It is risk-based and periodic, so lower-risk or emerging areas may go unreviewed for a time.\n\nThese are roles, not org-chart boxes: one person or team can hold first and second line roles, while independence does not mean isolation."
+      },
+      {
+        "heading": "Applying it in a technology organisation",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page maps the lines to technology functions. First line: product engineering, platform, SRE and operations, through code review, automated testing, change management, access hygiene, on-call and incident response, capacity planning and SLOs. Second line: security engineering, GRC or risk, compliance and quality functions, through security standards and threat models, control monitoring, risk reporting, design review and security champion networks. Third line: internal audit and independent external assessors, through IT general controls testing, ISO 27001 or SOC 2 assessment, independent penetration testing and board-level assurance reporting.\n\nTwo traps the page names: a penetration test run by the team that built the system is first or second line work, not third-line assurance; and if the security team both defines controls and certifies they work, the second and third lines have collapsed."
+      },
+      {
+        "heading": "Failure modes and practical steps",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Failure modes on the page: the second line becomes bureaucratic when measured on tickets closed rather than risk reduced; the first line outsources its risk to security or others; the third line is too far from the code so findings are dismissed as noise; a team designs a control and also assures it; and a risk register nobody reviews, which the page says is not a control.\n\nPractical steps from the page: write a one-page ownership map for your top ten risks naming a first-line owner, second-line challenger and third-line assurer, and gaps will surface quickly; keep roles rather than org charts; publish second-line standards once so teams can meet them through normal delivery; review assurance coverage annually; never let internal audit own the controls it audits; and feed external findings into the same register."
+      },
+      {
+        "heading": "The Swiss Cheese Model",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework describes the model as a way to understand how complex systems fail, used in risk management, safety engineering and cybersecurity. Each defensive measure is a slice of cheese. Every slice has holes (the page names design flaws, human error and unexpected circumstances), but the holes sit in different places. A failure happens only when the weak points in every layer line up so that a threat passes through all of them.\n\nThe page's example protects sensitive customer data with four controls: network firewalls, multi-factor authentication, encryption at rest and in transit, and security awareness training. Each has a weakness (a firewall can be misconfigured, MFA can be defeated by sophisticated phishing, keys can be mishandled, training cannot stop every mistake), but together an attacker must get past several independent safeguards."
+      },
+      {
+        "heading": "Putting the two together",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The Three Lines tell you who is accountable for a risk and who checks. Swiss Cheese tells you how many independent controls stand between a threat and harm. Use both on the same risk: the ownership map says who owns each layer, and the layer analysis says whether the layers are really independent.\n\nThe page says the controls are independent. Test that claim, because it is the one that fails in practice. If two controls depend on the same thing, for example the same identity provider or the same configuration, one fault can open both holes at once and your layers count as one. That check (looking for shared dependencies, a common cause) is an Academy addition, not on the framework page."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "One risk through both lenses (illustrative, not Cretek data)",
+      "body": "Risk: customer records exposed through the web application. Ownership: first line is the engineering lead who runs the service; second line is a named person who sets the security standard and reviews design (in a small company this may be the CTO, which is acceptable as a blended role only if disclosed); third line is an external penetration tester, who must not be the team that built it. Layers: WAF, MFA, field-level encryption, access logging with alerts. Independence check: the WAF and the alerting both rely on the same cloud account and the same admin credentials, so a compromised admin account could weaken both at once. The layers are therefore fewer than four in effect, and the fix is to separate that dependency."
+    },
+    "misconceptions": [
+      "Believing the lines are three departments. The page says they are roles and can be blended.",
+      "Presenting an internal penetration test as independent assurance.",
+      "Treating the second line as the department that says no.",
+      "Counting four controls as four layers when they share a dependency.",
+      "Assuming more layers is always better. Layers that fail together add cost without safety."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a small-business owner why the person who builds a control should not be the one who certifies it, and what you do when you only have three people."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "tl-1",
+      "question": "Which line is the people doing the work, who own the risk day to day?",
+      "options": ["Internal audit", "Risk and compliance", "Management and operations", "The board"],
+      "answer": 2,
+      "why": "The first line is management and operations; they assess, mitigate and accept risk and run the controls."
+    },
+    {
+      "id": "tl-2",
+      "question": "A penetration test is run by the same team that built the system. How does the page classify it?",
+      "options": [
+        "Third-line assurance",
+        "First or second line work, not third-line assurance",
+        "External assurance",
+        "A regulatory audit"
+      ],
+      "answer": 1,
+      "why": "The page names this as a trap: it is not independent, so it cannot be third-line assurance."
+    },
+    {
+      "id": "tl-3",
+      "question": "According to the Swiss Cheese page, when does a failure happen?",
+      "options": [
+        "When any one layer has a hole",
+        "When the first layer fails",
+        "When people ignore the rules",
+        "When the weak points in every layer line up and let a threat through"
+      ],
+      "answer": 3,
+      "why": "One layer failing is expected. Harm needs the holes in all layers to align."
+    },
+    {
+      "id": "tl-4",
+      "question": "Which is a failure mode of the second line named on the Three Lines page?",
+      "options": [
+        "It becomes bureaucratic when measured on tickets closed rather than risk reduced",
+        "It reports directly to the board",
+        "It owns the controls it audits",
+        "It is too close to the code"
+      ],
+      "answer": 0,
+      "why": "The page lists a bureaucratic second line, measured on tickets closed, as a failure mode. Being too far from the code is the third-line failure."
+    },
+    {
+      "id": "tl-5",
+      "question": "In a six-person company one lead holds both first and second line roles. What does the page imply?",
+      "options": [
+        "It is forbidden by the model",
+        "It is acceptable because roles are not fixed boxes, but board-level assurance must stay independent",
+        "It means no assurance is needed",
+        "The lead should also act as internal audit"
+      ],
+      "answer": 1,
+      "why": "The page says one person or team can hold first and second line roles; independence matters most for the third line, and audit must never own the controls it audits."
+    }
+  ],
+  "build": {
+    "business": "Cretek needs to know who owns each major technology risk, who checks them and whether its defences are real or only look layered.",
+    "problem": "Produce an ownership map for Cretek's top ten technology risks and a layered-control analysis for the most serious one, and write a validator for the map.",
+    "requirements": [
+      "A one-page ownership map of ten risks: for each a named first-line owner, a second-line challenger and a third-line assurer, or an explicit GAP",
+      "A rule check that flags any risk where the same person is assurer and owner, or the builder is the assurer",
+      "For one critical risk (for example customer data in the school management app), a layered-control analysis with at least four controls, each with its known weakness and who owns it",
+      "An independence check: list every shared dependency between controls and state how many layers remain after common causes are removed",
+      "A plan for gaps. If Cretek is too small for a real third line, name the compensating arrangement (for example a periodic external assessment) and who the findings go to",
+      "Data labelled REAL or SIMULATED"
+    ],
+    "constraints": [
+      "Do not invent controls Cretek does not have. Mark proposed controls as proposed",
+      "Do not present a self-run test as independent assurance"
+    ],
+    "design": "Describe how the ownership map is stored, how it is reviewed annually and one alternative you rejected, for example an org-chart-based map, and why a role-based one is better.",
+    "tasks": [
+      "List the top ten risks, linking to RAID entries where they exist",
+      "Fill the ownership map and mark gaps",
+      "Implement the validator and tests: same person owns and assures, builder as assurer, missing owner, GAP counted",
+      "Analyse one risk's layers, controls and shared dependencies",
+      "Document the operational plan: review cadence, external findings intake, who reports to whom"
+    ],
+    "acceptance": [
+      "No risk has the same person as owner and assurer; the validator proves it and tests pass",
+      "Every gap is explicit with a plan or a stated accepted risk with sign-off",
+      "The layered analysis lists controls, weaknesses, shared dependencies and the resulting number of effective layers",
+      "Proposed versus existing controls are clearly separated",
+      "Data is labelled REAL or SIMULATED"
+    ],
+    "deliverable": "The ownership map, layered analysis, validator and tests, referenced by path or link."
+  },
+  "defend": {
+    "assessor": "Security leader",
+    "scenario": "A security-minded customer asks how Cretek knows its controls work and who would tell them if they did not.",
+    "prompts": [
+      "Who checks the person who runs this control, and are they genuinely independent?",
+      "You list four layers. What single failure would defeat more than one of them?",
+      "Your third line is a gap. What are you doing about it and why is that enough?",
+      "Show me the last time an external finding changed your register.",
+      "If I cut your assurance budget in half, what do you stop first?"
+    ],
+    "rubric": [
+      { "criterion": "Correct separation of ownership, challenge and assurance", "weight": 0.3 },
+      { "criterion": "Honest independence analysis of layers, including common causes", "weight": 0.3 },
+      { "criterion": "Realistic handling of gaps in a small organisation", "weight": 0.25 },
+      { "criterion": "Evidence from real findings or reviews", "weight": 0.15 }
+    ]
+  }
+}

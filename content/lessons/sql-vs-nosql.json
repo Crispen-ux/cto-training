@@ -1,0 +1,209 @@
+{
+  "id": "sql-vs-nosql",
+  "moduleId": "tech-data",
+  "pillar": "Tech",
+  "title": "SQL versus NoSQL: choosing a data store",
+  "estimatedMinutes": { "learn": 40, "build": 260, "defend": 30 },
+  "objectives": [
+    "Define relational (SQL) and non-relational (NoSQL) stores and the four NoSQL families the page names",
+    "Explain ACID with a transaction that rolls back, and say what eventual consistency gives up",
+    "Challenge the page's generalisations about scaling, consistency and schema flexibility",
+    "Choose a store from the access pattern and the consistency requirement, and record the decision with its triggers",
+    "Defend a data store choice, including polyglot persistence, to a data architect"
+  ],
+  "prerequisites": ["rest-apis"],
+  "unlock": { "prerequisites": [{ "lessonId": "rest-apis", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "SQL vs NoSQL Databases: Pros & Cons",
+      "url": "https://www.ctoframework.com/tech/architecture-design/sql-vs-nosql",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page has no numbers, benchmarks, pricing or case studies, no comparison table (it uses parallel pros and cons lists), names no SQL products, and cites no sources. It does not cover NewSQL or distributed SQL, specific product comparisons (MySQL versus PostgreSQL has its own page on the site), the CAP theorem (linked in navigation, covered in the Tech architecture module), replication, sharding or consistency tuning, security, backup or migration, team skills and operating cost, or how to implement polyglot persistence.",
+    "The retrieved summary flagged these overgeneralisations on the page, which the Academy agrees with: presenting horizontal scaling as a NoSQL advantage and a SQL limitation (many SQL systems scale out through sharding or distributed SQL); generalising weaker consistency to NoSQL (many offer tunable consistency or multi-document transactions); and implying schema flexibility comes without cost (validation moves into application code and change still needs managing). Re-read the live page to confirm each before quoting it.",
+    "The code in this lesson uses SQLite as a stand-in for a relational store, was run, and shows transaction behaviour only. It says nothing about the performance or scaling of any production database.",
+    "The page's description of use cases (financial and transactional systems for SQL; real-time analytics, content management, IoT and large web applications for NoSQL) are the page's own and are not evidence that those are the only fits."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Two families, as the page defines them",
+        "sourceCategory": "Official CTO Framework",
+        "body": "SQL (relational): a table-based structured schema with predefined relationships and ACID compliance: atomicity, consistency, isolation and durability.\n\nNoSQL (non-relational): built for flexibility, horizontal scaling, and unstructured or semi-structured data. The page names four types, each with one product: document stores (MongoDB), key-value stores (Redis), column-family stores (Cassandra) and graph databases (Neo4j). It names no SQL products."
+      },
+      {
+        "heading": "The pros and cons on the page",
+        "sourceCategory": "Official CTO Framework",
+        "body": "SQL pros: strong data integrity, a standard query language, built-in joins and ACID transactions. SQL cons: scaling is mainly vertical, which the page calls costly and limited; rigid schemas that need migrations; joins and complex transactions can bottleneck high-volume distributed applications.\n\nNoSQL pros: horizontal scaling across nodes, flexible schemas, workload-specific strengths (fast key-value lookups, graph relationships) and high availability. NoSQL cons: weaker consistency guarantees, inconsistent query languages and indexing across types, and less mature tooling for reporting, analytics and administration. The page says consistency is 'often' traded for availability, with eventual consistency models."
+      },
+      {
+        "heading": "When to choose each, per the page",
+        "sourceCategory": "Official CTO Framework",
+        "body": "SQL when consistency, integrity and structured relationships matter most: financial applications, CRM, transactional systems. NoSQL when scalability, flexibility and availability matter most: real-time analytics, content management, IoT and large-scale web applications. The page also suggests a hybrid, 'polyglot persistence', may be best in some cases, without explaining it."
+      },
+      {
+        "heading": "ACID you can watch",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page names ACID without showing it. This example was run on SQLite, used only as a stand-in for any relational store.\n\nTwo accounts: account 1 holds 100 and account 2 holds 50, with a rule that a balance may never be negative. A transfer of 150 from account 1 to account 2 is a single transaction of two updates. The second update breaks the rule, the whole transaction is rolled back, and both balances remain 100 and 50: atomicity and consistency. Nothing was half-applied. A valid transfer of 30 then left 70 and 80.\n\nWithout a transaction (or without a store that offers one over both records), a failure between the two updates would leave money added but not removed. That is the cost of weaker guarantees: you must build the safety yourself, with compensating actions or by designing the data so one record holds both facts.\n\nEventual consistency means that after a write, readers may briefly see old data on some nodes before all copies agree. For a social feed that is usually acceptable. For a balance it usually is not. The right question is not 'SQL or NoSQL?' but 'what happens to the business if two readers briefly see different values?'"
+      },
+      {
+        "heading": "Reading the page's claims critically",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page is a short comparison with no evidence, and several statements are broader than they should be.\n\nScaling. It presents scale-out as a NoSQL feature and scale-up as the SQL limit. Many relational systems scale reads with replicas and writes with sharding, and distributed SQL products exist. The better question is what your workload needs: how many reads and writes, how big, and with what latency.\n\nConsistency. Many NoSQL stores offer tunable consistency and some support multi-record transactions. Check the product, not the category.\n\nSchema. A flexible schema moves rules from the database into application code. Documents of different shapes accumulate; every reader must cope with all of them. 'No schema' usually means 'schema enforced elsewhere, or not at all'.\n\nTooling and skills. The page notes immature reporting tools for NoSQL. Add your team's skills and operating cost: a store nobody can run at 3 a.m. is a risk whatever its benchmarks say.\n\nStart from the access pattern: what are the top queries, how large will the data be, what consistency is required, and who reports on it? Choose the simplest store that meets those, and write down what would make you add another."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A decision record for a school management application (illustrative, not Cretek data)",
+      "body": "Requirement: a school application holds students, guardians, classes, fees and payments. Staff run reports by class and term. Fee payments must never be lost or double-counted. Peak load is the start of a term, a few hundred concurrent users (an assumption).\n\nAccess pattern. The data is highly relational (student to guardian to class to invoice). Reports join across them. Payments need transactions across the invoice and ledger records. Consistency requirement: strong; two staff must not see different balances for the same invoice.\n\nAssessment against the page: the 'SQL when consistency, integrity and structured relationships matter most' case applies directly. Does scale force NoSQL? A few hundred concurrent users is well within what one relational database handles with a replica for reports; the page's scaling argument does not apply at this size. Cost of NoSQL: you would rebuild joins and transactions in application code.\n\nDecision: a relational database as the system of record.\n\nWhere something else might earn its place: a cache for hot read data (key-value), or a search index for free-text lookup of students. Neither is needed now. Record the triggers: add a cache if measured read latency on a specific endpoint exceeds the target after indexing; add a search index if staff need fuzzy name search that the database cannot serve acceptably.\n\nThat is polyglot persistence in its sensible form: one primary store for the facts that must be right, and specialised stores added only for a measured need, each fed from the primary."
+    },
+    "misconceptions": [
+      "Believing NoSQL means 'no schema'. The schema moves into application code.",
+      "Believing SQL cannot scale out. Replicas, sharding and distributed SQL exist.",
+      "Believing all NoSQL stores are eventually consistent. Many are tunable.",
+      "Choosing a store for its scaling story when the workload is small.",
+      "Treating the page's four NoSQL types as interchangeable. Each fits a different access pattern.",
+      "Assuming polyglot persistence is free. Every extra store is more to run, secure, back up and keep in sync.",
+      "Ignoring who will run and report on the data."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a school principal why payments live in a relational database, and what would make you add another store."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "sn-1",
+      "question": "In the page's definition, what does ACID stand for?",
+      "options": [
+        "Availability, consistency, isolation, distribution",
+        "Atomicity, consistency, isolation, durability",
+        "Atomicity, concurrency, integrity, durability",
+        "Access, control, integrity, distribution"
+      ],
+      "answer": 1,
+      "why": "ACID is atomicity, consistency, isolation and durability, the guarantees the page attributes to SQL stores."
+    },
+    {
+      "id": "sn-2",
+      "question": "Which pairing of NoSQL type and example product is the page's?",
+      "options": [
+        "Key-value store and Neo4j",
+        "Graph database and Redis",
+        "Document store and MongoDB",
+        "Column-family store and MongoDB"
+      ],
+      "answer": 2,
+      "why": "The page names document stores (MongoDB), key-value stores (Redis), column-family stores (Cassandra) and graph databases (Neo4j)."
+    },
+    {
+      "id": "sn-3",
+      "question": "A transfer of 150 from an account holding 100 breaks a no-negative-balance rule on the second of two updates. In a transaction, what are the final balances?",
+      "options": [
+        "Account 1: -50, account 2: 200",
+        "Account 1: 100, account 2: 50, the whole transaction rolled back",
+        "Account 1: 100, account 2: 200",
+        "Account 1: 0, account 2: 50"
+      ],
+      "answer": 1,
+      "why": "Atomicity: both updates apply or neither does. The failed rule rolls everything back, so balances stay at 100 and 50."
+    },
+    {
+      "id": "sn-4",
+      "question": "Which is a claim on the page that the Academy considers an overgeneralisation?",
+      "options": [
+        "Joins are built into SQL",
+        "SQL scaling is mainly vertical and so limited, with horizontal scaling presented as a NoSQL advantage",
+        "Redis is a key-value store",
+        "ACID provides strong consistency"
+      ],
+      "answer": 1,
+      "why": "Many relational systems scale out with replicas, sharding or distributed SQL. The page's framing overstates the SQL scaling limit."
+    },
+    {
+      "id": "sn-5",
+      "question": "Which statement about the page is accurate?",
+      "options": [
+        "It provides benchmarks and pricing for each database type",
+        "It includes a detailed comparison table with measured figures",
+        "It has no numbers, benchmarks or case studies and does not explain how to implement polyglot persistence",
+        "It covers NewSQL and distributed SQL in depth"
+      ],
+      "answer": 2,
+      "why": "The page has no figures and mentions polyglot persistence without explaining it. It does not cover NewSQL, product comparisons or consistency tuning."
+    },
+    {
+      "id": "sn-6",
+      "question": "For a school application with a few hundred concurrent users, relational data and payments that must never be double-counted, which store fits best in the worked example, and why?",
+      "options": [
+        "A document store, for scale",
+        "A relational database as the system of record, because the data is relational, payments need transactions and the load is modest",
+        "A graph database, for relationships",
+        "A key-value store, for speed"
+      ],
+      "answer": 1,
+      "why": "The access pattern is relational with strong consistency needs, and a few hundred users is well within a relational database. Specialised stores are added later only for a measured need."
+    }
+  ],
+  "build": {
+    "business": "Every Cretek application stores data that someone depends on. A CTO must choose stores from evidence, and be able to say what would change the choice. This is the data-store decision capability in the CTO Operating System.",
+    "problem": "Decide and evidence the data store design for one real Cretek application, with a tested demonstration of its critical consistency rule and a decision record.",
+    "requirements": [
+      "Choose one real application (for example the school management application) and list its entities and relationships",
+      "Record the real access pattern: the top ten queries or operations, read and write mix, current and expected data size and peak concurrency, each REAL from logs or counts, or labelled ASSUMPTION",
+      "State the consistency requirement for each important operation (for example payments, enrolment, reports) and what the business impact is if two readers briefly see different values",
+      "Assess at least two candidate stores against the access pattern and requirements, including the one you use now. For each, state what you would have to build yourself",
+      "Challenge at least three claims from the page (scaling, consistency, schema flexibility) against your own workload, with evidence",
+      "Demonstrate the most critical consistency rule in code against a real or local database: a transaction that must apply both parts or neither, with a test that forces a failure part-way and shows nothing is half-applied",
+      "A measured baseline: the time of your slowest important queries on a realistic data volume (SIMULATED data is fine and must be labelled), with the method and repeats stated",
+      "A decision record in ADR form including the triggers that would make you add a cache, a search index or a different primary store, and the cost to run each",
+      "A one-page summary for a technical lead, led by the decision and the biggest risk",
+      "Every figure labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No customer data in the repository or in the test database. Use generated data labelled SIMULATED",
+      "Do not change the production database to run experiments",
+      "Do not choose a store because of its scaling story unless your measured or estimated load needs it",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the entities, the access pattern, the consistency rules, the candidate stores and the alternative you rejected with the reason.",
+    "tasks": [
+      "Model the entities and relationships",
+      "Gather the access pattern and consistency requirements",
+      "Assess the candidate stores and challenge three page claims",
+      "Build and test the transaction demonstration with a forced failure",
+      "Measure the slowest queries on realistic simulated data",
+      "Write the decision record with triggers",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "Access pattern and consistency requirements are stated with real or labelled figures",
+      "Two or more stores are assessed, including what must be built by hand",
+      "Three page claims are tested against the workload",
+      "The transaction test forces a failure and shows no partial result",
+      "Query timings are measured with method and repeats stated",
+      "The decision record has triggers and running costs",
+      "No customer data is used"
+    ],
+    "deliverable": "The access-pattern analysis, the transaction demonstration with tests, the measurements, the decision record and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Data architect",
+    "scenario": "A data architect is reviewing your choice of data store. They suspect the decision followed fashion, not the workload.",
+    "prompts": [
+      "What are your top queries, and how did you find out?",
+      "What happens to the business if two users briefly see different values here?",
+      "Which of your reasons would still hold if the data were ten times larger, or a hundred times?",
+      "What will you have to build yourself because of this choice?",
+      "When would you add a second store, and what would it cost to keep the two in step?",
+      "Which claim in the framework's comparison did you find least true for your workload?"
+    ],
+    "rubric": [
+      { "criterion": "Decision derived from the access pattern and consistency needs, with evidence", "weight": 0.3 },
+      { "criterion": "Correct reasoning about transactions, consistency and the limits of the page's generalisations", "weight": 0.3 },
+      { "criterion": "Triggers, costs and honest treatment of what is built by hand", "weight": 0.25 },
+      { "criterion": "Clear communication to a technical reviewer", "weight": 0.15 }
+    ]
+  }
+}

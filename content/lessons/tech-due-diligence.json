@@ -1,0 +1,211 @@
+{
+  "id": "tech-due-diligence",
+  "moduleId": "economics-investment",
+  "pillar": "Economics",
+  "title": "Technology due diligence: buy-side and sell-side",
+  "estimatedMinutes": { "learn": 45, "build": 300, "defend": 35 },
+  "objectives": [
+    "Name the four pillars of technology due diligence and the questions each asks",
+    "Prepare a sell-side pre-DD pack from the framework's five-step checklist",
+    "Recognise the five buy-side red flags and say what evidence would confirm or clear each",
+    "Verify management claims against raw data and explain why reluctance to share access is itself a finding",
+    "Defend your own systems under diligence, including your technical debt, to an acquirer"
+  ],
+  "prerequisites": ["investment-rounds-stages"],
+  "unlock": { "prerequisites": [{ "lessonId": "investment-rounds-stages", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Technology Due Diligence",
+      "url": "https://www.ctoframework.com/economics/investment/tech-due-diligence",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The page has a heading for 'Typical Tech DD workflow' but no content under it in the retrieved text, so no timeline or phase-by-phase process is taught from the framework here. Check the live page.",
+    "The page gives no numerical examples, cost models or budget figures, no thresholds for velocity, attrition or cloud spend, no valuation method or way to turn findings into price or deal terms, no legal or transaction structuring guidance beyond licence risk, no guidance on running penetration tests or achieving SOC 2 or ISO 27001, and no instructions for FOSSA or Snyk. RTO/RPO, SBOM, C4 and TCO are referenced but not explained.",
+    "The page links Investment Rounds, Total Cost of Ownership, Compliance & Regulation and Open-source Licences. Compliance & Regulation and Open-source Licences were not read for this lesson. Read Open-source Licences before making any licence claim, and take legal advice on copyleft exposure.",
+    "The scorecard and the claim-to-evidence method in this lesson are Original Academy material, not framework content."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What technology due diligence is",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A systematic review of a target company's software systems, architecture, infrastructure, security posture and engineering team, carried out during an acquisition or investment round. It aims to find hidden technical risks, judge scalability and decide whether the technology supports the buyer's strategic goals.\n\nThe page treats it as a pragmatic risk-management exercise, not an academic code review. The aim is to find issues that could break the deal, affect valuation or need costly fixes after the deal. It applies to both sides: buy-side (investigating a target) and sell-side (preparing your own stack)."
+      },
+      {
+        "heading": "The four pillars",
+        "sourceCategory": "Official CTO Framework",
+        "body": "1. Architecture and codebase quality: technical debt (modular or tightly coupled); open-source licence compliance (copyleft licences such as GPL or AGPL mixed into proprietary code, which risks proprietary IP having to be open-sourced); third-party dependencies (deprecated, unmaintained or vulnerable); documentation (current system designs, API specs, READMEs, or architecture that lives in a few engineers' heads).\n\n2. Infrastructure and operations: cloud architecture (containerised, defined as code and auto-scaling, or manually configured VMs); scalability (can it take 5x or 10x load, where are the bottlenecks such as database limits or single points of failure); disaster recovery (backups automated, replicated and tested; actual RTO and RPO); cost optimisation (efficient use, or a bill inflated by poor utilisation).\n\n3. Security and data privacy: compliance with regulations (GDPR, HIPAA, PCI-DSS) or frameworks (SOC 2, ISO 27001); vulnerability management (date of the last independent penetration test, speed of patching); data governance (where PII is stored, how it is encrypted, who can access it).\n\n4. People and organisation: key-person risk or bus factor (would the system falter if the lead architect or founder left, how concentrated is the knowledge); team topology and velocity (set up for fast flow, or slowed by cross-team dependencies and bureaucracy); culture and attrition (turnover and morale)."
+      },
+      {
+        "heading": "The sell-side pre-DD checklist",
+        "sourceCategory": "Official CTO Framework",
+        "body": "1. Generate a Software Bill of Materials (SBOM) with scanning tools to audit open-source dependencies and confirm no copyleft licences are present. The page names FOSSA and Snyk as examples.\n2. Prepare documentation: high-level system diagrams (it links C4), data flow maps and onboarding guides.\n3. Audit cloud spend: remove unused dev instances and show awareness of Total Cost of Ownership.\n4. Collate security evidence: recent penetration tests, SOC 2 certificates and documented remediation plans.\n5. Prepare team metrics: delivery velocity, code coverage, deployment frequency and historical attrition.\n\nThe page's tip: do not hide technical debt. Document the key debt areas and present a prioritised, realistic remediation roadmap."
+      },
+      {
+        "heading": "Buy-side red flags and the verification rule",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Five red flags: a 'black box' core (a critical system understood by one person, often the founder, with no documentation or test coverage); under-licensed code (core IP built on copyleft code, risking legal action or forced disclosure of proprietary algorithms); manual deployment (releases by manual SSH work, no automated tests or infrastructure as code); bloated cloud costs (high cloud cost per user, suggesting inefficient queries or architecture); no security testing or incident logging (claims of 'never having a security incident' without penetration tests or basic intrusion detection).\n\nThe rule: verify management's claims against raw data, meaning Git repository access, cloud billing dashboards and security logs. Reluctance to grant read-only access in late-stage DD is a significant red flag.\n\nPitfalls on the page: being distracted by a polished UI or a charismatic presentation; accepting claims without checking raw data; concealing technical debt, which investors tend to penalise; disorganised preparation, which raises suspicion and can lower valuation; and resisting read-only access late in the process."
+      },
+      {
+        "heading": "Claims, evidence and gaps",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page gives you the pillars and red flags but not a working method. A practical one is a claim register: one row per claim management makes ('we deploy daily', 'no copyleft', 'last pen test in March'), the raw source that would confirm it, what you actually found, and a status of confirmed, contradicted or unverifiable.\n\nTreat 'unverifiable' as its own finding. A claim that cannot be checked is not a pass; it is a gap the buyer will price. From the sell side, the best defence is to make claims checkable before anyone asks: the SBOM, the billing export and the deployment history are all easy to produce in advance and hard to dispute.\n\nThe page gives no thresholds, so avoid inventing them. A cloud cost per user is only a signal when compared with your own trend or a documented peer figure; on its own it is a number, not a verdict. Say what you compared it to."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A claim register for a fictional target (illustrative, not Cretek data)",
+      "body": "A buyer reviews a fictional company. Three management claims:\n\n1. 'We have never had a security incident.' Raw data requested: security logs and the last penetration test. Found: no penetration test on record and no intrusion logging. Status: unverifiable, and it matches the page's fifth red flag. The claim is not evidence of safety.\n\n2. 'We deploy daily.' Raw data: deployment history. Found: releases are manual over SSH, roughly monthly. Status: contradicted, and it matches the manual deployment red flag.\n\n3. 'Hosting is efficient.' Raw data: billing export and user counts. Found: a 40,000 monthly bill for 2,000 monthly active users, which is 20 per user. By itself this is only a number: no threshold is given on the page. The buyer compares it with the company's own earlier months and asks what drives it.\n\nNet: one claim unverifiable, one contradicted, one needing a comparison. A prepared seller would have produced a recent penetration test, a deployment log, and a cost-per-user trend before the buyer asked, and would have told the buyer about the manual releases with a remediation plan, which is the page's tip: do not hide debt, present a prioritised roadmap."
+    },
+    "misconceptions": [
+      "Believing diligence is a code review. The page calls it risk management focused on deal-breaking issues.",
+      "Accepting 'we have never had an incident' as evidence of security.",
+      "Treating an unverifiable claim as a pass.",
+      "Hiding technical debt. The page says investors tend to penalise concealment.",
+      "Quoting cost per user as a verdict. The page gives no thresholds.",
+      "Assuming copyleft is automatically a problem or automatically fine. It depends on the licence and how the code is used, and needs legal advice.",
+      "Thinking diligence only matters at an acquisition. The page applies it to investment rounds too."
+    ],
+    "explainTask": "In 150 words or fewer, explain to an acquirer why they should trust your technology claims, and what you will give them to check."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "dd-1",
+      "question": "Which is NOT one of the four pillars of technology due diligence on the page?",
+      "options": [
+        "Architecture and codebase quality",
+        "Infrastructure and operations",
+        "Marketing and brand strength",
+        "People and organisation"
+      ],
+      "answer": 2,
+      "why": "The four pillars are architecture and codebase quality, infrastructure and operations, security and data privacy, and people and organisation."
+    },
+    {
+      "id": "dd-2",
+      "question": "What does the page say is the risk of copyleft licences such as GPL or AGPL mixed into proprietary code?",
+      "options": [
+        "Slower builds",
+        "Proprietary IP may have to be open-sourced",
+        "Higher cloud costs",
+        "Loss of SOC 2 certification"
+      ],
+      "answer": 1,
+      "why": "The page flags the risk that copyleft licences in proprietary code could force proprietary IP to be open-sourced. Whether it applies depends on the licence and use, so take legal advice."
+    },
+    {
+      "id": "dd-3",
+      "question": "Which is the first item on the sell-side pre-DD checklist?",
+      "options": [
+        "Prepare team metrics",
+        "Audit cloud spend",
+        "Generate an SBOM to audit open-source dependencies",
+        "Collate security evidence"
+      ],
+      "answer": 2,
+      "why": "The first step is generating a Software Bill of Materials with scanning tools to audit dependencies and confirm no copyleft licences are present."
+    },
+    {
+      "id": "dd-4",
+      "question": "Management says they have never had a security incident, but there is no penetration test and no intrusion detection. How does the page treat this?",
+      "options": [
+        "As strong evidence of good security",
+        "As a red flag: no security testing or incident logging",
+        "As irrelevant",
+        "As proof of compliance"
+      ],
+      "answer": 1,
+      "why": "The page lists 'no security testing or incident logging' as a buy-side red flag, including claims of never having an incident without tests or detection."
+    },
+    {
+      "id": "dd-5",
+      "question": "In late-stage diligence the target refuses read-only access to repositories, billing and security logs. According to the page this is:",
+      "options": [
+        "Normal and expected",
+        "A significant red flag",
+        "A reason to skip verification",
+        "A sign of strong security"
+      ],
+      "answer": 1,
+      "why": "The page says to verify management's claims against raw data and calls reluctance to grant read-only access in late-stage DD a significant red flag."
+    },
+    {
+      "id": "dd-6",
+      "question": "What does the page advise a seller to do about technical debt?",
+      "options": [
+        "Conceal it until after the deal",
+        "Document the key areas and present a prioritised, realistic remediation roadmap",
+        "Fix all of it before any conversation",
+        "Blame the previous team"
+      ],
+      "answer": 1,
+      "why": "The tip is not to hide technical debt: document the key debt areas and present a prioritised, realistic remediation roadmap."
+    }
+  ],
+  "build": {
+    "business": "Any investor, acquirer or large client will examine Cretek's technology. The CTO should know the answers before the questions arrive. This is the self-diligence capability in the CTO Operating System.",
+    "problem": "Run a sell-side pre-diligence review on Cretek's own systems, producing a claim register, a readiness pack and a tested register tool.",
+    "requirements": [
+      "Cover all four pillars for at least two real Cretek systems (for example the school management application and the quotation automation). For each pillar item on the page, record the finding, the evidence, and a status of confirmed, contradicted or unverifiable",
+      "Work through the five sell-side checklist items: an SBOM with the tool used, documentation including a C4-level diagram and a data flow map, a cloud spend audit with unused resources listed, a security evidence set (what exists and what does not), and team metrics (deployment frequency, test coverage and any other measures you can compute from real data)",
+      "A claim register: at least ten claims the business makes or implies about its technology, each with the raw source, what you found, and a status. Include at least one claim you could not verify",
+      "A review of the five buy-side red flags against Cretek, each marked present, absent or unknown with evidence",
+      "A technical debt statement: the key debt areas, a prioritised remediation roadmap and owners, consistent with the earlier Technical Debt and budget lessons",
+      "A licence review noting any copyleft or unclear licences found by the SBOM, with a note that legal advice is needed before drawing conclusions",
+      "A claim register tool that stores claims, evidence and status, flags any claim without a raw source, and reports counts by status and pillar. Automated tests required, including a claim with no source, an unknown status (reject), a duplicate claim id, an empty register, and a report on a mixed register",
+      "A one-page readiness summary, led by gaps, not strengths",
+      "Every finding labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No invented Cretek findings. Use real repositories, bills and logs, or mark the item unverifiable",
+      "Do not commit secrets, credentials, personal data or customer data to the repository or the register",
+      "Do not make licence or legal conclusions. Record findings and refer them for legal advice",
+      "Use read-only access when inspecting systems. Do not change anything in production",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the claim register schema, the status rules, how evidence is referenced without copying sensitive data, and one alternative you rejected, for example a free-text checklist document.",
+    "tasks": [
+      "Pick the systems in scope and agree access (read-only)",
+      "Generate the SBOM and review the licences",
+      "Collect the documentation, the data flow map and the security evidence",
+      "Audit the cloud spend and compute any team metrics you can from real data",
+      "Build the claim register tool with tests and populate it",
+      "Assess the five red flags and write the debt roadmap",
+      "Write the one-page readiness summary",
+      "Document security handling for the register and its evidence"
+    ],
+    "acceptance": [
+      "All four pillars are covered for at least two systems with evidence",
+      "The five checklist items are each done or recorded as a gap",
+      "The claim register has at least ten claims, each with a source or flagged as lacking one, and at least one unverifiable claim",
+      "The five red flags are assessed with evidence",
+      "The tool tests pass including edge cases",
+      "No secrets or personal data are in the repository",
+      "No legal conclusions are drawn on licences",
+      "All findings labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The claim register and tool with tests, the readiness pack and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Acquirer",
+    "scenario": "An acquirer's technical adviser is examining Cretek's systems. They have read-only access requests ready and expect straight answers.",
+    "prompts": [
+      "Which of your claims could you not verify, and why not?",
+      "Show me the part of the system only one person understands. What is the plan?",
+      "What did your SBOM find, and what licence questions are open?",
+      "You say hosting is efficient. Compared with what, and how do I check it?",
+      "Which technical debt would you fix first with our money, and what would it cost not to?",
+      "Why should I believe your security position when there is no recent penetration test?"
+    ],
+    "rubric": [
+      { "criterion": "Claims backed by raw evidence, with unverifiable items admitted", "weight": 0.3 },
+      { "criterion": "Honest treatment of debt, red flags and gaps with a credible roadmap", "weight": 0.3 },
+      { "criterion": "Correct use of the four pillars and caution on licence and legal matters", "weight": 0.2 },
+      { "criterion": "Clear, brief communication under challenge", "weight": 0.2 }
+    ]
+  }
+}

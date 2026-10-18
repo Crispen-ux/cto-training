@@ -1,0 +1,207 @@
+{
+  "id": "rca-post-mortems",
+  "moduleId": "delivery-incidents",
+  "pillar": "Delivery",
+  "title": "Root cause analysis and blameless post-mortems",
+  "estimatedMinutes": { "learn": 45, "build": 260, "defend": 30 },
+  "objectives": [
+    "State the five RCA steps and the five techniques the framework names",
+    "Run a 5 Whys analysis and test whether the answer is a root cause or only the last thing you thought of",
+    "Write a post-mortem using the framework's eight template sections",
+    "Apply blameless principles in the wording of findings and actions",
+    "Compute time to detect and time to restore from a timeline and say what those numbers do and do not tell you",
+    "Defend an incident review to a review board, including actions that did not get done"
+  ],
+  "prerequisites": ["sla-slo-sli"],
+  "unlock": { "prerequisites": [{ "lessonId": "sla-slo-sli", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Root Cause Analysis (RCA)",
+      "url": "https://www.ctoframework.com/delivery/incident-management/root-cause-analysis",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    },
+    {
+      "category": "Official CTO Framework",
+      "title": "Technical Post-Mortems",
+      "url": "https://www.ctoframework.com/delivery/incident-management/technical-post-mortems",
+      "reviewed": "2026-10-13",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The RCA page has no pitfalls section and no figures. It does not explain how to run the techniques in practice (facilitation, building a fishbone step by step), how to choose between them, how to handle multiple root causes, who owns corrective actions, how to verify that fixes work, or the blame and culture side of investigations. Its worked example (website downtime) is a single causal chain with no numbers.",
+    "The page's 'root cause' in that example (inadequate testing before software updates) is a judgement. The page does not argue why the chain stops there. The critique of it in this lesson is Original Academy material.",
+    "The Post-Mortems page has no worked example, no figures, no pitfalls section, no guidance on facilitation or attendees, no metrics such as time to detect or time to resolve, no tooling or follow-up cadence, and no detailed templates beyond the eight section headings. Its blameless culture is stated as principle; the wording guidance and the timeline calculation here are Original Academy material.",
+    "The page lists three external references (AWS Post-Event Summaries, Google's SRE book chapter on postmortem culture, postmortem.io). None was read for this lesson. Read the Google SRE chapter before relying on any post-mortem practice described beyond the page.",
+    "Time to detect and time to restore are used here as plain interval calculations. Industry definitions of MTTD, MTTR and similar acronyms vary; the Academy does not adopt one. State your own definition in any report."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What RCA is for",
+        "sourceCategory": "Official CTO Framework",
+        "body": "RCA is a systematic method for finding the underlying cause or causes of a problem, failure or defect, so it does not recur, rather than only treating its visible effects.\n\nThe page lists four principles: cause over symptoms; evidence-based (facts, data and logic, not assumptions); structured (a step-by-step method); and prevention-oriented (corrective action to stop recurrence).\n\nFive steps: define the problem (what happened, where, when, how); gather data (logs, reports, witness accounts); determine root causes using analytical techniques; implement corrective actions that address root causes, not only symptoms; monitor and verify that the actions actually prevent recurrence."
+      },
+      {
+        "heading": "The five techniques the page names",
+        "sourceCategory": "Official CTO Framework",
+        "body": "5 Whys: ask 'why' repeatedly to drill from symptom to cause. The page gives no fixed number of iterations.\nFishbone (Ishikawa) diagram: sort possible causes into categories such as People, Process and Equipment.\nFailure Mode and Effects Analysis (FMEA): systematically evaluate where failures could occur.\nFault Tree Analysis (FTA): map cause-and-effect relationships in a logical tree.\nPareto analysis: use the 80/20 principle to identify the most significant causes (covered in the next lesson).\n\nThe page does not say how to choose between them, or how to run each in practice."
+      },
+      {
+        "heading": "The page's worked example, and a harder look at it",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Problem: a website has frequent downtime. The causal chain on the page: the server crashes; high CPU usage overloads the system; a poorly optimised database query runs continuously; a recent software update introduced inefficient indexing; the update was not thoroughly tested before deployment. Root cause on the page: inadequate testing before software updates. Solution: a robust testing protocol before deployment.\n\nThe page gives no numbers and does not say how it knows each link is true."
+      },
+      {
+        "heading": "Testing a root cause",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page's example is a single chain, and a single chain is the main weakness of 5 Whys: it follows the first answer to each question and ignores the others. In the example, testing was missing, but other questions go unasked. Why was a continuously running query not caught by monitoring or an alert on CPU? Why could a faulty change not be rolled back quickly? Why did the problem recur ('frequent' downtime) if a past incident had been reviewed? Several things went wrong together, and 'inadequate testing' is one of them.\n\nThree tests for a candidate root cause. Evidence: does a log, a commit or a measurement support each link, or did the team assume it? Counterfactual: if this had been different, would the incident have been prevented or much smaller? Actionability: is there a change you can make that is within your control? A 'root cause' that is 'human error' or 'the team was careless' fails the actionability test and usually the evidence test; ask why the system let one person's mistake cause the outage.\n\nExpect more than one contributing cause. A good analysis lists them, says which were necessary for the outage and which only made it worse or longer, and does not force a single answer. The page's definition itself says 'cause(s)'."
+      },
+      {
+        "heading": "The post-mortem and its template",
+        "sourceCategory": "Official CTO Framework",
+        "body": "A technical post-mortem is a structured review held after a system failure, security incident or significant technical problem. Its aim is to establish what happened, why, and how to prevent it recurring.\n\nObjectives on the page: identify the root cause (technical, process-related or human); document impact on systems, users and business operations; review the response (what worked, what could have gone better); define preventive measures (code fixes, monitoring improvements, process changes); and promote a blameless culture focused on learning and systemic improvement.\n\nEight template sections: incident summary; timeline of events (key timestamps from detection to resolution); root cause analysis (5 Whys, fishbone, fault tree); impact analysis; incident response review; corrective and preventive actions; lessons learned; action items and follow-ups.\n\nPractice from the page: write it soon after the incident while details are fresh; each preventive measure has an assigned owner; review past post-mortems regularly to refine the process; write clearly enough for technical and non-technical readers."
+      },
+      {
+        "heading": "Writing blameless findings",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page states the principle: attribute failures to processes and systems, not people. The wording makes it real.\n\nBlameful: 'Dev A pushed an untested change.' Blameless and more useful: 'The change reached production without a performance test because the pipeline does not require one.' The second names the control that was missing, which you can fix; the first names a person, which you cannot.\n\nBlameless does not mean accountability-free. Owners are still named on the actions. It means the review asks 'what made this the easy thing to do?' and not 'who did it?'.\n\nAvoid vague actions. 'Be more careful with deployments' has no owner, no deadline and no way to check. 'Add a query-plan check to the deployment pipeline: owner R, due 2026-11-15, verified when a deliberately slow query fails the pipeline' can be tracked. The page requires owners but gives no guidance on deadlines or tracking, so set those yourself."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "A timeline and what it measures (illustrative, not Cretek data)",
+      "body": "A fictional incident. 14:02 a release is deployed and the slow query begins; users are affected from this time. 14:09 monitoring alerts fire. 14:20 the incident is declared. 14:35 the decision to roll back is taken. 14:48 service is restored.\n\nTime from impact start to detection: 14:09 - 14:02 = 7 minutes. Time from impact start to restoration: 14:48 - 14:02 = 46 minutes. Time from detection to restoration: 14:48 - 14:09 = 39 minutes. The page gives no such metrics; these are plain interval calculations, and you should define your own start and end events and say so.\n\nWhat the numbers show: detection was quick, but 39 minutes elapsed after detection, of which 26 were between the alert and the rollback decision (14:09 to 14:35). The response review should ask why. Was the rollback path unclear, was the on-call person unsure of authority, or was the cause misdiagnosed? What the numbers do not show: why the slow query reached production (the RCA), or how many users were affected (the impact analysis).\n\nA sound review keeps the numbers beside the explanations, names the contributing causes (no performance check in the pipeline; no automatic rollback; an unclear rollback decision), writes each action with an owner and a verification, and revisits the open actions at a fixed date."
+    },
+    "misconceptions": [
+      "Treating the 5 Whys as a single line of questions that always ends in one answer.",
+      "Stopping at 'human error' or 'carelessness' as the root cause.",
+      "Believing blameless means nobody is accountable. Owners are still named on actions.",
+      "Writing actions with no owner, no date and no way to verify them.",
+      "Assuming the page sets time-to-detect or time-to-resolve metrics. It does not; define your own.",
+      "Writing the post-mortem weeks later from memory. The page says to write soon after, while details are fresh.",
+      "Closing the post-mortem without checking that the fix works. The RCA process includes a monitor and verify step."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a non-technical executive what a blameless post-mortem is, why it does not name individuals, and how you make sure actions get done."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "rp-1",
+      "question": "Which is the last of the RCA process steps on the page?",
+      "options": [
+        "Gather data",
+        "Determine root causes",
+        "Implement corrective actions",
+        "Monitor and verify that the actions prevent recurrence"
+      ],
+      "answer": 3,
+      "why": "The steps are define the problem, gather data, determine root causes, implement corrective actions, then monitor and verify."
+    },
+    {
+      "id": "rp-2",
+      "question": "Which technique does the RCA page describe as sorting possible causes into categories such as People, Process and Equipment?",
+      "options": ["5 Whys", "Fishbone (Ishikawa) diagram", "Fault Tree Analysis", "Pareto analysis"],
+      "answer": 1,
+      "why": "The fishbone diagram sorts possible causes into categories. 5 Whys drills by repeated 'why', FTA maps cause and effect in a logical tree, and Pareto ranks the most significant causes."
+    },
+    {
+      "id": "rp-3",
+      "question": "How many template sections does the Technical Post-Mortems page list?",
+      "options": ["Five", "Six", "Eight", "Ten"],
+      "answer": 2,
+      "why": "Eight: incident summary, timeline, RCA, impact analysis, response review, corrective and preventive actions, lessons learned, action items and follow-ups."
+    },
+    {
+      "id": "rp-4",
+      "question": "Which finding is worded in line with blameless principles?",
+      "options": [
+        "Dev A pushed an untested change",
+        "The change reached production without a performance test because the pipeline does not require one",
+        "The team was careless",
+        "Someone should have noticed"
+      ],
+      "answer": 1,
+      "why": "It attributes the failure to a missing control in the process, which can be fixed, and does not name or blame a person."
+    },
+    {
+      "id": "rp-5",
+      "question": "Impact starts at 14:02, an alert fires at 14:09 and service is restored at 14:48. What is the time from detection to restoration?",
+      "options": ["7 minutes", "39 minutes", "46 minutes", "48 minutes"],
+      "answer": 1,
+      "why": "14:48 - 14:09 = 39 minutes. Seven minutes is detection time from impact start and 46 minutes is total from impact start."
+    },
+    {
+      "id": "rp-6",
+      "question": "What does the Post-Mortems page say about assigning ownership of preventive measures?",
+      "options": [
+        "Owners should not be named in a blameless review",
+        "Each preventive measure needs an assigned owner",
+        "Only the on-call engineer owns actions",
+        "Ownership is decided by the CEO"
+      ],
+      "answer": 1,
+      "why": "The page says each preventive measure needs an assigned owner. Blameless means not blaming individuals for the failure, not leaving actions without owners."
+    }
+  ],
+  "build": {
+    "business": "Cretek will have incidents. A CTO should be able to run a review that finds the real causes, produces actions that get done, and leaves the team more willing to report the next problem. This is the incident learning capability in the CTO Operating System.",
+    "problem": "Write one real Cretek incident review in the eight-section format, plus a tested timeline calculator and an action tracker.",
+    "requirements": [
+      "Choose a real Cretek incident or near-miss (for example an outage, a failed release, a data problem or a security event). If there is no usable record, say so and use a clearly labelled RECONSTRUCTED or SIMULATED incident. Do not invent a real-seeming one",
+      "A post-mortem with all eight sections. The timeline has timestamps with the source of each (log, message, memory) so the reader can see which are recorded and which are recalled",
+      "An RCA that records evidence for each link, tries at least two branches and not a single chain, names the necessary contributing causes, and applies the evidence, counterfactual and actionability tests to each. State what you could not establish",
+      "A blameless wording review: list any sentence you rewrote to remove blame, with before and after",
+      "Corrective and preventive actions, each with an owner, a due date and a verification step. Say which were completed before the review was written",
+      "A calculator that takes event timestamps (impact start, detected, declared, mitigated, restored) and outputs the intervals between them. Automated tests required, including known values from the worked example, events out of order (reject), a missing optional event, identical timestamps, and a timeline that crosses midnight",
+      "An action tracker that lists open actions with owner and due date and flags those overdue or lacking a verification step. Tests required, including an empty list and an action with no owner (reject)",
+      "A one-page summary for a non-technical reader",
+      "Every figure labelled REAL, ASSUMPTION, SIMULATED or RECONSTRUCTED"
+    ],
+    "constraints": [
+      "No invented Cretek incident facts",
+      "Do not name individuals as the cause. Refer to roles and systems",
+      "Do not include customer personal data, credentials or secrets in the review or the repository",
+      "Must run locally with a single command"
+    ],
+    "design": "Write a one-page design covering the timeline schema, how times and time zones are handled, how an unrecorded event is represented, and one alternative you rejected, for example a free-text timeline with no structure.",
+    "tasks": [
+      "Choose the incident and collect logs and messages",
+      "Build the timeline and note the source of each entry",
+      "Run the RCA with at least two branches and test each candidate cause",
+      "Draft the eight-section post-mortem and the blameless wording review",
+      "Write actions with owners, dates and verification",
+      "Build the calculator and tracker with tests",
+      "Write the one-page summary"
+    ],
+    "acceptance": [
+      "All eight sections are present and the timeline shows the source of each entry",
+      "The RCA has evidence for each link, more than one branch and states what is unknown",
+      "No finding blames a named individual",
+      "Every action has an owner, a due date and a verification step",
+      "Calculator and tracker tests pass including edge cases",
+      "No secrets or personal data in the repository",
+      "All figures labelled with their data type"
+    ],
+    "deliverable": "The post-mortem, the calculator and tracker with tests and the one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Incident review board",
+    "scenario": "A review board has read your post-mortem. One member thinks it is too soft; another thinks it names the wrong cause.",
+    "prompts": [
+      "How do you know this is the root cause and not just the last thing that went wrong?",
+      "What other contributing causes did you consider and rule out, and on what evidence?",
+      "Without naming a person, who is accountable for the actions?",
+      "Which of your timeline entries are recorded and which are recalled?",
+      "Which action will not get done, and what happens then?",
+      "How will you know in three months that the fix worked?"
+    ],
+    "rubric": [
+      { "criterion": "Evidence-based RCA with multiple causes tested, not a single chain", "weight": 0.3 },
+      { "criterion": "Blameless but accountable: systemic findings, owned and verifiable actions", "weight": 0.3 },
+      { "criterion": "Honest about unknowns and the quality of the timeline", "weight": 0.2 },
+      { "criterion": "Clear, brief communication to technical and non-technical readers", "weight": 0.2 }
+    ]
+  }
+}

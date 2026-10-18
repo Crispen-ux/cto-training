@@ -1,0 +1,186 @@
+{
+  "id": "technical-debt",
+  "moduleId": "tech-architecture",
+  "pillar": "Tech",
+  "title": "Technical debt: classifying, funding and governing it",
+  "estimatedMinutes": { "learn": 35, "build": 240, "defend": 30 },
+  "objectives": [
+    "Classify debt using the quadrant the framework presents",
+    "Identify lifecycle (dependency) debt and plan around support windows",
+    "Build a debt register that links items to risks and decisions",
+    "Argue for a capacity allocation to a product executive and say what you will not fund"
+  ],
+  "prerequisites": ["adr-c4"],
+  "unlock": { "prerequisites": [{ "lessonId": "adr-c4", "type": "knowledge_check" }] },
+  "sources": [
+    {
+      "category": "Official CTO Framework",
+      "title": "Technical Debt & Risk Management",
+      "url": "https://www.ctoframework.com/tech/architecture-design/technical-debt",
+      "reviewed": "2026-10-11",
+      "reviewDepth": "Page content retrieved as an automated summary; re-read the page itself before relying on it."
+    }
+  ],
+  "verificationNotes": [
+    "The page gives no method for measuring or quantifying debt, no process for prioritising repayment, no cost-of-debt calculation, no risk-scoring framework and no figures other than the 20% capacity guideline. The measurement and prioritisation methods in this lesson are Original Academy.",
+    "The page references endoflife.date, Wikipedia and Martin Fowler's original quadrant article. None were consulted. Check support windows against the vendor's own announcements before relying on endoflife.date.",
+    "The Well-architected guide (/tech/architecture-design/well-architected) is part of this module's source list, but its article body could not be retrieved: only navigation and links to AWS, Azure, Oracle Cloud and a third-party Google Cloud write-up were returned. Nothing from it is used in these lessons, and it is not claimed to be covered. It needs a manual read and the providers' own framework documentation as supplementary material."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "What technical debt is",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The framework defines technical debt as the future cost of choosing a quick, short-term software solution over a more robust approach that takes longer. It treats debt as manageable rather than always harmful, and warns that unmanaged debt slows development and creates operational risk."
+      },
+      {
+        "heading": "The quadrant",
+        "sourceCategory": "Official CTO Framework",
+        "body": "The page uses Martin Fowler's Technical Debt Quadrant, which sorts debt by intent (deliberate or inadvertent) and execution (prudent or reckless).\n\nPrudent and deliberate (strategic): debt taken knowingly to meet a critical deadline, with a plan to repay it after launch.\nPrudent and inadvertent (learning): the code was sound when written, but later understanding of the domain shows a better design.\nReckless and deliberate (shortsighted): speed over quality with no thought to consequences or repayment.\nReckless and inadvertent (ignorant): the team lacks knowledge, training or craftsmanship and does not realise the debt exists.\n\nThe quadrant implies several causes: deadline pressure, evolving domain understanding, a deliberate focus on speed and skill gaps. The page does not analyse them further."
+      },
+      {
+        "heading": "Impact and lifecycle debt",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Impact on delivery, per the page: velocity drops as engineers work around old shortcuts; morale suffers in brittle codebases, which can lead to disengagement and turnover; reliability and security risk grows through legacy systems, outdated dependencies and hasty integrations, which can increase outages.\n\nThe page highlights lifecycle (dependency) debt, running unsupported software versions or packages, as commonly overlooked. It creates security exposure and makes later upgrades much harder. The suggested response is to track platform support windows and plan upgrades ahead of time."
+      },
+      {
+        "heading": "Managing it, and its pitfalls",
+        "sourceCategory": "Official CTO Framework",
+        "body": "Strategies on the page: reserve 20% of each sprint or cycle for refactoring, upgrades, infrastructure maintenance and debt work (the only numeric guidance on the page); apply the Boy Scout rule, leaving code slightly cleaner than found; and record decisions in Architectural Decision Records so future teams do not add debt by misreading past constraints.\n\nPitfalls it notes: targeting metrics such as code coverage or bug counts can encourage reckless debt (a Goodhart's Law effect), and implicit dependencies (Hyrum's Law) compound system debt."
+      },
+      {
+        "heading": "What the page leaves to you",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "The page tells you what debt is and gives one rule of thumb. It does not say how to find it, size it, rank it or decide what to leave alone. Do not treat 20% as a law; treat it as a starting point you adjust with evidence. A usable Academy approach: log each item with the quadrant, the symptom (what it slows or risks), an estimate of the cost of leaving it (hours lost per month or a named risk) and the cost to fix, with the assumptions labelled. Rank by cost of leaving divided by cost to fix, and break ties by risk to security or availability. Some debt is cheaper to live with than to repay; recording a deliberate decision to leave it, with an owner and a review date, is a legitimate outcome.\n\nAnd link the register to what you already have: debt that threatens delivery belongs in the RAID log as a risk with a ROAM status, and the decision that created or accepted it belongs in an ADR."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Ranking three items (illustrative numbers and assumptions, not Cretek data)",
+      "body": "Item A: an unsupported runtime version on a customer-facing service. Quadrant: prudent and inadvertent was the original choice, but it is now lifecycle debt. Cost of leaving: security exposure (named risk) plus harder upgrade each month; cost to fix: 5 days. Item B: duplicated quoting logic in two places, causing about 6 hours a month of double fixes. Cost to fix: 8 days. Item C: an ugly but stable report script touched twice a year. Cost to fix: 6 days, cost of leaving: about 1 hour a year. Ranking: A first, because of the risk and because lifecycle debt gets harder with time (the page's point); B second, since 6 hours a month is about 72 hours a year against a one-off 64 hour fix (8 days at 8 hours), a payback of under a year; C is a deliberate decision to leave alone, recorded with a review date. The numbers matter less than the fact that every choice is written down with its assumptions."
+    },
+    "misconceptions": [
+      "Believing all debt is bad. The page treats deliberate, prudent debt as a legitimate, manageable choice.",
+      "Assuming debt only means messy code. The page includes unsupported versions and dependencies.",
+      "Setting a target such as 90% code coverage as the way to cut debt. The page warns that metric targets can encourage reckless debt.",
+      "Treating 20% as a rule rather than a starting guideline.",
+      "Keeping debt in people's heads. Undocumented debt gets repaid by accident or never."
+    ],
+    "explainTask": "In 150 words or fewer, explain to a product executive why you want to spend some of the team's time on work that adds no feature, and what you will stop doing if they say no."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "td-1",
+      "question": "A team knowingly takes a shortcut to hit a critical deadline and plans to repay it after launch. Which quadrant is this?",
+      "options": [
+        "Prudent and deliberate",
+        "Reckless and deliberate",
+        "Prudent and inadvertent",
+        "Reckless and inadvertent"
+      ],
+      "answer": 0,
+      "why": "Deliberate and prudent: strategic debt taken knowingly with a plan to repay."
+    },
+    {
+      "id": "td-2",
+      "question": "What is the only numeric guidance on the page?",
+      "options": [
+        "Reserve 10% of each sprint",
+        "Reserve 20% of each sprint or cycle for debt work",
+        "Keep debt under 30% of the codebase",
+        "Repay debt within 90 days"
+      ],
+      "answer": 1,
+      "why": "The page's one figure is the 20% capacity guideline for refactoring, upgrades, maintenance and debt."
+    },
+    {
+      "id": "td-3",
+      "question": "What does the page suggest for lifecycle (dependency) debt?",
+      "options": [
+        "Ignore it until a vulnerability is announced",
+        "Replace the whole platform every year",
+        "Track platform support windows and plan upgrades ahead of time",
+        "Pin every version forever"
+      ],
+      "answer": 2,
+      "why": "Unsupported versions create security exposure and make later upgrades harder, so track support windows and plan ahead."
+    },
+    {
+      "id": "td-4",
+      "question": "Why does the page warn against targeting metrics such as code coverage or bug counts?",
+      "options": [
+        "Metrics are always inaccurate",
+        "Targets can encourage reckless debt, a Goodhart's Law effect",
+        "They cost too much to collect",
+        "They only apply to large teams"
+      ],
+      "answer": 1,
+      "why": "When a measure becomes a target, people optimise the number and can take on reckless debt to hit it."
+    },
+    {
+      "id": "td-5",
+      "question": "The code was sound when written, but the team later learns the domain better and sees a better design. Which quadrant?",
+      "options": [
+        "Reckless and deliberate",
+        "Reckless and inadvertent",
+        "Prudent and deliberate",
+        "Prudent and inadvertent"
+      ],
+      "answer": 3,
+      "why": "Prudent and inadvertent: the debt appears only because understanding improved. The page calls this the learning quadrant."
+    }
+  ],
+  "build": {
+    "business": "Cretek's systems carry shortcuts and ageing dependencies. A CTO must know what they are, what they cost and which to fix first, rather than relying on how the code feels.",
+    "problem": "Build a technical debt register for the Cretek systems, including a lifecycle audit, and propose a capacity allocation with evidence.",
+    "requirements": [
+      "A register of at least 15 real debt items across at least three Cretek systems, each with quadrant, symptom, cost of leaving, cost to fix, owner and a link to the related RAID risk or ADR where one exists",
+      "Cost figures are measured where possible and otherwise labelled assumptions with the basis stated",
+      "A lifecycle audit: every runtime, framework and major dependency with its version, its vendor-stated support end date and the source of that date",
+      "A ranking method written down, with the formula and tie-break rules, and the resulting order",
+      "Items you decide to leave alone, with a recorded reason, owner and review date",
+      "A capacity proposal (for example the page's 20% as a starting point) justified from the register, with what the team will stop doing to afford it",
+      "A script that reads dependency manifests, compares them with your support-window table and flags items nearing or past end of support, with tests",
+      "Data labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No invented dependencies or dates. Support dates must come from a source you cite; mark unverified ones",
+      "Do not use a code-coverage or bug-count target as a measure of progress"
+    ],
+    "design": "Describe how items enter the register, who reviews it, and how it feeds the RAID log and sprint planning.",
+    "tasks": [
+      "Inventory the systems and gather real debt items from the people who work in them",
+      "Run the lifecycle audit with cited sources",
+      "Classify, cost and rank the items",
+      "Implement the manifest checker with tests: past end of support, near end, unknown package, missing date",
+      "Write the capacity proposal and the 'will not fix' list",
+      "Link at least three items to RAID risks or ADRs and update those records"
+    ],
+    "acceptance": [
+      "Register has 15 real items, each classified and costed with labelled assumptions",
+      "Lifecycle audit cites a support source for every date, or marks it unverified",
+      "Ranking is reproducible from the formula",
+      "Checker tests pass and cover the cases listed",
+      "Capacity proposal states what is traded off",
+      "Data labelled REAL, ASSUMPTION or SIMULATED"
+    ],
+    "deliverable": "The register, audit, checker script, tests and capacity proposal in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Product executive",
+    "scenario": "The product executive has a launch coming and a roadmap that is already full. They want to know why they should give you 20% of the team.",
+    "prompts": [
+      "Show me what this debt costs us today in real terms, not in adjectives.",
+      "Why 20% and not 10%? What do I get for the extra?",
+      "Which debt are you deliberately leaving alone, and what makes that safe?",
+      "How will I know in a quarter that the time was well spent, without a vanity metric?",
+      "If I say no this quarter, what exactly breaks, and when?"
+    ],
+    "rubric": [
+      { "criterion": "Evidence-based costing, with assumptions stated honestly", "weight": 0.3 },
+      { "criterion": "Prioritisation logic, including what is left alone", "weight": 0.25 },
+      { "criterion": "Trade-offs and impact on delivery presented in business terms", "weight": 0.25 },
+      { "criterion": "Success measures that avoid gameable targets", "weight": 0.2 }
+    ]
+  }
+}
