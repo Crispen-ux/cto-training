@@ -1,0 +1,228 @@
+{
+  "id": "goodharts-law-vanity-metrics",
+  "moduleId": "delivery-metrics",
+  "pillar": "Delivery",
+  "title": "Goodhart's law, vanity metrics and honest KPIs",
+  "estimatedMinutes": {
+    "learn": 35,
+    "build": 180,
+    "defend": 30
+  },
+  "objectives": [
+    "State Goodhart's law and distinguish a measure from a target",
+    "Identify vanity metrics that move without proving customer or delivery value",
+    "Design a small metric set with a counter-metric or gaming check for each",
+    "Write a one-page metric contract: definition, owner, window, and what behaviour we do not want",
+    "Defend a metric change to a team that has learned to game the old one"
+  ],
+  "prerequisites": [
+    "dora-metrics",
+    "sla-slo-sli"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "dora-metrics",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "sla-slo-sli",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Goodhart's law — Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/Goodhart%27s_law",
+      "reviewed": "2026-10-18",
+      "reviewDepth": "Full article retrieved 2026-10-18; classic formulation and related adages checked against the article."
+    }
+  ],
+  "verificationNotes": [
+    "Wikipedia article retrieved in full on 2026-10-18. The classic formulation ('When a measure becomes a target, it ceases to be a good measure'), Goodhart's 1975 monetary-policy origin, Campbell's law as a related idea, and examples (testing targets, education, citation metrics) are from the article. This lesson re-states them in Academy voice for engineering delivery; it does not claim Cretek invented the adage.",
+    "The article's point that related ideas predate Goodhart (including Campbell, Ravetz, Lucas) is noted; the common short form is used here for teaching, with the full article as source.",
+    "Vanity metrics, metric contracts, and counter-metrics are Academy extensions of the adage for CTO practice; they are not attributed to the article.",
+    "No team was measured or re-measured for this lesson. Worked examples use clearly labelled illustrative numbers."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The adage",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Goodhart's law is usually quoted as: when a measure becomes a target, it ceases to be a good measure. Charles Goodhart's 1975 observation was about monetary policy: any observed statistical regularity tends to collapse once pressure is placed on it for control purposes.\n\nThe mechanism is human. Once a number is rewarded, people optimise the number. That can mean real improvement, pure gaming, or a mix that is hard to untangle. The law does not say metrics are useless; it says the link between measure and goal breaks under reward pressure.\n\nRelated ideas in the same family: Campbell's law (quantitative social indicators used for decisions invite corruption pressures) and the general lesson from citation-index gaming that metrics of evaluation get abused."
+      },
+      {
+        "heading": "Measure, target, counter-metric",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A measure is an observation: deploy frequency, mean lead time, error rate, support contacts per customer. A target is a management commitment on that measure. The law fires when the measure becomes the target without a second check.\n\nA counter-metric is a measure you refuse to sacrifice while chasing the primary. Examples: deploy frequency (primary) with change-failure rate and post-deploy incidents as counter-metrics; story points completed (primary, weak) with escaped defects and customer outcome metrics as counters; support contacts closed (primary) with reopen rate and CSAT as counters.\n\nDesign rule: no metric enters a review or bonus without at least one counter-metric and a written definition (numerator, denominator, window, data source). If you cannot name the gaming path, you have not finished the design."
+      },
+      {
+        "heading": "Vanity metrics",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A vanity metric looks good in a slide and does not change a decision. Typical shapes:\n\nCumulative totals without a rate or a denominator: '10 million events processed' with no time window, no error share, and no comparison to load.\n\nActivity dressed as outcome: meetings held, tickets closed, PRs merged, hours logged. Each can rise while product quality and customer value fall.\n\nUnsegmented averages that hide the tail: average latency with no p95/p99; average delivery date with no variance.\n\nMetrics with no owner and no action: if no one would change behaviour on a red result, the metric is decoration.\n\nAsk of every chart: what decision changes if this number moves one standard deviation? If the answer is 'none', drop it from the executive pack."
+      },
+      {
+        "heading": "Say-do ratio and completion theatre",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "A common delivery vanity trap is celebrating commitments rather than outcomes. The say-do ratio is a simple honesty check: of the items you said you would do in a period, how many did you actually finish to an agreed definition of done?\n\nSay-do below 100% is not always failure; re-planning is sometimes correct. The pathology is a permanent gap that is never explained, or a ratio gamed by shrinking the 'said' list after the fact. Freeze the commitment list at the start of the period, publish the ratio, and require a written reason for each miss. Pair it with a customer-facing outcome metric so the team cannot max the ratio by only doing trivial work."
+      },
+      {
+        "heading": "A metric contract",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Before a metric is used in governance, write a one-page contract:\n\nDefinition: exact numerator, denominator, filters, and exclusions.\nWindow: hour, day, sprint, month; state it on every chart.\nSource system and owner: which system of record, who fixes a data bug.\nIntended decision: what a red or green result is allowed to change.\nCounter-metrics: what must not get worse while this improves.\nAnti-gaming note: the most likely way this number will be gamed, and how you will detect it.\nReview cadence: when the contract itself is re-read.\n\nIf the contract cannot be written in a page, the metric is not ready for a board slide."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Two teams, two metric failures (illustrative)",
+      "body": "Team A: leadership sets a target of 40 PRs merged per engineer per month. Merged PRs climb. Review depth collapses, small cosmetic changes split across PRs, and production incidents rise. The measure became the target; the counter-metrics (incident rate, review quality sample) were absent. Fix: replace the volume target with a flow metric (lead time for changes) plus change-failure rate and a monthly review-quality sample; drop the PR count from the exec pack.\n\nTeam B: 'support contacts resolved per day' is targeted. Agents close tickets before the customer confirms. Reopen rate doubles; CSAT falls. Fix: count resolved only after 48 hours without reopen; add reopen rate and CSAT as equal-weight counters.\n\nNumbers above are SIMULATED teaching cases, not Cretek telemetry. The point is the pattern: every target needs a written definition, a window, an owner, and a counter-metric."
+    },
+    "misconceptions": [
+      "Believing removing all targets fixes Goodhart. Direction and constraints still matter; unmeasured work drifts.",
+      "Using a metric in a bonus before its anti-gaming note exists.",
+      "Reading a cumulative total as health.",
+      "Averaging away the p99 and the unhappy customers.",
+      "Changing the metric definition mid-period to improve the story.",
+      "Treating DORA or flow metrics as targets to max rather than signals to interpret with counters."
+    ],
+    "explainTask": "In 120 words or fewer, explain to a delivery manager why you will not put 'PRs merged per person' on the team scorecard, and what you will put instead."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "gl-1",
+      "question": "Goodhart's law in its common form is:",
+      "options": [
+        "When a measure becomes a target, it ceases to be a good measure",
+        "Only audited metrics matter",
+        "If you cannot measure it, it does not exist",
+        "Faster is always better"
+      ],
+      "answer": 0,
+      "why": "The classic short form: reward pressure breaks the measure's link to the goal."
+    },
+    {
+      "id": "gl-2",
+      "question": "A counter-metric exists to:",
+      "options": [
+        "Replace the primary metric in the board pack",
+        "Detect when the primary is being gamed or is harming something else that matters",
+        "Double the reporting effort",
+        "Make averages look better"
+      ],
+      "answer": 1,
+      "why": "Counters catch gaming and side effects while chasing the primary."
+    },
+    {
+      "id": "gl-3",
+      "question": "Which is most likely a vanity metric for an executive update?",
+      "options": [
+        "Change failure rate with a 30-day window and owner",
+        "Cumulative 'events processed' with no rate, error share, or decision attached",
+        "p95 latency trend with an alert threshold",
+        "Say-do ratio with a frozen commitment list"
+      ],
+      "answer": 1,
+      "why": "An unsegmented cumulative total that changes no decision is decoration."
+    },
+    {
+      "id": "gl-4",
+      "question": "Say-do ratio measures:",
+      "options": [
+        "How fast the team types",
+        "Of the items committed in a period, how many were finished to the agreed definition of done",
+        "Lines of documentation written",
+        "Number of meetings declined"
+      ],
+      "answer": 1,
+      "why": "It is a completion honesty check against a frozen commitment list, not an activity count."
+    },
+    {
+      "id": "gl-5",
+      "question": "What must exist before a metric is used in bonuses or public scoreboards?",
+      "options": [
+        "A slide template",
+        "A written contract: definition, window, owner, decision, counter-metrics, anti-gaming note",
+        "A vendor dashboard",
+        "Unanimous team love for the number"
+      ],
+      "answer": 1,
+      "why": "Without the contract, you are inviting the exact failure the law describes."
+    },
+    {
+      "id": "gl-6",
+      "question": "Team raises 'tickets closed per day'. Agents close without customer confirmation and reopens spike. Best first fix:",
+      "options": [
+        "Raise the daily target further",
+        "Define resolved only after a confirmation window; track reopen rate and CSAT as counters",
+        "Hide the reopen data",
+        "Stop measuring support"
+      ],
+      "answer": 1,
+      "why": "Tighten the definition and add counters; do not hide the damage or double down on the gamed target."
+    }
+  ],
+  "build": {
+    "business": "Cretek needs delivery and reliability numbers a board can trust without teaching the organisation to game them. This is the measurement discipline in the CTO Operating System.",
+    "problem": "Audit one real metric pack (or a labelled SIMULATED pack), rewrite it as metric contracts with counter-metrics, and demonstrate a gaming scenario in a small local simulator.",
+    "requirements": [
+      "List every metric currently shown to leadership (or simulate a realistic pack) and tag each: decision-driving, diagnostic, or vanity",
+      "For each metric you keep, write a one-page contract: definition, window, source, owner, intended decision, counter-metrics, anti-gaming note",
+      "For each vanity metric, write what it was replaced with and why the old one is dropped",
+      "Build a local simulation or analysis script: a gamed scenario (for example PR-splitting under a volume target) showing the primary rising while a counter-metric falls",
+      "Tests or assertions that flag metrics missing a contract field or missing a counter-metric",
+      "A one-page say-do or outcome summary suitable for a product owner",
+      "Label every figure REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "Do not put individual performance ranking on a gamed volume metric",
+      "Do not change definitions mid-period without a written note in the contract",
+      "Must run locally with a single command for the audit tool and its tests"
+    ],
+    "design": "One page: metric inventory, keep/drop rules, and the simulation scenario.",
+    "tasks": [
+      "Inventory and tag metrics",
+      "Write contracts for keepers",
+      "Replace vanity metrics",
+      "Build gaming simulation with tests",
+      "Publish the one-page summary"
+    ],
+    "acceptance": [
+      "No metric remains without definition, window, owner and decision",
+      "Each keeper has at least one counter-metric",
+      "Simulation shows primary up / counter down under gaming",
+      "Vanity drops are justified, not silent"
+    ],
+    "deliverable": "Metric inventory, contracts, audit script with tests, and one-page summary in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Delivery manager",
+    "scenario": "A delivery manager loves a new 'merged PRs' dashboard from a vendor. You must argue for a smaller, honest metric set without sounding anti-transparency.",
+    "prompts": [
+      "What decision changes when merged-PR count moves?",
+      "How will this be gamed within one sprint?",
+      "What counter-metric would you attach before this goes to the board?",
+      "What will you still show from the vendor pack, and with what window?",
+      "How do you handle the team's fear that fewer vanity charts means less credit for hard work?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Names the gaming path and a detection method",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Proposes a smaller contract-backed metric set, not no metrics",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Keeps transparency while dropping decoration",
+        "weight": 0.2
+      },
+      {
+        "criterion": "Clear language for a non-analyst delivery manager",
+        "weight": 0.2
+      }
+    ]
+  }
+}

@@ -1,0 +1,243 @@
+{
+  "id": "event-driven-architecture",
+  "moduleId": "tech-architecture",
+  "pillar": "Tech",
+  "title": "Event-driven architecture",
+  "estimatedMinutes": {
+    "learn": 40,
+    "build": 220,
+    "defend": 30
+  },
+  "objectives": [
+    "Describe event-driven architecture: producers, channels (broker vs stream), and consumers",
+    "Distinguish publish-subscribe from event streaming and when each fits",
+    "State the benefits and the operational challenges the Azure Architecture Center names",
+    "Choose a payload strategy (full attributes vs keys only) and justify the trade-off",
+    "Design correlation IDs, dead-letter handling and compensation for a multi-service flow",
+    "Defend why a request-response workflow should not be forced onto an event bus"
+  ],
+  "prerequisites": [
+    "adr-c4",
+    "architecture-tradeoffs"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "adr-c4",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "architecture-tradeoffs",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Event-driven architecture style — Azure Architecture Center",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/guide/architecture-styles/event-driven",
+      "reviewed": "2026-10-18",
+      "reviewDepth": "Full page retrieved and read 2026-10-18; figures and pattern names are from the page, not invented."
+    },
+    {
+      "category": "Supplementary free learning resource",
+      "title": "Queue-based load leveling — Azure Architecture Center",
+      "url": "https://learn.microsoft.com/en-us/azure/architecture/patterns/queue-based-load-leveling",
+      "reviewed": "2026-10-14",
+      "reviewDepth": "Page previously retrieved for the invoicing scenario; re-check before relying on any figure."
+    }
+  ],
+  "verificationNotes": [
+    "The Azure Architecture Center page was retrieved in full on 2026-10-18. Definitions of producers, channels and consumers, the publish-subscribe versus streaming distinction, the broker and mediator topologies, payload strategies, and the list of challenges (eventual consistency, ordering, error handling, data loss, observability, schema evolution) are from that page. Examples naming Event Grid, Event Hubs and Functions are the page's; this lesson does not claim Cretek uses them.",
+    "The page recommends publish-subscribe when new subscribers do not need past events, and event streaming when clients must replay or join mid-stream. That is the page's framing.",
+    "The page does not cover how to size a broker, how to choose between competing managed products on cost, how to test end-to-end across async hops, or how to migrate an existing synchronous system. Those gaps are Academy material and the build task asks for them.",
+    "No Azure subscription was used. Nothing in this lesson was deployed or measured on a real cloud."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "Producers, channels and consumers",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "An event-driven architecture has three parts: producers that emit a stream of events, consumers that react to those events, and event channels (brokers or ingestion services) that carry events from producers to consumers.\n\nProducers do not know who is listening. Consumers do not know who published. That decoupling is the point: you can add a new consumer without changing the producer, and subsystems scale independently.\n\nThis is different from a competing-consumers queue, where each message is processed once by whoever pulls it. In event-driven designs, multiple consumer types often each see every event.\n\nDelivery is near real time, not instantaneous. 'Near' is doing real work: consumers react as events arrive, but nothing in the style guarantees a global clock or a single ordered view for all parties."
+      },
+      {
+        "heading": "Publish-subscribe versus event streaming",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "The Azure Architecture Center describes two channel models.\n\nPublish-subscribe: the infrastructure tracks subscriptions. When an event is published, it is pushed to each current subscriber. After delivery the event is not kept as a durable log for late joiners. New subscribers do not see past events. The page points to Azure Event Grid as the example for this model.\n\nEvent streaming: events are written to a durable, ordered log (strictly ordered within a partition). Clients do not subscribe in the push sense; they read from a position in the stream and advance that position themselves. They can join at any time and replay from earlier offsets. Replay supports recovery, late-arriving consumers, and reprocessing after a bug fix. The page points to Azure Event Hubs as the high-throughput streaming example.\n\nChoice rule from the page's framing: if a new consumer needs history, or you must reprocess, use a stream. If each event is only interesting at the moment it happens and only to current subscribers, pub-sub is enough."
+      },
+      {
+        "heading": "When the style fits (and when it does not)",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Use event-driven architecture when:\n- Multiple subsystems must process the same events.\n- Real-time processing with a small lag is required.\n- You need complex processing: pattern matching or aggregation over time windows.\n- Volume and velocity are high (the page cites IoT).\n- You need producers and consumers decoupled so they can scale and fail independently.\n\nAvoid it when:\n- The workflow is simple request-response and synchronous calls already meet latency and throughput. Broker operations, async error handling and eventual consistency are pure overhead then.\n- Business transactions need strong consistency across services. Eventual consistency is a deliberate trade-off that works against you if different parts of the system must always agree on current state.\n- The team has no experience operating distributed async systems. Debugging, monitoring and error recovery patterns differ from synchronous architectures, and that learning curve hits delivery."
+      },
+      {
+        "heading": "Topologies: broker and mediator",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Broker topology: components broadcast events to the system. Others act on them or ignore them. No central coordinator. Highly decoupled, good for scalability and fault tolerance, but no component owns multi-step business transactions. Distributed transactions are risky because there is no built-in restart or replay. You must design error handling and manual intervention deliberately, or you will get data inconsistency.\n\nMediator topology: an event mediator manages flow, holds state, and coordinates error handling and restart. It dispatches commands to named channels (often queues) rather than broadcasting. Consumers are expected to process those commands. You get more control and better multi-step consistency, at the cost of coupling to the mediator, which can become a bottleneck or a single reliability concern.\n\nThe page does not pick a winner. Match topology to whether any component must own a multi-step process."
+      },
+      {
+        "heading": "Payload design: fat events or keys only",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Two payload strategies from the page:\n\nInclude all required attributes: consumers get everything without a side query. Larger payloads cost more bandwidth, can create consistency problems when multiple systems of record disagree after updates, and make contract versioning harder.\n\nInclude only keys: consumers fetch the rest from a single system of record. Better consistency and smaller contracts; worse performance because every consumer must query the source. Less coupling and versioning pain.\n\nPick deliberately. A compliance consumer that only needs 'compliant' or 'noncompliant' does not need a full customer record on the bus."
+      },
+      {
+        "heading": "Challenges the page names",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "Eventual consistency: after a publish, different parts of the system can disagree until consumers catch up. Design reads to tolerate that window.\n\nOrdering and exactly-once: multiple consumer instances are normal. If order or exactly-once matters, you must implement idempotent processing and ordering constraints; the platform will not invent them for you.\n\nError handling: a common pattern on the page is a dedicated error-handler processor. On failure the consumer sends the bad event there and continues. The handler retries, then can dead-letter the event for human inspection. Resubmitted events may process out of sequence.\n\nData loss: if a component crashes before acknowledging the next hop, the event can vanish. Persist in-transit events and only dequeue after the next component acknowledges (client acknowledge mode).\n\nObservability: one business transaction can span producers, channels and consumers with no shared call stack. Put a correlation ID on every event from day one; retrofitting is far harder.\n\nSchema evolution: producers and consumers deploy independently. Version your schemas and design consumers to ignore or tolerate versions they do not understand.\n\nEvent volume: too many fine-grained events saturate the system and drown analysis; too coarse forces consumers to fetch extra data and process noise."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Order paid, then what? (illustrative, not Cretek data)",
+      "body": "An e-commerce service publishes OrderPaid. Two consumers exist today: fulfillment (ships the parcel) and finance (posts the ledger entry).\n\nChannel choice: fulfillment needs only current and future OrderPaid events. Finance must be able to re-run last month after a tax-rule bug fix, so finance reads from a durable stream (or a log-backed store) with replay, not a pure push subscription. The page's streaming model fits that need.\n\nPayload: the event carries order ID, customer ID, amount, currency, and a correlation ID. Line items stay in the order system of record. Fulfillment and finance each fetch line items if they need them. That keeps the contract small and the order service the single system of record for items.\n\nFailure: finance's consumer throws on a malformed tax field. The error-handler receives the event, retries twice, then dead-letters it with the correlation ID. Fulfillment is unaffected because consumers are independent.\n\nCompensation: if shipping starts and then payment is reversed later, fulfillment does not un-ship by magic. A compensating action (return label, stock adjustment) is an explicit process, not an automatic rollback. The page names compensating transactions for multi-service flows; nothing here was run against a live system."
+    },
+    "misconceptions": [
+      "Treating an event bus like a synchronous RPC with retries. Latency and partial failure are different; design for them.",
+      "Using pub-sub when a consumer needs history or replay. That is streaming, or a log, not a pure subscription.",
+      "Skipping correlation IDs because 'the demo worked'. Production async systems without correlation are undebuggable.",
+      "Assuming exactly-once comes free. Idempotency and ordering are your job.",
+      "Forcing a single request-response eligibility check onto the bus when you actually need a reply queue (request-response messaging) or a sync path.",
+      "Broadcasting full customer records on the bus 'just in case'. That is a compliance and bandwidth problem."
+    ],
+    "explainTask": "In 120 words or fewer, explain to a product owner why shipping a new analytics consumer does not require changing the order service, and what you must still design (correlation, schema version, replay) so it stays that way."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "eda-1",
+      "question": "In the event-driven style on the Azure Architecture Center page, what does a producer know about its consumers?",
+      "options": [
+        "The producer must list every consumer in configuration",
+        "The producer does not know which consumers are listening",
+        "The producer only knows consumers that acknowledge within 50 ms",
+        "The producer knows the consumer count for load balancing"
+      ],
+      "answer": 1,
+      "why": "Producers and consumers are decoupled; a producer does not know who is listening."
+    },
+    {
+      "id": "eda-2",
+      "question": "Which statement matches the page's publish-subscribe model?",
+      "options": [
+        "Events are stored in a durable log and new subscribers replay from the start",
+        "The bus tracks subscriptions and pushes to current subscribers; past events are not kept for late joiners",
+        "Consumers pull messages one at a time from a work queue",
+        "Only one consumer processes each event"
+      ],
+      "answer": 1,
+      "why": "Pub-sub tracks subscriptions and delivers to subscribers now; it is not a durable replay log. Streaming (e.g. Event Hubs) is the replay model."
+    },
+    {
+      "id": "eda-3",
+      "question": "When does the page say event-driven architecture may NOT be suitable?",
+      "options": [
+        "When multiple subsystems must process the same events",
+        "When IoT volume and velocity are high",
+        "When the workload is simple request-response and sync calls already meet latency and throughput",
+        "When consumers need independent scaling"
+      ],
+      "answer": 2,
+      "why": "Broker overhead, async error handling and eventual consistency are not justified for straightforward request-response."
+    },
+    {
+      "id": "eda-4",
+      "question": "Which payload strategy favours a single system of record and smaller contracts, at the cost of consumer-side queries?",
+      "options": [
+        "Include all required attributes in the payload",
+        "Include only keys and let consumers fetch the rest",
+        "Duplicate the full database row on the bus",
+        "Send a signed JWT as the event body"
+      ],
+      "answer": 1,
+      "why": "Keys-only keeps one system of record and simple contracts; consumers must query the source, which is the performance trade-off."
+    },
+    {
+      "id": "eda-5",
+      "question": "What does the page recommend to keep a multi-hop async transaction debuggable?",
+      "options": [
+        "Use a single monolith so there is one call stack",
+        "Include a correlation ID on every event from the start of design",
+        "Rely on log timestamps alone",
+        "Disable async until the system is stable"
+      ],
+      "answer": 1,
+      "why": "Without a shared call context, a correlation ID on every event (and in logs) is how you stitch the trace; retrofitting is hard."
+    },
+    {
+      "id": "eda-6",
+      "question": "In broker topology, what is a known risk the page calls out?",
+      "options": [
+        "The mediator becomes a bottleneck",
+        "No component owns multi-step business transactions; distributed transactions are risky without built-in replay",
+        "Events are never delivered more than once",
+        "New consumers require producer changes"
+      ],
+      "answer": 1,
+      "why": "Broker topology is highly decoupled but has no central coordination for multi-step transactions; mediator topology addresses that at the cost of coupling."
+    }
+  ],
+  "build": {
+    "business": "Cretek's order and notification paths already cross service boundaries. A CTO needs a defensible answer for when to publish events, when to keep a sync call, and how to operate async flows without silent data loss.",
+    "problem": "Document one real or realistic event-driven slice end to end: choose the channel model, design the payload, and specify correlation, error handling and compensation. Build a small local simulation that proves the failure path.",
+    "requirements": [
+      "Pick one Cretek-relevant flow (or a clearly labelled SIMULATED flow) with at least one producer and two consumers",
+      "Decide pub-sub vs event streaming for each consumer and state why, using the page's criteria (history/replay vs present-only)",
+      "Write the event schema with a correlation ID and a version field; decide fat payload vs keys-only and justify",
+      "Specify error handling: retry policy, dead-letter route, who inspects DLQ, and whether out-of-order resubmits are acceptable",
+      "Specify compensation for a multi-step failure (what undoes what, manually or automatically)",
+      "Build a local simulation (no cloud required) with tests: happy path, consumer failure to DLQ, idempotent reprocess of the same event, and correlation ID present on every hop",
+      "Write a one-page decision record: when you would reject EDA for this flow and keep request-response",
+      "Label every figure REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No production event bus required; local or in-memory is enough for the simulation",
+      "Do not claim exactly-once unless the simulation proves idempotent handling under duplicate delivery",
+      "Must run locally with a single command for the simulation and its tests"
+    ],
+    "design": "A one-page design: topology (broker or mediator), channel model per consumer, payload strategy, correlation and DLQ flow, and one alternative rejected.",
+    "tasks": [
+      "Define the flow and consumers",
+      "Choose channel model and payload strategy",
+      "Design schema, correlation, DLQ and compensation",
+      "Implement the local simulation with tests",
+      "Write the decision record and summary"
+    ],
+    "acceptance": [
+      "Channel model choice is justified from the page's criteria",
+      "Schema has correlation ID and version; payload strategy is argued",
+      "DLQ and compensation are specified, not hand-waved",
+      "Tests cover duplicate delivery and failure to DLQ",
+      "Decision record states when EDA is the wrong tool"
+    ],
+    "deliverable": "Decision record, event schema, local simulation with passing tests, and one-page summary, in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "Principal engineer",
+    "scenario": "A principal engineer wants every new integration on the event bus for 'decoupling'. You must justify where events fit and where a sync call is still the better engineering choice.",
+    "prompts": [
+      "Which of the page's 'when to use' conditions does this integration actually meet?",
+      "What breaks if a consumer needs last week's events?",
+      "Where is the correlation ID, and what happens on consumer failure?",
+      "What is your compensation story when step two of three fails?",
+      "What operational skills does the team lack that EDA demands?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Uses the page's fit criteria, not fashion, to accept or reject EDA",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Clear channel and payload decisions with trade-offs",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Error handling, DLQ, correlation and compensation specified",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Honest about team readiness and operational cost",
+        "weight": 0.15
+      }
+    ]
+  }
+}

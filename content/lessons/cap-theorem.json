@@ -1,0 +1,210 @@
+{
+  "id": "cap-theorem",
+  "moduleId": "tech-architecture",
+  "pillar": "Tech",
+  "title": "The CAP theorem and consistency trade-offs",
+  "estimatedMinutes": {
+    "learn": 35,
+    "build": 180,
+    "defend": 30
+  },
+  "objectives": [
+    "State the three guarantees: consistency, availability, partition tolerance, in the CAP sense (not ACID)",
+    "Explain why partitions force a choice between consistency and availability, and why normal operation is not a two-of-three lottery",
+    "Apply PACELC to the everyday latency-versus-consistency trade-off when there is no partition",
+    "Map CAP language to a concrete product decision (read-your-writes, stale banner, write refusal)",
+    "Defend a data-store choice to a stakeholder who has heard 'we need all three'"
+  ],
+  "prerequisites": [
+    "sql-vs-nosql",
+    "architecture-tradeoffs"
+  ],
+  "unlock": {
+    "prerequisites": [
+      {
+        "lessonId": "sql-vs-nosql",
+        "type": "knowledge_check"
+      },
+      {
+        "lessonId": "architecture-tradeoffs",
+        "type": "knowledge_check"
+      }
+    ]
+  },
+  "sources": [
+    {
+      "category": "Supplementary free learning resource",
+      "title": "CAP theorem — Wikipedia",
+      "url": "https://en.wikipedia.org/wiki/CAP_theorem",
+      "reviewed": "2026-10-18",
+      "reviewDepth": "Full article retrieved 2026-10-18; definitions and PACELC description checked against the article."
+    }
+  ],
+  "verificationNotes": [
+    "Wikipedia article retrieved in full on 2026-10-18. The three guarantees, Gilbert and Lynch's definitions, Brewer's later clarification that 'two out of three' is misleading, and PACELC are from the article. Historical claims (1998/1999/2000/2002 milestones) are the article's; this lesson does not invent new history.",
+    "The article notes CAP consistency is not the same as ACID transaction consistency. That distinction is preserved here.",
+    "The article states there are no databases one would classify as CA in the NoSQL sense, and that most modern distributed databases offer configuration for both consistency and availability. Treat product claims as configuration-dependent, not absolute labels.",
+    "This is a theory-and-decision lesson. No distributed store was deployed or failover-tested for this content."
+  ],
+  "learn": {
+    "sections": [
+      {
+        "heading": "The three guarantees in CAP language",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "CAP concerns a distributed data store under network failure. The three guarantees, as the article defines them:\n\nConsistency (CAP): every read receives the most recent write or an error. All clients see the same data at the same time regardless of which node they hit. Writes on one node must be reflected before the write is treated as successful. This is not ACID transactional consistency.\n\nAvailability (CAP): every request to a non-failing node gets a response, without guaranteeing that response carries the newest data.\n\nPartition tolerance: the system keeps operating when the network drops or delays arbitrary messages between nodes.\n\nNo distributed system is safe from network failure, so partition tolerance is assumed. When a partition happens you must choose: cancel operations and protect consistency, or proceed and protect availability, risking inconsistency."
+      },
+      {
+        "heading": "Why 'two out of three' is a misleading slogan",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "The popular reading is 'pick two of three'. The article records Brewer's later clarification: that framing is often misleading. Designers only sacrifice consistency or availability when a partition is actually present. In normal operation a store can cover all three. Partition management and recovery techniques also exist.\n\nSo the practical question is not 'is this database CP or AP forever?'. It is: during a partition, does this workflow refuse writes (or refuse reads that need freshest data) to stay consistent, or does it answer with possibly stale data to stay available?\n\nThe article notes most modern distributed databases expose configuration that lets you prefer consistency or availability on a path-by-path basis. Ask which path, under which failure, not for a single letter label on the product box."
+      },
+      {
+        "heading": "PACELC: the trade-off when nothing is broken",
+        "sourceCategory": "Supplementary free learning resource",
+        "body": "The article describes PACELC (2010): if there is a partition (P), choose between availability (A) and consistency (C); else (E, normal operation), choose between latency (L) and consistency (C).\n\nThat second half matters for CTO decisions. Most of the year you are not in a partition. You are paying or saving latency on every cross-node write to buy or avoid stronger consistency. Quote L-versus-C decisions in product terms: read-your-writes for the author, eventual visibility for everyone else, cross-region write latency budget, and so on."
+      },
+      {
+        "heading": "From theory to a product sentence",
+        "sourceCategory": "Original Academy lesson or simulation",
+        "body": "Translate each guarantee into something a stakeholder can accept or reject:\n\nConsistency-first: 'If the user saved the invoice, the next screen always shows that save, or we show an error and do not pretend it worked. Under a network partition some writes will fail visibly.'\n\nAvailability-first: 'We always answer. If two regions disagree for a few seconds, the UI may show a slightly stale total; we mark it and accept support tickets when it confuses people.'\n\nPartition tolerance is not optional; do not put it on the slide as a choice.\n\nAlso separate domains. A payments write path and a product-catalog read path in the same product often need different answers. CAP is a property of the path under failure, not a personality test for the whole company."
+      }
+    ],
+    "workedExample": {
+      "sourceCategory": "Original Academy lesson or simulation",
+      "title": "Two paths, two answers (illustrative, not Cretek data)",
+      "body": "A marketplace has (1) a payments ledger write and (2) a product-catalogue browse.\n\nPayments path: the business cannot double-spend because two regions disagreed. Under partition, prefer consistency: reject or queue writes that cannot be confirmed on the primary. Stakeholder sentence: 'During a region split, checkout may fail or queue rather than accept an unconfirmed payment.'\n\nCatalogue path: a few seconds of staleness on price display is painful but rare; losing the browse page is worse. Under partition, prefer availability with a possible stale read, and a UI banner if freshness is uncertain. Stakeholder sentence: 'Browse stays up; a price may be minutes old during a split and we show last-updated when we cannot confirm.'\n\nNormal operation (PACELC): the ledger still pays L-for-C on every write (synchronous replication to a quorum). The catalogue serves reads from regional caches (favour L) and refreshes asynchronously. Same product, same day, two CAP/PACELC answers. Nothing above was tested against a live multi-region deploy; it is decision practice."
+    },
+    "misconceptions": [
+      "Believing CAP means you permanently lose one of the three letters for the whole database.",
+      "Using CAP consistency as if it were ACID transaction isolation.",
+      "Arguing 'our cloud is highly available so we do not need CAP'. High availability in normal operation is not the partition case.",
+      "Ignoring PACELC and only thinking about failure mode; you pay L-versus-C every healthy day.",
+      "Applying one consistency policy to every workflow in the product.",
+      "Quoting 'we need all three' without naming which read or write fails when the network splits."
+    ],
+    "explainTask": "In 100 words or fewer, tell a product owner what changes for users when a network partition hits a consistency-first write path versus an availability-first read path."
+  },
+  "knowledgeCheck": [
+    {
+      "id": "cap-1",
+      "question": "Under CAP, consistency means:",
+      "options": [
+        "Every read returns the most recent write or an error",
+        "ACID transactions on a single node",
+        "Every write is mirrored to three regions within one second",
+        "Users never see a spinner"
+      ],
+      "answer": 0,
+      "why": "CAP consistency is linearizable-style: most recent write or error, not ACID transactional consistency."
+    },
+    {
+      "id": "cap-2",
+      "question": "When does the CAP trade-off between consistency and availability actually force a choice?",
+      "options": [
+        "Only when a network partition is present",
+        "At all times, permanently",
+        "Only on NoSQL databases",
+        "Only when you use more than one region"
+      ],
+      "answer": 0,
+      "why": "In normal operation a store can provide all three; the forced choice is under partition. Brewer clarified that 'two out of three' is often misleading."
+    },
+    {
+      "id": "cap-3",
+      "question": "PACELC adds which everyday trade-off?",
+      "options": [
+        "Security versus cost when the network is fine",
+        "Latency versus consistency when there is no partition",
+        "Throughput versus memory on a single node",
+        "Schema versus code-first development"
+      ],
+      "answer": 1,
+      "why": "Else (no partition), trade latency for consistency. Partitions are rare; L-versus-C is paid constantly."
+    },
+    {
+      "id": "cap-4",
+      "question": "A payments write path under partition should usually prioritise:",
+      "options": [
+        "Availability of checkout at all costs, even with conflicting ledgers",
+        "Consistency: refuse or queue writes that cannot be confirmed",
+        "Neither; payments are outside CAP",
+        "Client-side caching of the ledger"
+      ],
+      "answer": 1,
+      "why": "Double-spend risk from disagreeing nodes is a consistency failure; refuse or queue is the consistency-first move (illustrative decision, not a universal rule)."
+    },
+    {
+      "id": "cap-5",
+      "question": "Which statement about CAP labels on product marketing is most accurate?",
+      "options": [
+        "CP means the product can never serve reads during a partition",
+        "Most modern distributed databases offer configuration; the right question is which path prefers what under failure",
+        "AP means data is never replicated",
+        "CA databases are the safe default for multi-region"
+      ],
+      "answer": 1,
+      "why": "Configuration and path-level choices matter more than a permanent single-letter badge; the article notes configuration options for both consistency and availability."
+    }
+  ],
+  "build": {
+    "business": "Cretek cannot afford a single consistency slogan across payments, operational dashboards and customer portals. The CTO must be able to say which path prefers which guarantee, and what users see when the network splits.",
+    "problem": "Produce a consistency decision for two different paths in a real or simulated Cretek product, with user-visible consequences and a small state-machine simulation of partition behaviour.",
+    "requirements": [
+      "Name two workflows (or SIMULATED workflows) with different criticality",
+      "For each: CAP behaviour under partition (prefer C or A) and PACELC behaviour under normal operation (prefer L or C), with the user-visible consequence written in plain language",
+      "Write the stakeholder sentence for each path (what breaks when the network splits)",
+      "Build a small local simulation or state machine that shows: write accepted, partition, node returns with stale or refused write, read outcome for each policy",
+      "Tests: consistency-first refuses or errors the unconfirmed write; availability-first returns a response with documented staleness; normal-operation latency budget is stated even if simulated",
+      "A one-page table of the two paths for a board or product review",
+      "Label every figure REAL, ASSUMPTION or SIMULATED"
+    ],
+    "constraints": [
+      "No real multi-region outage required or invited",
+      "Do not claim a product is 'CAP-proof' or 'all three forever'",
+      "Must run locally with a single command for the simulation and tests"
+    ],
+    "design": "One page: the two paths, partition policy, normal-operation L/C policy, and one alternative rejected.",
+    "tasks": [
+      "Select and describe two paths",
+      "Write partition and PACELC policies",
+      "Implement the simulation with tests",
+      "Produce the stakeholder table and summary"
+    ],
+    "acceptance": [
+      "Two paths have different, argued policies",
+      "User-visible consequences are concrete",
+      "Simulation demonstrates refuse-vs-stale under partition",
+      "No misuse of CAP language as ACID or as a permanent product badge"
+    ],
+    "deliverable": "Decision table, stakeholder sentences, local simulation with tests, and one-page summary in a repository referenced by link or path."
+  },
+  "defend": {
+    "assessor": "CEO or non-technical founder",
+    "scenario": "A founder says competitors claim 'no downtime and always consistent'. You need to explain, without jargon, what is actually possible under a network split.",
+    "prompts": [
+      "What does 'always consistent' cost us when the network splits?",
+      "What does 'always up' cost us when the network splits?",
+      "Which of our two paths should fail loudly, and why?",
+      "What do users see on a normal day when we optimise for latency instead of consistency?",
+      "What will you never promise on the marketing site?"
+    ],
+    "rubric": [
+      {
+        "criterion": "Explains partition as a network failure, not a vendor failure, in plain language",
+        "weight": 0.25
+      },
+      {
+        "criterion": "Correct consistency-first and availability-first consequences per path",
+        "weight": 0.3
+      },
+      {
+        "criterion": "Uses PACELC / normal-day trade-offs, not only disaster stories",
+        "weight": 0.2
+      },
+      {
+        "criterion": "Refuses to over-promise; names what will not be claimed",
+        "weight": 0.25
+      }
+    ]
+  }
+}

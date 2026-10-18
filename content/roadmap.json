@@ -61,7 +61,8 @@
         "dora-metrics",
         "sla-slo-sli",
         "rto-rpo",
-        "sli-slo-sla-error-budgets"
+        "sli-slo-sla-error-budgets",
+        "goodharts-law-vanity-metrics"
       ],
       "registerPaths": [
         "/delivery/metrics/dora-metrics",
@@ -161,7 +162,9 @@
         "adr-c4",
         "architecture-tradeoffs",
         "technical-debt",
-        "well-architected-framework"
+        "well-architected-framework",
+        "event-driven-architecture",
+        "cap-theorem"
       ],
       "registerPaths": [
         "/tech/architecture-design/architectural-decision-record",
