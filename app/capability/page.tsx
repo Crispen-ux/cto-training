@@ -11,7 +11,7 @@ const TRACKS = ["Solutions Architect", "AI Solutions Architect", "CTO / Technolo
 export default function CapabilityPage({ searchParams }: { searchParams?: { track?: string; ok?: string; error?: string } }) {
   const state = readState();
   const track = (TRACKS.includes(searchParams?.track as any) ? searchParams?.track : "Solutions Architect") as (typeof TRACKS)[number];
-  const dashboard = capabilityDashboard(state.capabilityAssessments, track);
+  const dashboard = capabilityDashboard(state.capabilityAssessments, track, state.evidence);
   const comps = loadCompetencies().filter((c) => c.tracks.includes(track === "Solutions Architect" ? "SA" : track === "AI Solutions Architect" ? "AISA" : "CTO"));
 
   return (
@@ -33,10 +33,22 @@ export default function CapabilityPage({ searchParams }: { searchParams?: { trac
 
       <div className="grid cols4" style={{ marginBottom: 16 }}>
         <div className="card"><div className="muted">Competencies</div><div className="big">{dashboard.total}</div></div>
-        <div className="card"><div className="muted">Unassessed</div><div className="big">{dashboard.unassessed}</div></div>
+        <div className="card">
+          <div className="muted">From reviewed evidence</div>
+          <div className="big">{dashboard.fromEvidence}</div>
+          <div className="muted">{dashboard.fromSelf} from self-rating · {dashboard.unassessed} unassessed</div>
+        </div>
         <div className="card"><div className="muted">Critical gaps</div><div className="big">{dashboard.critical}</div></div>
         <div className="card"><div className="muted">Coverage</div><div className="big">{dashboard.coverage}%</div></div>
       </div>
+
+      {dashboard.fromEvidence === 0 && (
+        <div className="notice warn">
+          <strong>Nothing here is evidence-backed yet.</strong> Proving a competency needs reviewed work: pass a
+          knowledge check, then submit a reviewed artefact and defend it. A self-rating is recorded separately and is
+          never counted as demonstrated ability.
+        </div>
+      )}
 
       <h2>Record a baseline assessment</h2>
       <div className="card" style={{ marginBottom: 16 }}>
@@ -78,21 +90,32 @@ export default function CapabilityPage({ searchParams }: { searchParams?: { trac
       <h2>Gap analysis and priorities</h2>
       <div className="card">
         <table>
-          <thead>
-            <tr><th>Competency</th><th>Target</th><th>Demonstrated</th><th>Gap</th><th>Confidence</th><th>Status</th></tr>
-          </thead>
-          <tbody>
-            {dashboard.gaps.map((g) => (
-              <tr key={g.competencyId}>
-                <td>{g.title}{g.foundation ? " (foundation)" : ""}</td>
-                <td>{g.target}</td>
-                <td>{g.unassessed ? "Unassessed" : g.demonstrated}</td>
-                <td>{g.unassessed ? "-" : g.gap}</td>
-                <td>{g.evidenceConfidence}</td>
-                <td>{g.stale ? "Stale" : g.unassessed ? "Unassessed" : g.gap <= 0 ? "Met" : "Gap"}</td>
-              </tr>
-            ))}
-          </tbody>
+            <thead>
+              <tr><th>Competency</th><th>Target</th><th>Demonstrated</th><th>Gap</th><th>Based on</th><th>Status</th></tr>
+            </thead>
+            <tbody>
+              {dashboard.gaps.map((g) => (
+                <tr key={g.competencyId}>
+                  <td>{g.title}{g.foundation ? " (foundation)" : ""}</td>
+                  <td>{g.target}</td>
+                  <td>{g.unassessed ? "Unassessed" : g.demonstrated}</td>
+                  <td>{g.unassessed ? "-" : g.gap}</td>
+                  <td>
+                    {g.source === "evidence"
+                      ? `${g.evidenceIds.length} reviewed evidence item(s), weakest: ${g.weakestDimension}`
+                      : g.source === "self-report"
+                        ? "self-rating with a reference"
+                        : "nothing yet"}
+                    <div className="muted" style={{ fontSize: 12 }}>
+                      {g.provenance === "declared"
+                        ? `sources: ${g.sourceKinds.join(", ")}${g.specificRubric ? " · competency-specific rubric" : ""}`
+                        : "no declared sources yet"}
+                    </div>
+                  </td>
+                  <td>{g.stale ? "Stale" : g.unassessed ? "Unassessed" : g.gap <= 0 ? "Met" : "Gap"}</td>
+                </tr>
+              ))}
+            </tbody>
         </table>
       </div>
 

@@ -116,14 +116,24 @@ export default async function LessonPage({
           <h2>Ask the tutor</h2>
           <Tutor lessonId={id} configured={ai.configured} mock={ai.mock} />
 
-          <h2>Knowledge check</h2>
-          {st.checkPassed ? (
-            <div className="notice ok">Passed. Move on to <Link href={`/lessons/${id}?mode=build`}>Build</Link>.</div>
+          {lesson.knowledgeCheck.length > 0 ? (
+            <>
+              <h2>Knowledge check</h2>
+              {st.checkPassed ? (
+                <div className="notice ok">Passed. Move on to <Link href={`/lessons/${id}?mode=build`}>Build</Link>.</div>
+              ) : (
+                <KnowledgeCheck
+                  lessonId={id}
+                  questions={lesson.knowledgeCheck.map(({ id: qid, question, options }) => ({ id: qid, question, options }))}
+                />
+              )}
+            </>
           ) : (
-            <KnowledgeCheck
-              lessonId={id}
-              questions={lesson.knowledgeCheck.map(({ id: qid, question, options }) => ({ id: qid, question, options }))}
-            />
+            <div className="notice">
+              <strong>No knowledge check for this lesson.</strong> It is imported study material, so no quiz was
+              generated and nothing is invented on your behalf. You are evidenced by the written work and the
+              defence instead. Move on to <Link href={`/lessons/${id}?mode=build`}>Build</Link>.
+            </div>
           )}
         </>
       )}

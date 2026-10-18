@@ -175,6 +175,12 @@ export interface ArchitectureProject {
   operationalNotes: string;
   costNotes: string;
   openQuestions: string[];
+  /**
+   * Lessons whose reviewed evidence can evidence this project. Declaring the
+   * link is not evidence: a level is awarded only when a reviewed submission
+   * carries this reference, so an artefact existing never inflates a score.
+   */
+  evidenceLessonIds: string[];
   createdAt: string;
   updatedAt: string;
 }
@@ -206,6 +212,7 @@ export function emptyProject(name = ""): ArchitectureProject {
     operationalNotes: "",
     costNotes: "",
     openQuestions: [],
+    evidenceLessonIds: ["adr-c4", "architecture-tradeoffs", "sa-migration"],
     createdAt: now,
     updatedAt: now,
   };

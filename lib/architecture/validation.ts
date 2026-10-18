@@ -164,6 +164,7 @@ export function migrateProject(raw: unknown): ArchitectureProject {
     operationalNotes: str(p.operationalNotes),
     costNotes: str(p.costNotes),
     openQuestions: arr(p.openQuestions),
+    evidenceLessonIds: arr(p.evidenceLessonIds),
     createdAt: str(p.createdAt) || new Date().toISOString(),
     updatedAt: str(p.updatedAt) || new Date().toISOString(),
   };

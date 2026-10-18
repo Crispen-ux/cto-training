@@ -51,7 +51,11 @@ describe("roadmap integrity", () => {
     for (const m of roadmap.modules) for (const l of m.lessons) counts.set(l, (counts.get(l) ?? 0) + 1);
     for (const l of lessons) {
       expect(counts.get(l.id) ?? 0, `${l.id} must be referenced by exactly one module`).toBe(1);
-      expect(l.moduleId, l.id).toBe(roadmap.modules.find((m) => m.lessons.includes(l.id))?.id);
+      // Imported reference lessons may omit moduleId; their roadmap membership
+      // is what matters. Framework lessons must declare the right one.
+      if (l.kind !== "reference") {
+        expect(l.moduleId, l.id).toBe(roadmap.modules.find((m) => m.lessons.includes(l.id))?.id);
+      }
     }
   });
 });
@@ -60,7 +64,11 @@ describe("lesson integrity", () => {
   it("has the three modes and a source category on every lesson", () => {
     for (const l of lessons) {
       expect(l.learn.sections.length, l.id).toBeGreaterThan(0);
-      expect(l.knowledgeCheck.length, l.id).toBeGreaterThanOrEqual(5);
+      // A reference lesson is imported study material with no authored quiz.
+      // Nothing is fabricated for it, so it is exempt from the quiz minimum.
+      if (l.kind !== "reference") {
+        expect(l.knowledgeCheck.length, l.id).toBeGreaterThanOrEqual(5);
+      }
       expect(l.build.acceptance.length, l.id).toBeGreaterThan(0);
       expect(l.defend.prompts.length, l.id).toBeGreaterThan(0);
       expect(l.sources.length, l.id).toBeGreaterThan(0);

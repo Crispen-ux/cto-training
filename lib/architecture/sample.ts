@@ -115,6 +115,7 @@ export function sampleProject(): ArchitectureProject {
     operationalNotes: "Restore target: four hours. Not yet tested.",
     costNotes: "All components are expected to fit a free tier; confirm with current pricing.",
     openQuestions: ["Do we need partial dispatch when only some lines are in stock?"],
+    evidenceLessonIds: ["adr-c4", "architecture-tradeoffs", "sa-migration"],
     createdAt: now,
     updatedAt: now,
   };

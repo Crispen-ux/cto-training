@@ -60,7 +60,8 @@
       "lessons": [
         "dora-metrics",
         "sla-slo-sli",
-        "rto-rpo"
+        "rto-rpo",
+        "sli-slo-sla-error-budgets"
       ],
       "registerPaths": [
         "/delivery/metrics/dora-metrics",

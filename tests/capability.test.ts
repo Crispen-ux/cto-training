@@ -41,10 +41,19 @@ describe("capability framework", () => {
   });
 
   it("self-rating alone does not count as demonstrated proficiency", () => {
-    const gaps = computeGaps([assessment()], "Solutions Architect");
-    const g = gaps.find((x) => x.competencyId === "req-discovery")!;
-    expect(g.demonstrated).toBe(0);
-    expect(g.unassessed).toBe(false);
+    // A bare self-rating with no evidence reference is now reported as
+    // unassessed, which is more honest than the old behaviour that accepted it
+    // as an assessment. A self-rating WITH a reference is labelled self-report.
+    const bare = computeGaps([assessment()], "Solutions Architect");
+    const b = bare.find((x) => x.competencyId === "req-discovery")!;
+    expect(b.demonstrated).toBe(0);
+    expect(b.unassessed).toBe(true);
+    expect(b.source).toBe("none");
+
+    const referenced = computeGaps([assessment({ evidenceRef: "a-file" })], "Solutions Architect");
+    const r = referenced.find((x) => x.competencyId === "req-discovery")!;
+    expect(r.source).toBe("self-report");
+    expect(r.demonstrated).toBe(3);
   });
 
   it("knowledge alone does not satisfy practical execution", () => {

@@ -3,6 +3,31 @@ import path from "node:path";
 import crypto from "node:crypto";
 import { RULES, type Evidence, type EvidenceType, type Pillar } from "./engine";
 import type { CapabilityAssessment } from "./capability";
+import type { DecisionAttempt } from "./decision-loop";
+import type { ArticulationLevel } from "./articulation";
+
+export interface ArticulationAttempt {
+  id: string;
+  level: ArticulationLevel;
+  text: string;
+  wordCount: number;
+  findings: { kind: string; finding: string; challenge: string; excerpt: string }[];
+  /** Set when a reviewer has scored it. Never self-assigned. */
+  review?: { score: number; notes: string; assessedBy: "human" | "ai"; at: string };
+  createdAt: string;
+}
+
+/**
+ * A submission may point at work produced outside the lesson folder, such as an
+ * Architecture Studio project. Those references are recognisable and are
+ * allowed, so real architecture work can be reviewed into evidence without
+ * inventing a new submission type.
+ */
+export const STUDIO_REF_PREFIX = "studio:";
+
+export function isStudioRef(ref: string | undefined): boolean {
+  return !!ref && ref.startsWith(STUDIO_REF_PREFIX);
+}
 
 export interface Submission {
   id: string;
@@ -150,6 +175,8 @@ export interface State {
   clients: Client[];
   workstreams: Workstream[];
   artifacts: Artifact[];
+  decisionAttempts: DecisionAttempt[];
+  articulationAttempts: ArticulationAttempt[];
 }
 
 export const DEFAULT_SETTINGS: Settings = {
@@ -164,7 +191,7 @@ function dataFile() {
 export function readState(): State {
   const { file } = dataFile();
   if (!fs.existsSync(/*turbopackIgnore: true*/ file))
-    return { evidence: [], submissions: [], settings: DEFAULT_SETTINGS, defenceSessions: [], aiAssessments: [], aiUsage: {}, diagnostics: [], capabilityAssessments: [], mentorSessions: [], projects: [], tasks: [], decisions: [], clients: [], workstreams: [], artifacts: [] };
+    return { evidence: [], submissions: [], settings: DEFAULT_SETTINGS, defenceSessions: [], aiAssessments: [], aiUsage: {}, diagnostics: [], capabilityAssessments: [], mentorSessions: [], projects: [], tasks: [], decisions: [], clients: [], workstreams: [], artifacts: [], decisionAttempts: [], articulationAttempts: [] };
   const parsed = JSON.parse(fs.readFileSync(/*turbopackIgnore: true*/ file, "utf8")) as Partial<State>;
   return {
     evidence: parsed.evidence ?? [],
@@ -182,6 +209,8 @@ export function readState(): State {
     clients: parsed.clients ?? [],
     workstreams: parsed.workstreams ?? [],
     artifacts: parsed.artifacts ?? [],
+    decisionAttempts: parsed.decisionAttempts ?? [],
+    articulationAttempts: parsed.articulationAttempts ?? [],
   };
 }
 
@@ -304,6 +333,22 @@ export function setAiPreliminary(submissionId: string, prelim: NonNullable<Submi
   if (!sub) throw new Error("Submission not found");
   sub.aiPreliminary = prelim;
   writeState(state);
+}
+
+export function addArticulationAttempt(a: Omit<ArticulationAttempt, "id"> & { id?: string }): ArticulationAttempt {
+  const state = readState();
+  const full: ArticulationAttempt = { ...a, id: a.id || newId() };
+  state.articulationAttempts.push(full);
+  writeState(state);
+  return full;
+}
+
+export function addDecisionAttempt(a: Omit<DecisionAttempt, "id"> & { id?: string }): DecisionAttempt {
+  const state = readState();
+  const full: DecisionAttempt = { ...a, id: a.id || newId() };
+  state.decisionAttempts.push(full);
+  writeState(state);
+  return full;
 }
 
 export function saveMentorSession(session: MentorSession) {

@@ -27,6 +27,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <summary>Tools</summary>
               <div className="dropdown-menu">
                 <Link href="/architecture">Architecture report</Link>
+                <Link href="/articulation">Executive communication</Link>
+                <Link href="/decision">Decision loop</Link>
                 <Link href="/adr">ADR generator</Link>
                 <Link href="/c4">C4 diagrams</Link>
               </div>

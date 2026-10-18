@@ -36,7 +36,13 @@ export function lessonStatus(
     submissions.some((s) => s.lessonId === lesson.id && s.kind === kind && s.status === "pending");
 
   const u = checkUnlock(lesson.unlock, evidence);
-  const checkPassed = passed("knowledge_check");
+  /**
+   * A reference lesson (imported Markdown with no authored quiz) has no check
+   * to pass. Without this it would sit on "Learn" forever, because the quiz is
+   * the only thing that normally moves a lesson past that step.
+   */
+  const hasQuiz = lesson.knowledgeCheck.length > 0;
+  const checkPassed = !hasQuiz || passed("knowledge_check");
   const buildPassed = passed("artifact") || passed("lab");
   const defencePassed = passed("defence");
   const nextStep: LessonStep = !checkPassed
@@ -101,7 +107,9 @@ export function buildDashboard(
         lessonTitle: l.title,
         step: "learn",
         minutes: s.framework + s.fundamentals,
-        headline: `Study the official guide, then pass the knowledge check (${l.knowledgeCheck.length} questions)`,
+        headline: l.knowledgeCheck.length > 0
+        ? `Study the official guide, then pass the knowledge check (${l.knowledgeCheck.length} questions)`
+        : "Study the material, then produce written work that applies it",
         evidenceRequired: ["Knowledge check scored 70% or more"],
         awaitingReview: false,
       };
